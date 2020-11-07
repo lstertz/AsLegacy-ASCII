@@ -1,12 +1,11 @@
-﻿using System;
-
-namespace AsLegacy
+﻿namespace AsLegacy
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Display.Init();
+            //Display.Draw();
         }
     }
 }
