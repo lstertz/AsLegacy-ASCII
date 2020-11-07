@@ -37,6 +37,16 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "MonoGame.Framework.DesktopGL": {
+              "target": "Package",
+              "version": "[3.8.0.1641, )"
+            },
+            "SadConsole": {
+              "target": "Package",
+              "version": "[8.99.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
