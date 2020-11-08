@@ -1,6 +1,6 @@
 ﻿namespace AsLegacy
 {
-    class Program
+    class AsLegacy
     {
         static void Main(string[] args)
         {
