@@ -11,8 +11,8 @@ namespace AsLegacy
             "T..TTT".ToCharArray(),
             "TT..TT".ToCharArray(),
         };
-        private static readonly int columnCount = env[0].Length;
-        private static readonly int rowCount = env.Length;
+        public static readonly int columnCount = env[0].Length;
+        public static readonly int rowCount = env.Length;
 
         public Cell[] environment = new Cell[rowCount * columnCount];
         public Cell[] characters = new Cell[rowCount * columnCount];

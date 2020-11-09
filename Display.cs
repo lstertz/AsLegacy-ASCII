@@ -31,9 +31,9 @@ namespace AsLegacy
             // Create stats for Player stats/inventory/equipment/legacy.
             // Create interaction for displaying/receiving commands.
 
-            environment = new Console(6, 3, world.environment);
+            environment = new Console(World.columnCount, World.rowCount, world.environment);
             environment.Position = new Point(1, 1);
-            characters = new Console(6, 3, world.characters);
+            characters = new Console(World.columnCount, World.rowCount, world.characters);
             characters.Position = new Point(1, 1);
 
             console.Children.Add(environment);
