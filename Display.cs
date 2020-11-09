@@ -1,44 +1,58 @@
 ﻿using Microsoft.Xna.Framework;
 
 using SadConsole;
+using SadConsole.Components;
+using SadConsole.Debug;
+using SadConsole.Input;
+using System;
 using Console = SadConsole.Console;
-using Game = SadConsole.Game;
 
 namespace AsLegacy
 {
-    class Display
+    public class Display : DrawConsoleComponent
     {
-        public const int Width = 80;
-        public const int Height = 25;
+        private static Display display;
 
-        private static Console screen;
-        private static Console map;
-
-        public static void Init()
+        public static void Init(Console console, World world)
         {
-            Game.Create(Width, Height);
-            Game.OnInitialize = () =>
-            {
-                map = new Console(40, 15);
-                map.Position = new Point(0, 0);
-
-                screen = Global.CurrentScreen;
-                screen.Children.Add(map);
-
-                Draw();
-            };
-
-            Game.Instance.Run();
-            Game.Instance.Dispose();
+            if (display == null)
+                display = new Display(console, world);
         }
 
-        public static void Draw()
+        private Console frame;
+        private Console environment;
+        private Console characters;
+        private Console stats;
+        private Console interaction;
+
+        private Display(Console console, World world)
         {
-            screen.Fill(ColorAnsi.White, ColorAnsi.White, 0);
+            // Create frame to outline around other child consoles.
+            // Create stats for Player stats/inventory/equipment/legacy.
+            // Create interaction for displaying/receiving commands.
 
-            map.Fill(ColorAnsi.BlueBright, ColorAnsi.Blue, 0);
-            map.SetGlyph(1, 1, 1);
+            environment = new Console(6, 3, world.environment);
+            environment.Position = new Point(1, 1);
+            characters = new Console(6, 3, world.characters);
+            characters.Position = new Point(1, 1);
 
+            console.Children.Add(environment);
+            console.Children.Add(characters);
+            console.Components.Add(this);
+        }
+
+        // TODO :: Update map viewport.
+        // TODO :: Update stats console.
+        // TODO :: Update interaction console.
+
+        public override void Draw(Console console, TimeSpan delta)
+        {
+            //console.Fill(ColorAnsi.White, ColorAnsi.White, 0);
+
+            //environment.Fill(ColorAnsi.Red, ColorAnsi.Blue, 0);
+            //characters.Fill(ColorAnsi.White, ColorAnsi.Blue.ClearAlpha(), 0);
+            //environment.SetGlyph(1, 2, 9);
+            //characters.SetGlyph(1, 1, 1, ColorAnsi.White, ColorAnsi.Black);
         }
     }
 }
