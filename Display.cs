@@ -5,6 +5,8 @@ using SadConsole.Components;
 using SadConsole.Debug;
 using SadConsole.Input;
 using System;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Console = SadConsole.Console;
 
 namespace AsLegacy
@@ -13,10 +15,10 @@ namespace AsLegacy
     {
         private static Display display;
 
-        public static void Init(Console console, World world)
+        public static void Init(Console console)
         {
             if (display == null)
-                display = new Display(console, world);
+                display = new Display(console);
         }
 
         private Console frame;
@@ -25,16 +27,17 @@ namespace AsLegacy
         private Console stats;
         private Console interaction;
 
-        private Display(Console console, World world)
+        private Display(Console console)
         {
             // Create frame to outline around other child consoles.
             // Create stats for Player stats/inventory/equipment/legacy.
             // Create interaction for displaying/receiving commands.
 
-            environment = new Console(6, 3, world.environment);
+            environment = new Console(World.columnCount, World.rowCount, World.Environment);
             environment.Position = new Point(1, 1);
-            characters = new Console(6, 3, world.characters);
+            characters = new Console(World.columnCount, World.rowCount, World.Characters);
             characters.Position = new Point(1, 1);
+            
 
             console.Children.Add(environment);
             console.Children.Add(characters);

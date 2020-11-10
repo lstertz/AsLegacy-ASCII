@@ -18,8 +18,6 @@ namespace AsLegacy
             new AsLegacy();
         }
 
-        private World world;
-
         public AsLegacy()
         {
             Game.Create(Width, Height);
@@ -29,18 +27,16 @@ namespace AsLegacy
                 Global.CurrentScreen = console;
                 console.Components.Add(this);
 
-                world = new World();
-                Display.Init(console, world);
+                World.Init();
+                Display.Init(console);
             };
 
             Game.Instance.Run();
             Game.Instance.Dispose();
         }
 
-        public override void Update(SadConsole.Console console, TimeSpan delta)
+        public override void Update(Console console, TimeSpan delta)
         {
-            world.characters[2].Glyph = 1;
-            world.characters[2].Background = Color.Black;
             // This is the Game Loop.
             // Update game logic here.
         }
