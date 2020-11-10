@@ -15,10 +15,10 @@ namespace AsLegacy
     {
         private static Display display;
 
-        public static void Init(Console console, World world)
+        public static void Init(Console console)
         {
             if (display == null)
-                display = new Display(console, world);
+                display = new Display(console);
         }
 
         private Console frame;
@@ -27,17 +27,15 @@ namespace AsLegacy
         private Console stats;
         private Console interaction;
 
-        private Display(Console console, World world)
+        private Display(Console console)
         {
             // Create frame to outline around other child consoles.
             // Create stats for Player stats/inventory/equipment/legacy.
             // Create interaction for displaying/receiving commands.
 
-            environment = new Console(World.columnCount, World.rowCount, 
-                world.environment.CastTo((element) => { return (Cell)element; }));
+            environment = new Console(World.columnCount, World.rowCount, World.Environment);
             environment.Position = new Point(1, 1);
-            characters = new Console(World.columnCount, World.rowCount,
-                world.characters.CastTo((element) => { return (Cell)element; }));
+            characters = new Console(World.columnCount, World.rowCount, World.Characters);
             characters.Position = new Point(1, 1);
             
 

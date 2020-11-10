@@ -1,9 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
+using System;
 
 namespace AsLegacy
 {
-    public class World
+    public static partial class World
     {
         private static readonly char[][] env =
         {
@@ -14,19 +15,45 @@ namespace AsLegacy
         public static readonly int columnCount = env[0].Length;
         public static readonly int rowCount = env.Length;
 
-        public Tile[] environment = new Tile[rowCount * columnCount];
-        public Tile[] characters = new Tile[rowCount * columnCount];
+        public static Cell[] Environment
+        {
+            get
+            {
+                return environment.CastTo((element) => { return (Cell)element; });
+            }
+        }
+        private static Tile[] environment = new Tile[rowCount * columnCount];
 
-        public World()
+        public static Cell[] Characters
+        {
+            get
+            {
+                return characters.CastTo((element) => { return (Cell)element; });
+            }
+        }
+        private static Character[] characters = new Character[rowCount * columnCount];
+
+        public static void Init()
         {
             for (int row = 0; row < rowCount; row++)
                 for (int col = 0; col < columnCount; col++)
                 {
                     environment[row * columnCount + col] = 
-                        new Tile(Color.White, Color.Black, env[row][col]);
-                    characters[row * columnCount + col] =
-                        new Tile(Color.White, Color.Transparent, 0);
+                        new Tile(Color.Black, Color.White, env[row][col], true);
+                    new AbsentCharacter(col, row);
                 }
+
+            new Player(1, 1);
+        }
+
+        private static AbsentCharacter GetAbsentCharacter(int col, int row)
+        {
+            Character c = characters[row * columnCount + col];
+            if (!(c is AbsentCharacter))
+                throw new InvalidOperationException("An absent character cannot be retrieved " + 
+                    "from (" + col + ", " + row + "), as a character is present there.");
+
+            return c as AbsentCharacter;
         }
 
         // TODO :: Adding characters changes characters cells.

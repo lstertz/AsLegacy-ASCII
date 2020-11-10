@@ -3,18 +3,52 @@ using SadConsole;
 
 namespace AsLegacy
 {
-    public class Tile
+    public static partial class World
     {
-        public static implicit operator Cell(Tile tile)
+        public class Tile
         {
-            return tile.cell;
-        }
+            public static implicit operator Cell(Tile tile)
+            {
+                return tile.cell;
+            }
 
-        private Cell cell;
+            public int Glyph
+            {
+                get { return cell.Glyph; }
+                set { cell.Glyph = value; }
+            }
 
-        public Tile(Color foreground, Color background, int glyph)
-        {
-            cell = new Cell(foreground, background, glyph);
+            public Color GlyphColor
+            {
+                get { return cell.Foreground; }
+                set { cell.Foreground = value; }
+            }
+
+            public Color Background
+            {
+                get { return cell.Background; }
+                set { cell.Background = value; }
+            }
+
+            private Cell cell;
+
+            public bool Passable
+            {
+                get;
+                private set;
+            }
+
+            public Tile(Color background, Color glyphColor, int glyph, bool passable)
+            {
+                cell = new Cell(glyphColor, background, glyph);
+                Passable = passable;
+            }
+
+            protected Tile(Tile original, bool passable)
+            {
+                cell = original.cell;
+                Passable = passable;
+            }
         }
     }
 }
