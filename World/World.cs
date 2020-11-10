@@ -14,8 +14,8 @@ namespace AsLegacy
         public static readonly int columnCount = env[0].Length;
         public static readonly int rowCount = env.Length;
 
-        public Cell[] environment = new Cell[rowCount * columnCount];
-        public Cell[] characters = new Cell[rowCount * columnCount];
+        public Tile[] environment = new Tile[rowCount * columnCount];
+        public Tile[] characters = new Tile[rowCount * columnCount];
 
         public World()
         {
@@ -23,9 +23,9 @@ namespace AsLegacy
                 for (int col = 0; col < columnCount; col++)
                 {
                     environment[row * columnCount + col] = 
-                        new Cell(Color.White, Color.Black, env[row][col]);
+                        new Tile(Color.White, Color.Black, env[row][col]);
                     characters[row * columnCount + col] =
-                        new Cell(Color.White, Color.Transparent, 0);
+                        new Tile(Color.White, Color.Transparent, 0);
                 }
         }
 

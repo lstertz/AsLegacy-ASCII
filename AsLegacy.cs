@@ -37,10 +37,10 @@ namespace AsLegacy
             Game.Instance.Dispose();
         }
 
-        public override void Update(SadConsole.Console console, TimeSpan delta)
+        public override void Update(Console console, TimeSpan delta)
         {
-            world.characters[2].Glyph = 1;
-            world.characters[2].Background = Color.Black;
+            ((Cell)world.characters[2]).Glyph = 1;
+            ((Cell)world.characters[2]).Background = Color.Black;
             // This is the Game Loop.
             // Update game logic here.
         }

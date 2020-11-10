@@ -5,6 +5,8 @@ using SadConsole.Components;
 using SadConsole.Debug;
 using SadConsole.Input;
 using System;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Console = SadConsole.Console;
 
 namespace AsLegacy
@@ -31,10 +33,13 @@ namespace AsLegacy
             // Create stats for Player stats/inventory/equipment/legacy.
             // Create interaction for displaying/receiving commands.
 
-            environment = new Console(World.columnCount, World.rowCount, world.environment);
+            environment = new Console(World.columnCount, World.rowCount, 
+                world.environment.CastTo((element) => { return (Cell)element; }));
             environment.Position = new Point(1, 1);
-            characters = new Console(World.columnCount, World.rowCount, world.characters);
+            characters = new Console(World.columnCount, World.rowCount,
+                world.characters.CastTo((element) => { return (Cell)element; }));
             characters.Position = new Point(1, 1);
+            
 
             console.Children.Add(environment);
             console.Children.Add(characters);
