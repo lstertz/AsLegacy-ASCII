@@ -1,12 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
-using SadConsole;
 using SadConsole.Components;
-using SadConsole.Debug;
-using SadConsole.Input;
 using System;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Console = SadConsole.Console;
 
 namespace AsLegacy
