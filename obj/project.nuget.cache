@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Nd5+FAHk54vT3BAkM92K+BipTbWM+1TByHLj89iVs4CVOdSNOWPCLYSRc6JCNVjrK+UaiB9GhKVFX6QTy3dKdA==",
+  "dgSpecHash": "4dihQsY4kQDnhSAxpGLkvem1dRcNHaDMS0K2eyC/QfXfcy7yqkgPRLkiz/tuKe/QXc6kTlM97BYDAgAwCtJZ9g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lucas\\Projects\\As Legacy (C#)\\AsLegacy.csproj",
+  "projectFilePath": "C:\\Users\\lucas\\Projects\\AsLegacy-ASCII\\AsLegacy.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lucas\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.0.1641\\monogame.framework.desktopgl.3.8.0.1641.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
