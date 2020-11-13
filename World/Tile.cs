@@ -7,7 +7,7 @@ namespace AsLegacy
         /// <summary>
         /// Defines a Tile to represent an entity within the World.
         /// </summary>
-        public class Tile
+        public abstract class Tile
         {
             /// <summary>
             /// The glyph to visually represent the entity of the Tile.

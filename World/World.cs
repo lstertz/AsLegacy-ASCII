@@ -8,6 +8,13 @@ namespace AsLegacy
     /// </summary>
     public static partial class World
     {
+        private static readonly char[][] env =
+        {
+            "TT..TT".ToCharArray(),
+            "T..TTT".ToCharArray(),
+            "TT..TT".ToCharArray(),
+        };
+
         /// <summary>
         /// The number of columns within the World.
         /// </summary>
@@ -17,13 +24,6 @@ namespace AsLegacy
         /// The number of rows within the World.
         /// </summary>
         public static readonly int rowCount = env.Length;
-
-        private static readonly char[][] env =
-        {
-            "TT..TT".ToCharArray(),
-            "T..TTT".ToCharArray(),
-            "TT..TT".ToCharArray(),
-        };
 
         /// <summary>
         /// The displayable environment of the World.
@@ -37,7 +37,8 @@ namespace AsLegacy
         }
         private static TileSet<Tile> environment = new TileSet<Tile>((row, column) =>
         {
-            return new Tile(Color.Black, Color.White, env[row][column], false);
+            // TODO :: Update to be based on the env.
+            return new Tree();
         });
 
         /// <summary>
