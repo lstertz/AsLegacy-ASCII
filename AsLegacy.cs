@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using SadConsole;
+﻿using SadConsole;
 using SadConsole.Components;
 using System;
 

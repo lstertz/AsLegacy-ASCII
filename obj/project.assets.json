@@ -155,11 +155,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lucas\\Projects\\As Legacy (C#)\\AsLegacy.csproj",
+      "projectUniqueName": "C:\\Users\\lucas\\Projects\\AsLegacy-ASCII\\AsLegacy.csproj",
       "projectName": "AsLegacy",
-      "projectPath": "C:\\Users\\lucas\\Projects\\As Legacy (C#)\\AsLegacy.csproj",
+      "projectPath": "C:\\Users\\lucas\\Projects\\AsLegacy-ASCII\\AsLegacy.csproj",
       "packagesPath": "C:\\Users\\lucas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lucas\\Projects\\As Legacy (C#)\\obj\\",
+      "outputPath": "C:\\Users\\lucas\\Projects\\AsLegacy-ASCII\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\lucas\\AppData\\Roaming\\NuGet\\NuGet.Config",

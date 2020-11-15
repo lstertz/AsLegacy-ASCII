@@ -1,52 +1,48 @@
 ﻿using Microsoft.Xna.Framework;
-using SadConsole;
 
 namespace AsLegacy
 {
     public static partial class World
     {
-        public class Tile
+        /// <summary>
+        /// Defines a Tile to represent an entity within the World.
+        /// </summary>
+        public abstract class Tile
         {
-            public static implicit operator Cell(Tile tile)
-            {
-                return tile.cell;
-            }
+            /// <summary>
+            /// The glyph to visually represent the entity of the Tile.
+            /// </summary>
+            public int Glyph { get; private set; }
 
-            public int Glyph
-            {
-                get { return cell.Glyph; }
-                set { cell.Glyph = value; }
-            }
+            /// <summary>
+            /// The color of the glyph to visually represent the entity of the Tile.
+            /// </summary>
+            public Color GlyphColor { get; private set; }
 
-            public Color GlyphColor
-            {
-                get { return cell.Foreground; }
-                set { cell.Foreground = value; }
-            }
+            /// <summary>
+            /// The color of the area behind the glyph.
+            /// </summary>
+            public Color Background { get; private set; }
 
-            public Color Background
-            {
-                get { return cell.Background; }
-                set { cell.Background = value; }
-            }
+            /// <summary>
+            /// Specifies whether this Tile's entity can be passed through by others.
+            /// </summary>
+            public bool Passable { get; private set; }
 
-            private Cell cell;
-
-            public bool Passable
-            {
-                get;
-                private set;
-            }
-
+            /// <summary>
+            /// Constructs a new Tile.
+            /// </summary>
+            /// <param name="background">The color of the area behind the glyph.</param>
+            /// <param name="glyphColor">The color of the glyph.</param>
+            /// <param name="glyph">The glyph to visually represent the entity 
+            /// of the new Tile.</param>
+            /// <param name="passable">Specifies whether the new Tile's entity can be 
+            /// passed through by others.</param>
             public Tile(Color background, Color glyphColor, int glyph, bool passable)
             {
-                cell = new Cell(glyphColor, background, glyph);
-                Passable = passable;
-            }
-
-            protected Tile(Tile original, bool passable)
-            {
-                cell = original.cell;
+                Background = background;
+                GlyphColor = glyphColor;
+                Glyph = glyph;
                 Passable = passable;
             }
         }
