@@ -20,7 +20,7 @@ namespace AsLegacy
             /// <param name="glyph">The glyph visually displayed to represent 
             /// the new Present Character.</param>
             protected PresentCharacter(int row, int column, Color glyphColor, int glyph) :
-                base(row, column, Color.Black, glyphColor, glyph, false)
+                base(row, column, Color.Transparent, glyphColor, glyph, false)
             { }
         }
     }

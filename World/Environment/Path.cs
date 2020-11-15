@@ -14,7 +14,7 @@ namespace AsLegacy
             /// Constructs a new Path.
             /// </summary>
             public Path() :
-                base(Color.Black, Color.White, '.', true)
+                base(Color.Black, Color.SandyBrown, 176, true)
             {
             }
 
