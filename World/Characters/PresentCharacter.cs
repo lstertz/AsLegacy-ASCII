@@ -10,6 +10,19 @@ namespace AsLegacy
         /// </summary>
         public abstract class PresentCharacter : Character
         {
+            public enum Direction
+            {
+                Left,
+                Right,
+                Up,
+                Down
+            }
+
+            // TODO : 6 :: Mode Property.
+            
+            public Direction[] AvailableDirections { get; private set; }
+
+
             /// <summary>
             /// Constructs a new Present Character.
             /// </summary>
@@ -21,7 +34,16 @@ namespace AsLegacy
             /// the new Present Character.</param>
             protected PresentCharacter(int row, int column, Color glyphColor, int glyph) :
                 base(row, column, Color.Transparent, glyphColor, glyph, false)
-            { }
+            {
+                // TODO : 5 :: Determine available directions from position.
+            }
+
+            public void ActivateSkill() { }
+
+            public void PerformInDirection(Direction direction)
+            { 
+                // TODO : 6 :: Move and update available direction from new position.
+            }
         }
     }
 }

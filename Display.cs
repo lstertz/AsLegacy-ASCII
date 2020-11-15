@@ -32,7 +32,11 @@ namespace AsLegacy
             environment.Position = new Point(1, 1);
             characters = new Console(World.columnCount, World.rowCount, World.Characters);
             characters.Position = new Point(1, 1);
-            
+
+            // TODO : 5 :: Create directions console.
+            // TODO : 5 :: (Create) Add DirectionsHandler as a component.
+            // TODO : 5 :: Bind Player to the DirectionsHandler.
+            // TODO : 5 :: Update directions console with Player Directions.
 
             console.Children.Add(environment);
             console.Children.Add(characters);
