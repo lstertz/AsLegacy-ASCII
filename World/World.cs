@@ -37,8 +37,9 @@ namespace AsLegacy
         }
         private static TileSet<Tile> environment = new TileSet<Tile>((row, column) =>
         {
-            // TODO :: Update to be based on the env.
-            return new Tree();
+            if (env[row][column] == 'T')
+                return new Tree();
+            return new Path();
         });
 
         /// <summary>
