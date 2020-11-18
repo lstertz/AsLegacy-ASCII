@@ -32,10 +32,8 @@ namespace AsLegacy
             characters = new Console(World.columnCount, World.rowCount, World.Characters);
             characters.Position = new Point(1, 1);
 
-            Directions dirs = new Directions();
-            directions = new Console(3, 3, dirs.Cells);
-            directions.Position = new Point(World.Player.Column - 1, World.Player.Row - 1);
-            directions.Components.Add(dirs);
+            directions = new Console(3, 3, Directions.Cells);
+            directions.Components.Add(new Directions());
 
             environment = new Console(World.columnCount, World.rowCount, World.Environment);
             environment.Position = new Point(1, 1);

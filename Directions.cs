@@ -17,36 +17,22 @@ namespace AsLegacy
         {
             private static readonly Color fadedWhite = new Color(255, 255, 255, 240);
 
-            private readonly Cell empty =
-                new Cell(Color.Transparent, Color.Transparent);
-            private readonly Cell up =
-                new Cell(fadedWhite, Color.Transparent, 30);
-            private readonly Cell right =
-                new Cell(fadedWhite, Color.Transparent, 16);
-            private readonly Cell down =
-                new Cell(fadedWhite, Color.Transparent, 31);
-            private readonly Cell left =
-                new Cell(fadedWhite, Color.Transparent, 17);
+            private static readonly Cell empty = new Cell(Color.Transparent, Color.Transparent);
+            private static readonly Cell up = new Cell(fadedWhite, Color.Transparent, 30);
+            private static readonly Cell right = new Cell(fadedWhite, Color.Transparent, 16);
+            private static readonly Cell down = new Cell(fadedWhite, Color.Transparent, 31);
+            private static readonly Cell left = new Cell(fadedWhite, Color.Transparent, 17);
 
             /// <summary>
             /// The Cells that make up the display of the 
             /// available directions.
             /// </summary>
-            public Cell[] Cells { get; private set; }
-
-            /// <summary>
-            /// Constructs a new Directions display, which 
-            /// initializes the Cells.
-            /// </summary>
-            public Directions()
-            {
-               Cells = new Cell[]
+            public static readonly Cell[] Cells = new Cell[]
                {
                    empty, up, empty,
                    left, empty, right,
                    empty, down, empty
                };
-            }
 
             /// <summary>
             /// Updates the cell display by changing the 
@@ -58,6 +44,15 @@ namespace AsLegacy
             /// since the last draw update.</param>
             public override void Draw(Console console, TimeSpan delta)
             {
+                int x = World.Player.Column;
+                int y = World.Player.Row;
+
+                console.Position = new Point(x - 1, y - 1);
+
+                console.SetForeground(1, 0, World.IsPassable(y - 1, x) ? fadedWhite : Color.Transparent);//.Cells[1].Glyph = 2;// Color.Transparent;
+                console.SetForeground(2, 1, World.IsPassable(y, x + 1) ? fadedWhite : Color.Transparent);
+                console.SetForeground(1, 2, World.IsPassable(y + 1, x) ? fadedWhite : Color.Transparent);
+                console.SetForeground(0, 1, World.IsPassable(y, x - 1) ? fadedWhite : Color.Transparent);
             }
         }
     }
