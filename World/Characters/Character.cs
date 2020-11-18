@@ -11,8 +11,8 @@ namespace AsLegacy
         /// </summary>
         public abstract class Character : Tile
         {
-            protected int column;
-            protected int row;
+            public int Column { get; private set; }
+            public int Row { get; private set; }
 
             /// <summary>
             /// Constructs a new Character.
@@ -30,8 +30,8 @@ namespace AsLegacy
                 Color background, Color glyphColor, int glyph, bool passable) :
                 base(background, glyphColor, glyph, passable)
             {
-                this.column = column;
-                this.row = row;
+                Column = column;
+                Row = row;
 
                 if (characters != null)
                     characters.ReplaceWith(row, column, this);

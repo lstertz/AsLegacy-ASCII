@@ -57,17 +57,28 @@ namespace AsLegacy
             return new AbsentCharacter(row, column);
         });
 
-        private static Player player;
+        public static Player Player { get; private set; }
 
         /// <summary>
         /// Initializes the World with expected Characters.
         /// </summary>
         public static void Init()
         {
-            if (player != null)
+            if (Player != null)
                 return;
 
-            player = new Player(1, 1);
+            Player = new Player(1, 1);
+        }
+
+        /// <summary>
+        /// Specifies whether the provided position can be passed through.
+        /// </summary>
+        /// <param name="row">The row, defining the y axis of the position..</param>
+        /// <param name="column">The column, defining the x axis of the position.</param>
+        /// <returns>True if the position is passable, false otherwise.</returns>
+        public static bool IsPassable(int row, int column)
+        {
+            return characters.IsPassable(row, column) && environment.IsPassable(row, column);
         }
     }
 }
