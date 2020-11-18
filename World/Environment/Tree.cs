@@ -24,7 +24,7 @@ namespace AsLegacy
         /// Constructs a new Tree.
         /// </summary>
         public Tree() : 
-            base(Color.Black, Color.ForestGreen, GetTreeGlyph(), true)
+            base(Color.Black, Color.ForestGreen, GetTreeGlyph(), false)
         { }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace AsLegacy
         /// <param name="column">The column position of the new Tree, 
         /// to be used to replace any existing Environment Element.</param>
         public Tree(int row, int column) : 
-            base(row, column, Color.Black, Color.ForestGreen, GetTreeGlyph(), true)
+            base(row, column, Color.Black, Color.ForestGreen, GetTreeGlyph(), false)
         {
         }
     }
