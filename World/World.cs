@@ -57,17 +57,17 @@ namespace AsLegacy
             return new AbsentCharacter(row, column);
         });
 
-        private static Player player;
+        public static Player Player { get; private set; }
 
         /// <summary>
         /// Initializes the World with expected Characters.
         /// </summary>
         public static void Init()
         {
-            if (player != null)
+            if (Player != null)
                 return;
 
-            player = new Player(1, 1);
+            Player = new Player(1, 1);
         }
     }
 }
