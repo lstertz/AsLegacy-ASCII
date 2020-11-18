@@ -87,6 +87,17 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Specifies whether the tile at the provided position is passable.
+            /// </summary>
+            /// <param name="row">The row of the tile.</param>
+            /// <param name="column">The column of the tile.</param>
+            /// <returns>True if the tile is passable, false otherwise.</returns>
+            public bool IsPassable(int row, int column)
+            {
+                return tiles[row, column].Passable;
+            }
+
+            /// <summary>
             /// Replaces the current Tile a the specified row and column 
             /// with the provided new Tile.
             /// </summary>
