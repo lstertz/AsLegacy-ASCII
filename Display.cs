@@ -6,7 +6,7 @@ using Console = SadConsole.Console;
 
 namespace AsLegacy
 {
-    public class Display : DrawConsoleComponent
+    public partial class Display : DrawConsoleComponent
     {
         private static Display display;
 
@@ -17,8 +17,9 @@ namespace AsLegacy
         }
 
         private Console frame;
-        private Console environment;
         private Console characters;
+        private Console directions;
+        private Console environment;
         private Console stats;
         private Console interaction;
 
@@ -28,18 +29,23 @@ namespace AsLegacy
             // Create stats for Player stats/inventory/equipment/legacy.
             // Create interaction for displaying/receiving commands.
 
-            environment = new Console(World.columnCount, World.rowCount, World.Environment);
-            environment.Position = new Point(1, 1);
             characters = new Console(World.columnCount, World.rowCount, World.Characters);
             characters.Position = new Point(1, 1);
 
-            // TODO : 5 :: Create directions console.
-            // TODO : 5 :: (Create) Add DirectionsHandler as a component.
-            // TODO : 5 :: Bind Player to the DirectionsHandler.
-            // TODO : 5 :: Update directions console with Player Directions.
+            Directions dirs = new Directions();
+            directions = new Console(3, 3, dirs.Cells);
+            directions.Position = new Point(World.Player.Column - 1, World.Player.Row - 1);
+            directions.Components.Add(dirs);
+
+            environment = new Console(World.columnCount, World.rowCount, World.Environment);
+            environment.Position = new Point(1, 1);
+
+            // TODO : 6 :: (Create) Add DirectionsHandler as a component.
+            // TODO : 6 :: Bind Player to the DirectionsHandler.
 
             console.Children.Add(environment);
             console.Children.Add(characters);
+            characters.Children.Add(directions);
             console.Components.Add(this);
         }
 
