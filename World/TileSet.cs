@@ -91,9 +91,11 @@ namespace AsLegacy
             /// </summary>
             /// <param name="row">The row of the tile.</param>
             /// <param name="column">The column of the tile.</param>
-            /// <returns>True if the tile is passable, false otherwise.</returns>
+            /// <returns>True if the tile exists and is passable, false otherwise.</returns>
             public bool IsPassable(int row, int column)
             {
+                if (row < 0 || column < 0 || rowCount <= row || columnCount <= column)
+                    return false;
                 return tiles[row, column].Passable;
             }
 
