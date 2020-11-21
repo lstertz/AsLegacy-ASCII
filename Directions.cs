@@ -15,7 +15,7 @@ namespace AsLegacy
         /// </summary>
         public class Directions : DrawConsoleComponent
         {
-            private static readonly Color fadedWhite = new Color(255, 255, 255, 240);
+            private static readonly Color fadedWhite = new Color(255, 255, 255, 235);
 
             private static readonly Cell empty = new Cell(Color.Transparent, Color.Transparent);
             private static readonly Cell up = new Cell(fadedWhite, Color.Transparent, 30);
@@ -28,11 +28,20 @@ namespace AsLegacy
             /// available directions.
             /// </summary>
             public static readonly Cell[] Cells = new Cell[]
-               {
-                   empty, up, empty,
-                   left, empty, right,
-                   empty, down, empty
-               };
+            {
+                empty, up, empty,
+                left, empty, right,
+                empty, down, empty
+            };
+
+            private int highlightCellX = -1;
+            private int highlightCellY = -1;
+
+            public void SetCellToHighlight(int x, int y)
+            {
+                highlightCellX = x;
+                highlightCellY = y;
+            }
 
             /// <summary>
             /// Updates the cell display by changing the 
@@ -49,10 +58,21 @@ namespace AsLegacy
 
                 console.Position = new Point(x - 1, y - 1);
 
-                console.SetForeground(1, 0, World.IsPassable(y - 1, x) ? fadedWhite : Color.Transparent);//.Cells[1].Glyph = 2;// Color.Transparent;
-                console.SetForeground(2, 1, World.IsPassable(y, x + 1) ? fadedWhite : Color.Transparent);
-                console.SetForeground(1, 2, World.IsPassable(y + 1, x) ? fadedWhite : Color.Transparent);
-                console.SetForeground(0, 1, World.IsPassable(y, x - 1) ? fadedWhite : Color.Transparent);
+                console.SetForeground(1, 0, GetCellColor(1, 0, y - 1, x));
+                console.SetForeground(2, 1, GetCellColor(2, 1, y, x + 1));
+                console.SetForeground(1, 2, GetCellColor(1, 2, y + 1, x));
+                console.SetForeground(0, 1, GetCellColor(0, 1, y, x - 1));
+            }
+
+            private Color GetCellColor(int x, int y, int worldX, int worldY)
+            {
+                if (!World.IsPassable(worldX, worldY))
+                    return Color.Transparent;
+
+                if (highlightCellX == x && highlightCellY == y)
+                    return Color.White;
+
+                return fadedWhite;
             }
         }
     }
