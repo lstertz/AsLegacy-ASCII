@@ -1,5 +1,6 @@
 ﻿using SadConsole;
 using System;
+using Console = SadConsole.Console;
 
 namespace AsLegacy
 {
@@ -27,6 +28,7 @@ namespace AsLegacy
                 }
 
                 private Cell[] cells;
+                private Console console;
                 private TileSet<T> tileSet;
 
                 /// <summary>
@@ -43,6 +45,11 @@ namespace AsLegacy
                     this.tileSet = tileSet;
                 }
 
+                public void Bind(Console console)
+                {
+                    this.console = console;
+                }
+
                 /// <summary>
                 /// Updates the Display's rendered data structure for the Tile at 
                 /// the given row and column position.
@@ -56,9 +63,18 @@ namespace AsLegacy
                     Cell cell = cells[row * columnCount + column];
                     T tile = tileSet.tiles[row, column];
 
-                    cell.Foreground = tile.GlyphColor;
-                    cell.Background = tile.Background;
-                    cell.Glyph = tile.Glyph;
+                    if (console != null)
+                    {
+                        console.SetForeground(column, row, tile.GlyphColor);
+                        console.SetBackground(column, row, tile.Background);
+                        console.SetGlyph(column, row, tile.Glyph);
+                    }
+                    else
+                    {
+                        cell.Foreground = tile.GlyphColor;
+                        cell.Background = tile.Background;
+                        cell.Glyph = tile.Glyph;
+                    }
                 }
             }
 
@@ -86,6 +102,13 @@ namespace AsLegacy
                 }
             }
 
+            public T Get(int row, int column)
+            {
+                if (row < 0 || column < 0 || rowCount <= row || columnCount <= column)
+                    return null;
+                return tiles[row, column];
+            }
+
             /// <summary>
             /// Specifies whether the tile at the provided position is passable.
             /// </summary>
@@ -100,16 +123,21 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Replaces the current Tile a the specified row and column 
+            /// Replaces the current Tile at the specified row and column 
             /// with the provided new Tile.
             /// </summary>
             /// <param name="row">The row of the Tile to be replaced.</param>
             /// <param name="column">The column of the Tile to be replaced.</param>
             /// <param name="newTile">The Tile replacing the original Tile.</param>
-            public void ReplaceWith(int row, int column, T newTile)
+            /// <returns>The replaced Tile.</returns>
+            public T ReplaceWith(int row, int column, T newTile)
             {
+                T replaced = tiles[row, column];
+
                 tiles[row, column] = newTile;
                 display.Update(row, column);
+
+                return replaced;
             }
 
             /// <summary>
