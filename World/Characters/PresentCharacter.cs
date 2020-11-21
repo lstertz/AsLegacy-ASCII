@@ -18,10 +18,15 @@ namespace AsLegacy
                 Down
             }
 
-            // TODO : 6 :: Mode Property.
-            
-            public Direction[] AvailableDirections { get; private set; }
+            public enum Mode
+            {
+                Move,
+                Attack,
+                Defend
+            }
 
+            private Mode mode;
+            
 
             /// <summary>
             /// Constructs a new Present Character.
@@ -35,14 +40,45 @@ namespace AsLegacy
             protected PresentCharacter(int row, int column, Color glyphColor, int glyph) :
                 base(row, column, Color.Transparent, glyphColor, glyph, false)
             {
-                // TODO : 5 :: Determine available directions from position.
+                mode = Mode.Move;
             }
 
             public void ActivateSkill() { }
 
             public void PerformInDirection(Direction direction)
-            { 
-                // TODO : 6 :: Move and update available direction from new position.
+            {
+                switch (mode)
+                {
+                    case Mode.Move:
+                        switch (direction)
+                        {
+                            case Direction.Left:
+                                if (World.IsPassable(Row, Column - 1))
+                                    Move(this, Row, Column - 1);
+                                break;
+                            case Direction.Right:
+                                if (World.IsPassable(Row, Column + 1))
+                                    Move(this, Row, Column + 1);
+                                break;
+                            case Direction.Up:
+                                if (World.IsPassable(Row - 1, Column))
+                                    Move(this, Row - 1, Column);
+                                break;
+                            case Direction.Down:
+                                if (World.IsPassable(Row + 1, Column))
+                                    Move(this, Row + 1, Column);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Mode.Attack:
+                        break;
+                    case Mode.Defend:
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

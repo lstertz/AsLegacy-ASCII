@@ -36,6 +36,18 @@ namespace AsLegacy
                 if (characters != null)
                     characters.ReplaceWith(row, column, this);
             }
+
+            protected void Move(Character c, int newRow, int newColumn)
+            {
+                Character swapped = characters.ReplaceWith(newRow, newColumn, c);
+                characters.ReplaceWith(c.Row, c.Column, swapped);
+
+                swapped.Row = c.Row;
+                swapped.Column = c.Column;
+
+                c.Row = newRow;
+                c.Column = newColumn;
+            }
         }
     }
 }
