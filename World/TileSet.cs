@@ -1,5 +1,6 @@
 ﻿using SadConsole;
 using System;
+using Console = SadConsole.Console;
 
 namespace AsLegacy
 {
@@ -18,15 +19,16 @@ namespace AsLegacy
             public class Display
             {
                 /// <summary>
-                /// Implicitly converts a Display to an array of SadConsole Cells.
+                /// Implicitly converts a Display to a SadConsole Console that encapsulates 
+                /// all of the display's Cells.
                 /// </summary>
                 /// <param name="display">The Display to be converted.</param>
-                public static implicit operator Cell[](Display display)
+                public static implicit operator Console(Display display)
                 {
-                    return display.cells;
+                    return display.console;
                 }
 
-                private Cell[] cells;
+                private Console console;
                 private TileSet<T> tileSet;
 
                 /// <summary>
@@ -36,11 +38,12 @@ namespace AsLegacy
                 /// data for the Display.</param>
                 public Display(TileSet<T> tileSet)
                 {
-                    cells = new Cell[rowCount * columnCount];
+                    Cell[] cells = new Cell[rowCount * columnCount];
                     for (int c = 0, count = rowCount * columnCount; c < count; c++)
                         cells[c] = new Cell();
 
                     this.tileSet = tileSet;
+                    console = new Console(columnCount, rowCount, cells);
                 }
 
                 /// <summary>
@@ -53,12 +56,10 @@ namespace AsLegacy
                 /// is to be updated.</param>
                 public void Update(int row, int column)
                 {
-                    Cell cell = cells[row * columnCount + column];
                     T tile = tileSet.tiles[row, column];
-
-                    cell.Foreground = tile.GlyphColor;
-                    cell.Background = tile.Background;
-                    cell.Glyph = tile.Glyph;
+                    console.SetForeground(column, row, tile.GlyphColor);
+                    console.SetBackground(column, row, tile.Background);
+                    console.SetGlyph(column, row, tile.Glyph);
                 }
             }
 
@@ -87,6 +88,20 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Provides the Tile at the specified row and column.
+            /// </summary>
+            /// <param name="row">The row of the requested tile.</param>
+            /// <param name="column">The column of the requested tile.</param>
+            /// <returns>The Tile, or null if the specified row or column are 
+            /// outside the range of this TileSet.</returns>
+            public T Get(int row, int column)
+            {
+                if (row < 0 || column < 0 || rowCount <= row || columnCount <= column)
+                    return null;
+                return tiles[row, column];
+            }
+
+            /// <summary>
             /// Specifies whether the tile at the provided position is passable.
             /// </summary>
             /// <param name="row">The row of the tile.</param>
@@ -100,16 +115,21 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Replaces the current Tile a the specified row and column 
+            /// Replaces the current Tile at the specified row and column 
             /// with the provided new Tile.
             /// </summary>
             /// <param name="row">The row of the Tile to be replaced.</param>
             /// <param name="column">The column of the Tile to be replaced.</param>
             /// <param name="newTile">The Tile replacing the original Tile.</param>
-            public void ReplaceWith(int row, int column, T newTile)
+            /// <returns>The replaced Tile.</returns>
+            public T ReplaceWith(int row, int column, T newTile)
             {
+                T replaced = tiles[row, column];
+
                 tiles[row, column] = newTile;
                 display.Update(row, column);
+
+                return replaced;
             }
 
             /// <summary>

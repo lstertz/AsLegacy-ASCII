@@ -6,6 +6,9 @@ using Console = SadConsole.Console;
 
 namespace AsLegacy
 {
+    /// <summary>
+    /// Defines Display, which serves as the primary visual output controller.
+    /// </summary>
     public partial class Display : DrawConsoleComponent
     {
         private static Display display;
@@ -16,30 +19,26 @@ namespace AsLegacy
                 display = new Display(console);
         }
 
-        private Console frame;
         private Console characters;
         private Console directions;
         private Console environment;
         private Console stats;
-        private Console interaction;
 
         private Display(Console console)
         {
             // Create frame to outline around other child consoles.
             // Create stats for Player stats/inventory/equipment/legacy.
-            // Create interaction for displaying/receiving commands.
 
-            characters = new Console(World.columnCount, World.rowCount, World.Characters);
+            characters = World.Characters;
             characters.Position = new Point(1, 1);
 
             directions = new Console(3, 3, Directions.Cells);
             directions.Components.Add(new Directions());
+            directions.Components.Add(new DirectionHandling());
+            directions.IsFocused = true;
 
-            environment = new Console(World.columnCount, World.rowCount, World.Environment);
+            environment = World.Environment;
             environment.Position = new Point(1, 1);
-
-            // TODO : 6 :: (Create) Add DirectionsHandler as a component.
-            // TODO : 6 :: Bind Player to the DirectionsHandler.
 
             console.Children.Add(environment);
             console.Children.Add(characters);
@@ -49,7 +48,6 @@ namespace AsLegacy
 
         // TODO :: Update map viewport.
         // TODO :: Update stats console.
-        // TODO :: Update interaction console.
 
         public override void Draw(Console console, TimeSpan delta)
         {
