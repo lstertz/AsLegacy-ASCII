@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using SadConsole;
+﻿using SadConsole;
 using SadConsole.Components;
 using SadConsole.Input;
+
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace AsLegacy
 {
@@ -11,6 +12,9 @@ namespace AsLegacy
     /// </summary>
     public class DirectionHandling : InputConsoleComponent
     {
+        // TODO :: Refactor to account for handling other keyboard input for 
+        //          the remaining Player controls (mode changes, skill activation, etc.).
+
         /// <summary>
         /// Handles keyboard state changes.
         /// </summary>
@@ -20,7 +24,18 @@ namespace AsLegacy
         /// <param name="handled">A bool indicating whether the input was handled.</param>
         public override void ProcessKeyboard(Console console, Keyboard info, out bool handled)
         {
-            throw new System.NotImplementedException();
+            handled = true;
+
+            if (info.IsKeyReleased(Keys.Up))
+                World.Player.PerformInDirection(World.PresentCharacter.Direction.Up);
+            else if (info.IsKeyReleased(Keys.Down))
+                World.Player.PerformInDirection(World.PresentCharacter.Direction.Down);
+            else if (info.IsKeyReleased(Keys.Left))
+                World.Player.PerformInDirection(World.PresentCharacter.Direction.Left);
+            else if (info.IsKeyReleased(Keys.Right))
+                World.Player.PerformInDirection(World.PresentCharacter.Direction.Right);
+            else
+                handled = false;
         }
 
         /// <summary>
@@ -32,8 +47,6 @@ namespace AsLegacy
         public override void ProcessMouse(Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;
-            Display.Directions directions = console
-                .GetComponent<Display.Directions>() as Display.Directions;
 
             int x = state.CellPosition.X - 1;
             int y = state.CellPosition.Y - 1;
@@ -58,6 +71,8 @@ namespace AsLegacy
                 }
             }
 
+            Display.Directions directions = console
+                .GetComponent<Display.Directions>() as Display.Directions;
             directions.SetCellToHighlight(x + 1, y + 1);
         }
     }

@@ -10,8 +10,7 @@ namespace AsLegacy
     {
         /// <summary>
         /// Defines the Directions aspect of a Display, 
-        /// which is responsible for updating the directions 
-        /// available for Player movement.
+        /// which is responsible for updating the directions available for Player movement.
         /// </summary>
         public class Directions : DrawConsoleComponent
         {
@@ -24,8 +23,7 @@ namespace AsLegacy
             private static readonly Cell left = new Cell(fadedWhite, Color.Transparent, 17);
 
             /// <summary>
-            /// The Cells that make up the display of the 
-            /// available directions.
+            /// The Cells that make up the display of the available directions.
             /// </summary>
             public static readonly Cell[] Cells = new Cell[]
             {
@@ -37,6 +35,13 @@ namespace AsLegacy
             private int highlightCellX = -1;
             private int highlightCellY = -1;
 
+            /// <summary>
+            /// Specifies which Directions Display Cell should be highlighted, which 
+            /// influences the foreground color of the Cell. A location outside of the 
+            /// Directions Console (e.g. (-1, -1)) indicates that no Cell should be highlighted.
+            /// </summary>
+            /// <param name="x">The local x of the Cell.</param>
+            /// <param name="y">The local y of the Cell.</param>
             public void SetCellToHighlight(int x, int y)
             {
                 highlightCellX = x;
@@ -64,6 +69,15 @@ namespace AsLegacy
                 console.SetForeground(0, 1, GetCellColor(0, 1, y, x - 1));
             }
 
+            /// <summary>
+            /// Determines the foreground color of a Directions Display Cell for the 
+            /// specified local and global location.
+            /// </summary>
+            /// <param name="x">The local x location of the Cell.</param>
+            /// <param name="y">The local y location of the Cell.</param>
+            /// <param name="worldX">The global x location of the Cell.</param>
+            /// <param name="worldY">The global y location of the Cell.</param>
+            /// <returns></returns>
             private Color GetCellColor(int x, int y, int worldX, int worldY)
             {
                 if (!World.IsPassable(worldX, worldY))

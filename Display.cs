@@ -6,6 +6,9 @@ using Console = SadConsole.Console;
 
 namespace AsLegacy
 {
+    /// <summary>
+    /// Defines Display, which serves as the primary visual output controller.
+    /// </summary>
     public partial class Display : DrawConsoleComponent
     {
         private static Display display;
@@ -32,6 +35,7 @@ namespace AsLegacy
             directions = new Console(3, 3, Directions.Cells);
             directions.Components.Add(new Directions());
             directions.Components.Add(new DirectionHandling());
+            directions.IsFocused = true;
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
