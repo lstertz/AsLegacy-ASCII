@@ -16,7 +16,6 @@ namespace AsLegacy
                 display = new Display(console);
         }
 
-        private Console frame;
         private Console characters;
         private Console directions;
         private Console environment;
@@ -27,16 +26,14 @@ namespace AsLegacy
             // Create frame to outline around other child consoles.
             // Create stats for Player stats/inventory/equipment/legacy.
 
-            characters = new Console(World.columnCount, World.rowCount, World.Characters);
-            World.Characters.Bind(characters);
+            characters = World.Characters;
             characters.Position = new Point(1, 1);
 
             directions = new Console(3, 3, Directions.Cells);
             directions.Components.Add(new Directions());
             directions.Components.Add(new DirectionHandling());
 
-            environment = new Console(World.columnCount, World.rowCount, World.Environment);
-            World.Environment.Bind(environment);
+            environment = World.Environment;
             environment.Position = new Point(1, 1);
 
             console.Children.Add(environment);

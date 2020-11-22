@@ -19,15 +19,15 @@ namespace AsLegacy
             public class Display
             {
                 /// <summary>
-                /// Implicitly converts a Display to an array of SadConsole Cells.
+                /// Implicitly converts a Display to a SadConsole Console that encapsulates 
+                /// all of the display's Cells.
                 /// </summary>
                 /// <param name="display">The Display to be converted.</param>
-                public static implicit operator Cell[](Display display)
+                public static implicit operator Console(Display display)
                 {
-                    return display.cells;
+                    return display.console;
                 }
 
-                private Cell[] cells;
                 private Console console;
                 private TileSet<T> tileSet;
 
@@ -38,16 +38,12 @@ namespace AsLegacy
                 /// data for the Display.</param>
                 public Display(TileSet<T> tileSet)
                 {
-                    cells = new Cell[rowCount * columnCount];
+                    Cell[] cells = new Cell[rowCount * columnCount];
                     for (int c = 0, count = rowCount * columnCount; c < count; c++)
                         cells[c] = new Cell();
 
                     this.tileSet = tileSet;
-                }
-
-                public void Bind(Console console)
-                {
-                    this.console = console;
+                    console = new Console(columnCount, rowCount, cells);
                 }
 
                 /// <summary>
@@ -60,21 +56,10 @@ namespace AsLegacy
                 /// is to be updated.</param>
                 public void Update(int row, int column)
                 {
-                    Cell cell = cells[row * columnCount + column];
                     T tile = tileSet.tiles[row, column];
-
-                    if (console != null)
-                    {
-                        console.SetForeground(column, row, tile.GlyphColor);
-                        console.SetBackground(column, row, tile.Background);
-                        console.SetGlyph(column, row, tile.Glyph);
-                    }
-                    else
-                    {
-                        cell.Foreground = tile.GlyphColor;
-                        cell.Background = tile.Background;
-                        cell.Glyph = tile.Glyph;
-                    }
+                    console.SetForeground(column, row, tile.GlyphColor);
+                    console.SetBackground(column, row, tile.Background);
+                    console.SetGlyph(column, row, tile.Glyph);
                 }
             }
 
@@ -102,6 +87,13 @@ namespace AsLegacy
                 }
             }
 
+            /// <summary>
+            /// Provides the Tile at the specified row and column.
+            /// </summary>
+            /// <param name="row">The row of the requested tile.</param>
+            /// <param name="column">The column of the requested tile.</param>
+            /// <returns>The Tile, or null if the specified row or column are 
+            /// outside the range of this TileSet.</returns>
             public T Get(int row, int column)
             {
                 if (row < 0 || column < 0 || rowCount <= row || columnCount <= column)

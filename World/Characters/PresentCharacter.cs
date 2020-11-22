@@ -10,6 +10,9 @@ namespace AsLegacy
         /// </summary>
         public abstract class PresentCharacter : Character
         {
+            /// <summary>
+            /// Defines the standard directions, for immediate actions, available to the Character.
+            /// </summary>
             public enum Direction
             {
                 Left,
@@ -18,6 +21,10 @@ namespace AsLegacy
                 Down
             }
 
+            /// <summary>
+            /// Defines the different modes of a Character, which heavily influence the state and 
+            /// available actions of a Character.
+            /// </summary>
             public enum Mode
             {
                 Move,
@@ -25,6 +32,9 @@ namespace AsLegacy
                 Defend
             }
 
+            /// <summary>
+            /// The character's present mode.
+            /// </summary>
             private Mode mode;
             
 
@@ -45,6 +55,12 @@ namespace AsLegacy
 
             public void ActivateSkill() { }
 
+            /// <summary>
+            /// Performs the appropriate action for the character's present state, in the 
+            /// specified direction, if possible.
+            /// </summary>
+            /// <param name="direction">The direction in which the action is 
+            /// to be performed.</param>
             public void PerformInDirection(Direction direction)
             {
                 switch (mode)
