@@ -1,4 +1,5 @@
-﻿using SadConsole;
+﻿using Microsoft.Xna.Framework;
+using SadConsole;
 using System;
 using Console = SadConsole.Console;
 
@@ -23,12 +24,12 @@ namespace AsLegacy
                 /// all of the display's Cells.
                 /// </summary>
                 /// <param name="display">The Display to be converted.</param>
-                public static implicit operator Console(Display display)
+                public static implicit operator ScrollingConsole(Display display)
                 {
                     return display.console;
                 }
 
-                private Console console;
+                private ScrollingConsole console;
                 private TileSet<T> tileSet;
 
                 /// <summary>
@@ -38,12 +39,14 @@ namespace AsLegacy
                 /// data for the Display.</param>
                 public Display(TileSet<T> tileSet)
                 {
-                    Cell[] cells = new Cell[rowCount * columnCount];
-                    for (int c = 0, count = rowCount * columnCount; c < count; c++)
+                    Cell[] cells = new Cell[RowCount * ColumnCount];
+                    for (int c = 0, count = RowCount * ColumnCount; c < count; c++)
                         cells[c] = new Cell();
 
                     this.tileSet = tileSet;
-                    console = new Console(columnCount, rowCount, cells);
+                    console = ScrollingConsole.FromSurface(
+                        new Console(ColumnCount, RowCount, cells),
+                        new Rectangle(0, 0, ColumnCount, RowCount));
                 }
 
                 /// <summary>
@@ -75,11 +78,11 @@ namespace AsLegacy
             public TileSet(Func<int, int, T> tileConstructor)
             {
                 display = new Display(this);
-                tiles = new T[rowCount, columnCount];
+                tiles = new T[RowCount, ColumnCount];
 
-                for (int row = 0; row < rowCount; row++)
+                for (int row = 0; row < RowCount; row++)
                 {
-                    for (int col = 0; col < columnCount; col++)
+                    for (int col = 0; col < ColumnCount; col++)
                     {
                         tiles[row, col] = tileConstructor(row, col);
                         display.Update(row, col);
@@ -96,7 +99,7 @@ namespace AsLegacy
             /// outside the range of this TileSet.</returns>
             public T Get(int row, int column)
             {
-                if (row < 0 || column < 0 || rowCount <= row || columnCount <= column)
+                if (row < 0 || column < 0 || RowCount <= row || ColumnCount <= column)
                     return null;
                 return tiles[row, column];
             }
@@ -109,7 +112,7 @@ namespace AsLegacy
             /// <returns>True if the tile exists and is passable, false otherwise.</returns>
             public bool IsPassable(int row, int column)
             {
-                if (row < 0 || column < 0 || rowCount <= row || columnCount <= column)
+                if (row < 0 || column < 0 || RowCount <= row || ColumnCount <= column)
                     return false;
                 return tiles[row, column].Passable;
             }

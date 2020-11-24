@@ -10,20 +10,23 @@ namespace AsLegacy
     {
         private static readonly char[][] env =
         {
-            "TT..TT".ToCharArray(),
-            "T..TTT".ToCharArray(),
-            "TT..TT".ToCharArray(),
+            "TT..TTT".ToCharArray(),
+            "T..TTTT".ToCharArray(),
+            "TT..TTT".ToCharArray(),
+            "TT..TTT".ToCharArray(),
+            "TT...TT".ToCharArray(),
+            "TTTT.TT".ToCharArray(),
         };
 
         /// <summary>
         /// The number of columns within the World.
         /// </summary>
-        public static readonly int columnCount = env[0].Length;
+        public static readonly int ColumnCount = env[0].Length;
 
         /// <summary>
         /// The number of rows within the World.
         /// </summary>
-        public static readonly int rowCount = env.Length;
+        public static readonly int RowCount = env.Length;
 
         /// <summary>
         /// The displayable environment of the World.
@@ -67,7 +70,7 @@ namespace AsLegacy
             if (Player != null)
                 return;
 
-            Player = new Player(1, 1);
+            Player = new Player(3, 3);
         }
 
         /// <summary>
