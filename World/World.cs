@@ -8,7 +8,7 @@ namespace AsLegacy
     /// </summary>
     public static partial class World
     {
-        private static readonly char[][] env =
+        private static readonly char[][] map =
         {
             "TT..TTT".ToCharArray(),
             "T..TTTT".ToCharArray(),
@@ -21,12 +21,12 @@ namespace AsLegacy
         /// <summary>
         /// The number of columns within the World.
         /// </summary>
-        public static readonly int ColumnCount = env[0].Length;
+        public static readonly int ColumnCount = map[0].Length;
 
         /// <summary>
         /// The number of rows within the World.
         /// </summary>
-        public static readonly int RowCount = env.Length;
+        public static readonly int RowCount = map.Length;
 
         /// <summary>
         /// The displayable environment of the World.
@@ -40,7 +40,7 @@ namespace AsLegacy
         }
         private static TileSet<Tile> environment = new TileSet<Tile>((row, column) =>
         {
-            if (env[row][column] == 'T')
+            if (map[row][column] == 'T')
                 return new Tree();
             return new Path();
         });
