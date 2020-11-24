@@ -34,8 +34,6 @@ namespace AsLegacy
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Left);
             else if (info.IsKeyReleased(Keys.Right))
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Right);
-            else
-                handled = false;
         }
 
         /// <summary>

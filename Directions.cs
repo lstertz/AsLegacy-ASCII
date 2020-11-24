@@ -34,7 +34,7 @@ namespace AsLegacy
 
             private int highlightCellX = -1;
             private int highlightCellY = -1;
-
+            
             /// <summary>
             /// Specifies which Directions Display Cell should be highlighted, which 
             /// influences the foreground color of the Cell. A location outside of the 
@@ -61,7 +61,19 @@ namespace AsLegacy
                 int x = World.Player.Column;
                 int y = World.Player.Row;
 
-                console.Position = new Point(x - 1, y - 1);
+                int centerX = MapViewPortHalfWidth;
+                int centerY = MapViewPortHalfHeight;
+
+                if (display.MapViewPort.Left == 0)
+                    centerX = World.Player.Column;
+                else if (display.MapViewPort.Right == World.ColumnCount)
+                    centerX = World.Player.Column - display.characters.ViewPort.Left;
+                if (display.characters.ViewPort.Top == 0)
+                    centerY = World.Player.Row;
+                else if (display.characters.ViewPort.Bottom == World.RowCount)
+                    centerY = World.Player.Row - display.characters.ViewPort.Top;
+
+                console.Position = new Point(centerX - 1, centerY - 1);
 
                 console.SetForeground(1, 0, GetCellColor(1, 0, y - 1, x));
                 console.SetForeground(2, 1, GetCellColor(2, 1, y, x + 1));
