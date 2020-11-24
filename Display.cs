@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-
+using SadConsole;
 using SadConsole.Components;
 using System;
 using Console = SadConsole.Console;
@@ -11,6 +11,11 @@ namespace AsLegacy
     /// </summary>
     public partial class Display : DrawConsoleComponent
     {
+        public const int MapViewPortWidth = 6;
+        public const int MapViewPortHeight = 6;
+        public const int MapViewPortHalfWidth = MapViewPortWidth / 2;
+        public const int MapViewPortHalfHeight = MapViewPortHeight / 2;
+
         private static Display display;
 
         public static void Init(Console console)
@@ -19,10 +24,12 @@ namespace AsLegacy
                 display = new Display(console);
         }
 
-        private Console characters;
+        private ScrollingConsole characters;
         private Console directions;
-        private Console environment;
+        private ScrollingConsole environment;
         private Console stats;
+
+        private Rectangle MapViewPort => characters.ViewPort;
 
         private Display(Console console)
         {
@@ -31,6 +38,8 @@ namespace AsLegacy
 
             characters = World.Characters;
             characters.Position = new Point(1, 1);
+            characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
+            characters.CenterViewPortOnPoint(World.Player.Point);
 
             directions = new Console(3, 3, Directions.Cells);
             directions.Components.Add(new Directions());
@@ -39,6 +48,8 @@ namespace AsLegacy
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
+            environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
+            environment.CenterViewPortOnPoint(World.Player.Point);
 
             console.Children.Add(environment);
             console.Children.Add(characters);
@@ -51,12 +62,8 @@ namespace AsLegacy
 
         public override void Draw(Console console, TimeSpan delta)
         {
-            //console.Fill(ColorAnsi.White, ColorAnsi.White, 0);
-
-            //environment.Fill(ColorAnsi.Red, ColorAnsi.Blue, 0);
-            //characters.Fill(ColorAnsi.White, ColorAnsi.Blue.ClearAlpha(), 0);
-            //environment.SetGlyph(1, 2, 9);
-            //characters.SetGlyph(1, 1, 1, ColorAnsi.White, ColorAnsi.Black);
+            characters.CenterViewPortOnPoint(World.Player.Point);
+            environment.CenterViewPortOnPoint(World.Player.Point);
         }
     }
 }
