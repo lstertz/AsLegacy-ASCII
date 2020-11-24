@@ -9,6 +9,11 @@ namespace AsLegacy
     public class Player : World.PresentCharacter
     {
         /// <summary>
+        /// Provides the point (global location) of this Player.
+        /// </summary>
+        public Point Point => new Point(Column, Row);
+
+        /// <summary>
         /// Constructs a new Player at the provided row and column on the map.
         /// </summary>
         /// <param name="row">The row position of the new Player.</param>
