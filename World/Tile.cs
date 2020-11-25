@@ -12,17 +12,32 @@ namespace AsLegacy
             /// <summary>
             /// The glyph to visually represent the entity of the Tile.
             /// </summary>
-            public int Glyph { get; private set; }
+            public virtual int Glyph
+            {
+                get => glyph;
+                protected set => glyph = value;
+            }
+            private int glyph;
 
             /// <summary>
             /// The color of the glyph to visually represent the entity of the Tile.
             /// </summary>
-            public Color GlyphColor { get; private set; }
+            public virtual Color GlyphColor
+            {
+                get => glyphColor;
+                protected set => glyphColor = value;
+            }
+            private Color glyphColor;
 
             /// <summary>
             /// The color of the area behind the glyph.
             /// </summary>
-            public Color Background { get; private set; }
+            public virtual Color Background
+            {
+                get => background;
+                protected set => background = value;
+            }
+            private Color background;
 
             /// <summary>
             /// Specifies whether this Tile's entity can be passed through by others.
