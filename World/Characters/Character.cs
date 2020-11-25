@@ -11,8 +11,63 @@ namespace AsLegacy
         /// </summary>
         public abstract class Character : Tile
         {
+            protected readonly Color highlightedGlyphColor = Color.White;
+
+            /// <summary>
+            /// The glyph to visually represent the entity of the Character.
+            /// </summary>
+            public override int Glyph 
+            { 
+                get => base.Glyph;
+                protected set
+                {
+                    base.Glyph = value;
+                    characters?.GetDisplay()?.Update(Row, Column);
+                }
+            }
+
+            /// <summary>
+            /// The color of the glyph to visually represent the entity of the Tile.
+            /// </summary>
+            public override Color GlyphColor
+            {
+                get => base.GlyphColor;
+                protected set
+                {
+                    base.GlyphColor = value;
+                    characters?.GetDisplay()?.Update(Row, Column);
+                }
+            }
+            private Color originalGlyphColor;
+
+            /// <summary>
+            /// The Column (x-axis) location of the Character.
+            /// </summary>
             public int Column { get; private set; }
+
+            /// <summary>
+            /// The Row (y-axis) location of the Character.
+            /// </summary>
             public int Row { get; private set; }
+
+            /// <summary>
+            /// Specifies whether the Character is highlighted, generally for 
+            /// some kind of interaction or as being targeted. Highlighting a Character 
+            /// changes its glyph's color.
+            /// </summary>
+            public bool Highlighted 
+            {
+                get => highlighted;
+                set
+                {
+                    if (highlighted == value)
+                        return;
+
+                    highlighted = value;
+                    GlyphColor = value ? highlightedGlyphColor : originalGlyphColor;
+                }
+            }
+            private bool highlighted;
 
             /// <summary>
             /// Constructs a new Character.
@@ -30,6 +85,7 @@ namespace AsLegacy
                 Color background, Color glyphColor, int glyph, bool passable) :
                 base(background, glyphColor, glyph, passable)
             {
+                originalGlyphColor = glyphColor;
                 Column = column;
                 Row = row;
 
@@ -37,6 +93,14 @@ namespace AsLegacy
                     characters.ReplaceWith(row, column, this);
             }
 
+            /// <summary>
+            /// Moves the specificed Character to a new Row and Column location.
+            /// This technically swaps the Character with the Character presently at 
+            /// the new Row and Column.
+            /// </summary>
+            /// <param name="c">The Character to be moved.</param>
+            /// <param name="newRow">The Row that the Character will be moved to.</param>
+            /// <param name="newColumn">The Column that the Character will be moved to.</param>
             protected void Move(Character c, int newRow, int newColumn)
             {
                 Character swapped = characters.ReplaceWith(newRow, newColumn, c);
