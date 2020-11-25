@@ -76,10 +76,12 @@ namespace AsLegacy
 
                 console.Position = new Point(centerX - 1, centerY - 1);
 
-                console.SetForeground(1, 0, GetCellColor(1, 0, y - 1, x));
-                console.SetForeground(2, 1, GetCellColor(2, 1, y, x + 1));
-                console.SetForeground(1, 2, GetCellColor(1, 2, y + 1, x));
-                console.SetForeground(0, 1, GetCellColor(0, 1, y, x - 1));
+                console.SetForeground(1, 0, GetDirectionColor(1, 0, y - 1, x));
+                console.SetForeground(2, 1, GetDirectionColor(2, 1, y, x + 1));
+                console.SetForeground(1, 2, GetDirectionColor(1, 2, y + 1, x));
+                console.SetForeground(0, 1, GetDirectionColor(0, 1, y, x - 1));
+
+                World.Player.Highlighted = highlightCellX == 1 && highlightCellY == 1;
             }
 
             /// <summary>
@@ -91,9 +93,12 @@ namespace AsLegacy
             /// <param name="worldX">The global x location of the Cell.</param>
             /// <param name="worldY">The global y location of the Cell.</param>
             /// <returns></returns>
-            private Color GetCellColor(int x, int y, int worldX, int worldY)
+            private Color GetDirectionColor(int x, int y, int worldX, int worldY)
             {
                 if (!World.IsPassable(worldX, worldY))
+                        return Color.Transparent;
+
+                if (World.Player.ActiveMode != World.PresentCharacter.Mode.Normal)
                     return Color.Transparent;
 
                 if (highlightCellX == x && highlightCellY == y)

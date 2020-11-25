@@ -57,6 +57,8 @@ namespace AsLegacy
                         World.Player.PerformInDirection(World.PresentCharacter.Direction.Up);
                     else if (y == 1) // Down
                         World.Player.PerformInDirection(World.PresentCharacter.Direction.Down);
+                    else if (y == 0) // Center (Mode Toggle)
+                        World.Player.ToggleMode();
                     y -= y;
                 }
                 else if (y == 0)
@@ -69,9 +71,9 @@ namespace AsLegacy
                 }
             }
 
-            Display.PlayerCommands directions = console
+            Display.PlayerCommands playerCommands = console
                 .GetComponent<Display.PlayerCommands>() as Display.PlayerCommands;
-            directions.SetCellToHighlight(x + 1, y + 1);
+            playerCommands.SetCellToHighlight(x + 1, y + 1);
         }
     }
 }
