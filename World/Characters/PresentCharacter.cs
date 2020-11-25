@@ -11,6 +11,22 @@ namespace AsLegacy
         public abstract class PresentCharacter : Character
         {
             /// <summary>
+            /// Defines the glyph to be shown when the Character is in attack mode.
+            /// </summary>
+            protected abstract int attackGlyph { get; }
+
+            /// <summary>
+            /// Defines the glyph to be shown when the Character is in defend mode.
+            /// </summary>
+            protected abstract int defendGlyph { get; }
+
+            /// <summary>
+            /// Defines the glyph to be shown when the Character is in normal mode.
+            /// </summary>
+            protected abstract int normalGlyph { get; }
+
+
+            /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>
             public enum Direction
@@ -27,7 +43,7 @@ namespace AsLegacy
             /// </summary>
             public enum Mode
             {
-                Move,
+                Normal,
                 Attack,
                 Defend
             }
@@ -35,6 +51,32 @@ namespace AsLegacy
             /// <summary>
             /// The character's present mode.
             /// </summary>
+            public Mode ActiveMode
+            {
+                get 
+                { 
+                    return mode;
+                }
+                private set 
+                { 
+                    mode = value;
+
+                    switch (value)
+                    {
+                        case Mode.Normal:
+                            Glyph = normalGlyph;
+                            break;
+                        case Mode.Attack:
+                            Glyph = attackGlyph;
+                            break;
+                        case Mode.Defend:
+                            Glyph = defendGlyph;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
             private Mode mode;
             
 
@@ -50,7 +92,7 @@ namespace AsLegacy
             protected PresentCharacter(int row, int column, Color glyphColor, int glyph) :
                 base(row, column, Color.Transparent, glyphColor, glyph, false)
             {
-                mode = Mode.Move;
+                mode = Mode.Normal;
             }
 
             public void ActivateSkill() { }
@@ -65,7 +107,7 @@ namespace AsLegacy
             {
                 switch (mode)
                 {
-                    case Mode.Move:
+                    case Mode.Normal:
                         switch (direction)
                         {
                             case Direction.Left:
@@ -93,6 +135,29 @@ namespace AsLegacy
                     case Mode.Defend:
                         break;
                     default:
+                        break;
+                }
+            }
+
+            /// <summary>
+            /// Toggles between the 3 modes of the Character.
+            /// Normal proceeds to Attack, Attack to Defend, and Defend to Normal.
+            /// </summary>
+            public void ToggleMode()
+            {
+                switch (mode)
+                {
+                    case Mode.Normal:
+                        ActiveMode = Mode.Attack;
+                        break;
+                    case Mode.Attack:
+                        ActiveMode = Mode.Defend;
+                        break;
+                    case Mode.Defend:
+                        ActiveMode = Mode.Normal;
+                        break;
+                    default:
+                        ActiveMode = Mode.Normal;
                         break;
                 }
             }
