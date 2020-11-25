@@ -8,9 +8,9 @@ namespace AsLegacy
 {
     /// <summary>
     /// Defines a Console Component to handle inputs (mouse and keyboard) for 
-    /// a Console that represents Directions available to the Player.
+    /// a Console that represents PlayerCommands available to the Player.
     /// </summary>
-    public class DirectionHandling : InputConsoleComponent
+    public class PlayerCommandHandling : InputConsoleComponent
     {
         // TODO :: Refactor to account for handling other keyboard input for 
         //          the remaining Player controls (mode changes, skill activation, etc.).
@@ -69,8 +69,8 @@ namespace AsLegacy
                 }
             }
 
-            Display.Directions directions = console
-                .GetComponent<Display.Directions>() as Display.Directions;
+            Display.PlayerCommands directions = console
+                .GetComponent<Display.PlayerCommands>() as Display.PlayerCommands;
             directions.SetCellToHighlight(x + 1, y + 1);
         }
     }

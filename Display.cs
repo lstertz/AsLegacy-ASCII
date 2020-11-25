@@ -41,9 +41,9 @@ namespace AsLegacy
             characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             characters.CenterViewPortOnPoint(World.Player.Point);
 
-            directions = new Console(3, 3, Directions.Cells);
-            directions.Components.Add(new Directions());
-            directions.Components.Add(new DirectionHandling());
+            directions = new Console(3, 3, PlayerCommands.Cells);
+            directions.Components.Add(new PlayerCommands());
+            directions.Components.Add(new PlayerCommandHandling());
             directions.IsFocused = true;
 
             environment = World.Environment;

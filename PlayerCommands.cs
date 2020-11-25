@@ -9,14 +9,15 @@ namespace AsLegacy
     public partial class Display : DrawConsoleComponent
     {
         /// <summary>
-        /// Defines the Directions aspect of a Display, 
+        /// Defines the PlayerCommands aspect of a Display, 
         /// which is responsible for updating the directions available for Player movement.
         /// </summary>
-        public class Directions : DrawConsoleComponent
+        public class PlayerCommands : DrawConsoleComponent
         {
             private static readonly Color fadedWhite = new Color(255, 255, 255, 235);
 
             private static readonly Cell empty = new Cell(Color.Transparent, Color.Transparent);
+            private static readonly Cell center = new Cell(Color.Transparent, Color.Transparent);
             private static readonly Cell up = new Cell(fadedWhite, Color.Transparent, 30);
             private static readonly Cell right = new Cell(fadedWhite, Color.Transparent, 16);
             private static readonly Cell down = new Cell(fadedWhite, Color.Transparent, 31);
@@ -28,7 +29,7 @@ namespace AsLegacy
             public static readonly Cell[] Cells = new Cell[]
             {
                 empty, up, empty,
-                left, empty, right,
+                left, center, right,
                 empty, down, empty
             };
 
@@ -36,9 +37,9 @@ namespace AsLegacy
             private int highlightCellY = -1;
             
             /// <summary>
-            /// Specifies which Directions Display Cell should be highlighted, which 
+            /// Specifies which PlayerCommands Display Cell should be highlighted, which 
             /// influences the foreground color of the Cell. A location outside of the 
-            /// Directions Console (e.g. (-1, -1)) indicates that no Cell should be highlighted.
+            /// PlayerCommands Console (e.g. (-1, -1)) indicates that no Cell should be highlighted.
             /// </summary>
             /// <param name="x">The local x of the Cell.</param>
             /// <param name="y">The local y of the Cell.</param>
@@ -53,7 +54,7 @@ namespace AsLegacy
             /// visibility of the cells to indicate available movement.
             /// </summary>
             /// <param name="console">The Console to which the 
-            /// Directions has been added as a component.</param>
+            /// PlayerCommands has been added as a component.</param>
             /// <param name="delta">The time that has passed
             /// since the last draw update.</param>
             public override void Draw(Console console, TimeSpan delta)
@@ -82,7 +83,7 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Determines the foreground color of a Directions Display Cell for the 
+            /// Determines the foreground color of a PlayerCommands Display Cell for the 
             /// specified local and global location.
             /// </summary>
             /// <param name="x">The local x location of the Cell.</param>
