@@ -8,12 +8,13 @@ namespace AsLegacy
 {
     /// <summary>
     /// Defines a Console Component to handle inputs (mouse and keyboard) for 
-    /// a Console that represents Directions available to the Player.
+    /// a Console that represents PlayerCommands available to the Player.
     /// </summary>
-    public class DirectionHandling : InputConsoleComponent
+    public class PlayerCommandHandling : InputConsoleComponent
     {
         // TODO :: Refactor to account for handling other keyboard input for 
-        //          the remaining Player controls (mode changes, skill activation, etc.).
+        //          the remaining Player controls (skill activation, etc.) 
+        //          and interactions with Characters in general (targeting).
 
         /// <summary>
         /// Handles keyboard state changes.
@@ -34,6 +35,21 @@ namespace AsLegacy
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Left);
             else if (info.IsKeyReleased(Keys.Right))
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Right);
+            
+            if (info.IsKeyReleased(Keys.Space))
+                World.Player.ToggleAttackMode();
+            World.Player.EnableDefense(AltIsDown(info));
+        }
+
+        /// <summary>
+        /// Specifies whether an Alt key is currently pressed down.
+        /// </summary>
+        /// <param name="info">The keyboard state being checked.</param>
+        /// <returns>True if an Alt key (either left or right) is currently 
+        /// pressed down.</returns>
+        private bool AltIsDown(Keyboard info)
+        {
+            return info.IsKeyDown(Keys.LeftAlt) || info.IsKeyDown(Keys.RightAlt);
         }
 
         /// <summary>
@@ -57,6 +73,8 @@ namespace AsLegacy
                         World.Player.PerformInDirection(World.PresentCharacter.Direction.Up);
                     else if (y == 1) // Down
                         World.Player.PerformInDirection(World.PresentCharacter.Direction.Down);
+                    else if (y == 0) // Center (Mode Toggle)
+                        World.Player.ToggleMode();
                     y -= y;
                 }
                 else if (y == 0)
@@ -69,9 +87,9 @@ namespace AsLegacy
                 }
             }
 
-            Display.Directions directions = console
-                .GetComponent<Display.Directions>() as Display.Directions;
-            directions.SetCellToHighlight(x + 1, y + 1);
+            Display.PlayerCommands playerCommands = console
+                .GetComponent<Display.PlayerCommands>() as Display.PlayerCommands;
+            playerCommands.SetCellToHighlight(x + 1, y + 1);
         }
     }
 }

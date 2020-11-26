@@ -11,6 +11,22 @@ namespace AsLegacy
         public abstract class PresentCharacter : Character
         {
             /// <summary>
+            /// Defines the glyph to be shown when the Character is in attack mode.
+            /// </summary>
+            protected abstract int attackGlyph { get; }
+
+            /// <summary>
+            /// Defines the glyph to be shown when the Character is in defend mode.
+            /// </summary>
+            protected abstract int defendGlyph { get; }
+
+            /// <summary>
+            /// Defines the glyph to be shown when the Character is in normal mode.
+            /// </summary>
+            protected abstract int normalGlyph { get; }
+
+
+            /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>
             public enum Direction
@@ -27,7 +43,7 @@ namespace AsLegacy
             /// </summary>
             public enum Mode
             {
-                Move,
+                Normal,
                 Attack,
                 Defend
             }
@@ -35,7 +51,35 @@ namespace AsLegacy
             /// <summary>
             /// The character's present mode.
             /// </summary>
+            public Mode ActiveMode
+            {
+                get 
+                { 
+                    return mode;
+                }
+                private set 
+                { 
+                    mode = value;
+
+                    switch (value)
+                    {
+                        case Mode.Normal:
+                            Glyph = normalGlyph;
+                            break;
+                        case Mode.Attack:
+                            Glyph = attackGlyph;
+                            break;
+                        case Mode.Defend:
+                            Glyph = defendGlyph;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
             private Mode mode;
+            private bool attackEnabled = false;
+            private bool defenseEnabled = false;
             
 
             /// <summary>
@@ -50,10 +94,8 @@ namespace AsLegacy
             protected PresentCharacter(int row, int column, Color glyphColor, int glyph) :
                 base(row, column, Color.Transparent, glyphColor, glyph, false)
             {
-                mode = Mode.Move;
+                mode = Mode.Normal;
             }
-
-            public void ActivateSkill() { }
 
             /// <summary>
             /// Performs the appropriate action for the character's present state, in the 
@@ -65,7 +107,7 @@ namespace AsLegacy
             {
                 switch (mode)
                 {
-                    case Mode.Move:
+                    case Mode.Normal:
                         switch (direction)
                         {
                             case Direction.Left:
@@ -95,6 +137,67 @@ namespace AsLegacy
                     default:
                         break;
                 }
+            }
+
+            /// <summary>
+            /// Toggles between the 3 modes of the Character.
+            /// Normal proceeds to Attack, Attack to Defend, and Defend to Normal.
+            /// </summary>
+            public void ToggleMode()
+            {
+                switch (mode)
+                {
+                    case Mode.Normal:
+                        ActiveMode = Mode.Attack;
+                        break;
+                    case Mode.Attack:
+                        ActiveMode = Mode.Defend;
+                        break;
+                    case Mode.Defend:
+                        ActiveMode = Mode.Normal;
+                        break;
+                    default:
+                        ActiveMode = Mode.Normal;
+                        break;
+                }
+            }
+
+            /// <summary>
+            /// Toggles whether Attack Mode is enabled, and updates 
+            /// the current active mode.
+            /// </summary>
+            public void ToggleAttackMode()
+            {
+                attackEnabled = !attackEnabled;
+                UpdateActiveMode();
+            }
+
+            /// <summary>
+            /// Specifies whether the Defend Mode is enabled, and updates 
+            /// the current active mode.
+            /// </summary>
+            /// <param name="enabled">Whether the Defend Mode should be enabled.</param>
+            public void EnableDefense(bool enabled)
+            {
+                if (defenseEnabled == enabled)
+                    return;
+
+                defenseEnabled = enabled;
+                UpdateActiveMode();
+            }
+
+            /// <summary>
+            /// Updates the active mode of the character, based on the current state of 
+            /// enabled defense/attack.
+            /// </summary>
+            private void UpdateActiveMode()
+            {
+                if (defenseEnabled)
+                    ActiveMode = Mode.Defend;
+                else if (attackEnabled)
+                    ActiveMode = Mode.Attack;
+                else
+                    ActiveMode = Mode.Normal;
             }
         }
     }
