@@ -78,6 +78,8 @@ namespace AsLegacy
                 }
             }
             private Mode mode;
+            private bool attackEnabled = false;
+            private bool defenseEnabled = false;
             
 
             /// <summary>
@@ -94,8 +96,6 @@ namespace AsLegacy
             {
                 mode = Mode.Normal;
             }
-
-            public void ActivateSkill() { }
 
             /// <summary>
             /// Performs the appropriate action for the character's present state, in the 
@@ -160,6 +160,44 @@ namespace AsLegacy
                         ActiveMode = Mode.Normal;
                         break;
                 }
+            }
+
+            /// <summary>
+            /// Toggles whether Attack Mode is enabled, and updates 
+            /// the current active mode.
+            /// </summary>
+            public void ToggleAttackMode()
+            {
+                attackEnabled = !attackEnabled;
+                UpdateActiveMode();
+            }
+
+            /// <summary>
+            /// Specifies whether the Defend Mode is enabled, and updates 
+            /// the current active mode.
+            /// </summary>
+            /// <param name="enabled">Whether the Defend Mode should be enabled.</param>
+            public void EnableDefense(bool enabled)
+            {
+                if (defenseEnabled == enabled)
+                    return;
+
+                defenseEnabled = enabled;
+                UpdateActiveMode();
+            }
+
+            /// <summary>
+            /// Updates the active mode of the character, based on the current state of 
+            /// enabled defense/attack.
+            /// </summary>
+            private void UpdateActiveMode()
+            {
+                if (defenseEnabled)
+                    ActiveMode = Mode.Defend;
+                else if (attackEnabled)
+                    ActiveMode = Mode.Attack;
+                else
+                    ActiveMode = Mode.Normal;
             }
         }
     }
