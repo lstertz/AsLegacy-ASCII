@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Components;
+using SadConsole.Controls;
 using System;
 using System.Collections.Generic;
 using Console = SadConsole.Console;
@@ -64,9 +65,9 @@ namespace AsLegacy
         }
 
         private ScrollingConsole characters;
-        private Console directions;
+        private Console playerCommands;
         private ScrollingConsole environment;
-        private Console stats;
+        private ControlsConsole characterPanel;
 
         private Rectangle MapViewPort => characters.ViewPort;
 
@@ -84,19 +85,24 @@ namespace AsLegacy
             characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             characters.CenterViewPortOnPoint(World.Player.Point);
 
-            directions = new Console(3, 3, PlayerCommands.Cells);
-            directions.Components.Add(new PlayerCommands());
-            directions.Components.Add(new PlayerCommandHandling());
-            directions.IsFocused = true;
+            playerCommands = new Console(3, 3, PlayerCommands.Cells);
+            playerCommands.Components.Add(new PlayerCommands());
+            playerCommands.Components.Add(new PlayerCommandHandling());
+            playerCommands.IsFocused = true;
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
             environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             environment.CenterViewPortOnPoint(World.Player.Point);
 
+            characterPanel = new CharacterPanel(AsLegacy.Width / 2 - 2, AsLegacy.Height - 2);
+            characterPanel.Position = new Point(AsLegacy.Width / 2 + 1, 1);
+
             console.Children.Add(environment);
             console.Children.Add(characters);
-            characters.Children.Add(directions);
+            characters.Children.Add(playerCommands);
+            console.Children.Add(characterPanel);
+
             console.Components.Add(this);
         }
 
