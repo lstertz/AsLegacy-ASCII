@@ -27,13 +27,13 @@ namespace AsLegacy
         {
             handled = true;
 
-            if (info.IsKeyReleased(Keys.Up))
+            if (info.IsKeyReleased(Keys.Up) || info.IsKeyReleased(Keys.W))
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Up);
-            else if (info.IsKeyReleased(Keys.Down))
+            else if (info.IsKeyReleased(Keys.Down) || info.IsKeyReleased(Keys.S))
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Down);
-            else if (info.IsKeyReleased(Keys.Left))
+            else if (info.IsKeyReleased(Keys.Left) || info.IsKeyReleased(Keys.A))
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Left);
-            else if (info.IsKeyReleased(Keys.Right))
+            else if (info.IsKeyReleased(Keys.Right) || info.IsKeyReleased(Keys.D))
                 World.Player.PerformInDirection(World.PresentCharacter.Direction.Right);
             
             if (info.IsKeyReleased(Keys.Space))
