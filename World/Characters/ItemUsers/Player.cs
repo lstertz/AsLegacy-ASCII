@@ -30,6 +30,24 @@ namespace AsLegacy
         /// </summary>
         public Point Point => new Point(Column, Row);
 
+        /// <summary>
+        /// Specifies the target of the Player.
+        /// The target will be selected, and will be the recipient of 
+        /// certain actions performed by the Player.
+        /// </summary>
+        public override World.PresentCharacter Target
+        {
+            get { return target; }
+            set
+            {
+                if (target != null)
+                    target.Selected = false;
+
+                value.Selected = true;
+                base.Target = value;
+            }
+        }
+
 
         /// <summary>
         /// Constructs a new Player at the provided row and column on the map.

@@ -85,7 +85,19 @@ namespace AsLegacy
             /// The name of this Present Character.
             /// </summary>
             public string Name { get; private set; }
-            
+
+            /// <summary>
+            /// Specifies the target of this Present Character.
+            /// The target will be the recipient of certain actions performed 
+            /// by this Present Character.
+            /// </summary>
+            public virtual PresentCharacter Target
+            {
+                get { return target; }
+                set { target = value; }
+            }
+            protected PresentCharacter target = null;
+
 
             /// <summary>
             /// Constructs a new Present Character.
