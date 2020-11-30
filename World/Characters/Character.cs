@@ -12,6 +12,7 @@ namespace AsLegacy
         public abstract class Character : Tile
         {
             protected readonly Color highlightedGlyphColor = Color.White;
+            protected readonly Color selectedGlyphColor = Color.Blue;
 
             /// <summary>
             /// The glyph to visually represent the entity of the Character.
@@ -52,7 +53,7 @@ namespace AsLegacy
 
             /// <summary>
             /// Specifies whether the Character is highlighted, generally for 
-            /// some kind of interaction or as being targeted. Highlighting a Character 
+            /// some kind of anticipated interaction. Highlighting a Character 
             /// changes its glyph's color.
             /// </summary>
             public bool Highlighted 
@@ -68,6 +69,24 @@ namespace AsLegacy
                 }
             }
             private bool highlighted;
+
+            /// <summary>
+            /// Specifies whether the Character is selected, generally for being targeted. 
+            /// Selecting a Character changes its glyph's color.
+            /// </summary>
+            public bool Selected
+            {
+                get => selected;
+                set
+                {
+                    if (selected == value)
+                        return;
+
+                    selected = value;
+                    GlyphColor = value ? selectedGlyphColor : originalGlyphColor;
+                }
+            }
+            private bool selected;
 
             /// <summary>
             /// Constructs a new Character.
