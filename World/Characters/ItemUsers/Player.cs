@@ -6,7 +6,7 @@ namespace AsLegacy
     /// Defines a Player, the focal character, on the World map, of the real-life player as 
     /// they interact with the game.
     /// </summary>
-    public class Player : World.PresentCharacter
+    public class Player : ItemUser
     {
         private const int normal = '@';
 
