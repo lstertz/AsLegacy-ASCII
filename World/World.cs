@@ -67,6 +67,8 @@ namespace AsLegacy
 
         public static Player Player { get; private set; }
 
+        private static Beast beast;
+
         /// <summary>
         /// Initializes the World with expected Characters.
         /// </summary>
@@ -76,6 +78,7 @@ namespace AsLegacy
                 return;
 
             Player = new Player(3, 3);
+            beast = new Beast(7, 1, "Wolf");
         }
 
         /// <summary>
