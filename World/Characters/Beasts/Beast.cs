@@ -16,12 +16,9 @@ namespace AsLegacy
 
         protected override int normalGlyph => normal;
 
-        public string Name { get; private set; }
-
         public Beast(int row, int column, string name) : 
-            base(row, column, Color.DarkOrange, normal)
+            base(row, column, Color.DarkOrange, normal, name)
         {
-            Name = name;
         }
     }
 }

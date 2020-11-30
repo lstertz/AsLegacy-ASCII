@@ -80,6 +80,11 @@ namespace AsLegacy
             private Mode mode;
             private bool attackEnabled = false;
             private bool defenseEnabled = false;
+
+            /// <summary>
+            /// The name of this Present Character.
+            /// </summary>
+            public string Name { get; private set; }
             
 
             /// <summary>
@@ -91,10 +96,13 @@ namespace AsLegacy
             /// the new Present Character.</param>
             /// <param name="glyph">The glyph visually displayed to represent 
             /// the new Present Character.</param>
-            protected PresentCharacter(int row, int column, Color glyphColor, int glyph) :
+            /// <param name="name">The string name given to the new Present Character.</param>
+            protected PresentCharacter(int row, int column, 
+                Color glyphColor, int glyph, string name) :
                 base(row, column, Color.Transparent, glyphColor, glyph, false)
             {
                 mode = Mode.Normal;
+                Name = name;
             }
 
             /// <summary>
