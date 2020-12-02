@@ -65,6 +65,19 @@ namespace AsLegacy
             return new AbsentCharacter(row, column);
         });
 
+        /// <summary>
+        /// The currently highlighted Present Character, if any.
+        /// </summary>
+        public static PresentCharacter HighlightedCharacter { get; private set; }
+
+        /// <summary>
+        /// The currently selected Present Character, if any.
+        /// </summary>
+        public static PresentCharacter SelectedCharacter { get; private set; }
+
+        /// <summary>
+        /// The Player Character.
+        /// </summary>
         public static Player Player { get; private set; }
 
         private static Beast beast;
@@ -82,14 +95,50 @@ namespace AsLegacy
         }
 
         /// <summary>
+        /// Attempts to highlight the Present Character at the specified position.
+        /// </summary>
+        /// <param name="row">The row, defining the y axis of the position.</param>
+        /// <param name="column">The column, defining the x axis of the position.</param>
+        public static void Highlight(int row, int column)
+        {
+            Character c = characters.Get(row, column);
+            if (c == HighlightedCharacter)
+                return;
+
+            HighlightedCharacter.Highlighted = false;
+            if (c is AbsentCharacter)
+                HighlightedCharacter = null;
+            else
+                (c as PresentCharacter).Highlighted = true;
+        }
+
+        /// <summary>
         /// Specifies whether the provided position can be passed through.
         /// </summary>
-        /// <param name="row">The row, defining the y axis of the position..</param>
+        /// <param name="row">The row, defining the y axis of the position.</param>
         /// <param name="column">The column, defining the x axis of the position.</param>
         /// <returns>True if the position is passable, false otherwise.</returns>
         public static bool IsPassable(int row, int column)
         {
             return characters.IsPassable(row, column) && environment.IsPassable(row, column);
+        }
+
+        /// <summary>
+        /// Attempts to select the Present Character at the specified position.
+        /// </summary>
+        /// <param name="row">The row, defining the y axis of the position.</param>
+        /// <param name="column">The column, defining the x axis of the position.</param>
+        public static void Select(int row, int column)
+        {
+            Character c = characters.Get(row, column);
+            if (c == SelectedCharacter)
+                return;
+
+            SelectedCharacter.Selected = false;
+            if (c is AbsentCharacter)
+                SelectedCharacter = null;
+            else
+                (c as PresentCharacter).Selected = true;
         }
     }
 }
