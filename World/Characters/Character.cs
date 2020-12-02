@@ -39,7 +39,7 @@ namespace AsLegacy
                     characters?.GetDisplay()?.Update(Row, Column);
                 }
             }
-            private Color originalGlyphColor;
+            protected Color originalGlyphColor;
 
             /// <summary>
             /// The Column (x-axis) location of the Character.
@@ -50,43 +50,6 @@ namespace AsLegacy
             /// The Row (y-axis) location of the Character.
             /// </summary>
             public int Row { get; private set; }
-
-            /// <summary>
-            /// Specifies whether the Character is highlighted, generally for 
-            /// some kind of anticipated interaction. Highlighting a Character 
-            /// changes its glyph's color.
-            /// </summary>
-            public bool Highlighted 
-            {
-                get => highlighted;
-                set
-                {
-                    if (highlighted == value)
-                        return;
-
-                    highlighted = value;
-                    GlyphColor = value ? highlightedGlyphColor : originalGlyphColor;
-                }
-            }
-            private bool highlighted;
-
-            /// <summary>
-            /// Specifies whether the Character is selected, generally for being targeted. 
-            /// Selecting a Character changes its glyph's color.
-            /// </summary>
-            public bool Selected
-            {
-                get => selected;
-                set
-                {
-                    if (selected == value)
-                        return;
-
-                    selected = value;
-                    GlyphColor = value ? selectedGlyphColor : originalGlyphColor;
-                }
-            }
-            private bool selected;
 
             /// <summary>
             /// Constructs a new Character.
