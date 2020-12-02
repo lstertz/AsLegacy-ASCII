@@ -9,15 +9,14 @@ namespace AsLegacy
     public partial class Display : DrawConsoleComponent
     {
         /// <summary>
-        /// Defines the PlayerCommands aspect of a Display, 
+        /// Defines the Commands aspect of a Display, 
         /// which is responsible for updating the directions available for Player movement.
         /// </summary>
-        public class PlayerCommands : DrawConsoleComponent
+        public class Commands : Console
         {
             private static readonly Color fadedWhite = new Color(255, 255, 255, 235);
 
             private static readonly Cell empty = new Cell(Color.Transparent, Color.Transparent);
-            private static readonly Cell center = new Cell(Color.Transparent, Color.Transparent);
             private static readonly Cell up = new Cell(fadedWhite, Color.Transparent, 30);
             private static readonly Cell right = new Cell(fadedWhite, Color.Transparent, 16);
             private static readonly Cell down = new Cell(fadedWhite, Color.Transparent, 31);
@@ -26,20 +25,27 @@ namespace AsLegacy
             /// <summary>
             /// The Cells that make up the display of the available directions.
             /// </summary>
-            public static readonly Cell[] Cells = new Cell[]
+            private static readonly Cell[] cells = new Cell[]
             {
                 empty, up, empty,
-                left, center, right,
+                left, empty, right,
                 empty, down, empty
             };
 
+            private World.PresentCharacter focus;
+            
             private int highlightCellX = -1;
             private int highlightCellY = -1;
+
+            public Commands(World.PresentCharacter focus) : base(3, 3, cells)
+            {
+                this.focus = focus;
+            }
             
             /// <summary>
-            /// Specifies which PlayerCommands Display Cell should be highlighted, which 
+            /// Specifies which Commands Display Cell should be highlighted, which 
             /// influences the foreground color of the Cell. A location outside of the 
-            /// PlayerCommands Console (e.g. (-1, -1)) indicates that no Cell should be highlighted.
+            /// Commands Console (e.g. (-1, -1)) indicates that no Cell should be highlighted.
             /// </summary>
             /// <param name="x">The local x of the Cell.</param>
             /// <param name="y">The local y of the Cell.</param>
@@ -54,51 +60,48 @@ namespace AsLegacy
             /// visibility of the cells to indicate available movement.
             /// </summary>
             /// <param name="console">The Console to which the 
-            /// PlayerCommands has been added as a component.</param>
-            /// <param name="delta">The time that has passed
-            /// since the last draw update.</param>
-            public override void Draw(Console console, TimeSpan delta)
+            /// Commands has been added as a component.</param>
+            /// <param name="delta">The time that has passed since the last draw update.</param>
+            public override void Draw(TimeSpan delta)
             {
-                int x = World.Player.Column;
-                int y = World.Player.Row;
+                int x = focus.Column;
+                int y = focus.Row;
 
                 int centerX = MapViewPortHalfWidth;
                 int centerY = MapViewPortHalfHeight;
 
                 if (display.MapViewPort.Left == 0)
-                    centerX = World.Player.Column;
+                    centerX = x;
                 else if (display.MapViewPort.Right == World.ColumnCount)
-                    centerX = World.Player.Column - display.characters.ViewPort.Left;
+                    centerX = x - display.characters.ViewPort.Left;
                 if (display.characters.ViewPort.Top == 0)
-                    centerY = World.Player.Row;
+                    centerY = y;
                 else if (display.characters.ViewPort.Bottom == World.RowCount)
-                    centerY = World.Player.Row - display.characters.ViewPort.Top;
+                    centerY = y - display.characters.ViewPort.Top;
 
-                console.Position = new Point(centerX - 1, centerY - 1);
+                Position = new Point(centerX - 1, centerY - 1);
 
-                console.SetForeground(1, 0, GetDirectionColor(1, 0, y - 1, x));
-                console.SetForeground(2, 1, GetDirectionColor(2, 1, y, x + 1));
-                console.SetForeground(1, 2, GetDirectionColor(1, 2, y + 1, x));
-                console.SetForeground(0, 1, GetDirectionColor(0, 1, y, x - 1));
-
-                World.Player.Highlighted = highlightCellX == 1 && highlightCellY == 1;
+                SetForeground(1, 0, GetDirectionColor(1, 0, y - 1, x));
+                SetForeground(2, 1, GetDirectionColor(2, 1, y, x + 1));
+                SetForeground(1, 2, GetDirectionColor(1, 2, y + 1, x));
+                SetForeground(0, 1, GetDirectionColor(0, 1, y, x - 1));
             }
 
             /// <summary>
-            /// Determines the foreground color of a PlayerCommands Display Cell for the 
+            /// Determines the foreground color of a Commands Display Cell for the 
             /// specified local and global location.
             /// </summary>
             /// <param name="x">The local x location of the Cell.</param>
             /// <param name="y">The local y location of the Cell.</param>
             /// <param name="worldX">The global x location of the Cell.</param>
             /// <param name="worldY">The global y location of the Cell.</param>
-            /// <returns></returns>
+            /// <returns>The Color for the glyph of the located Cell.</returns>
             private Color GetDirectionColor(int x, int y, int worldX, int worldY)
             {
                 if (!World.IsPassable(worldX, worldY))
                         return Color.Transparent;
 
-                if (World.Player.ActiveMode != World.PresentCharacter.Mode.Normal)
+                if (focus.ActiveMode != World.PresentCharacter.Mode.Normal)
                     return Color.Transparent;
 
                 if (highlightCellX == x && highlightCellY == y)

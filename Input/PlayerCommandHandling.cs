@@ -8,14 +8,10 @@ namespace AsLegacy
 {
     /// <summary>
     /// Defines a Console Component to handle inputs (mouse and keyboard) for 
-    /// a Console that represents PlayerCommands available to the Player.
+    /// a Console that represents Commands available to the Player.
     /// </summary>
     public class PlayerCommandHandling : InputConsoleComponent
     {
-        // TODO :: Refactor to account for handling other keyboard input for 
-        //          the remaining Player controls (skill activation, etc.) 
-        //          and interactions with Characters in general (targeting).
-
         /// <summary>
         /// Handles keyboard state changes.
         /// </summary>
@@ -73,8 +69,6 @@ namespace AsLegacy
                         World.Player.PerformInDirection(World.PresentCharacter.Direction.Up);
                     else if (y == 1) // Down
                         World.Player.PerformInDirection(World.PresentCharacter.Direction.Down);
-                    else if (y == 0) // Center (Mode Toggle)
-                        World.Player.ToggleMode();
                     y -= y;
                 }
                 else if (y == 0)
@@ -87,9 +81,8 @@ namespace AsLegacy
                 }
             }
 
-            Display.PlayerCommands playerCommands = console
-                .GetComponent<Display.PlayerCommands>() as Display.PlayerCommands;
-            playerCommands.SetCellToHighlight(x + 1, y + 1);
+            if (console is Display.Commands)
+                (console as Display.Commands).SetCellToHighlight(x + 1, y + 1);
         }
     }
 }

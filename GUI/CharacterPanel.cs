@@ -53,7 +53,6 @@ namespace AsLegacy
                 colors.ControlBackLight = Color.Transparent;
                 colors.ControlBackSelected = Color.Transparent;
                 colors.ControlBackDark = Color.Transparent;
-                // Change glyph highlight and select somehow.
                 colors.RebuildAppearances();
                 ThemeColors = colors;
 

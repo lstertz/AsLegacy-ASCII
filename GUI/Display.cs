@@ -65,7 +65,7 @@ namespace AsLegacy
         }
 
         private ScrollingConsole characters;
-        private Console playerCommands;
+        private Console commands;
         private ScrollingConsole environment;
         private ControlsConsole characterPanel;
 
@@ -84,11 +84,11 @@ namespace AsLegacy
             characters.Position = new Point(1, 1);
             characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             characters.CenterViewPortOnPoint(World.Player.Point);
+            // TODO :: 11 : Add a Component for mouse processing, to highlight and select Characters.
 
-            playerCommands = new Console(3, 3, PlayerCommands.Cells);
-            playerCommands.Components.Add(new PlayerCommands());
-            playerCommands.Components.Add(new PlayerCommandHandling());
-            playerCommands.IsFocused = true;
+            commands = new Commands(World.Player);
+            commands.Components.Add(new PlayerCommandHandling());
+            commands.IsFocused = true;
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
@@ -100,7 +100,7 @@ namespace AsLegacy
 
             console.Children.Add(environment);
             console.Children.Add(characters);
-            characters.Children.Add(playerCommands);
+            characters.Children.Add(commands);
             console.Children.Add(characterPanel);
 
             console.Components.Add(this);
