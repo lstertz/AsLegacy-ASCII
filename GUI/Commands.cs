@@ -69,15 +69,16 @@ namespace AsLegacy
 
                 int centerX = MapViewPortHalfWidth;
                 int centerY = MapViewPortHalfHeight;
+                Rectangle viewPort = MapViewPort;
 
-                if (display.MapViewPort.Left == 0)
+                if (viewPort.Left == 0)
                     centerX = x;
-                else if (display.MapViewPort.Right == World.ColumnCount)
-                    centerX = x - display.characters.ViewPort.Left;
-                if (display.characters.ViewPort.Top == 0)
+                else if (viewPort.Right == World.ColumnCount)
+                    centerX = x - viewPort.Left;
+                if (viewPort.Top == 0)
                     centerY = y;
-                else if (display.characters.ViewPort.Bottom == World.RowCount)
-                    centerY = y - display.characters.ViewPort.Top;
+                else if (viewPort.Bottom == World.RowCount)
+                    centerY = y - viewPort.Top;
 
                 Position = new Point(centerX - 1, centerY - 1);
 

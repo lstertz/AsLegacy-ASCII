@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Components;
-using SadConsole.Controls;
 using System;
 using System.Collections.Generic;
 using Console = SadConsole.Console;
+
+using AsLegacy.Input;
 
 namespace AsLegacy
 {
@@ -52,6 +53,8 @@ namespace AsLegacy
 
         private static Display display;
 
+        public static Rectangle MapViewPort => display.characters.ViewPort;
+
         /// <summary>
         /// Initializes the Display.
         /// Required for any display output to be rendered, or for any 
@@ -68,8 +71,6 @@ namespace AsLegacy
         private Console commands;
         private ScrollingConsole environment;
         private ControlsConsole characterPanel;
-
-        private Rectangle MapViewPort => characters.ViewPort;
 
         /// <summary>
         /// Constructs a new Display for the given Console.

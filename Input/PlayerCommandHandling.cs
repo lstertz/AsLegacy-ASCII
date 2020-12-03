@@ -4,7 +4,7 @@ using SadConsole.Input;
 
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
-namespace AsLegacy
+namespace AsLegacy.Input
 {
     /// <summary>
     /// Defines a Console Component to handle inputs (mouse and keyboard) for 
