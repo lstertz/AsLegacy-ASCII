@@ -59,11 +59,11 @@ namespace AsLegacy
             /// Updates the cell display by changing the 
             /// visibility of the cells to indicate available movement.
             /// </summary>
-            /// <param name="console">The Console to which the 
-            /// Commands has been added as a component.</param>
             /// <param name="delta">The time that has passed since the last draw update.</param>
             public override void Draw(TimeSpan delta)
             {
+                base.Draw(delta);
+
                 int x = focus.Column;
                 int y = focus.Row;
 
@@ -99,7 +99,7 @@ namespace AsLegacy
             private Color GetDirectionColor(int x, int y, int worldX, int worldY)
             {
                 if (!World.IsPassable(worldX, worldY))
-                        return Color.Transparent;
+                    return Color.Transparent;
 
                 if (focus.ActiveMode != World.PresentCharacter.Mode.Normal)
                     return Color.Transparent;
