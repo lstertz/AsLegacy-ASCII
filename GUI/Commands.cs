@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Components;
+using SadConsole.Input;
 using System;
 using Console = SadConsole.Console;
 
@@ -32,12 +33,12 @@ namespace AsLegacy
                 empty, down, empty
             };
 
-            private World.PresentCharacter focus;
+            private World.Character focus;
             
             private int highlightCellX = -1;
             private int highlightCellY = -1;
 
-            public Commands(World.PresentCharacter focus) : base(3, 3, cells)
+            public Commands(World.Character focus) : base(3, 3, cells)
             {
                 this.focus = focus;
             }
@@ -88,6 +89,15 @@ namespace AsLegacy
                 SetForeground(0, 1, GetDirectionColor(0, 1, y, x - 1));
             }
 
+            public override bool ProcessMouse(MouseConsoleState state)
+            {
+                // Ensure that the PlayerCommandHandling Component processes.
+                ComponentsMouse[0].ProcessMouse(this, state, out _);
+
+                // Permit mouse interactions to fall through to other Consoles.
+                return false;
+            }
+
             /// <summary>
             /// Determines the foreground color of a Commands Display Cell for the 
             /// specified local and global location.
@@ -99,16 +109,25 @@ namespace AsLegacy
             /// <returns>The Color for the glyph of the located Cell.</returns>
             private Color GetDirectionColor(int x, int y, int worldX, int worldY)
             {
-                if (!World.IsPassable(worldX, worldY))
-                    return Color.Transparent;
-
-                if (focus.ActiveMode != World.PresentCharacter.Mode.Normal)
+                if (!IsInteractable(worldX, worldY))
                     return Color.Transparent;
 
                 if (highlightCellX == x && highlightCellY == y)
                     return Color.White;
-
                 return fadedWhite;
+            }
+
+            /// <summary>
+            /// Specifies whether an input provided at the specified world postion 
+            /// should be interactable; whether it should be considered for a command.
+            /// </summary>
+            /// <param name="worldX">The world x-axis position.</param>
+            /// <param name="worldY">The world y-axis position.</param>
+            /// <returns>Whether the input should be considered for a command.</returns>
+            private bool IsInteractable(int worldX, int worldY)
+            {
+                return World.IsPassable(worldX, worldY) && 
+                    focus.ActiveMode == World.Character.Mode.Normal;
             }
         }
     }
