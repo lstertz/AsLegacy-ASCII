@@ -11,9 +11,6 @@ namespace AsLegacy
         /// </summary>
         public abstract class Character : Tile
         {
-            protected readonly Color highlightedGlyphColor = Color.White;
-            protected readonly Color selectedGlyphColor = Color.Blue;
-
             /// <summary>
             /// The glyph to visually represent the entity of the Character.
             /// </summary>
@@ -39,7 +36,35 @@ namespace AsLegacy
                     characters?.GetDisplay()?.Update(Row, Column);
                 }
             }
-            protected Color originalGlyphColor;
+            /// <summary>
+            /// Specifies whether the Character is highlighted, generally for 
+            /// some kind of anticipated interaction.
+            /// Highlighting a Character changes its glyph's color.
+            /// Only one Tile can be highlighted at a time.
+            /// </summary>
+            public override bool Highlighted 
+            { 
+                get => base.Highlighted;
+                set
+                {
+                    base.Highlighted = value;
+                    characters?.GetDisplay()?.Update(Row, Column);
+                }
+            }
+
+            /// <summary>
+            /// Specifies whether the Character is selected, generally for being targeted. 
+            /// Selecting a Character changes its glyph's color.
+            /// </summary>
+            public override bool Selected
+            {
+                get => base.Selected;
+                protected set
+                {
+                    base.Selected = value;
+                    characters?.GetDisplay()?.Update(Row, Column);
+                }
+            }
 
             /// <summary>
             /// The Column (x-axis) location of the Character.
@@ -67,7 +92,6 @@ namespace AsLegacy
                 Color background, Color glyphColor, int glyph, bool passable) :
                 base(background, glyphColor, glyph, passable)
             {
-                originalGlyphColor = glyphColor;
                 Column = column;
                 Row = row;
 

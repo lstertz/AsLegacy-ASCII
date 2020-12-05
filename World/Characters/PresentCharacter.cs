@@ -81,58 +81,6 @@ namespace AsLegacy
             private bool attackEnabled = false;
             private bool defenseEnabled = false;
 
-
-            /// <summary>
-            /// Specifies whether the Character is highlighted, generally for 
-            /// some kind of anticipated interaction. Highlighting a Character 
-            /// changes its glyph's color.
-            /// </summary>
-            public bool Highlighted
-            {
-                get => highlighted;
-                set
-                {
-                    if (highlighted == value)
-                        return;
-
-                    highlighted = value;
-                    GlyphColor = highlighted ? highlightedGlyphColor : selected ?
-                        selectedGlyphColor : originalGlyphColor;
-
-                    if (value)
-                    {
-                        HighlightedCharacter.Highlighted = false;
-                        HighlightedCharacter = this;
-                    }
-                }
-            }
-            private bool highlighted;
-
-            /// <summary>
-            /// Specifies whether the Character is selected, generally for being targeted. 
-            /// Selecting a Character changes its glyph's color.
-            /// </summary>
-            public bool Selected
-            {
-                get => selected;
-                set
-                {
-                    if (selected == value)
-                        return;
-
-                    selected = value;
-                    GlyphColor = highlighted ? highlightedGlyphColor : selected ?
-                        selectedGlyphColor : originalGlyphColor;
-
-                    if (value)
-                    {
-                        SelectedCharacter.Selected = false;
-                        SelectedCharacter = this;
-                    }
-                }
-            }
-            private bool selected;
-
             /// <summary>
             /// The name of this Present Character.
             /// </summary>
@@ -145,7 +93,7 @@ namespace AsLegacy
             /// </summary>
             public virtual PresentCharacter Target
             {
-                get { return target; }
+                get => target;
                 set { target = value; }
             }
             protected PresentCharacter target = null;
@@ -270,6 +218,14 @@ namespace AsLegacy
                     ActiveMode = Mode.Attack;
                 else
                     ActiveMode = Mode.Normal;
+            }
+
+            protected void UpdateSelected(PresentCharacter lastSelected, 
+                PresentCharacter toBeSelected)
+            {
+                if (lastSelected != null)
+                    lastSelected.Selected = false;
+                toBeSelected.Selected = true;
             }
         }
     }

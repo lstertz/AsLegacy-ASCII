@@ -40,10 +40,7 @@ namespace AsLegacy
             get { return target; }
             set
             {
-                if (target != null)
-                    target.Selected = false;
-
-                value.Selected = true;
+                UpdateSelected(target, value);
                 base.Target = value;
             }
         }
