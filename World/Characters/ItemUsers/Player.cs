@@ -35,7 +35,7 @@ namespace AsLegacy
         /// The target will be selected, and will be the recipient of 
         /// certain actions performed by the Player.
         /// </summary>
-        public override World.PresentCharacter Target
+        public override World.Character Target
         {
             get { return target; }
             set

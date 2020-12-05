@@ -3,10 +3,10 @@
 namespace AsLegacy
 {
     /// <summary>
-    /// Defines a Beast, which is a Present Character that cannot 
+    /// Defines a Beast, which is a Present CharacterBase that cannot 
     /// use Items and has a number of nature-based skills and abilities.
     /// </summary>
-    public class Beast : World.PresentCharacter
+    public class Beast : World.Character
     {
         private const int normal = 224;
 

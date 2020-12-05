@@ -53,14 +53,14 @@ namespace AsLegacy
         /// <summary>
         /// The displayable characters of the World.
         /// </summary>
-        public static TileSet<Character>.Display Characters
+        public static TileSet<CharacterBase>.Display Characters
         {
             get
             {
                 return characters.GetDisplay();
             }
         }
-        private static TileSet<Character> characters = new TileSet<Character>((row, column) =>
+        private static TileSet<CharacterBase> characters = new TileSet<CharacterBase>((row, column) =>
         {
             return new AbsentCharacter(row, column);
         });
@@ -91,13 +91,13 @@ namespace AsLegacy
         /// <param name="column">The column, defining the x axis of the position.</param>
         /// <returns>The Character at the specified position, if there is one, 
         /// null if there is not.</returns>
-        public static PresentCharacter CharacterAt(int row, int column)
+        public static Character CharacterAt(int row, int column)
         {
-            Character c = characters.Get(row, column);
+            CharacterBase c = characters.Get(row, column);
 
             if (c is AbsentCharacter)
                 return null;
-            return c as PresentCharacter;
+            return c as Character;
         }
 
         /// <summary>
