@@ -85,7 +85,7 @@ namespace AsLegacy
             characters.Position = new Point(1, 1);
             characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             characters.CenterViewPortOnPoint(World.Player.Point);
-            // TODO :: 11 : Add a Component for mouse processing, to highlight and select Characters.
+            characters.Components.Add(new PlayerTargetHandling());
 
             commands = new Commands(World.Player);
             commands.Components.Add(new PlayerCommandHandling());
