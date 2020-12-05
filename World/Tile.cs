@@ -12,7 +12,7 @@ namespace AsLegacy
             /// <summary>
             /// The currently highlighted Tile, or null, or no Tile is currently highlighted.
             /// </summary>
-            private Tile highlightedTile = null;
+            protected static Tile HighlightedTile { get; private set; }
 
             /// <summary>
             /// The glyph to visually represent the entity of the Tile.
@@ -54,18 +54,18 @@ namespace AsLegacy
                 get => highlighted;
                 set
                 {
-                    if (value && highlightedTile == this)
+                    if (value == highlighted)
                         return;
+                    highlighted = value;
 
-                    if (highlightedTile != null)
+                    if (HighlightedTile != this && HighlightedTile != null)
                     {
-                        highlightedTile.Highlighted = false;
-                        highlightedTile = null;
+                        HighlightedTile.Highlighted = false;
+                        HighlightedTile = null;
                     }
 
                     if (value)
-                        highlightedTile = this;
-                    highlighted = value;
+                        HighlightedTile = this;
                 }
             }
             private bool highlighted;

@@ -118,6 +118,22 @@ namespace AsLegacy
                 c.Row = newRow;
                 c.Column = newColumn;
             }
+
+            /// <summary>
+            /// Properly updates the selected Character by deselecting the 
+            /// specified last selected Character.
+            /// </summary>
+            /// <param name="lastSelected">The last Character known to have been selected.</param>
+            /// <param name="toBeSelected">The new Character to be selected.</param>
+            protected void UpdateSelected(CharacterBase lastSelected,
+                CharacterBase toBeSelected)
+            {
+                if (lastSelected != null)
+                    lastSelected.Selected = false;
+
+                if (toBeSelected != null)
+                    toBeSelected.Selected = true;
+            }
         }
     }
 }

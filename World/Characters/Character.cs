@@ -11,6 +11,20 @@ namespace AsLegacy
         public abstract class Character : CharacterBase
         {
             /// <summary>
+            /// Highlights the provided Character, if it isn't null, and removes any 
+            /// existing highlight.
+            /// </summary>
+            /// <param name="c">The Character to be highlighted.</param>
+            public static void Highlight(Character c)
+            {
+                if (HighlightedTile != c && HighlightedTile != null)
+                    HighlightedTile.Highlighted = false;
+
+                if (c != null)
+                    c.Highlighted = true;
+            }
+
+            /// <summary>
             /// Defines the glyph to be shown when the Character is in attack mode.
             /// </summary>
             protected abstract int attackGlyph { get; }
@@ -53,12 +67,12 @@ namespace AsLegacy
             /// </summary>
             public Mode ActiveMode
             {
-                get 
-                { 
+                get
+                {
                     return mode;
                 }
-                private set 
-                { 
+                private set
+                {
                     mode = value;
 
                     switch (value)
@@ -109,7 +123,7 @@ namespace AsLegacy
             /// <param name="glyph">The glyph visually displayed to represent 
             /// the new Character.</param>
             /// <param name="name">The string name given to the new Character.</param>
-            protected Character(int row, int column, 
+            protected Character(int row, int column,
                 Color glyphColor, int glyph, string name) :
                 base(row, column, Color.Transparent, glyphColor, glyph, false)
             {
@@ -218,14 +232,6 @@ namespace AsLegacy
                     ActiveMode = Mode.Attack;
                 else
                     ActiveMode = Mode.Normal;
-            }
-
-            protected void UpdateSelected(Character lastSelected, 
-                Character toBeSelected)
-            {
-                if (lastSelected != null)
-                    lastSelected.Selected = false;
-                toBeSelected.Selected = true;
             }
         }
     }
