@@ -66,16 +66,6 @@ namespace AsLegacy
         });
 
         /// <summary>
-        /// The currently highlighted Present Character, if any.
-        /// </summary>
-        public static PresentCharacter HighlightedCharacter { get; private set; }
-
-        /// <summary>
-        /// The currently selected Present Character, if any.
-        /// </summary>
-        public static PresentCharacter SelectedCharacter { get; private set; }
-
-        /// <summary>
         /// The Player Character.
         /// </summary>
         public static Player Player { get; private set; }
@@ -95,21 +85,19 @@ namespace AsLegacy
         }
 
         /// <summary>
-        /// Attempts to highlight the Present Character at the specified position.
+        /// Provides the Character at the specified position.
         /// </summary>
         /// <param name="row">The row, defining the y axis of the position.</param>
         /// <param name="column">The column, defining the x axis of the position.</param>
-        public static void Highlight(int row, int column)
+        /// <returns>The Character at the specified position, if there is one, 
+        /// null if there is not.</returns>
+        public static PresentCharacter CharacterAt(int row, int column)
         {
             Character c = characters.Get(row, column);
-            if (c == HighlightedCharacter)
-                return;
 
-            HighlightedCharacter.Highlighted = false;
             if (c is AbsentCharacter)
-                HighlightedCharacter = null;
-            else
-                (c as PresentCharacter).Highlighted = true;
+                return null;
+            return c as PresentCharacter;
         }
 
         /// <summary>
@@ -121,24 +109,6 @@ namespace AsLegacy
         public static bool IsPassable(int row, int column)
         {
             return characters.IsPassable(row, column) && environment.IsPassable(row, column);
-        }
-
-        /// <summary>
-        /// Attempts to select the Present Character at the specified position.
-        /// </summary>
-        /// <param name="row">The row, defining the y axis of the position.</param>
-        /// <param name="column">The column, defining the x axis of the position.</param>
-        public static void Select(int row, int column)
-        {
-            Character c = characters.Get(row, column);
-            if (c == SelectedCharacter)
-                return;
-
-            SelectedCharacter.Selected = false;
-            if (c is AbsentCharacter)
-                SelectedCharacter = null;
-            else
-                (c as PresentCharacter).Selected = true;
         }
     }
 }
