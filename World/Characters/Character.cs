@@ -137,7 +137,7 @@ namespace AsLegacy
             /// </summary>
             /// <param name="direction">The direction in which the action is 
             /// to be performed.</param>
-            public void PerformInDirection(Direction direction)
+            public bool PerformInDirection(Direction direction)
             {
                 switch (mode)
                 {
@@ -146,19 +146,31 @@ namespace AsLegacy
                         {
                             case Direction.Left:
                                 if (World.IsPassable(Row, Column - 1))
+                                {
                                     Move(this, Row, Column - 1);
+                                    return true;
+                                }
                                 break;
                             case Direction.Right:
                                 if (World.IsPassable(Row, Column + 1))
+                                {
                                     Move(this, Row, Column + 1);
+                                    return true;
+                                }
                                 break;
                             case Direction.Up:
                                 if (World.IsPassable(Row - 1, Column))
+                                {
                                     Move(this, Row - 1, Column);
+                                    return true;
+                                }
                                 break;
                             case Direction.Down:
                                 if (World.IsPassable(Row + 1, Column))
+                                {
                                     Move(this, Row + 1, Column);
+                                    return true;
+                                }
                                 break;
                             default:
                                 break;
@@ -171,6 +183,8 @@ namespace AsLegacy
                     default:
                         break;
                 }
+
+                return false;
             }
 
             /// <summary>

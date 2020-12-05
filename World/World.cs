@@ -95,7 +95,7 @@ namespace AsLegacy
         {
             CharacterBase c = characters.Get(row, column);
 
-            if (c is AbsentCharacter)
+            if (c == null || c is AbsentCharacter)
                 return null;
             return c as Character;
         }
