@@ -92,10 +92,8 @@ namespace AsLegacy
             public override bool ProcessMouse(MouseConsoleState state)
             {
                 // Ensure that the PlayerCommandHandling Component processes.
-                ComponentsMouse[0].ProcessMouse(this, state, out _);
-
-                // Permit mouse interactions to fall through to other Consoles.
-                return false;
+                ComponentsMouse[0].ProcessMouse(this, state, out bool handled);
+                return handled;
             }
 
             /// <summary>

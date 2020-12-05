@@ -58,6 +58,7 @@ namespace AsLegacy.Input
         {
             handled = false;
 
+            Display.Commands c = console as Display.Commands;
             int x = state.CellPosition.X - 1;
             int y = state.CellPosition.Y - 1;
 
@@ -66,23 +67,22 @@ namespace AsLegacy.Input
                 if (x == 0)
                 {
                     if (y == -1) // Up
-                        World.Player.PerformInDirection(World.Character.Direction.Up);
+                        handled = World.Player.PerformInDirection(World.Character.Direction.Up);
                     else if (y == 1) // Down
-                        World.Player.PerformInDirection(World.Character.Direction.Down);
-                    y -= y;
+                        handled = World.Player.PerformInDirection(World.Character.Direction.Down);
                 }
                 else if (y == 0)
                 {
                     if (x == -1) // Left
-                        World.Player.PerformInDirection(World.Character.Direction.Left);
+                        handled = World.Player.PerformInDirection(World.Character.Direction.Left);
                     else if (x == 1) // Right
-                        World.Player.PerformInDirection(World.Character.Direction.Right);
-                    x -= x;
+                        handled = World.Player.PerformInDirection(World.Character.Direction.Right);
                 }
-            }
 
-            if (console is Display.Commands)
-                (console as Display.Commands).SetCellToHighlight(x + 1, y + 1);
+                c?.SetCellToHighlight(-1, -1);
+            }
+            else
+                c?.SetCellToHighlight(x + 1, y + 1);
         }
     }
 }
