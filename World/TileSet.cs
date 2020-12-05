@@ -19,6 +19,9 @@ namespace AsLegacy
             /// </summary>
             public class Display
             {
+                protected readonly Color highlightedGlyphColor = Color.White;
+                protected readonly Color selectedGlyphColor = Color.Blue;
+
                 /// <summary>
                 /// Implicitly converts a Display to a SadConsole Console that encapsulates 
                 /// all of the display's Cells.
@@ -60,7 +63,8 @@ namespace AsLegacy
                 public void Update(int row, int column)
                 {
                     T tile = tileSet.tiles[row, column];
-                    console.SetForeground(column, row, tile.GlyphColor);
+                    console.SetForeground(column, row, tile.Selected ? selectedGlyphColor : 
+                        tile.Highlighted ? highlightedGlyphColor : tile.GlyphColor);
                     console.SetBackground(column, row, tile.Background);
                     console.SetGlyph(column, row, tile.Glyph);
                 }
