@@ -132,51 +132,22 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Performs the appropriate action for the character's present state, in the 
-            /// specified direction, if possible.
+            /// Performs an appropriate action, to move towards or attack, at/towards the 
+            /// specified position, as determined by the Character's current state.
             /// </summary>
-            /// <param name="direction">The direction in which the action is 
-            /// to be performed.</param>
-            public bool PerformInDirection(Direction direction)
+            /// <param name="row">The row position, the location on the y-axis.</param>
+            /// <param name="column">The column position, the location on the x-axis.</param>
+            /// <returns>Whether an action was performed.</returns>
+            public bool PerformForPosition(int row, int column)
             {
                 switch (mode)
                 {
                     case Mode.Normal:
-                        switch (direction)
-                        {
-                            case Direction.Left:
-                                if (World.IsPassable(Row, Column - 1))
-                                {
-                                    Move(this, Row, Column - 1);
-                                    return true;
-                                }
-                                break;
-                            case Direction.Right:
-                                if (World.IsPassable(Row, Column + 1))
-                                {
-                                    Move(this, Row, Column + 1);
-                                    return true;
-                                }
-                                break;
-                            case Direction.Up:
-                                if (World.IsPassable(Row - 1, Column))
-                                {
-                                    Move(this, Row - 1, Column);
-                                    return true;
-                                }
-                                break;
-                            case Direction.Down:
-                                if (World.IsPassable(Row + 1, Column))
-                                {
-                                    Move(this, Row + 1, Column);
-                                    return true;
-                                }
-                                break;
-                            default:
-                                break;
-                        }
+                        // TODO :: Move towards if 'following' is enabled.
                         break;
                     case Mode.Attack:
+                        // TODO :: Move towards if not in range of attack.
+                        // TODO :: Attack if in range.
                         break;
                     case Mode.Defend:
                         break;
@@ -188,26 +159,42 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Toggles between the 3 modes of the Character.
-            /// Normal proceeds to Attack, Attack to Defend, and Defend to Normal.
+            /// Attempts to move the Character in the specified direction.
             /// </summary>
-            public void ToggleMode()
+            /// <param name="direction">The direction in which the Character is 
+            /// to attempt to move.</param>
+            /// <returns>Whether the Character was able to move.</returns>
+            public bool MoveInDirection(Direction direction)
             {
-                switch (mode)
+                if (mode != Mode.Normal)
+                    return false;
+
+                int intendedRow = Row;
+                int intendedColumn = Column;
+                switch (direction)
                 {
-                    case Mode.Normal:
-                        ActiveMode = Mode.Attack;
+                    case Direction.Left:
+                        intendedColumn--;
                         break;
-                    case Mode.Attack:
-                        ActiveMode = Mode.Defend;
+                    case Direction.Right:
+                        intendedColumn++;
                         break;
-                    case Mode.Defend:
-                        ActiveMode = Mode.Normal;
+                    case Direction.Up:
+                        intendedRow--;
+                        break;
+                    case Direction.Down:
+                        intendedRow++;
                         break;
                     default:
-                        ActiveMode = Mode.Normal;
                         break;
                 }
+
+                if (World.IsPassable(intendedRow, intendedColumn))
+                {
+                    Move(this, intendedRow, intendedColumn);
+                    return true;
+                }
+                return false;
             }
 
             /// <summary>

@@ -24,13 +24,13 @@ namespace AsLegacy.Input
             handled = true;
 
             if (info.IsKeyReleased(Keys.Up) || info.IsKeyReleased(Keys.W))
-                World.Player.PerformInDirection(World.Character.Direction.Up);
+                World.Player.MoveInDirection(World.Character.Direction.Up);
             else if (info.IsKeyReleased(Keys.Down) || info.IsKeyReleased(Keys.S))
-                World.Player.PerformInDirection(World.Character.Direction.Down);
+                World.Player.MoveInDirection(World.Character.Direction.Down);
             else if (info.IsKeyReleased(Keys.Left) || info.IsKeyReleased(Keys.A))
-                World.Player.PerformInDirection(World.Character.Direction.Left);
+                World.Player.MoveInDirection(World.Character.Direction.Left);
             else if (info.IsKeyReleased(Keys.Right) || info.IsKeyReleased(Keys.D))
-                World.Player.PerformInDirection(World.Character.Direction.Right);
+                World.Player.MoveInDirection(World.Character.Direction.Right);
             
             if (info.IsKeyReleased(Keys.Space))
                 World.Player.ToggleAttackMode();
@@ -67,16 +67,16 @@ namespace AsLegacy.Input
                 if (x == 0)
                 {
                     if (y == -1) // Up
-                        handled = World.Player.PerformInDirection(World.Character.Direction.Up);
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Up);
                     else if (y == 1) // Down
-                        handled = World.Player.PerformInDirection(World.Character.Direction.Down);
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Down);
                 }
                 else if (y == 0)
                 {
                     if (x == -1) // Left
-                        handled = World.Player.PerformInDirection(World.Character.Direction.Left);
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Left);
                     else if (x == 1) // Right
-                        handled = World.Player.PerformInDirection(World.Character.Direction.Right);
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Right);
                 }
 
                 c?.SetCellToHighlight(-1, -1);
