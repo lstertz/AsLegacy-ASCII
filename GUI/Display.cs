@@ -1,17 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Components;
-using SadConsole.Controls;
 using System;
 using System.Collections.Generic;
 using Console = SadConsole.Console;
+
+using AsLegacy.GUI;
+using AsLegacy.Input;
 
 namespace AsLegacy
 {
     /// <summary>
     /// Defines Display, which serves as the primary visual output controller.
     /// </summary>
-    public partial class Display : DrawConsoleComponent
+    public class Display : DrawConsoleComponent
     {
         public const int MapViewPortWidth = 6;
         public const int MapViewPortHeight = 6;
@@ -52,6 +54,8 @@ namespace AsLegacy
 
         private static Display display;
 
+        public static Rectangle MapViewPort => display.characters.ViewPort;
+
         /// <summary>
         /// Initializes the Display.
         /// Required for any display output to be rendered, or for any 
@@ -65,11 +69,10 @@ namespace AsLegacy
         }
 
         private ScrollingConsole characters;
-        private Console playerCommands;
+        private Console commands;
         private ScrollingConsole environment;
-        private ControlsConsole characterPanel;
-
-        private Rectangle MapViewPort => characters.ViewPort;
+        private CharacterPanel characterPanel;
+        private TargetHUD targetHUD;
 
         /// <summary>
         /// Constructs a new Display for the given Console.
@@ -84,11 +87,14 @@ namespace AsLegacy
             characters.Position = new Point(1, 1);
             characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             characters.CenterViewPortOnPoint(World.Player.Point);
+            characters.Components.Add(new PlayerTargetHandling());
 
-            playerCommands = new Console(3, 3, PlayerCommands.Cells);
-            playerCommands.Components.Add(new PlayerCommands());
-            playerCommands.Components.Add(new PlayerCommandHandling());
-            playerCommands.IsFocused = true;
+            commands = new Commands(World.Player);
+            commands.Components.Add(new PlayerCommandHandling());
+            commands.IsFocused = true;
+
+            targetHUD = new TargetHUD(AsLegacy.Width / 2 - 1);
+            targetHUD.Position = new Point(1, AsLegacy.Height - 4);
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
@@ -100,7 +106,8 @@ namespace AsLegacy
 
             console.Children.Add(environment);
             console.Children.Add(characters);
-            characters.Children.Add(playerCommands);
+            characters.Children.Add(commands);
+            console.Children.Add(targetHUD);
             console.Children.Add(characterPanel);
 
             console.Components.Add(this);

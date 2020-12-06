@@ -6,7 +6,7 @@ namespace AsLegacy
     /// Defines a Player, the focal character, on the World map, of the real-life player as 
     /// they interact with the game.
     /// </summary>
-    public class Player : World.PresentCharacter
+    public class Player : ItemUser
     {
         private const int normal = '@';
 
@@ -30,6 +30,21 @@ namespace AsLegacy
         /// </summary>
         public Point Point => new Point(Column, Row);
 
+        /// <summary>
+        /// Specifies the target of the Player.
+        /// The target will be selected, and will be the recipient of 
+        /// certain actions performed by the Player.
+        /// </summary>
+        public override World.Character Target
+        {
+            get { return target; }
+            set
+            {
+                UpdateSelected(target, value);
+                base.Target = value;
+            }
+        }
+
 
         /// <summary>
         /// Constructs a new Player at the provided row and column on the map.
@@ -37,7 +52,7 @@ namespace AsLegacy
         /// <param name="row">The row position of the new Player.</param>
         /// <param name="column">The column position of the new Player.</param>
         public Player(int row, int column) :
-            base(row, column, Color.Goldenrod, normal)
+            base(row, column, Color.Goldenrod, normal, "Player")
         {
 
         }

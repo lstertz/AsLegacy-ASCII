@@ -5,112 +5,234 @@ namespace AsLegacy
     public static partial class World
     {
         /// <summary>
-        /// Defines a Character, which is an entity that is expected to 
-        /// manipulate the environment and other characters from its specific 
-        /// position, as a Tile, on the map.
+        /// Represents an abstraction of a CharacterBase that has a presence within the World.
+        /// Such characters exist in a formal sense and can be interacted with.
         /// </summary>
-        public abstract class Character : Tile
+        public abstract class Character : CharacterBase
         {
-            protected readonly Color highlightedGlyphColor = Color.White;
-
             /// <summary>
-            /// The glyph to visually represent the entity of the Character.
+            /// Highlights the provided Character, if it isn't null, and removes any 
+            /// existing highlight.
             /// </summary>
-            public override int Glyph 
-            { 
-                get => base.Glyph;
-                protected set
-                {
-                    base.Glyph = value;
-                    characters?.GetDisplay()?.Update(Row, Column);
-                }
-            }
-
-            /// <summary>
-            /// The color of the glyph to visually represent the entity of the Tile.
-            /// </summary>
-            public override Color GlyphColor
+            /// <param name="c">The Character to be highlighted.</param>
+            public static void Highlight(Character c)
             {
-                get => base.GlyphColor;
-                protected set
-                {
-                    base.GlyphColor = value;
-                    characters?.GetDisplay()?.Update(Row, Column);
-                }
+                if (HighlightedTile != c && HighlightedTile != null)
+                    HighlightedTile.Highlighted = false;
+
+                if (c != null)
+                    c.Highlighted = true;
             }
-            private Color originalGlyphColor;
 
             /// <summary>
-            /// The Column (x-axis) location of the Character.
+            /// Defines the glyph to be shown when the Character is in attack mode.
             /// </summary>
-            public int Column { get; private set; }
+            protected abstract int attackGlyph { get; }
 
             /// <summary>
-            /// The Row (y-axis) location of the Character.
+            /// Defines the glyph to be shown when the Character is in defend mode.
             /// </summary>
-            public int Row { get; private set; }
+            protected abstract int defendGlyph { get; }
 
             /// <summary>
-            /// Specifies whether the Character is highlighted, generally for 
-            /// some kind of interaction or as being targeted. Highlighting a Character 
-            /// changes its glyph's color.
+            /// Defines the glyph to be shown when the Character is in normal mode.
             /// </summary>
-            public bool Highlighted 
+            protected abstract int normalGlyph { get; }
+
+
+            /// <summary>
+            /// Defines the standard directions, for immediate actions, available to the Character.
+            /// </summary>
+            public enum Direction
             {
-                get => highlighted;
-                set
-                {
-                    if (highlighted == value)
-                        return;
+                Left,
+                Right,
+                Up,
+                Down
+            }
 
-                    highlighted = value;
-                    GlyphColor = value ? highlightedGlyphColor : originalGlyphColor;
+            /// <summary>
+            /// Defines the different modes of a Character, which heavily influence the state and 
+            /// available actions of a Character.
+            /// </summary>
+            public enum Mode
+            {
+                Normal,
+                Attack,
+                Defend
+            }
+
+            /// <summary>
+            /// The character's present mode.
+            /// </summary>
+            public Mode ActiveMode
+            {
+                get
+                {
+                    return mode;
+                }
+                private set
+                {
+                    mode = value;
+
+                    switch (value)
+                    {
+                        case Mode.Normal:
+                            Glyph = normalGlyph;
+                            break;
+                        case Mode.Attack:
+                            Glyph = attackGlyph;
+                            break;
+                        case Mode.Defend:
+                            Glyph = defendGlyph;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-            private bool highlighted;
+            private Mode mode;
+            private bool attackEnabled = false;
+            private bool defenseEnabled = false;
+
+            /// <summary>
+            /// The name of this Character.
+            /// </summary>
+            public string Name { get; private set; }
+
+            /// <summary>
+            /// Specifies the target of this Character.
+            /// The target will be the recipient of certain actions performed 
+            /// by this Character.
+            /// </summary>
+            public virtual Character Target
+            {
+                get => target;
+                set { target = value; }
+            }
+            protected Character target = null;
+
 
             /// <summary>
             /// Constructs a new Character.
             /// </summary>
             /// <param name="row">The row position of the new Character.</param>
             /// <param name="column">The column position of the new Character.</param>
-            /// <param name="background">The color of the area behind the glyph.</param>
             /// <param name="glyphColor">The color of the glyph visually displayed to represent 
             /// the new Character.</param>
             /// <param name="glyph">The glyph visually displayed to represent 
             /// the new Character.</param>
-            /// <param name="passable">Whether the new Character can be 
-            /// passed through by others.</param>
-            protected Character(int row, int column, 
-                Color background, Color glyphColor, int glyph, bool passable) :
-                base(background, glyphColor, glyph, passable)
+            /// <param name="name">The string name given to the new Character.</param>
+            protected Character(int row, int column,
+                Color glyphColor, int glyph, string name) :
+                base(row, column, Color.Transparent, glyphColor, glyph, false)
             {
-                originalGlyphColor = glyphColor;
-                Column = column;
-                Row = row;
-
-                if (characters != null)
-                    characters.ReplaceWith(row, column, this);
+                mode = Mode.Normal;
+                Name = name;
             }
 
             /// <summary>
-            /// Moves the specificed Character to a new Row and Column location.
-            /// This technically swaps the Character with the Character presently at 
-            /// the new Row and Column.
+            /// Performs an appropriate action, to move towards or attack, at/towards the 
+            /// specified position, as determined by the Character's current state.
             /// </summary>
-            /// <param name="c">The Character to be moved.</param>
-            /// <param name="newRow">The Row that the Character will be moved to.</param>
-            /// <param name="newColumn">The Column that the Character will be moved to.</param>
-            protected void Move(Character c, int newRow, int newColumn)
+            /// <param name="row">The row position, the location on the y-axis.</param>
+            /// <param name="column">The column position, the location on the x-axis.</param>
+            /// <returns>Whether an action was performed.</returns>
+            public bool PerformForPosition(int row, int column)
             {
-                Character swapped = characters.ReplaceWith(newRow, newColumn, c);
-                characters.ReplaceWith(c.Row, c.Column, swapped);
+                switch (mode)
+                {
+                    case Mode.Normal:
+                        // TODO :: Move towards if 'following' is enabled.
+                        break;
+                    case Mode.Attack:
+                        // TODO :: Move towards if not in range of attack.
+                        // TODO :: Attack if in range.
+                        break;
+                    case Mode.Defend:
+                        break;
+                    default:
+                        break;
+                }
 
-                swapped.Row = c.Row;
-                swapped.Column = c.Column;
+                return false;
+            }
 
-                c.Row = newRow;
-                c.Column = newColumn;
+            /// <summary>
+            /// Attempts to move the Character in the specified direction.
+            /// </summary>
+            /// <param name="direction">The direction in which the Character is 
+            /// to attempt to move.</param>
+            /// <returns>Whether the Character was able to move.</returns>
+            public bool MoveInDirection(Direction direction)
+            {
+                if (mode != Mode.Normal)
+                    return false;
+
+                int intendedRow = Row;
+                int intendedColumn = Column;
+                switch (direction)
+                {
+                    case Direction.Left:
+                        intendedColumn--;
+                        break;
+                    case Direction.Right:
+                        intendedColumn++;
+                        break;
+                    case Direction.Up:
+                        intendedRow--;
+                        break;
+                    case Direction.Down:
+                        intendedRow++;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (World.IsPassable(intendedRow, intendedColumn))
+                {
+                    Move(this, intendedRow, intendedColumn);
+                    return true;
+                }
+                return false;
+            }
+
+            /// <summary>
+            /// Toggles whether Attack Mode is enabled, and updates 
+            /// the current active mode.
+            /// </summary>
+            public void ToggleAttackMode()
+            {
+                attackEnabled = !attackEnabled;
+                UpdateActiveMode();
+            }
+
+            /// <summary>
+            /// Specifies whether the Defend Mode is enabled, and updates 
+            /// the current active mode.
+            /// </summary>
+            /// <param name="enabled">Whether the Defend Mode should be enabled.</param>
+            public void EnableDefense(bool enabled)
+            {
+                if (defenseEnabled == enabled)
+                    return;
+
+                defenseEnabled = enabled;
+                UpdateActiveMode();
+            }
+
+            /// <summary>
+            /// Updates the active mode of the character, based on the current state of 
+            /// enabled defense/attack.
+            /// </summary>
+            private void UpdateActiveMode()
+            {
+                if (defenseEnabled)
+                    ActiveMode = Mode.Defend;
+                else if (attackEnabled)
+                    ActiveMode = Mode.Attack;
+                else
+                    ActiveMode = Mode.Normal;
             }
         }
     }

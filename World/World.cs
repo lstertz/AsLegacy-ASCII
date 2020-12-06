@@ -53,19 +53,24 @@ namespace AsLegacy
         /// <summary>
         /// The displayable characters of the World.
         /// </summary>
-        public static TileSet<Character>.Display Characters
+        public static TileSet<CharacterBase>.Display Characters
         {
             get
             {
                 return characters.GetDisplay();
             }
         }
-        private static TileSet<Character> characters = new TileSet<Character>((row, column) =>
+        private static TileSet<CharacterBase> characters = new TileSet<CharacterBase>((row, column) =>
         {
             return new AbsentCharacter(row, column);
         });
 
+        /// <summary>
+        /// The Player Character.
+        /// </summary>
         public static Player Player { get; private set; }
+
+        private static Beast beast;
 
         /// <summary>
         /// Initializes the World with expected Characters.
@@ -76,12 +81,29 @@ namespace AsLegacy
                 return;
 
             Player = new Player(3, 3);
+            beast = new Beast(7, 1, "Wolf");
+        }
+
+        /// <summary>
+        /// Provides the Character at the specified position.
+        /// </summary>
+        /// <param name="row">The row, defining the y axis of the position.</param>
+        /// <param name="column">The column, defining the x axis of the position.</param>
+        /// <returns>The Character at the specified position, if there is one, 
+        /// null if there is not.</returns>
+        public static Character CharacterAt(int row, int column)
+        {
+            CharacterBase c = characters.Get(row, column);
+
+            if (c == null || c is AbsentCharacter)
+                return null;
+            return c as Character;
         }
 
         /// <summary>
         /// Specifies whether the provided position can be passed through.
         /// </summary>
-        /// <param name="row">The row, defining the y axis of the position..</param>
+        /// <param name="row">The row, defining the y axis of the position.</param>
         /// <param name="column">The column, defining the x axis of the position.</param>
         /// <returns>True if the position is passable, false otherwise.</returns>
         public static bool IsPassable(int row, int column)

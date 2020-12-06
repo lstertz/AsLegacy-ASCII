@@ -4,18 +4,16 @@ using SadConsole.Input;
 
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
-namespace AsLegacy
+using AsLegacy.GUI;
+
+namespace AsLegacy.Input
 {
     /// <summary>
     /// Defines a Console Component to handle inputs (mouse and keyboard) for 
-    /// a Console that represents PlayerCommands available to the Player.
+    /// a Console that represents Commands available to the Player.
     /// </summary>
     public class PlayerCommandHandling : InputConsoleComponent
     {
-        // TODO :: Refactor to account for handling other keyboard input for 
-        //          the remaining Player controls (skill activation, etc.) 
-        //          and interactions with Characters in general (targeting).
-
         /// <summary>
         /// Handles keyboard state changes.
         /// </summary>
@@ -28,13 +26,13 @@ namespace AsLegacy
             handled = true;
 
             if (info.IsKeyReleased(Keys.Up) || info.IsKeyReleased(Keys.W))
-                World.Player.PerformInDirection(World.PresentCharacter.Direction.Up);
+                World.Player.MoveInDirection(World.Character.Direction.Up);
             else if (info.IsKeyReleased(Keys.Down) || info.IsKeyReleased(Keys.S))
-                World.Player.PerformInDirection(World.PresentCharacter.Direction.Down);
+                World.Player.MoveInDirection(World.Character.Direction.Down);
             else if (info.IsKeyReleased(Keys.Left) || info.IsKeyReleased(Keys.A))
-                World.Player.PerformInDirection(World.PresentCharacter.Direction.Left);
+                World.Player.MoveInDirection(World.Character.Direction.Left);
             else if (info.IsKeyReleased(Keys.Right) || info.IsKeyReleased(Keys.D))
-                World.Player.PerformInDirection(World.PresentCharacter.Direction.Right);
+                World.Player.MoveInDirection(World.Character.Direction.Right);
             
             if (info.IsKeyReleased(Keys.Space))
                 World.Player.ToggleAttackMode();
@@ -62,6 +60,7 @@ namespace AsLegacy
         {
             handled = false;
 
+            Commands c = console as Commands;
             int x = state.CellPosition.X - 1;
             int y = state.CellPosition.Y - 1;
 
@@ -70,26 +69,22 @@ namespace AsLegacy
                 if (x == 0)
                 {
                     if (y == -1) // Up
-                        World.Player.PerformInDirection(World.PresentCharacter.Direction.Up);
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Up);
                     else if (y == 1) // Down
-                        World.Player.PerformInDirection(World.PresentCharacter.Direction.Down);
-                    else if (y == 0) // Center (Mode Toggle)
-                        World.Player.ToggleMode();
-                    y -= y;
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Down);
                 }
                 else if (y == 0)
                 {
                     if (x == -1) // Left
-                        World.Player.PerformInDirection(World.PresentCharacter.Direction.Left);
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Left);
                     else if (x == 1) // Right
-                        World.Player.PerformInDirection(World.PresentCharacter.Direction.Right);
-                    x -= x;
+                        handled = World.Player.MoveInDirection(World.Character.Direction.Right);
                 }
-            }
 
-            Display.PlayerCommands playerCommands = console
-                .GetComponent<Display.PlayerCommands>() as Display.PlayerCommands;
-            playerCommands.SetCellToHighlight(x + 1, y + 1);
+                c?.SetCellToHighlight(-1, -1);
+            }
+            else
+                c?.SetCellToHighlight(x + 1, y + 1);
         }
     }
 }

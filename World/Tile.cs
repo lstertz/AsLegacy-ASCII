@@ -10,6 +10,11 @@ namespace AsLegacy
         public abstract class Tile
         {
             /// <summary>
+            /// The currently highlighted Tile, or null, or no Tile is currently highlighted.
+            /// </summary>
+            protected static Tile HighlightedTile { get; private set; }
+
+            /// <summary>
             /// The glyph to visually represent the entity of the Tile.
             /// </summary>
             public virtual int Glyph
@@ -38,6 +43,42 @@ namespace AsLegacy
                 protected set => background = value;
             }
             private Color background;
+
+            /// <summary>
+            /// Specifies whether the Tile is highlighted, generally for 
+            /// some kind of anticipated interaction.
+            /// Only one Tile can be highlighted at a time.
+            /// </summary>
+            public virtual bool Highlighted
+            {
+                get => highlighted;
+                set
+                {
+                    if (value == highlighted)
+                        return;
+                    highlighted = value;
+
+                    if (HighlightedTile != this && HighlightedTile != null)
+                    {
+                        HighlightedTile.Highlighted = false;
+                        HighlightedTile = null;
+                    }
+
+                    if (value)
+                        HighlightedTile = this;
+                }
+            }
+            private bool highlighted;
+
+            /// <summary>
+            /// Specifies whether the Tile is selected.
+            /// </summary>
+            public virtual bool Selected
+            {
+                get => selected;
+                protected set => selected = value;
+            }
+            private bool selected;
 
             /// <summary>
             /// Specifies whether this Tile's entity can be passed through by others.
