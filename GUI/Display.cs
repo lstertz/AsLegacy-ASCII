@@ -71,7 +71,8 @@ namespace AsLegacy
         private ScrollingConsole characters;
         private Console commands;
         private ScrollingConsole environment;
-        private ControlsConsole characterPanel;
+        private CharacterPanel characterPanel;
+        private TargetHUD targetHUD;
 
         /// <summary>
         /// Constructs a new Display for the given Console.
@@ -92,6 +93,8 @@ namespace AsLegacy
             commands.Components.Add(new PlayerCommandHandling());
             commands.IsFocused = true;
 
+            targetHUD = new TargetHUD(AsLegacy.Width / 2 - 2);
+
             environment = World.Environment;
             environment.Position = new Point(1, 1);
             environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
@@ -103,6 +106,7 @@ namespace AsLegacy
             console.Children.Add(environment);
             console.Children.Add(characters);
             characters.Children.Add(commands);
+            console.Children.Add(targetHUD);
             console.Children.Add(characterPanel);
 
             console.Components.Add(this);
