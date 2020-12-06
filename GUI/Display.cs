@@ -93,7 +93,8 @@ namespace AsLegacy
             commands.Components.Add(new PlayerCommandHandling());
             commands.IsFocused = true;
 
-            targetHUD = new TargetHUD(AsLegacy.Width / 2 - 2);
+            targetHUD = new TargetHUD(AsLegacy.Width / 2 - 1);
+            targetHUD.Position = new Point(1, AsLegacy.Height - 4);
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
