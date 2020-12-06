@@ -4,6 +4,8 @@ using SadConsole.Input;
 
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
+using AsLegacy.GUI;
+
 namespace AsLegacy.Input
 {
     /// <summary>
@@ -58,7 +60,7 @@ namespace AsLegacy.Input
         {
             handled = false;
 
-            Display.Commands c = console as Display.Commands;
+            Commands c = console as Commands;
             int x = state.CellPosition.X - 1;
             int y = state.CellPosition.Y - 1;
 
