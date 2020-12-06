@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Console = SadConsole.Console;
 
+using AsLegacy.GUI;
 using AsLegacy.Input;
 
 namespace AsLegacy
@@ -12,7 +13,7 @@ namespace AsLegacy
     /// <summary>
     /// Defines Display, which serves as the primary visual output controller.
     /// </summary>
-    public partial class Display : DrawConsoleComponent
+    public class Display : DrawConsoleComponent
     {
         public const int MapViewPortWidth = 6;
         public const int MapViewPortHeight = 6;

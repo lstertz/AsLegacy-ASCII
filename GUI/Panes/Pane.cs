@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 
-namespace AsLegacy
+namespace AsLegacy.GUI.Panes
 {
     /// <summary>
     /// Defines a Pane, a Console for displaying potentially 
