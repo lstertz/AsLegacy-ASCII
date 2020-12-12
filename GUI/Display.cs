@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Console = SadConsole.Console;
 
 using AsLegacy.GUI;
+using AsLegacy.GUI.HUDs;
 using AsLegacy.Input;
 
 namespace AsLegacy
