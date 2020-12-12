@@ -25,6 +25,9 @@ namespace AsLegacy.GUI.HUDs
         public override void Update(TimeSpan timeElapsed)
         {
             World.Character target = World.Player.Target;
+            if (target == World.Player)
+                target = null;
+
             if (target != focus)
             {
                 focus = target;
