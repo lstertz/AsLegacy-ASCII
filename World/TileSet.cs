@@ -20,7 +20,7 @@ namespace AsLegacy
             public class Display
             {
                 protected readonly Color highlightedGlyphColor = Color.White;
-                protected readonly Color selectedGlyphColor = Color.Blue;
+                protected readonly Color selectedGlyphColor = Color.SkyBlue;
 
                 /// <summary>
                 /// Implicitly converts a Display to a SadConsole Console that encapsulates 
