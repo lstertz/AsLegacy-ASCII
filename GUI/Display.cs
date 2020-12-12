@@ -30,13 +30,15 @@ namespace AsLegacy
             new Dictionary<int, Dictionary<int, int>>()
             {
                 {0, new Dictionary<int, int>() {
-                    {0, 201}, 
+                    {0, 201},
+                    {AsLegacy.Height - 4, 204},
                     {AsLegacy.Height - 1, 200}, 
                     {-1, 186} 
                 } },
                 {AsLegacy.Width / 2, new Dictionary<int, int>()
                 {
                     {0, 203},
+                    {AsLegacy.Height - 4, 185},
                     {AsLegacy.Height - 1, 202},
                     {-1, 186}
                 } },
@@ -73,6 +75,8 @@ namespace AsLegacy
         private Console commands;
         private ScrollingConsole environment;
         private CharacterPanel characterPanel;
+
+        private PlayerHUD playerHUD;
         private TargetHUD targetHUD;
 
         /// <summary>
@@ -94,8 +98,11 @@ namespace AsLegacy
             commands.Components.Add(new PlayerCommandHandling());
             commands.IsFocused = true;
 
+            playerHUD = new PlayerHUD(AsLegacy.Width / 2 - 1);
+            playerHUD.Position = new Point(1, AsLegacy.Height - 4);
+
             targetHUD = new TargetHUD(AsLegacy.Width / 2 - 1);
-            targetHUD.Position = new Point(1, AsLegacy.Height - 4);
+            targetHUD.Position = new Point(1, AsLegacy.Height - 7);
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
@@ -108,6 +115,7 @@ namespace AsLegacy
             console.Children.Add(environment);
             console.Children.Add(characters);
             characters.Children.Add(commands);
+            console.Children.Add(playerHUD);
             console.Children.Add(targetHUD);
             console.Children.Add(characterPanel);
 
