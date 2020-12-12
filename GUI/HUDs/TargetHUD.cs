@@ -13,7 +13,7 @@ namespace AsLegacy.GUI.HUDs
         /// The constructed TargetHUD has a default frame and is not visible.
         /// </summary>
         /// <param name="width">The width of the TargetHUD.</param>
-        public TargetHUD(int width) : base(width, '-', null)
+        public TargetHUD(int width) : base(width, 196, null)
         {
             IsVisible = false;
         }
