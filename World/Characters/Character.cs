@@ -96,6 +96,26 @@ namespace AsLegacy
             private bool defenseEnabled = false;
 
             /// <summary>
+            /// The current health of this Character, as an absolute value.
+            /// </summary>
+            public float CurrentHealth { get; protected set; }
+
+            /// <summary>
+            /// The health of this Character, as a percentage of its maximum health.
+            /// </summary>
+            public float Health => CurrentHealth / MaxHealth;
+
+            /// <summary>
+            /// Specifies whether this Character is alive.
+            /// </summary>
+            public bool IsAlive => CurrentHealth > 0;
+
+            /// <summary>
+            /// The maximum health of this Character.
+            /// </summary>
+            public abstract float MaxHealth { get; }
+
+            /// <summary>
             /// The name of this Character.
             /// </summary>
             public string Name { get; private set; }
@@ -129,6 +149,8 @@ namespace AsLegacy
             {
                 mode = Mode.Normal;
                 Name = name;
+
+                CurrentHealth = MaxHealth;
             }
 
             /// <summary>

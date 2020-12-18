@@ -26,6 +26,11 @@ namespace AsLegacy
         protected override int normalGlyph => normal;
 
         /// <summary>
+        /// The maximum health of this Player.
+        /// </summary>
+        public override float MaxHealth => 10.0f;
+
+        /// <summary>
         /// Provides the point (global location) of this Player.
         /// </summary>
         public Point Point => new Point(Column, Row);
