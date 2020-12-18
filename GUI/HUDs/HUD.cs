@@ -33,6 +33,8 @@ namespace AsLegacy.GUI.HUDs
                 for (int y = 0; y < height; y++)
                     SetBackground(x, y, Color.Black);
             SetFrame();
+
+            Print(1, 1, "Health");
         }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace AsLegacy.GUI.HUDs
         public override void Update(TimeSpan timeElapsed)
         {
             base.Update(timeElapsed);
+
             // TODO :: Update other target details, if target is not null.
         }
 
