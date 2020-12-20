@@ -101,7 +101,7 @@ namespace AsLegacy
             public float CurrentHealth { get; protected set; }
 
             /// <summary>
-            /// The health of this Character, as a percentage of its maximum health.
+            /// The health of this Character, as a percentage (0 - 1) of its maximum health.
             /// </summary>
             public float Health => CurrentHealth / MaxHealth;
 

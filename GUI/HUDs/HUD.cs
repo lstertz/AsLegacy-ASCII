@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.GUI.Elements;
+using Microsoft.Xna.Framework;
 using System;
 
 using Console = SadConsole.Console;
@@ -15,6 +16,8 @@ namespace AsLegacy.GUI.HUDs
 
         private int frameGlyph = 0;
         protected World.Character focus;
+
+        private Meter healthMeter;
 
         /// <summary>
         /// Constructs a new HUD.
@@ -34,7 +37,8 @@ namespace AsLegacy.GUI.HUDs
                     SetBackground(x, y, Color.Black);
             SetFrame();
 
-            Print(1, 1, "Health");
+            healthMeter = new Meter(1, 2, RetrieveHealth, Color.Red, Color.DarkRed, 3);
+            Components.Add(healthMeter);
         }
 
         /// <summary>
@@ -59,6 +63,17 @@ namespace AsLegacy.GUI.HUDs
 
             if (focus != null)
                 Print(1, 0, " " + focus.Name + " ");
+        }
+
+        /// <summary>
+        /// Retrieves the health of the current focus of the HUD, if there is one.
+        /// </summary>
+        /// <returns>The health of the current focus, 0 otherwise.</returns>
+        private float RetrieveHealth()
+        {
+            if (focus != null)
+                return focus.Health;
+            return 0.0f;
         }
     }
 }
