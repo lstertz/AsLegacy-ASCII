@@ -10,6 +10,8 @@ namespace AsLegacy
         /// </summary>
         public abstract class Character : CharacterBase
         {
+            private const float standardAttackDamage = 1.67f;
+
             /// <summary>
             /// Highlights the provided Character, if it isn't null, and removes any 
             /// existing highlight.
@@ -154,14 +156,32 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Performs an appropriate action, to move towards or attack, at/towards the 
-            /// specified position, as determined by the Character's current state.
+            /// Specifies whether this Character is adjacent (left, right, up, or down) 
+            /// to the provided position.
             /// </summary>
-            /// <param name="row">The row position, the location on the y-axis.</param>
-            /// <param name="column">The column position, the location on the x-axis.</param>
-            /// <returns>Whether an action was performed.</returns>
-            public bool PerformForPosition(int row, int column)
+            /// <param name="row">The row position to be checked for adjacency.</param>
+            /// <param name="column">The column position to be checked for adjacency.</param>
+            /// <returns>True if this Character is adjacent to the provided position.</returns>
+            public bool IsAdjacentTo(int row, int column)
             {
+                int rowDiff = Row - row;
+                if (rowDiff < -1 || rowDiff > 1)
+                    return false;
+
+                int columnDiff = Column - column;
+                return columnDiff >= -1 && columnDiff <= 1;
+            }
+
+            /// <summary>
+            /// Performs an appropriate action, to move towards or attack, at/towards the 
+            /// Character's target, as determined by the Character's current state.
+            /// </summary>
+            /// <returns>Whether an action was performed.</returns>
+            public bool PerformForTarget()
+            {
+                if (target == null)
+                    return false;
+
                 switch (mode)
                 {
                     case Mode.Normal:
@@ -169,7 +189,11 @@ namespace AsLegacy
                         break;
                     case Mode.Attack:
                         // TODO :: Move towards if not in range of attack.
-                        // TODO :: Attack if in range.
+                        if (IsAdjacentTo(target.Row, target.Column))
+                        {
+                            target.CurrentHealth -= standardAttackDamage;
+                            return true;
+                        }
                         break;
                     case Mode.Defend:
                         break;
@@ -211,7 +235,7 @@ namespace AsLegacy
                         break;
                 }
 
-                if (World.IsPassable(intendedRow, intendedColumn))
+                if (IsPassable(intendedRow, intendedColumn))
                 {
                     Move(this, intendedRow, intendedColumn);
                     return true;
@@ -227,6 +251,8 @@ namespace AsLegacy
             {
                 attackEnabled = !attackEnabled;
                 UpdateActiveMode();
+
+                PerformForTarget();
             }
 
             /// <summary>
