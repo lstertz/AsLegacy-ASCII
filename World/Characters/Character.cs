@@ -11,6 +11,7 @@ namespace AsLegacy
         public abstract partial class Character : CharacterBase
         {
             private const float standardAttackDamage = 1.67f;
+            private const int standardAttackInterval = 2000;
 
             /// <summary>
             /// Highlights the provided Character, if it isn't null, and removes any 
@@ -173,10 +174,10 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Performs an appropriate action, to move towards or attack, at/towards the 
+            /// Initiates an appropriate action, to move towards or attack, at/towards the 
             /// Character's target, as determined by the Character's current state.
             /// </summary>
-            /// <returns>Whether an action was performed.</returns>
+            /// <returns>Whether an action was initiated.</returns>
             public bool PerformForTarget()
             {
                 if (target == null)
@@ -189,12 +190,17 @@ namespace AsLegacy
                         break;
                     case Mode.Attack:
                         // TODO :: Move towards if not in range of attack.
-                        if (IsAdjacentTo(target.Row, target.Column))
-                        {
-                            target.CurrentHealth -= standardAttackDamage;
-                            return true;
-                        }
-                        break;
+                        new TargetedAction(this, target, standardAttackInterval, (c) =>
+                            {
+                                c.CurrentHealth -= standardAttackDamage;
+                            },
+                            (c) =>
+                            {
+                                return IsAlive && c == target &&
+                                    IsAdjacentTo(c.Row, c.Column) &&
+                                    mode == Mode.Attack;
+                            });
+                        return true;
                     case Mode.Defend:
                         break;
                     default:
