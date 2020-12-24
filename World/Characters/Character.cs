@@ -131,7 +131,14 @@ namespace AsLegacy
             public virtual Character Target
             {
                 get => target;
-                set { target = value; }
+                set 
+                {
+                    if (target == value)
+                        return;
+
+                    target = value;
+                    PerformForTarget();
+                }
             }
             protected Character target = null;
 
@@ -256,8 +263,6 @@ namespace AsLegacy
             {
                 attackEnabled = !attackEnabled;
                 UpdateActiveMode();
-
-                PerformForTarget();
             }
 
             /// <summary>
@@ -283,7 +288,10 @@ namespace AsLegacy
                 if (defenseEnabled)
                     ActiveMode = Mode.Defend;
                 else if (attackEnabled)
+                {
                     ActiveMode = Mode.Attack;
+                    PerformForTarget();
+                }
                 else
                     ActiveMode = Mode.Normal;
             }
