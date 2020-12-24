@@ -32,6 +32,7 @@ namespace AsLegacy
             private readonly System.Action action;
             private readonly Func<bool> meetsConditions;
             private readonly LinkedListNode<IAction> node;
+            private readonly bool repeats;
 
             /// <summary>
             /// Provides the time until the Action is activated, as a percentage (0 - 1), 
@@ -45,16 +46,19 @@ namespace AsLegacy
             /// <summary>
             /// Constructs a new Action.
             /// </summary>
-            /// <param name="action">The Action to be performed upon resolution of this Action.</param>
             /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
             /// before the action is to be performed.</param>
+            /// <param name="repeats">Whether the Action re-initializes 
+            /// itself after is resolves.</param>
+            /// <param name="action">The Action to be performed upon resolution of this Action.</param>
             /// <param name="conditionalCheck">A Func to ensure that required conditions to 
             /// resolve this Action continue to be met.</param>
             public Action(int requiredActivationTime, System.Action action,
-                Func<bool> conditionalCheck = null)
+                Func<bool> conditionalCheck = null, bool repeats = false)
             {
                 this.action = action;
                 this.requiredActivationTime = requiredActivationTime;
+                this.repeats = repeats;
 
                 meetsConditions = conditionalCheck;
 
@@ -76,7 +80,18 @@ namespace AsLegacy
                 if (passedActivationTime >= requiredActivationTime)
                 {
                     action();
-                    Destroy();
+
+                    if (repeats)
+                    {
+                        passedActivationTime -= requiredActivationTime;
+                        while (passedActivationTime >= requiredActivationTime)
+                        {
+                            action();
+                            passedActivationTime -= requiredActivationTime;
+                        }
+                    }
+                    else
+                        Destroy();
                 }
             }
 
@@ -107,14 +122,17 @@ namespace AsLegacy
                 /// Constructs a new Character Action.
                 /// </summary>
                 /// <param name="character">The performing Character.</param>
-                /// <param name="action">The Action to be performed by the Character.</param>
                 /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
                 /// before the action is to be performed.</param>
+                /// <param name="repeats">Whether the Action re-initializes 
+                /// itself after is resolves.</param>
+                /// <param name="action">The Action to be performed by the Character.</param>
                 /// <param name="conditionalCheck">A Func to ensure that required conditions to 
                 /// resolve this Action continue to be met.</param>
-                public Action(Character performer, int requiredActivationTime, 
-                    System.Action action, Func<bool> conditionalCheck = null) : base(
-                         requiredActivationTime, action, conditionalCheck)
+                public Action(Character performer, int requiredActivationTime,
+                    System.Action action, Func<bool> conditionalCheck = null, 
+                    bool repeats = false) : base(
+                        requiredActivationTime, action, conditionalCheck, repeats)
                 {
                     this.performer = performer;
                     characterActions.Add(performer, this);
@@ -137,19 +155,22 @@ namespace AsLegacy
                 /// Constructs a new Character TargetedAction.
                 /// </summary>
                 /// <param name="character">The performing Character.</param>
-                /// <param name="action">The Action to be performed upon the targeted Character, 
-                /// by the performing Character.</param>
                 /// <param name="target">The targeted Character.</param>
                 /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
                 /// before the action is to be performed.</param>
+                /// <param name="repeats">Whether the Action re-initializes 
+                /// itself after is resolves.</param>
+                /// <param name="action">The Action to be performed upon the targeted Character, 
+                /// by the performing Character.</param>
                 /// <param name="conditionalCheck">A Func to ensure that required conditions to 
                 /// resolve this Action for the targeted Character continue to be met.</param>
-                public TargetedAction(Character performer, Character target, 
+                public TargetedAction(Character performer, Character target,
                     int requiredActivationTime, Action<Character> action,
-                    Func<Character, bool> conditionalCheck) : base(
+                    Func<Character, bool> conditionalCheck, bool repeats = false) : base(
                         performer, requiredActivationTime,
                         () => action(target),
-                        () => { return conditionalCheck(target); })
+                        () => { return conditionalCheck(target); },
+                        repeats)
                 { }
             }
         }
