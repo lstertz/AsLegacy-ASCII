@@ -12,7 +12,7 @@ namespace AsLegacy
         public const int Width = 80;
         public const int Height = 25;
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             new AsLegacy();
         }
@@ -36,6 +36,7 @@ namespace AsLegacy
 
         public override void Update(Console console, TimeSpan delta)
         {
+            World.Update(delta.Milliseconds);
             // This is the Game Loop.
             // Update game logic here.
         }

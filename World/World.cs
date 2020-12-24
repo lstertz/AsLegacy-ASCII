@@ -1,10 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
 
 namespace AsLegacy
 {
     /// <summary>
-    /// Defines the World, which maintains the environment, characters, and 
-    /// effects that constitute the game world.
+    /// Defines the World, which maintains the actions, characters, effects, and environment
+    /// that constitute the game world.
     /// </summary>
     public static partial class World
     {
@@ -33,22 +33,9 @@ namespace AsLegacy
         /// </summary>
         public static readonly int RowCount = map.Length;
 
-        /// <summary>
-        /// The displayable environment of the World.
-        /// </summary>
-        public static TileSet<Tile>.Display Environment
-        {
-            get
-            {
-                return environment.GetDisplay();
-            }
-        }
-        private static TileSet<Tile> environment = new TileSet<Tile>((row, column) =>
-        {
-            if (map[row][column] == 'T')
-                return new Tree();
-            return new Path();
-        });
+        private static readonly LinkedList<IAction> actions = new LinkedList<IAction>();
+        private static readonly Dictionary<Character, Action> characterActions = 
+            new Dictionary<Character, Action>();
 
         /// <summary>
         /// The displayable characters of the World.
@@ -60,9 +47,26 @@ namespace AsLegacy
                 return characters.GetDisplay();
             }
         }
-        private static TileSet<CharacterBase> characters = new TileSet<CharacterBase>((row, column) =>
+        private static readonly TileSet<CharacterBase> characters = new TileSet<CharacterBase>((row, column) =>
         {
             return new AbsentCharacter(row, column);
+        });
+
+        /// <summary>
+        /// The displayable environment of the World.
+        /// </summary>
+        public static TileSet<Tile>.Display Environment
+        {
+            get
+            {
+                return environment.GetDisplay();
+            }
+        }
+        private static readonly TileSet<Tile> environment = new TileSet<Tile>((row, column) =>
+        {
+            if (map[row][column] == 'T')
+                return new Tree();
+            return new Path();
         });
 
         /// <summary>
@@ -109,6 +113,24 @@ namespace AsLegacy
         public static bool IsPassable(int row, int column)
         {
             return characters.IsPassable(row, column) && environment.IsPassable(row, column);
+        }
+
+        /// <summary>
+        /// Updates the state of the World and any of its constructs.
+        /// </summary>
+        /// <param name="timeDelta">The time passed, in milliseconds, 
+        /// since the last update.</param>
+        public static void Update(int timeDelta)
+        {
+            LinkedListNode<IAction> current;
+            LinkedListNode<IAction> next = actions.First;
+            while (next != null)
+            {
+                current = next;
+                next = current.Next;
+
+                current.Value.Evaluate(timeDelta);
+            }
         }
     }
 }
