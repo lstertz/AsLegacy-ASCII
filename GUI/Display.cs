@@ -16,8 +16,8 @@ namespace AsLegacy
     /// </summary>
     public class Display : DrawConsoleComponent
     {
-        public const int MapViewPortWidth = 6;
-        public const int MapViewPortHeight = 6;
+        public const int MapViewPortWidth = 13;
+        public const int MapViewPortHeight = 13;
         public const int MapViewPortHalfWidth = MapViewPortWidth / 2;
         public const int MapViewPortHalfHeight = MapViewPortHeight / 2;
 
