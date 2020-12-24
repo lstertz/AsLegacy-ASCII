@@ -99,6 +99,21 @@ namespace AsLegacy
             private bool defenseEnabled = false;
 
             /// <summary>
+            /// The current action being performed by this Character, 
+            /// or null if it is performing no action.
+            /// </summary>
+            public World.Action CurrentAction 
+            { 
+                get 
+                { 
+                    if (characterActions.ContainsKey(this))
+                        return characterActions[this];
+
+                    return null;
+                } 
+            }
+
+            /// <summary>
             /// The current health of this Character, as an absolute value.
             /// </summary>
             public float CurrentHealth { get; protected set; }
@@ -202,9 +217,9 @@ namespace AsLegacy
                             },
                             (c) =>
                             {
-                                return IsAlive && c == target &&
-                                    IsAdjacentTo(c.Row, c.Column) &&
-                                    mode == Mode.Attack;
+                                return IsAlive && mode == Mode.Attack && 
+                                    c.IsAlive && c == target &&
+                                    IsAdjacentTo(c.Row, c.Column);
                             }, true);
                         return true;
                     case Mode.Defend:

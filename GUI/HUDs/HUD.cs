@@ -17,6 +17,7 @@ namespace AsLegacy.GUI.HUDs
         private int frameGlyph = 0;
         protected World.Character focus;
 
+        private Meter activationMeter;
         private Meter healthMeter;
 
         /// <summary>
@@ -39,6 +40,10 @@ namespace AsLegacy.GUI.HUDs
 
             healthMeter = new Meter(1, 2, RetrieveHealth, Color.Red, Color.DarkRed, 3);
             Components.Add(healthMeter);
+
+            activationMeter = new Meter(14, 2, RetrieveActivation, Color.Goldenrod, 
+                new Color(218, 165, 32, 220), 15);
+            Components.Add(activationMeter);
         }
 
         /// <summary>
@@ -63,6 +68,23 @@ namespace AsLegacy.GUI.HUDs
 
             if (focus != null)
                 Print(1, 0, " " + focus.Name + " ");
+        }
+
+        /// <summary>
+        /// Retrieves the activation progress of the action currently being 
+        /// performed by the current focus of the HUD, if there is one.
+        /// </summary>
+        /// <returns>The activation progress of the current action 
+        /// of the current focus, 0 otherwise.</returns>
+        private float RetrieveActivation()
+        {
+            if (focus != null)
+            {
+                World.Action action = focus.CurrentAction;
+                if (action != null)
+                    return action.Activation;
+            }
+            return 0.0f;
         }
 
         /// <summary>

@@ -10,17 +10,24 @@ namespace AsLegacy
     {
         private static readonly char[][] map =
         {
-            ".T.........".ToCharArray(),
-            "...T.TTTTT.".ToCharArray(),
-            "TTT...TTTTT".ToCharArray(),
-            "TTT...TTTTT".ToCharArray(),
-            "........TTT".ToCharArray(),
-            "...TTTT....".ToCharArray(),
-            "..TTTTT.T..".ToCharArray(),
-            "...TTTTTT..".ToCharArray(),
-            "T.TTTTTT...".ToCharArray(),
-            "..TTTTT....".ToCharArray(),
-            "...TTTTTT..".ToCharArray(),
+            ".T....T............".ToCharArray(),
+            "...T....T.TTTTT.TT.".ToCharArray(),
+            "TTT..TTT...TTTTTTTT".ToCharArray(),
+            "TTT..TTT...TTTTTTTT".ToCharArray(),
+            ".............TTTTTT".ToCharArray(),
+            "...TT...TTTT.......".ToCharArray(),
+            "..TTT..TTTTT.T..T..".ToCharArray(),
+            "...TT...TTTTTT..T..".ToCharArray(),
+            "T.TTTT.TTTTTT......".ToCharArray(),
+            "..TTT..TTTTT.......".ToCharArray(),
+            "...TT...TTTTTT..T..".ToCharArray(),
+            "T.TTTT.TTTTTT......".ToCharArray(),
+            "..TTT..TTTTT.......".ToCharArray(),
+            "...TT...TTTTTT..T..".ToCharArray(),
+            ".T....T............".ToCharArray(),
+            "...T....T.TTTTT.TT.".ToCharArray(),
+            "TTT..TTT...TTTTTTTT".ToCharArray(),
+            "TTT..TTT...TTTTTTTT".ToCharArray(),
         };
 
         /// <summary>
