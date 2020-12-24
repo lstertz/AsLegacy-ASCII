@@ -29,17 +29,17 @@ namespace AsLegacy
             /// <summary>
             /// Defines the glyph to be shown when the Character is in attack mode.
             /// </summary>
-            protected abstract int attackGlyph { get; }
+            protected abstract int AttackGlyph { get; }
 
             /// <summary>
             /// Defines the glyph to be shown when the Character is in defend mode.
             /// </summary>
-            protected abstract int defendGlyph { get; }
+            protected abstract int DefendGlyph { get; }
 
             /// <summary>
             /// Defines the glyph to be shown when the Character is in normal mode.
             /// </summary>
-            protected abstract int normalGlyph { get; }
+            protected abstract int NormalGlyph { get; }
 
 
             /// <summary>
@@ -80,13 +80,13 @@ namespace AsLegacy
                     switch (value)
                     {
                         case Mode.Normal:
-                            Glyph = normalGlyph;
+                            Glyph = NormalGlyph;
                             break;
                         case Mode.Attack:
-                            Glyph = attackGlyph;
+                            Glyph = AttackGlyph;
                             break;
                         case Mode.Defend:
-                            Glyph = defendGlyph;
+                            Glyph = DefendGlyph;
                             break;
                         default:
                             break;

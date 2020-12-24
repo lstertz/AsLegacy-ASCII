@@ -13,17 +13,17 @@ namespace AsLegacy
         /// <summary>
         /// Defines the glyph to be shown when the Player is in attack mode.
         /// </summary>
-        protected override int attackGlyph => 235;
+        protected override int AttackGlyph => 235;
 
         /// <summary>
         /// Defines the glyph to be shown when the Player is in defend mode.
         /// </summary>
-        protected override int defendGlyph => 233;
+        protected override int DefendGlyph => 233;
 
         /// <summary>
         /// Defines the glyph to be shown when the Player is in normal mode.
         /// </summary>
-        protected override int normalGlyph => normal;
+        protected override int NormalGlyph => normal;
 
         /// <summary>
         /// The maximum health of this Player.

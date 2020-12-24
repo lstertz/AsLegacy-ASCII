@@ -12,7 +12,7 @@ namespace AsLegacy
         public const int Width = 80;
         public const int Height = 25;
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             new AsLegacy();
         }
