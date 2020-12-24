@@ -36,6 +36,7 @@ namespace AsLegacy
 
         public override void Update(Console console, TimeSpan delta)
         {
+            World.Update(delta.Milliseconds);
             // This is the Game Loop.
             // Update game logic here.
         }

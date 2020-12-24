@@ -19,8 +19,9 @@ namespace AsLegacy
             /// Updates the state of this Action and resolves it if the required activation 
             /// time has been satisfied or cancels it if the Action is no longer valid.
             /// </summary>
-            /// <param name="timeDelta">The time that has passed since the last update.</param>
-            void Evaluate(float timeDelta);
+            /// <param name="timeDelta">The time, in milliseconds, that has passed 
+            /// since the last update.</param>
+            void Evaluate(int timeDelta);
         }
 
         /// <summary>
@@ -45,11 +46,11 @@ namespace AsLegacy
             /// Constructs a new Action.
             /// </summary>
             /// <param name="action">The Action to be performed upon resolution of this Action.</param>
-            /// <param name="requiredActivationTime">The time that must pass before the 
-            /// action is to be performed.</param>
+            /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
+            /// before the action is to be performed.</param>
             /// <param name="conditionalCheck">A Func to ensure that required conditions to 
             /// resolve this Action continue to be met.</param>
-            public Action(System.Action action, float requiredActivationTime,
+            public Action(int requiredActivationTime, System.Action action,
                 Func<bool> conditionalCheck = null)
             {
                 this.action = action;
@@ -62,7 +63,7 @@ namespace AsLegacy
                 node = actions.AddFirst(this);
             }
 
-            void IAction.Evaluate(float timeDelta)
+            void IAction.Evaluate(int timeDelta)
             {
                 if (meetsConditions != null)
                     if (!meetsConditions())
@@ -107,13 +108,13 @@ namespace AsLegacy
                 /// </summary>
                 /// <param name="character">The performing Character.</param>
                 /// <param name="action">The Action to be performed by the Character.</param>
-                /// <param name="requiredActivationTime">The time that must pass before the 
-                /// action is to be performed.</param>
+                /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
+                /// before the action is to be performed.</param>
                 /// <param name="conditionalCheck">A Func to ensure that required conditions to 
                 /// resolve this Action continue to be met.</param>
-                public Action(Character performer, System.Action action,
-                    float requiredActivationTime, Func<bool> conditionalCheck = null) : base(
-                        action, requiredActivationTime, conditionalCheck)
+                public Action(Character performer, int requiredActivationTime, 
+                    System.Action action, Func<bool> conditionalCheck = null) : base(
+                         requiredActivationTime, action, conditionalCheck)
                 {
                     this.performer = performer;
                     characterActions.Add(performer, this);
@@ -121,6 +122,7 @@ namespace AsLegacy
 
                 protected override void Destroy()
                 {
+                    base.Destroy();
                     characterActions.Remove(performer);
                 }
             }
@@ -138,14 +140,15 @@ namespace AsLegacy
                 /// <param name="action">The Action to be performed upon the targeted Character, 
                 /// by the performing Character.</param>
                 /// <param name="target">The targeted Character.</param>
-                /// <param name="requiredActivationTime">The time that must pass before the 
-                /// action is to be performed.</param>
+                /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
+                /// before the action is to be performed.</param>
                 /// <param name="conditionalCheck">A Func to ensure that required conditions to 
                 /// resolve this Action for the targeted Character continue to be met.</param>
-                public TargetedAction(Character performer, Action<Character> action, 
-                    Character target, float requiredActivationTime, 
-                    Func<Character, bool> conditionalCheck) : base(performer, 
-                        () => action(target), requiredActivationTime,
+                public TargetedAction(Character performer, Character target, 
+                    int requiredActivationTime, Action<Character> action,
+                    Func<Character, bool> conditionalCheck) : base(
+                        performer, requiredActivationTime,
+                        () => action(target),
                         () => { return conditionalCheck(target); })
                 { }
             }

@@ -116,7 +116,7 @@ namespace AsLegacy
         }
 
 
-        public static void Update(float timeDelta)
+        public static void Update(int timeDelta)
         {
             LinkedListNode<IAction> current;
             LinkedListNode<IAction> next = actions.First;
