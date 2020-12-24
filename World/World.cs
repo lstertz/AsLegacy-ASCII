@@ -115,7 +115,11 @@ namespace AsLegacy
             return characters.IsPassable(row, column) && environment.IsPassable(row, column);
         }
 
-
+        /// <summary>
+        /// Updates the state of the World and any of its constructs.
+        /// </summary>
+        /// <param name="timeDelta">The time passed, in milliseconds, 
+        /// since the last update.</param>
         public static void Update(int timeDelta)
         {
             LinkedListNode<IAction> current;
