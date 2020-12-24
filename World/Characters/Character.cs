@@ -202,9 +202,9 @@ namespace AsLegacy
                             },
                             (c) =>
                             {
-                                return IsAlive && c == target &&
-                                    IsAdjacentTo(c.Row, c.Column) &&
-                                    mode == Mode.Attack;
+                                return IsAlive && mode == Mode.Attack && 
+                                    c.IsAlive && c == target &&
+                                    IsAdjacentTo(c.Row, c.Column);
                             }, true);
                         return true;
                     case Mode.Defend:
