@@ -8,7 +8,7 @@ namespace AsLegacy
         /// Represents an abstraction of a CharacterBase that has a presence within the World.
         /// Such characters exist in a formal sense and can be interacted with.
         /// </summary>
-        public abstract class Character : CharacterBase
+        public abstract partial class Character : CharacterBase
         {
             private const float standardAttackDamage = 1.67f;
 
