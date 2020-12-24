@@ -8,7 +8,7 @@ namespace AsLegacy
         /// <summary>
         /// Defines the Action interface for World-only accessible functionality.
         /// </summary>
-        private interface IAction
+        protected interface IAction
         {
             /// <summary>
             /// Initiates any operations to be performed upon the cancellation of this Action.

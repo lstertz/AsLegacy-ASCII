@@ -13,6 +13,8 @@ namespace AsLegacy
             private const float standardAttackDamage = 1.67f;
             private const int standardAttackInterval = 2000;
 
+            private readonly Color deadColor = Color.DarkGray;
+
             /// <summary>
             /// Highlights the provided Character, if it isn't null, and removes any 
             /// existing highlight.
@@ -116,7 +118,25 @@ namespace AsLegacy
             /// <summary>
             /// The current health of this Character, as an absolute value.
             /// </summary>
-            public float CurrentHealth { get; protected set; }
+            public float CurrentHealth
+            {
+                get => currentHealth;
+                set
+                {
+                    currentHealth = value;
+
+                    if (!IsAlive)
+                    {
+                        GlyphColor = deadColor;
+                        ActiveMode = Mode.Normal;
+
+                        (CurrentAction as IAction)?.Cancel();
+
+                        // TODO :: 20 : Remove the Character completely after 3 seconds (use Action?).
+                    }
+                }
+            }
+            private float currentHealth;
 
             /// <summary>
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
@@ -175,7 +195,7 @@ namespace AsLegacy
                 mode = Mode.Normal;
                 Name = name;
 
-                CurrentHealth = MaxHealth;
+                currentHealth = MaxHealth;
             }
 
             /// <summary>
