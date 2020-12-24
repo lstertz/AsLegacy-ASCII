@@ -166,11 +166,10 @@ namespace AsLegacy
             public bool IsAdjacentTo(int row, int column)
             {
                 int rowDiff = Row - row;
-                if (rowDiff < -1 || rowDiff > 1)
-                    return false;
-
                 int columnDiff = Column - column;
-                return columnDiff >= -1 && columnDiff <= 1;
+
+                return (rowDiff == -1 && columnDiff == 0) || (rowDiff == 1 && columnDiff == 0) ||
+                    (rowDiff == 0 && columnDiff == -1) || (rowDiff == 0 && columnDiff == 1);
             }
 
             /// <summary>
