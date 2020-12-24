@@ -131,7 +131,14 @@ namespace AsLegacy
             public virtual Character Target
             {
                 get => target;
-                set { target = value; }
+                set 
+                {
+                    if (target == value)
+                        return;
+
+                    target = value;
+                    PerformForTarget();
+                }
             }
             protected Character target = null;
 
@@ -166,11 +173,10 @@ namespace AsLegacy
             public bool IsAdjacentTo(int row, int column)
             {
                 int rowDiff = Row - row;
-                if (rowDiff < -1 || rowDiff > 1)
-                    return false;
-
                 int columnDiff = Column - column;
-                return columnDiff >= -1 && columnDiff <= 1;
+
+                return (rowDiff == -1 && columnDiff == 0) || (rowDiff == 1 && columnDiff == 0) ||
+                    (rowDiff == 0 && columnDiff == -1) || (rowDiff == 0 && columnDiff == 1);
             }
 
             /// <summary>
@@ -199,7 +205,7 @@ namespace AsLegacy
                                 return IsAlive && c == target &&
                                     IsAdjacentTo(c.Row, c.Column) &&
                                     mode == Mode.Attack;
-                            });
+                            }, true);
                         return true;
                     case Mode.Defend:
                         break;
@@ -257,8 +263,6 @@ namespace AsLegacy
             {
                 attackEnabled = !attackEnabled;
                 UpdateActiveMode();
-
-                PerformForTarget();
             }
 
             /// <summary>
@@ -284,7 +288,10 @@ namespace AsLegacy
                 if (defenseEnabled)
                     ActiveMode = Mode.Defend;
                 else if (attackEnabled)
+                {
                     ActiveMode = Mode.Attack;
+                    PerformForTarget();
+                }
                 else
                     ActiveMode = Mode.Normal;
             }
