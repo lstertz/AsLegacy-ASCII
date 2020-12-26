@@ -146,5 +146,19 @@ namespace AsLegacy
                 current.Value.Evaluate(timeDelta);
             }
         }
+
+
+        /// <summary>
+        /// Removes a Character from the World.
+        /// </summary>
+        /// <param name="c">The Character to be removed.</param>
+        private static void RemoveCharacter(Character c)
+        {
+            if (c != Player) // TODO :: Handle Player death appropriately later.
+                characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
+
+            if (c == Player.Target)
+                Player.Target = null;
+        }
     }
 }

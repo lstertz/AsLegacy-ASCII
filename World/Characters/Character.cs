@@ -10,6 +10,7 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase
         {
+            private const int characterRemovalTime = 3000;
             private const float standardAttackDamage = 1.67f;
             private const int standardAttackInterval = 2000;
 
@@ -131,8 +132,7 @@ namespace AsLegacy
                         ActiveMode = Mode.Normal;
 
                         (CurrentAction as IAction)?.Cancel();
-
-                        // TODO :: 20 : Remove the Character completely after 3 seconds (use Action?).
+                        new World.Action(characterRemovalTime, () => RemoveCharacter(this));
                     }
                 }
             }
