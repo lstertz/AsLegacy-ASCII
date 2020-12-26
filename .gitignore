@@ -5,3 +5,5 @@ obj/Debug
 AsLegacy.csproj.user
 obj/publish
 obj/Release
+release/win64/AsLegacy.pdb
+release/win86/AsLegacy.pdb
