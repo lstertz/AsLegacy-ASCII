@@ -10,8 +10,11 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase
         {
+            private const int characterRemovalTime = 3000;
             private const float standardAttackDamage = 1.67f;
             private const int standardAttackInterval = 2000;
+
+            private readonly Color deadColor = Color.DarkGray;
 
             /// <summary>
             /// Highlights the provided Character, if it isn't null, and removes any 
@@ -116,7 +119,24 @@ namespace AsLegacy
             /// <summary>
             /// The current health of this Character, as an absolute value.
             /// </summary>
-            public float CurrentHealth { get; protected set; }
+            public float CurrentHealth
+            {
+                get => currentHealth;
+                set
+                {
+                    currentHealth = value;
+
+                    if (!IsAlive)
+                    {
+                        GlyphColor = deadColor;
+                        ActiveMode = Mode.Normal;
+
+                        (CurrentAction as IAction)?.Cancel();
+                        new World.Action(characterRemovalTime, () => RemoveCharacter(this));
+                    }
+                }
+            }
+            private float currentHealth;
 
             /// <summary>
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
@@ -175,7 +195,7 @@ namespace AsLegacy
                 mode = Mode.Normal;
                 Name = name;
 
-                CurrentHealth = MaxHealth;
+                currentHealth = MaxHealth;
             }
 
             /// <summary>

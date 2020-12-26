@@ -42,7 +42,7 @@ namespace AsLegacy.GUI.HUDs
             Components.Add(healthMeter);
 
             activationMeter = new Meter(14, 2, RetrieveActivation, Color.Goldenrod, 
-                new Color(218, 165, 32, 220), 15);
+                new Color(138, 105, 20, 255), 15);
             Components.Add(activationMeter);
         }
 

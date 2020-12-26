@@ -10,24 +10,33 @@ namespace AsLegacy
     {
         private static readonly char[][] map =
         {
-            ".T....T............".ToCharArray(),
-            "...T....T.TTTTT.TT.".ToCharArray(),
-            "TTT..TTT...TTTTTTTT".ToCharArray(),
-            "TTT..TTT...TTTTTTTT".ToCharArray(),
-            ".............TTTTTT".ToCharArray(),
-            "...TT...TTTT.......".ToCharArray(),
-            "..TTT..TTTTT.T..T..".ToCharArray(),
-            "...TT...TTTTTT..T..".ToCharArray(),
-            "T.TTTT.TTTTTT......".ToCharArray(),
-            "..TTT..TTTTT.......".ToCharArray(),
-            "...TT...TTTTTT..T..".ToCharArray(),
-            "T.TTTT.TTTTTT......".ToCharArray(),
-            "..TTT..TTTTT.......".ToCharArray(),
-            "...TT...TTTTTT..T..".ToCharArray(),
-            ".T....T............".ToCharArray(),
-            "...T....T.TTTTT.TT.".ToCharArray(),
-            "TTT..TTT...TTTTTTTT".ToCharArray(),
-            "TTT..TTT...TTTTTTTT".ToCharArray(),
+            "TTTT.T....T.................".ToCharArray(),
+            "TTT....T....T.TTTTT.TT..TTTT".ToCharArray(),
+            "TT..TTT..TTT...TTTTTTTT..TTT".ToCharArray(),
+            "TTT...T..TTT...TTTTTTTT..TTT".ToCharArray(),
+            "TTT..............TTTTTT....T".ToCharArray(),
+            "TTTT...TT...TTTT.......TTT..".ToCharArray(),
+            "TTTT..TTT..TTTTT.T..T..TTT.T".ToCharArray(),
+            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
+            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
+            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
+            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
+            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
+            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
+            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
+            "TTTT.T....T.................".ToCharArray(),
+            "TTTT...T....T.TTTTT.TT..TTTT".ToCharArray(),
+            "TTTTTTT..TTT...TTTTTTTT..TTT".ToCharArray(),
+            "TTTTTTT..TTT......TTTTT.....".ToCharArray(),
+            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
+            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
+            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
+            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
+            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
         };
 
         /// <summary>
@@ -81,8 +90,6 @@ namespace AsLegacy
         /// </summary>
         public static Player Player { get; private set; }
 
-        private static Beast beast;
-
         /// <summary>
         /// Initializes the World with expected Characters.
         /// </summary>
@@ -92,7 +99,7 @@ namespace AsLegacy
                 return;
 
             Player = new Player(3, 3);
-            beast = new Beast(7, 1, "Wolf");
+            new Beast(7, 5, "Wolf");
         }
 
         /// <summary>
@@ -138,6 +145,20 @@ namespace AsLegacy
 
                 current.Value.Evaluate(timeDelta);
             }
+        }
+
+
+        /// <summary>
+        /// Removes a Character from the World.
+        /// </summary>
+        /// <param name="c">The Character to be removed.</param>
+        private static void RemoveCharacter(Character c)
+        {
+            if (c != Player) // TODO :: Handle Player death appropriately later.
+                characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
+
+            if (c == Player.Target)
+                Player.Target = null;
         }
     }
 }
