@@ -17,26 +17,26 @@ namespace AsLegacy
             "TTT..............TTTTTT....T".ToCharArray(),
             "TTTT...TT...TTTT.......TTT..".ToCharArray(),
             "TTTT..TTT..TTTTT.T..T..TTT.T".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
+            "TTTT...TT...TTTTTT..T..TTT.T".ToCharArray(),
+            "TTTTT.TTTT.TTTTTT......TTT..".ToCharArray(),
+            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
+            "TTTT...TT...TTTTTT..T..TTTT.".ToCharArray(),
             "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
             "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
+            "TTTT...TT...TTTTTT..T..TTT.T".ToCharArray(),
             "TTTT.T....T.................".ToCharArray(),
             "TTTT...T....T.TTTTT.TT..TTTT".ToCharArray(),
             "TTTTTTT..TTT...TTTTTTTT..TTT".ToCharArray(),
-            "TTTTTTT..TTT......TTTTT.....".ToCharArray(),
+            "TTTTT....T........TTTTT.....".ToCharArray(),
             "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
             "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
             "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
             "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTT..TTT..TTTTT............".ToCharArray(),
+            "TTTT.......TTTTTTT..TTTTT.TT".ToCharArray(),
+            "TTTTTTTTTT.........TTTT...TT".ToCharArray(),
+            "TT..TTTTTTTTTTTTTTTTT...TTTT".ToCharArray(),
+            "TTT...................TTTTTT".ToCharArray(),
         };
 
         /// <summary>
@@ -100,6 +100,8 @@ namespace AsLegacy
 
             Player = new Player(3, 3);
             new Beast(7, 5, "Wolf");
+            new Beast(19, 19, "Giant Rat");
+            new Beast(0, 21, "Bear");
         }
 
         /// <summary>
@@ -116,6 +118,24 @@ namespace AsLegacy
             if (c == null || c is AbsentCharacter)
                 return null;
             return c as Character;
+        }
+
+        /// <summary>
+        /// Provides the Characters near the specified Character (excluding 
+        /// the specified Character), and that are within the specified range, up to the 
+        /// number specified.
+        /// </summary>
+        /// <param name="c">The Character used as a reference to 
+        /// find the nearby Characters.</param>
+        /// <param name="withinHorizontal">The distance horizontally that a 
+        /// nearby Character may be.</param>
+        /// <param name="withinVertical">The distance vertically that a 
+        /// nearby Character may be.</param>
+        /// <returns>A list of nearby characters, or an empty list if none were found.</returns>
+        public static List<Character> CharactersNear(Character c, int withinHorizontal, 
+            int withinVertical)
+        {
+            return new List<Character>();
         }
 
         /// <summary>
