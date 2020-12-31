@@ -10,7 +10,7 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase
         {
-            private const int characterRemovalTime = 3000;
+            private const int characterRemovalTime = 700;
             private const float standardAttackDamage = 1.67f;
             private const int standardAttackInterval = 2000;
 
