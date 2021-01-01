@@ -12,33 +12,54 @@ namespace AsLegacy
     {
         private static readonly char[][] map =
         {
-            "TTTT.T....T.................".ToCharArray(),
-            "TTT....T....T.TTTTT.TT..TTTT".ToCharArray(),
-            "TT..TTT..TTT...TTTTTTTT..TTT".ToCharArray(),
-            "TTT...T..TTT...TTTTTTTT..TTT".ToCharArray(),
-            "TTT..............TTTTTT....T".ToCharArray(),
-            "TTTT...TT...TTTT.......TTT..".ToCharArray(),
-            "TTTT..TTT..TTTTT.T..T..TTT.T".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTT.T".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTT..".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTT.".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTT.T".ToCharArray(),
-            "TTTT.T....T.................".ToCharArray(),
-            "TTTT...T....T.TTTTT.TT..TTTT".ToCharArray(),
-            "TTTTTTT..TTT...TTTTTTTT..TTT".ToCharArray(),
-            "TTTTT....T........TTTTT.....".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT............".ToCharArray(),
-            "TTTT.......TTTTTTT..TTTTT.TT".ToCharArray(),
-            "TTTTTTTTTT.........TTTT...TT".ToCharArray(),
-            "TT..TTTTTTTTTTTTTTTTT...TTTT".ToCharArray(),
-            "TTT...................TTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT.T....T.................TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT....T....T.TTTTT.TT..TTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT..TTT..TTT...TTTTTTTT..TTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT...T..TTT...TTTTTTTT..TTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT..............TTTTTT....TTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT...TT...TTTT.......TTT..TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT..TTT..TTTTT.T..T..TTT.TTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT...TT...TTTTTT..T..TTT.TTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTT.TTTT.TTTTTT......TTT..TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT..TTT..TTTTT.......TTT..TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT...TT...TTTTTT..T..TTTT.TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTT.TTTT.TTTTTT......TTTT.TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT..TTT..TTTTT.......TTT..TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT...TT...TTTTTT..T..TTT.TTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT.T....T.................TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT...T....T.TTTTT.TT..TTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTT..TTT...TTTTTTTT..TTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTT....T........TTTTT.....TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTT.TTTT.TTTTTT......TTTT.TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT..TTT..TTTTT.......TTT..TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT...TT...TTTTTT..T..TTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTT.TTTT.TTTTTT......TTTT.TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT..TTT..TTTTT............TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTT.......TTTTTTT..TTTTT.TTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTT.........TTTT...TTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT..TTTTTTTTTTTTTTTTT...TTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT...................TTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
         };
 
         /// <summary>
@@ -102,10 +123,10 @@ namespace AsLegacy
             if (Player != null)
                 return;
 
-            Player = new Player(3, 3);
-            new Beast(7, 5, "Wolf");
-            new Beast(19, 19, "Giant Rat");
-            new Beast(0, 21, "Bear");
+            Player = new Player(12, 12);
+            new Beast(18, 15, "Wolf");
+            new Beast(30, 29, "Giant Rat");
+            new Beast(10, 32, "Bear");
         }
 
         /// <summary>
