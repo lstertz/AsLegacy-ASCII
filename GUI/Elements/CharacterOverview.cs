@@ -18,7 +18,7 @@ namespace AsLegacy.GUI.Elements
         public World.Character Character { get; set; }
         public World.Character Viewer { get; set; }
 
-        private int y;
+        private readonly int y;
 
         /// <summary>
         /// Constructs a new CharacterOverview.
@@ -42,10 +42,14 @@ namespace AsLegacy.GUI.Elements
         /// <param name="delta">The time passed since the last draw.</param>
         public override void Draw(SadConsole.Console console, TimeSpan delta)
         {
-            // TODO :: Use actual Character data, or hide entirely if Character is null.
-            console.Print(0, y, "Character Name");
-            console.Print(0, y + 1, "Character Action"); // TODO :: Center
-            console.Print(0, y + 2, "Character Target"); // TODO :: Center
+            console.Clear(new Rectangle(0, y, console.Width, OverviewHeight));
+
+            if (Character == null)
+                return;
+
+            console.Print(0, y, Character.Name);
+            console.Print(0, y + 1, "[Action]");
+            console.Print(0, y + 2, "[Target]");
 
             console.DrawLine(new Point(0, y + bottomFrameIndex), 
                 new Point(console.Width - 1, y + bottomFrameIndex), 
