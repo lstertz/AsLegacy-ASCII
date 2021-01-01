@@ -68,6 +68,8 @@ namespace AsLegacy
             return new AbsentCharacter(row, column);
         });
 
+        private static readonly List<Character> presentCharacters = new List<Character>();
+
         /// <summary>
         /// The displayable environment of the World.
         /// </summary>
@@ -169,11 +171,30 @@ namespace AsLegacy
 
 
         /// <summary>
+        /// Adds a Character to the World.
+        /// </summary>
+        /// <param name="row">The row, defining the y axis 
+        /// of the character's position.</param>
+        /// <param name="column">The column, defining the x axis 
+        /// of the character's position.</param>
+        /// <param name="c">The Character to be added.</param>
+        private static void AddCharacter(int row, int column, CharacterBase c)
+        {
+            if (characters != null)
+                characters.ReplaceWith(row, column, c);
+
+            if (c is Character)
+                presentCharacters.Add(c as Character);
+        }
+
+        /// <summary>
         /// Removes a Character from the World.
         /// </summary>
         /// <param name="c">The Character to be removed.</param>
         private static void RemoveCharacter(Character c)
         {
+            presentCharacters.Remove(c);
+
             if (c != Player) // TODO :: Handle Player death appropriately later.
                 characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
 
