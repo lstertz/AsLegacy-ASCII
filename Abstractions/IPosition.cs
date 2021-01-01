@@ -28,7 +28,7 @@ namespace AsLegacy.Abstractions
         /// <returns>The distance from this IPosition to the provided IPosition.</returns>
         public static float DistanceTo(this IPosition a, IPosition b)
         {
-            return MathF.Sqrt((a.Column - b.Column) ^ 2 + (a.Row - b.Row) ^ 2);
+            return MathF.Sqrt(a.SquaredDistanceTo(b));
         }
 
         /// <summary>
@@ -40,7 +40,9 @@ namespace AsLegacy.Abstractions
         /// <returns>The squared distance from this IPosition to the provided IPosition.</returns>
         public static int SquaredDistanceTo(this IPosition a, IPosition b)
         {
-            return (a.Column - b.Column) ^ 2 + (a.Row - b.Row) ^ 2;
+            int cDiff = a.Column - b.Column;
+            int rDiff = a.Row - b.Row;
+            return cDiff * cDiff + rDiff * rDiff;
         }
     }
 }
