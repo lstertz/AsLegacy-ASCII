@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AsLegacy.Abstractions;
+using System;
+using System.Collections.Generic;
 
 namespace AsLegacy
 {
@@ -127,17 +129,51 @@ namespace AsLegacy
         /// the specified Character), and that are within the specified range, up to the 
         /// number specified.
         /// </summary>
-        /// <param name="c">The Character used as a reference to 
+        /// <param name="character">The Character used as a reference to 
         /// find the nearby Characters.</param>
         /// <param name="withinHorizontal">The distance horizontally that a 
         /// nearby Character may be.</param>
         /// <param name="withinVertical">The distance vertically that a 
         /// nearby Character may be.</param>
         /// <returns>A list of nearby characters, or an empty list if none were found.</returns>
-        public static List<Character> CharactersNear(Character c, int withinHorizontal, 
+        public static Character[] CharactersNear(Character character, int withinHorizontal, 
             int withinVertical)
         {
-            return new List<Character>();
+            // TODO :: Optimize later, perhaps with 2D Linked Grid data structure support.
+
+            Dictionary<Character, int> nearCharacters = new Dictionary<Character, int>();
+            foreach (Character c in presentCharacters)
+            {
+                int columnDiff = Math.Abs(character.Column - c.Column);
+                int rowDiff = Math.Abs(character.Row - c.Row);
+
+                if (columnDiff == 0 && rowDiff == 0)
+                    continue;
+
+                if (columnDiff <= withinHorizontal && rowDiff <= withinVertical)
+                    nearCharacters.Add(c, character.SquaredDistanceTo(c));
+            }
+
+            Character nextNearest = null;
+            Character[] sortedCharacters = new Character[nearCharacters.Count];
+            for (int i = 0; i < sortedCharacters.Length; i++)
+            {
+                int nextDistance = int.MaxValue;
+                foreach (Character nearCharacter in nearCharacters.Keys)
+                {
+                    int d = nearCharacters[nearCharacter];
+                    if (d < nextDistance)
+                    {
+                        nextNearest = nearCharacter;
+                        nextDistance = d;
+                    }
+                }
+
+                nearCharacters.Remove(nextNearest);
+                sortedCharacters[i] = nextNearest;
+            }
+
+            return sortedCharacters;
         }
 
         /// <summary>
