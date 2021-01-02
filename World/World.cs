@@ -164,13 +164,14 @@ namespace AsLegacy
             Dictionary<Character, int> nearCharacters = new Dictionary<Character, int>();
             foreach (Character c in presentCharacters)
             {
-                int columnDiff = Math.Abs(character.Column - c.Column);
-                int rowDiff = Math.Abs(character.Row - c.Row);
+                int columnDiff = character.Column - c.Column;
+                int rowDiff = character.Row - c.Row;
 
                 if (columnDiff == 0 && rowDiff == 0)
                     continue;
 
-                if (columnDiff <= withinHorizontal && rowDiff <= withinVertical)
+                if (columnDiff <= withinHorizontal && columnDiff > -withinHorizontal && 
+                    rowDiff <= withinVertical && rowDiff > -withinVertical)
                     nearCharacters.Add(c, character.SquaredDistanceTo(c));
             }
 
