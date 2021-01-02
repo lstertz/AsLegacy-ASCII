@@ -122,7 +122,7 @@ namespace AsLegacy
             if (Player != null)
                 return;
 
-            Player = new Player(12, 12);
+            Player = new Player(12, 11);
             new Beast(18, 13, "Wolf");
             new Beast(31, 29, "Giant Rat");
             new Beast(10, 32, "Bear");

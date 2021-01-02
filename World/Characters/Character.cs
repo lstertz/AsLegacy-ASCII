@@ -13,6 +13,7 @@ namespace AsLegacy
             private const int characterRemovalTime = 700;
             private const float standardAttackDamage = 1.67f;
             private const int standardAttackInterval = 2000;
+            private const int movementTime = 500;
 
             private readonly Color deadColor = Color.DarkGray;
 
@@ -105,15 +106,15 @@ namespace AsLegacy
             /// The current action being performed by this Character, 
             /// or null if it is performing no action.
             /// </summary>
-            public World.Action CurrentAction 
-            { 
-                get 
-                { 
+            public World.Action CurrentAction
+            {
+                get
+                {
                     if (characterActions.ContainsKey(this))
                         return characterActions[this];
 
                     return null;
-                } 
+                }
             }
 
             /// <summary>
@@ -166,7 +167,7 @@ namespace AsLegacy
             public virtual Character Target
             {
                 get => target;
-                set 
+                set
                 {
                     if (target == value)
                         return;
@@ -231,13 +232,14 @@ namespace AsLegacy
                         break;
                     case Mode.Attack:
                         // TODO :: Move towards if not in range of attack.
-                        new TargetedAction(this, target, standardAttackInterval, (c) =>
+                        new TargetedAction(this, target, standardAttackInterval,
+                            (c) =>
                             {
                                 c.CurrentHealth -= standardAttackDamage;
                             },
                             (c) =>
                             {
-                                return IsAlive && mode == Mode.Attack && 
+                                return IsAlive && mode == Mode.Attack &&
                                     c.IsAlive && c == target &&
                                     IsAdjacentTo(c.Row, c.Column);
                             }, true);
@@ -256,7 +258,7 @@ namespace AsLegacy
             /// </summary>
             /// <param name="direction">The direction in which the Character is 
             /// to attempt to move.</param>
-            /// <returns>Whether the Character was able to move.</returns>
+            /// <returns>Whether the Character initiated an attempt to move.</returns>
             public bool MoveInDirection(Direction direction)
             {
                 if (mode != Mode.Normal)
@@ -284,7 +286,16 @@ namespace AsLegacy
 
                 if (IsPassable(intendedRow, intendedColumn))
                 {
-                    Move(this, intendedRow, intendedColumn);
+                    new Action(this, movementTime,
+                        () =>
+                        {
+                            Move(this, intendedRow, intendedColumn);
+                        },
+                        () =>
+                        {
+                            return IsAlive && mode == Mode.Normal &&
+                                IsPassable(intendedRow, intendedColumn);
+                        });
                     return true;
                 }
                 return false;
