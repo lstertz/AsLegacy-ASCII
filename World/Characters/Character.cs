@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace AsLegacy
 {
@@ -254,12 +255,15 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Attempts to move the Character in the specified direction.
+            /// Attempts to initiate Character movement in the specified direction.
             /// </summary>
             /// <param name="direction">The direction in which the Character is 
-            /// to attempt to move.</param>
+            /// to attempt to move, repeatedly by default.</param>
+            /// <param name="repeatMovement">A Func that defines whether movement should 
+            /// continue to be attempted after it has succeeded, or null, if movement should 
+            /// never be attempted after completing successfully.</param>
             /// <returns>Whether the Character initiated an attempt to move.</returns>
-            public bool MoveInDirection(Direction direction)
+            public bool MoveInDirection(Direction direction, Func<bool> repeatMovement = null)
             {
                 if (mode != Mode.Normal)
                     return false;
@@ -290,12 +294,33 @@ namespace AsLegacy
                         () =>
                         {
                             Move(this, intendedRow, intendedColumn);
+
+                            if (repeatMovement == null || repeatMovement() == false)
+                                (CurrentAction as IAction).Cancel();
+                            else
+                                switch (direction)
+                                {
+                                    case Direction.Left:
+                                        intendedColumn--;
+                                        break;
+                                    case Direction.Right:
+                                        intendedColumn++;
+                                        break;
+                                    case Direction.Up:
+                                        intendedRow--;
+                                        break;
+                                    case Direction.Down:
+                                        intendedRow++;
+                                        break;
+                                    default:
+                                        break;
+                                }
                         },
                         () =>
                         {
                             return IsAlive && mode == Mode.Normal &&
                                 IsPassable(intendedRow, intendedColumn);
-                        });
+                        }, true);
                     return true;
                 }
                 return false;
