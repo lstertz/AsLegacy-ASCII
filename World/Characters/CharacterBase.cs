@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using AsLegacy.Abstractions;
+
 namespace AsLegacy
 {
     public static partial class World
@@ -9,7 +11,7 @@ namespace AsLegacy
         /// manipulate the environment and other characters from its specific 
         /// position, as a Tile, on the map.
         /// </summary>
-        public abstract class CharacterBase : Tile
+        public abstract class CharacterBase : Tile, IPosition
         {
             /// <summary>
             /// The glyph to visually represent the entity of the CharacterBase.
@@ -95,8 +97,7 @@ namespace AsLegacy
                 Column = column;
                 Row = row;
 
-                if (characters != null)
-                    characters.ReplaceWith(row, column, this);
+                AddCharacter(row, column, this);
             }
 
             /// <summary>

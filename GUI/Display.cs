@@ -16,8 +16,8 @@ namespace AsLegacy
     /// </summary>
     public class Display : DrawConsoleComponent
     {
-        public const int MapViewPortWidth = 21;
-        public const int MapViewPortHeight = 21;
+        public const int MapViewPortWidth = 20;
+        public const int MapViewPortHeight = 20;
         public const int MapViewPortHalfWidth = MapViewPortWidth / 2;
         public const int MapViewPortHalfHeight = MapViewPortHeight / 2;
 
@@ -35,7 +35,7 @@ namespace AsLegacy
                     {AsLegacy.Height - 1, 200}, 
                     {-1, 186} 
                 } },
-                {22, new Dictionary<int, int>() {
+                {21, new Dictionary<int, int>() {
                     {0, 205},
                     {AsLegacy.Height - 1, 205},
                     {-1, 179}
@@ -79,6 +79,7 @@ namespace AsLegacy
         private ScrollingConsole characters;
         private Console commands;
         private ScrollingConsole environment;
+        private NearbyPanel nearbyPanel;
         private CharacterPanel characterPanel;
 
         private PlayerHUD playerHUD;
@@ -114,12 +115,17 @@ namespace AsLegacy
             environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             environment.CenterViewPortOnPoint(World.Player.Point);
 
+            nearbyPanel = new NearbyPanel(AsLegacy.Width / 2 - MapViewPortWidth - 2,
+                MapViewPortHeight, World.Player);
+            nearbyPanel.Position = new Point(MapViewPortWidth + 2, 1);
+
             characterPanel = new CharacterPanel(AsLegacy.Width / 2 - 2, AsLegacy.Height - 2);
             characterPanel.Position = new Point(AsLegacy.Width / 2 + 1, 1);
 
             console.Children.Add(environment);
             console.Children.Add(characters);
             characters.Children.Add(commands);
+            console.Children.Add(nearbyPanel);
             console.Children.Add(playerHUD);
             console.Children.Add(targetHUD);
             console.Children.Add(characterPanel);

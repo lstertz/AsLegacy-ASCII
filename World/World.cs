@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using AsLegacy.Abstractions;
+using System;
+using System.Collections.Generic;
 
 namespace AsLegacy
 {
@@ -10,33 +12,53 @@ namespace AsLegacy
     {
         private static readonly char[][] map =
         {
-            "TTTT.T....T.................".ToCharArray(),
-            "TTT....T....T.TTTTT.TT..TTTT".ToCharArray(),
-            "TT..TTT..TTT...TTTTTTTT..TTT".ToCharArray(),
-            "TTT...T..TTT...TTTTTTTT..TTT".ToCharArray(),
-            "TTT..............TTTTTT....T".ToCharArray(),
-            "TTTT...TT...TTTT.......TTT..".ToCharArray(),
-            "TTTT..TTT..TTTTT.T..T..TTT.T".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
-            "TTTT.T....T.................".ToCharArray(),
-            "TTTT...T....T.TTTTT.TT..TTTT".ToCharArray(),
-            "TTTTTTT..TTT...TTTTTTTT..TTT".ToCharArray(),
-            "TTTTTTT..TTT......TTTTT.....".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTT...TT...TTTTTT..T..TTTTT".ToCharArray(),
-            "TTTTT.TTTT.TTTTTT......TTTT.".ToCharArray(),
-            "TTTT..TTT..TTTTT.......TTT..".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT.T....T.................TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTT....T....T.TTTTT.TT..TTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTT..TTT..TTT...TTTTTTTT..TTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTT...T..TTT...TTTTTTTT..TTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTT..............TTTTTT....TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT...TT...TTTT.......TTT..TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT..TTT..TTTTT.T..T..TTT.TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT...TT...TTTTTT..T..TTT.TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT.TTTT.TTTTTT......TTT..TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT..TTT..TTTTT.......TTT..TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT...TT...TTTTTT..T..TTTT.TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT.TTTT.TTTTTT......TTTT.TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT..TTT..TTTTT.......TTT..TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT...TT...TTTTTT..T..TTT.TTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT.T....T.................TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT...T....T.TTTTT.TT..TTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTT..TTT...TTTTTTTT..TTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT....T........TTTTT.....TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT.TTTT.TTTTTT......TTTT.TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT..TTT..TTTTT.......TTT..TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT...TT...TTTTTT..T..TTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTT.TTTT.TTTTTT......TTTT.TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT..TTT..TTTTT............TTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTT.......TTTTTTT..TTTTT.TTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTT.........TTTT...TTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTT..TTTTTTTTTTTTTTTTT...TTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTT...................TTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
         };
 
         /// <summary>
@@ -68,6 +90,8 @@ namespace AsLegacy
             return new AbsentCharacter(row, column);
         });
 
+        private static readonly List<Character> presentCharacters = new List<Character>();
+
         /// <summary>
         /// The displayable environment of the World.
         /// </summary>
@@ -98,8 +122,10 @@ namespace AsLegacy
             if (Player != null)
                 return;
 
-            Player = new Player(3, 3);
-            new Beast(7, 5, "Wolf");
+            Player = new Player(12, 12);
+            new Beast(18, 13, "Wolf");
+            new Beast(31, 29, "Giant Rat");
+            new Beast(10, 32, "Bear");
         }
 
         /// <summary>
@@ -116,6 +142,59 @@ namespace AsLegacy
             if (c == null || c is AbsentCharacter)
                 return null;
             return c as Character;
+        }
+
+        /// <summary>
+        /// Provides the Characters near the specified Character (excluding 
+        /// the specified Character), and that are within the specified range, up to the 
+        /// number specified.
+        /// </summary>
+        /// <param name="character">The Character used as a reference to 
+        /// find the nearby Characters.</param>
+        /// <param name="withinHorizontal">The distance horizontally that a 
+        /// nearby Character may be.</param>
+        /// <param name="withinVertical">The distance vertically that a 
+        /// nearby Character may be.</param>
+        /// <returns>A list of nearby characters, or an empty list if none were found.</returns>
+        public static Character[] CharactersNear(Character character, int withinHorizontal, 
+            int withinVertical)
+        {
+            // TODO :: Optimize later, perhaps with 2D Linked Grid data structure support.
+
+            Dictionary<Character, int> nearCharacters = new Dictionary<Character, int>();
+            foreach (Character c in presentCharacters)
+            {
+                int columnDiff = character.Column - c.Column;
+                int rowDiff = character.Row - c.Row;
+
+                if (columnDiff == 0 && rowDiff == 0)
+                    continue;
+
+                if (columnDiff <= withinHorizontal && columnDiff > -withinHorizontal && 
+                    rowDiff <= withinVertical && rowDiff > -withinVertical)
+                    nearCharacters.Add(c, character.SquaredDistanceTo(c));
+            }
+
+            Character nextNearest = null;
+            Character[] sortedCharacters = new Character[nearCharacters.Count];
+            for (int i = 0; i < sortedCharacters.Length; i++)
+            {
+                int nextDistance = int.MaxValue;
+                foreach (Character nearCharacter in nearCharacters.Keys)
+                {
+                    int d = nearCharacters[nearCharacter];
+                    if (d < nextDistance)
+                    {
+                        nextNearest = nearCharacter;
+                        nextDistance = d;
+                    }
+                }
+
+                nearCharacters.Remove(nextNearest);
+                sortedCharacters[i] = nextNearest;
+            }
+
+            return sortedCharacters;
         }
 
         /// <summary>
@@ -149,11 +228,30 @@ namespace AsLegacy
 
 
         /// <summary>
+        /// Adds a Character to the World.
+        /// </summary>
+        /// <param name="row">The row, defining the y axis 
+        /// of the character's position.</param>
+        /// <param name="column">The column, defining the x axis 
+        /// of the character's position.</param>
+        /// <param name="c">The Character to be added.</param>
+        private static void AddCharacter(int row, int column, CharacterBase c)
+        {
+            if (characters != null)
+                characters.ReplaceWith(row, column, c);
+
+            if (c is Character)
+                presentCharacters.Add(c as Character);
+        }
+
+        /// <summary>
         /// Removes a Character from the World.
         /// </summary>
         /// <param name="c">The Character to be removed.</param>
         private static void RemoveCharacter(Character c)
         {
+            presentCharacters.Remove(c);
+
             if (c != Player) // TODO :: Handle Player death appropriately later.
                 characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
 
