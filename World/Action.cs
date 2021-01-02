@@ -135,6 +135,13 @@ namespace AsLegacy
                         requiredActivationTime, action, conditionalCheck, repeats)
                 {
                     this.performer = performer;
+
+                    if (characterActions.ContainsKey(performer))
+                    {
+                        (characterActions[performer] as IAction).Cancel();
+                        characterActions.Remove(performer);
+                    }
+
                     characterActions.Add(performer, this);
                 }
 
