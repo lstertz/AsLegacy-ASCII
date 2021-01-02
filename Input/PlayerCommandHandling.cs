@@ -23,17 +23,24 @@ namespace AsLegacy.Input
         /// <param name="handled">A bool indicating whether the input was handled.</param>
         public override void ProcessKeyboard(Console console, Keyboard info, out bool handled)
         {
+            info.InitialRepeatDelay = float.PositiveInfinity;
+            info.RepeatDelay = float.PositiveInfinity;
+
             handled = true;
 
-            if (info.IsKeyReleased(Keys.Up) || info.IsKeyReleased(Keys.W))
-                World.Player.MoveInDirection(World.Character.Direction.Up);
-            else if (info.IsKeyReleased(Keys.Down) || info.IsKeyReleased(Keys.S))
-                World.Player.MoveInDirection(World.Character.Direction.Down);
-            else if (info.IsKeyReleased(Keys.Left) || info.IsKeyReleased(Keys.A))
-                World.Player.MoveInDirection(World.Character.Direction.Left);
-            else if (info.IsKeyReleased(Keys.Right) || info.IsKeyReleased(Keys.D))
-                World.Player.MoveInDirection(World.Character.Direction.Right);
-            
+            if (info.IsKeyPressed(Keys.Up) || info.IsKeyPressed(Keys.W))
+                World.Player.MoveInDirection(World.Character.Direction.Up, () =>
+                    info.IsKeyDown(Keys.Up) || info.IsKeyDown(Keys.W));
+            else if (info.IsKeyPressed(Keys.Down) || info.IsKeyPressed(Keys.S))
+                World.Player.MoveInDirection(World.Character.Direction.Down, () =>
+                    info.IsKeyDown(Keys.Down) || info.IsKeyDown(Keys.S));
+            else if (info.IsKeyPressed(Keys.Left) || info.IsKeyPressed(Keys.A))
+                World.Player.MoveInDirection(World.Character.Direction.Left, () =>
+                    info.IsKeyDown(Keys.Left) || info.IsKeyDown(Keys.A));
+            else if (info.IsKeyPressed(Keys.Right) || info.IsKeyPressed(Keys.D))
+                World.Player.MoveInDirection(World.Character.Direction.Right, () =>
+                    info.IsKeyDown(Keys.Right) || info.IsKeyDown(Keys.D));
+
             if (info.IsKeyReleased(Keys.Space))
                 World.Player.ToggleAttackMode();
             World.Player.EnableDefense(AltIsDown(info));
