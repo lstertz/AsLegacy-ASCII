@@ -54,7 +54,7 @@ namespace AsLegacy.GUI
 
             while (nearbyCharacters.Length > Components.Count)
                 Components.Add(new CharacterOverview(
-                    Components.Count * CharacterOverview.OverviewHeight, Focus));
+                    Components.Count * CharacterOverview.Height, Focus));
 
             for (int c = 0, count = Components.Count; c < count; c++)
                 if (c >= nearbyCharacters.Length)

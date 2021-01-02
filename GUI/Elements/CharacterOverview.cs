@@ -10,12 +10,25 @@ namespace AsLegacy.GUI.Elements
     /// </summary>
     public class CharacterOverview : DrawConsoleComponent
     {
-        public const int OverviewHeight = 4;
+        /// <summary>
+        /// The total height of the overview.
+        /// </summary>
+        public const int Height = 4;
 
-        private const int bottomFrameIndex = OverviewHeight - 1;
+        private const int bottomFrameIndex = Height - 1;
         private const int bottomFrameGlyph = 196;
 
+        /// <summary>
+        /// The Character whose overview details are displayed by this CharacterOverview.
+        /// Null if this overview should not display anything.
+        /// </summary>
         public World.Character Character { get; set; }
+
+        /// <summary>
+        /// The expected Character (of the game player/viewer) that is viewing 
+        /// this CharacterOverview. The exact details or display may be tailored to be 
+        /// more meaningful from the perspective of this Character.
+        /// </summary>
         public World.Character Viewer { get; set; }
 
         private readonly int y;
@@ -42,7 +55,7 @@ namespace AsLegacy.GUI.Elements
         /// <param name="delta">The time passed since the last draw.</param>
         public override void Draw(SadConsole.Console console, TimeSpan delta)
         {
-            console.Clear(new Rectangle(0, y, console.Width, OverviewHeight));
+            console.Clear(new Rectangle(0, y, console.Width, Height));
 
             if (Character == null)
                 return;

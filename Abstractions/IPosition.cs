@@ -3,7 +3,7 @@
 namespace AsLegacy.Abstractions
 {
     /// <summary>
-    /// Defines that a construct has a column and row defining a position in space.
+    /// Defines that a construct has a position (column and row) in space.
     /// </summary>
     public interface IPosition
     {
