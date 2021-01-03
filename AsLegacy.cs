@@ -1,5 +1,4 @@
-﻿using SadConsole;
-using SadConsole.Components;
+﻿using SadConsole.Components;
 using System;
 
 using Console = SadConsole.Console;
@@ -23,7 +22,7 @@ namespace AsLegacy
             Game.OnInitialize = () =>
             {
                 Console console = new Console(Width, Height);
-                Global.CurrentScreen = console;
+                SadConsole.Global.CurrentScreen = console;
                 console.Components.Add(this);
 
                 World.Init();
