@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.Global;
+using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Input;
 using System;
@@ -12,13 +13,11 @@ namespace AsLegacy.GUI
     /// </summary>
     public class Commands : Console
     {
-        private static readonly Color fadedWhite = new Color(255, 255, 255, 235);
-
-        private static readonly Cell empty = new Cell(Color.Transparent, Color.Transparent);
-        private static readonly Cell up = new Cell(fadedWhite, Color.Transparent, 30);
-        private static readonly Cell right = new Cell(fadedWhite, Color.Transparent, 16);
-        private static readonly Cell down = new Cell(fadedWhite, Color.Transparent, 31);
-        private static readonly Cell left = new Cell(fadedWhite, Color.Transparent, 17);
+        private static readonly Cell empty = new Cell(Colors.Transparent, Colors.Transparent);
+        private static readonly Cell up = new Cell(Colors.FadedWhite, Colors.Transparent, 30);
+        private static readonly Cell right = new Cell(Colors.FadedWhite, Colors.Transparent, 16);
+        private static readonly Cell down = new Cell(Colors.FadedWhite, Colors.Transparent, 31);
+        private static readonly Cell left = new Cell(Colors.FadedWhite, Colors.Transparent, 17);
 
         /// <summary>
         /// The Cells that make up the display of the available directions.
@@ -30,7 +29,7 @@ namespace AsLegacy.GUI
                 empty, down, empty
         };
 
-        private World.Character focus;
+        private readonly World.Character focus;
 
         private int highlightCellX = -1;
         private int highlightCellY = -1;
@@ -105,11 +104,11 @@ namespace AsLegacy.GUI
         private Color GetDirectionColor(int x, int y, int worldX, int worldY)
         {
             if (!IsInteractable(worldX, worldY))
-                return Color.Transparent;
+                return Colors.Transparent;
 
             if (highlightCellX == x && highlightCellY == y)
-                return Color.White;
-            return fadedWhite;
+                return Colors.White;
+            return Colors.FadedWhite;
         }
 
         /// <summary>

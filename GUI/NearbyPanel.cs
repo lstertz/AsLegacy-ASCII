@@ -1,7 +1,6 @@
 ﻿using SadConsole;
 
 using AsLegacy.GUI.Elements;
-using System.Collections.Generic;
 
 namespace AsLegacy.GUI
 {
@@ -38,6 +37,10 @@ namespace AsLegacy.GUI
         public NearbyPanel(int width, int height, World.Character focus) : base(width, height)
         {
             this.focus = focus;
+
+            while (Display.MapViewPortHeight / CharacterOverview.Height > Components.Count)
+                Components.Add(new CharacterOverview(
+                    Components.Count * CharacterOverview.Height, Focus));
         }
 
         /// <summary>

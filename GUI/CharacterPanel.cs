@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using SadConsole;
+﻿using SadConsole;
 using SadConsole.Controls;
-using SadConsole.Themes;
 
+using Colors = AsLegacy.Global.Colors;
 using AsLegacy.GUI.Panes;
+
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy.GUI
 {
@@ -13,8 +14,6 @@ namespace AsLegacy.GUI
     /// </summary>
     public class CharacterPanel : ControlsConsole
     {
-        private static readonly Color fadedWhite = new Color(255, 255, 255, 235);
-
         /// <summary>
         /// Specifies which Pane is currently active, as is 
         /// identified by the Pane's index.
@@ -31,7 +30,7 @@ namespace AsLegacy.GUI
         }
         private int currentPane = 0;
 
-        private Pane[] panes = new Pane[3];
+        private readonly Pane[] panes = new Pane[3];
 
         /// <summary>
         /// Constructs a new Character Panel, which defines all of the Panes 
@@ -41,17 +40,17 @@ namespace AsLegacy.GUI
         /// <param name="height">The height of the Panel.</param>
         public CharacterPanel(int width, int height) : base(width, height)
         {
-            Colors colors = Colors.CreateDefault();
-            colors.ControlBack = Color.Transparent;
-            colors.Text = fadedWhite;
-            colors.TextDark = Color.White;
-            colors.TextLight = Color.White;
-            colors.TextFocused = fadedWhite;
-            colors.TextSelected = Color.White;
-            colors.TextSelectedDark = Color.White;
-            colors.ControlBackLight = Color.Transparent;
-            colors.ControlBackSelected = Color.Transparent;
-            colors.ControlBackDark = Color.Transparent;
+            SadConsole.Themes.Colors colors = SadConsole.Themes.Colors.CreateDefault();
+            colors.ControlBack = Colors.Transparent;
+            colors.Text = Colors.FadedWhite;
+            colors.TextDark = Colors.White;
+            colors.TextLight = Colors.White;
+            colors.TextFocused = Colors.FadedWhite;
+            colors.TextSelected = Colors.White;
+            colors.TextSelectedDark = Colors.White;
+            colors.ControlBackLight = Colors.Transparent;
+            colors.ControlBackSelected = Colors.Transparent;
+            colors.ControlBackDark = Colors.Transparent;
             colors.RebuildAppearances();
             ThemeColors = colors;
 
@@ -71,17 +70,23 @@ namespace AsLegacy.GUI
             right.Click += (s, e) => CurrentPaneIndex++;
             Add(right);
 
-            panes[0] = new Pane("Stats", "Character data to be shown here.", width - 2, height);
-            panes[0].Position = new Point(1, 0);
+            panes[0] = new Pane("Stats", "Character data to be shown here.", width - 2, height)
+            {
+                Position = new Point(1, 0)
+            };
             Children.Add(panes[0]);
 
-            panes[1] = new Pane("Skills", "Skills to be managed here.", width - 2, height);
-            panes[1].Position = new Point(1, 0);
+            panes[1] = new Pane("Skills", "Skills to be managed here.", width - 2, height)
+            {
+                Position = new Point(1, 0)
+            };
             Children.Add(panes[1]);
             panes[1].IsVisible = false;
 
-            panes[2] = new Pane("Items", "Items to be managed here.", width - 2, height);
-            panes[2].Position = new Point(1, 0);
+            panes[2] = new Pane("Items", "Items to be managed here.", width - 2, height)
+            {
+                Position = new Point(1, 0)
+            };
             Children.Add(panes[2]);
             panes[2].IsVisible = false;
         }
