@@ -1,7 +1,6 @@
 ﻿using SadConsole;
 
 using AsLegacy.GUI.Elements;
-using System.Collections.Generic;
 
 namespace AsLegacy.GUI
 {
@@ -11,6 +10,8 @@ namespace AsLegacy.GUI
     /// </summary>
     public class NearbyPanel : Console
     {
+        private const int initialOverviewCount = 5;
+
         /// <summary>
         /// The Character whose location is used to determine other nearby Characters 
         /// for displaying in the Panel.
@@ -38,6 +39,10 @@ namespace AsLegacy.GUI
         public NearbyPanel(int width, int height, World.Character focus) : base(width, height)
         {
             this.focus = focus;
+
+            while (initialOverviewCount > Components.Count)
+                Components.Add(new CharacterOverview(
+                    Components.Count * CharacterOverview.Height, Focus));
         }
 
         /// <summary>
