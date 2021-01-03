@@ -10,8 +10,6 @@ namespace AsLegacy.GUI
     /// </summary>
     public class NearbyPanel : Console
     {
-        private const int initialOverviewCount = 5;
-
         /// <summary>
         /// The Character whose location is used to determine other nearby Characters 
         /// for displaying in the Panel.
@@ -40,7 +38,7 @@ namespace AsLegacy.GUI
         {
             this.focus = focus;
 
-            while (initialOverviewCount > Components.Count)
+            while (Display.MapViewPortHeight / CharacterOverview.Height > Components.Count)
                 Components.Add(new CharacterOverview(
                     Components.Count * CharacterOverview.Height, Focus));
         }
