@@ -1,14 +1,16 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.Global;
+using Microsoft.Xna.Framework;
 using SadConsole.Components;
+using SadConsole.Input;
 using System;
 
-namespace AsLegacy.GUI.Elements
+namespace AsLegacy.GUI.Elements 
 {
     /// <summary>
     /// Defines a Character Overview GUI Element, which displays a brief summary of 
     /// the most pertinent details of a Character.
     /// </summary>
-    public class CharacterOverview : DrawConsoleComponent
+    public class CharacterOverview : ConsoleComponent
     {
         /// <summary>
         /// The total height of the overview.
@@ -32,6 +34,7 @@ namespace AsLegacy.GUI.Elements
         public World.Character Viewer { get; set; }
 
         private readonly int y;
+        private Rectangle box;
 
         /// <summary>
         /// Constructs a new CharacterOverview.
@@ -48,6 +51,12 @@ namespace AsLegacy.GUI.Elements
             Viewer = viewer;
         }
 
+        public override void OnAdded(SadConsole.Console console)
+        {
+            base.OnAdded(console);
+            box = new Rectangle(0, y, console.Width, Height);
+        }
+
         /// <summary>
         /// Draws the Meter, with updated cell glyphs and header colors, to its Console.
         /// </summary>
@@ -55,7 +64,7 @@ namespace AsLegacy.GUI.Elements
         /// <param name="delta">The time passed since the last draw.</param>
         public override void Draw(SadConsole.Console console, TimeSpan delta)
         {
-            console.Clear(new Rectangle(0, y, console.Width, Height));
+            console.Clear(box);
 
             if (Character == null)
                 return;
@@ -66,7 +75,34 @@ namespace AsLegacy.GUI.Elements
 
             console.DrawLine(new Point(0, y + bottomFrameIndex), 
                 new Point(console.Width - 1, y + bottomFrameIndex), 
-                Color.White, Color.Black, bottomFrameGlyph);
+                Colors.White, Colors.Black, bottomFrameGlyph);
         }
+
+        public override void ProcessMouse(SadConsole.Console console, MouseConsoleState state, out bool handled)
+        {
+            handled = false;
+            if (!box.Contains(state.ConsoleCellPosition))
+                return;
+
+            handled = true;
+            if (state.Mouse.LeftClicked)
+                Viewer.Target = Character;
+            else
+                World.Character.Highlight(Character);
+        }
+
+
+        #region Unused Overrides
+        public override void Update(SadConsole.Console console, TimeSpan delta)
+        {
+            return;
+        }
+
+        public override void ProcessKeyboard(SadConsole.Console console, Keyboard info, out bool handled)
+        {
+            handled = false;
+            return;
+        }
+        #endregion
     }
 }
