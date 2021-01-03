@@ -62,6 +62,9 @@ namespace AsLegacy
 
         private static Display display;
 
+        /// <summary>
+        /// The current position and size of the map viewport.
+        /// </summary>
         public static Rectangle MapViewPort => display.characters.ViewPort;
 
         /// <summary>
@@ -76,14 +79,14 @@ namespace AsLegacy
                 display = new Display(console);
         }
 
-        private ScrollingConsole characters;
-        private Console commands;
-        private ScrollingConsole environment;
-        private NearbyPanel nearbyPanel;
-        private CharacterPanel characterPanel;
+        private readonly ScrollingConsole characters;
+        private readonly Console commands;
+        private readonly ScrollingConsole environment;
+        private readonly NearbyPanel nearbyPanel;
+        private readonly CharacterPanel characterPanel;
 
-        private PlayerHUD playerHUD;
-        private TargetHUD targetHUD;
+        private readonly PlayerHUD playerHUD;
+        private readonly TargetHUD targetHUD;
 
         /// <summary>
         /// Constructs a new Display for the given Console.
@@ -104,11 +107,15 @@ namespace AsLegacy
             commands.Components.Add(new PlayerCommandHandling());
             commands.IsFocused = true;
 
-            playerHUD = new PlayerHUD(AsLegacy.Width / 2 - 1);
-            playerHUD.Position = new Point(1, AsLegacy.Height - 4);
+            playerHUD = new PlayerHUD(AsLegacy.Width / 2 - 1)
+            {
+                Position = new Point(1, AsLegacy.Height - 4)
+            };
 
-            targetHUD = new TargetHUD(AsLegacy.Width / 2 - 1);
-            targetHUD.Position = new Point(1, AsLegacy.Height - 7);
+            targetHUD = new TargetHUD(AsLegacy.Width / 2 - 1)
+            {
+                Position = new Point(1, AsLegacy.Height - 7)
+            };
 
             environment = World.Environment;
             environment.Position = new Point(1, 1);
@@ -116,11 +123,15 @@ namespace AsLegacy
             environment.CenterViewPortOnPoint(World.Player.Point);
 
             nearbyPanel = new NearbyPanel(AsLegacy.Width / 2 - MapViewPortWidth - 2,
-                MapViewPortHeight, World.Player);
-            nearbyPanel.Position = new Point(MapViewPortWidth + 2, 1);
+                MapViewPortHeight, World.Player)
+            {
+                Position = new Point(MapViewPortWidth + 2, 1)
+            };
 
-            characterPanel = new CharacterPanel(AsLegacy.Width / 2 - 2, AsLegacy.Height - 2);
-            characterPanel.Position = new Point(AsLegacy.Width / 2 + 1, 1);
+            characterPanel = new CharacterPanel(AsLegacy.Width / 2 - 2, AsLegacy.Height - 2)
+            {
+                Position = new Point(AsLegacy.Width / 2 + 1, 1)
+            };
 
             console.Children.Add(environment);
             console.Children.Add(characters);
