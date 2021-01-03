@@ -2,13 +2,13 @@
 C# ASCII prototype of the As Legacy game concept, built using SadConsole.
 
 ## Release
-The latest release is 0.0.2 (12/26/2020), for Windows only, found in the releases folder.
+The latest release is 0.0.3 (01/03/2021), for Windows only, found in the releases folder.
 
 ## Controls
 W,A,S,D (or arrow keys) - Move, when in normal mode.<br>
 Space - Toggle between normal and attack mode.<br>
 Hold-Alt - Activate defense mode.<br>
-Left mouse click to target a Character.<br>
+Left mouse click to target a Character, either through the map or the map sidebar.<br>
 
 ## Notes
 The Wolf can be damaged by targeting it, being adjacent to it (left, right, up, down), and 
