@@ -69,9 +69,15 @@ namespace AsLegacy.GUI.Elements
             if (Character == null)
                 return;
 
-            console.Print(0, y, Character.Name);
-            console.Print(0, y + 1, "[Action]");
-            console.Print(0, y + 2, "[Target]");
+            Color foreground = Colors.FadedWhite;
+            if (Character.Selected)
+                foreground = Colors.Selected;
+            else if (Character.Highlighted)
+                foreground = Colors.Highlighted;
+
+            console.Print(0, y, Character.Name, foreground);
+            console.Print(0, y + 1, "[Action]", foreground);
+            console.Print(0, y + 2, "[Target]", foreground);
 
             console.DrawLine(new Point(0, y + bottomFrameIndex), 
                 new Point(console.Width - 1, y + bottomFrameIndex), 
