@@ -78,30 +78,20 @@ namespace AsLegacy
         /// <summary>
         /// The displayable characters of the World.
         /// </summary>
-        public static TileSet<CharacterBase>.Display Characters
-        {
-            get
-            {
-                return characters.GetDisplay();
-            }
-        }
+        public static TileSet<CharacterBase>.Display Characters => characters.GetDisplay();
         private static readonly TileSet<CharacterBase> characters = new TileSet<CharacterBase>((row, column) =>
         {
             return new AbsentCharacter(row, column);
         });
 
         private static readonly List<Character> presentCharacters = new List<Character>();
+        private static readonly SortedSet<Character> rankedCharacters =
+            new SortedSet<Character>();
 
         /// <summary>
         /// The displayable environment of the World.
         /// </summary>
-        public static TileSet<Tile>.Display Environment
-        {
-            get
-            {
-                return environment.GetDisplay();
-            }
-        }
+        public static TileSet<Tile>.Display Environment => environment.GetDisplay();
         private static readonly TileSet<Tile> environment = new TileSet<Tile>((row, column) =>
         {
             if (map[row][column] == 'T')
@@ -209,6 +199,25 @@ namespace AsLegacy
         }
 
         /// <summary>
+        /// Provides the ranked Characters within the specified range.
+        /// </summary>
+        /// <param name="startIndex">The index from which the range begins.</param>
+        /// <param name="count">The number of ranks to be included in the range, if available.</param>
+        /// <returns>The requested range of ranked Characters, or as many Characters 
+        /// after the start rank that exist if there are not enough to fill the range.</returns>
+        public static Character[] RankedCharactersFor(int startIndex, int count)
+        {
+            int c = count;
+            if (c > rankedCharacters.Count)
+                c = rankedCharacters.Count - startIndex;
+
+            Character[] characters = new Character[c];
+            rankedCharacters.CopyTo(characters, startIndex, c);
+
+            return characters;
+        }
+
+        /// <summary>
         /// Updates the state of the World and any of its constructs.
         /// </summary>
         /// <param name="timeDelta">The time passed, in milliseconds, 
@@ -251,12 +260,24 @@ namespace AsLegacy
         private static void RemoveCharacter(Character c)
         {
             presentCharacters.Remove(c);
+            rankedCharacters.Remove(c);
 
             if (c != Player) // TODO :: Handle Player death appropriately later.
                 characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
 
             if (c == Player.Target)
                 Player.Target = null;
+        }
+
+        /// <summary>
+        /// Re-ranks the provided Character.
+        /// </summary>
+        /// <param name="c">The Character to be resorted (or added) into the collection 
+        /// of ranked Characters.</param>
+        private static void RerankCharacter(Character c)
+        {
+            rankedCharacters.Remove(c);
+            rankedCharacters.Add(c);
         }
     }
 }
