@@ -9,7 +9,7 @@ namespace AsLegacy
         /// Represents an abstraction of a CharacterBase that has a presence within the World.
         /// Such characters exist in a formal sense and can be interacted with.
         /// </summary>
-        public abstract partial class Character : CharacterBase
+        public abstract partial class Character : CharacterBase, IRankedCharacter
         {
             private const int characterRemovalTime = 700;
             private const float standardAttackDamage = 1.67f;
@@ -153,7 +153,16 @@ namespace AsLegacy
             /// <summary>
             /// The legacy of this Character, represented as a numerical value (points).
             /// </summary>
-            public int Legacy { get; private set; }
+            public int Legacy
+            {
+                get => legacy;
+                protected set
+                {
+                    legacy = value;
+                    RerankCharacter(this);
+                }
+            }
+            private int legacy;
 
             /// <summary>
             /// The maximum health of this Character.

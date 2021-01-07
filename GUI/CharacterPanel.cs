@@ -70,7 +70,7 @@ namespace AsLegacy.GUI
             right.Click += (s, e) => CurrentPaneIndex++;
             Add(right);
 
-            panes[0] = new Pane("Stats", "Character data to be shown here.", width - 2, height)
+            panes[0] = new StatsPane(width - 2, height)
             {
                 Position = new Point(1, 0)
             };
