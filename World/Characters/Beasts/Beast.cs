@@ -37,8 +37,9 @@ namespace AsLegacy
         /// <param name="row">The row position of the new Beast.</param>
         /// <param name="column">The column position of the new Beast.</param>
         /// <param name="name">The name of the new Beast.</param>
-        public Beast(int row, int column, string name) : 
-            base(row, column, Color.DarkOrange, normal, name)
+        /// <param name="legacy">The starting legacy of the new Beast.</param>
+        public Beast(int row, int column, string name, int legacy) : 
+            base(row, column, Color.DarkOrange, normal, name, legacy)
         {
         }
     }

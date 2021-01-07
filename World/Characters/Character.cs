@@ -151,6 +151,11 @@ namespace AsLegacy
             public bool IsAlive => CurrentHealth > 0;
 
             /// <summary>
+            /// The legacy of this Character, represented as a numerical value (points).
+            /// </summary>
+            public int Legacy { get; private set; }
+
+            /// <summary>
             /// The maximum health of this Character.
             /// </summary>
             public abstract float MaxHealth { get; }
@@ -190,14 +195,16 @@ namespace AsLegacy
             /// <param name="glyph">The glyph visually displayed to represent 
             /// the new Character.</param>
             /// <param name="name">The string name given to the new Character.</param>
+            /// <param name="legacy">The starting legacy of the new Character.</param>
             protected Character(int row, int column,
-                Color glyphColor, int glyph, string name) :
+                Color glyphColor, int glyph, string name, int legacy) :
                 base(row, column, Color.Transparent, glyphColor, glyph, false)
             {
                 mode = Mode.Normal;
                 Name = name;
 
                 currentHealth = MaxHealth;
+                Legacy = legacy;
             }
 
             /// <summary>
