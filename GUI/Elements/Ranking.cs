@@ -34,6 +34,9 @@ namespace AsLegacy.GUI
             // TODO :: Add a scroll bar (child ControlsConsole).
         }
 
+        /// <summary>
+        /// Draws the frame of the Ranking, including the table dividers.
+        /// </summary>
         private void DrawFrame()
         {
             int afterNameSpace = rankSpace + nameSpace;
@@ -55,6 +58,9 @@ namespace AsLegacy.GUI
             SetGlyph(Width - 1, Height - 1, 217);
         }
 
+        /// <summary>
+        /// Draws the header of the ranking.
+        /// </summary>
         private void DrawHeader()
         {
             int offset = 1;
@@ -68,6 +74,10 @@ namespace AsLegacy.GUI
             Print(offset, 0, legacyTitle, Colors.Black, Colors.White);
         }
 
+        /// <summary>
+        /// Draws the ranking data within the table.
+        /// </summary>
+        /// <param name="update">The time passed since the last draw.</param>
         public override void Draw(System.TimeSpan update)
         {
             base.Draw(update);

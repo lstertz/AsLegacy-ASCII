@@ -10,6 +10,11 @@ namespace AsLegacy.GUI.Panes
     {
         private readonly Ranking ranking;
 
+        /// <summary>
+        /// Constructs a new StatsPane.
+        /// </summary>
+        /// <param name="width">The width of the Pane.</param>
+        /// <param name="height">The height of the Pane.</param>
         public StatsPane(int width, int height) : 
             base("Stats", "Character data to be shown here.", width, height)
         {
