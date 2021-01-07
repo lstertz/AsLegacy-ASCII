@@ -123,9 +123,9 @@ namespace AsLegacy
                 return;
 
             Player = new Player(12, 11);
-            new Beast(18, 13, "Wolf");
-            new Beast(31, 29, "Giant Rat");
-            new Beast(10, 32, "Bear");
+            new Beast(18, 13, "Wolf", 8);
+            new Beast(31, 29, "Giant Rat", 4);
+            new Beast(10, 32, "Bear", 12);
         }
 
         /// <summary>
