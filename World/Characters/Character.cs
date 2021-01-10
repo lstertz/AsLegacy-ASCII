@@ -366,6 +366,19 @@ namespace AsLegacy
                 UpdateActiveMode();
             }
 
+
+            /// <summary>
+            /// Initiates the death of this Character.
+            /// </summary>
+            private void Die()
+            {
+                GlyphColor = deadColor;
+                ActiveMode = Mode.Normal;
+
+                (CurrentAction as IAction)?.Cancel();
+                new World.Action(characterRemovalTime, () => RemoveCharacter(this));
+            }
+
             /// <summary>
             /// Updates the active mode of the character, based on the current state of 
             /// enabled defense/attack.
