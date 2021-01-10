@@ -12,11 +12,46 @@ namespace AsLegacy
         public abstract partial class Character : CharacterBase, IRankedCharacter
         {
             private const int characterRemovalTime = 700;
-            private const float standardAttackDamage = 1.67f;
-            private const int standardAttackInterval = 2000;
             private const int movementTime = 500;
 
             private readonly Color deadColor = Color.DarkGray;
+
+            /// <summary>
+            /// Defines BaseSettings, the basic attributes of a Character, 
+            /// prior to instance-specific adjustments.
+            /// </summary>
+            protected abstract class BaseSettings
+            {
+                /// <summary>
+                /// Defines the color of the Character's Glyphs.
+                /// </summary>
+                public abstract Color GlyphColor { get; }
+                /// <summary>
+                /// Defines the glyph to be shown when the Character is in attack mode.
+                /// </summary>
+                public abstract int AttackGlyph { get; }
+                /// <summary>
+                /// Defines the glyph to be shown when the Character is in defend mode.
+                /// </summary>
+                public abstract int DefendGlyph { get; }
+                /// <summary>
+                /// Defines the glyph to be shown when the Character is in normal mode.
+                /// </summary>
+                public abstract int NormalGlyph { get; }
+
+                /// <summary>
+                /// The initial base maximum health for this specific type of Character.
+                /// </summary>
+                public abstract float InitialBaseMaxHealth { get; }
+                /// <summary>
+                /// The initial standard attack damage for this specific type of Character.
+                /// </summary>
+                public abstract float InitialAttackDamage { get; }
+                /// <summary>
+                /// The initial standard attack interval for this specific type of Character.
+                /// </summary>
+                public abstract int InitialAttackInterval { get; }
+            }
 
             /// <summary>
             /// Highlights the provided Character, if it isn't null, and removes any 
@@ -31,21 +66,6 @@ namespace AsLegacy
                 if (c != null)
                     c.Highlighted = true;
             }
-
-            /// <summary>
-            /// Defines the glyph to be shown when the Character is in attack mode.
-            /// </summary>
-            protected abstract int AttackGlyph { get; }
-
-            /// <summary>
-            /// Defines the glyph to be shown when the Character is in defend mode.
-            /// </summary>
-            protected abstract int DefendGlyph { get; }
-
-            /// <summary>
-            /// Defines the glyph to be shown when the Character is in normal mode.
-            /// </summary>
-            protected abstract int NormalGlyph { get; }
 
 
             /// <summary>
@@ -86,13 +106,13 @@ namespace AsLegacy
                     switch (value)
                     {
                         case Mode.Normal:
-                            Glyph = NormalGlyph;
+                            Glyph = baseSettings.NormalGlyph;
                             break;
                         case Mode.Attack:
-                            Glyph = AttackGlyph;
+                            Glyph = baseSettings.AttackGlyph;
                             break;
                         case Mode.Defend:
-                            Glyph = DefendGlyph;
+                            Glyph = baseSettings.DefendGlyph;
                             break;
                         default:
                             break;
@@ -102,6 +122,9 @@ namespace AsLegacy
             private Mode mode;
             private bool attackEnabled = false;
             private bool defenseEnabled = false;
+
+            private readonly BaseSettings baseSettings;
+            private readonly Combat.State combatState;
 
             /// <summary>
             /// The current action being performed by this Character, 
@@ -121,58 +144,33 @@ namespace AsLegacy
             /// <summary>
             /// The current health of this Character, as an absolute value.
             /// </summary>
-            public float CurrentHealth
-            {
-                get => currentHealth;
-                set
-                {
-                    currentHealth = value;
-
-                    if (!IsAlive)
-                    {
-                        GlyphColor = deadColor;
-                        ActiveMode = Mode.Normal;
-
-                        (CurrentAction as IAction)?.Cancel();
-                        new World.Action(characterRemovalTime, () => RemoveCharacter(this));
-                    }
-                }
-            }
-            private float currentHealth;
+            public float CurrentHealth => combatState.CurrentHealth;
 
             /// <summary>
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
             /// </summary>
-            public float Health => CurrentHealth / MaxHealth;
+            public float Health => combatState.CurrentHealth / combatState.MaxHealth;
 
             /// <summary>
             /// Specifies whether this Character is alive.
             /// </summary>
-            public bool IsAlive => CurrentHealth > 0;
+            public bool IsAlive => combatState.CurrentHealth > 0;
 
             /// <summary>
             /// The legacy of this Character, represented as a numerical value (points).
             /// </summary>
-            public int Legacy
-            {
-                get => legacy;
-                protected set
-                {
-                    legacy = value;
-                    RerankCharacter(this);
-                }
-            }
-            private int legacy;
+            public int Legacy => combatState.Legacy;
 
-            /// <summary>
-            /// The maximum health of this Character.
-            /// </summary>
-            public abstract float MaxHealth { get; }
 
             /// <summary>
             /// The name of this Character.
             /// </summary>
             public string Name { get; private set; }
+
+            /// <summary>
+            /// Provides the point (global location) of this Character.
+            /// </summary>
+            public Point Point => new Point(Column, Row);
 
             /// <summary>
             /// Specifies the target of this Character.
@@ -199,21 +197,20 @@ namespace AsLegacy
             /// </summary>
             /// <param name="row">The row position of the new Character.</param>
             /// <param name="column">The column position of the new Character.</param>
-            /// <param name="glyphColor">The color of the glyph visually displayed to represent 
-            /// the new Character.</param>
-            /// <param name="glyph">The glyph visually displayed to represent 
-            /// the new Character.</param>
             /// <param name="name">The string name given to the new Character.</param>
+            /// <param name="baseSettings">The base settings that define various 
+            /// aspects of the new Character.</param>
             /// <param name="legacy">The starting legacy of the new Character.</param>
-            protected Character(int row, int column,
-                Color glyphColor, int glyph, string name, int legacy) :
-                base(row, column, Color.Transparent, glyphColor, glyph, false)
+            protected Character(int row, int column, string name, 
+                BaseSettings baseSettings, int legacy) : base(row, column, Color.Transparent, 
+                    baseSettings.GlyphColor, baseSettings.NormalGlyph, false)
             {
                 mode = Mode.Normal;
                 Name = name;
 
-                currentHealth = MaxHealth;
-                Legacy = legacy;
+                this.baseSettings = baseSettings;
+                combatState = new Combat.State(baseSettings, legacy);
+                rankedCharacters.Add(this);
             }
 
             /// <summary>
@@ -249,17 +246,7 @@ namespace AsLegacy
                         break;
                     case Mode.Attack:
                         // TODO :: Move towards if not in range of attack.
-                        new TargetedAction(this, target, standardAttackInterval,
-                            (c) =>
-                            {
-                                c.CurrentHealth -= standardAttackDamage;
-                            },
-                            (c) =>
-                            {
-                                return IsAlive && mode == Mode.Attack &&
-                                    c.IsAlive && c == target &&
-                                    IsAdjacentTo(c.Row, c.Column);
-                            }, true);
+                        Combat.PerformStandardAttack(this, target);
                         return true;
                     case Mode.Defend:
                         break;
@@ -364,6 +351,19 @@ namespace AsLegacy
 
                 defenseEnabled = enabled;
                 UpdateActiveMode();
+            }
+
+
+            /// <summary>
+            /// Initiates the death of this Character.
+            /// </summary>
+            private void Die()
+            {
+                GlyphColor = deadColor;
+                ActiveMode = Mode.Normal;
+
+                (CurrentAction as IAction)?.Cancel();
+                new World.Action(characterRemovalTime, () => RemoveCharacter(this));
             }
 
             /// <summary>
