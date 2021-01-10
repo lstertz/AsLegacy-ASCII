@@ -1,5 +1,5 @@
 ﻿using AsLegacy.Abstractions;
-using System;
+using AsLegacy.Characters;
 using System.Collections.Generic;
 
 namespace AsLegacy
@@ -116,6 +116,7 @@ namespace AsLegacy
             new Beast(18, 13, "Wolf", 8);
             new Beast(31, 29, "Giant Rat", 4);
             new Beast(10, 32, "Bear", 12);
+            new ItemUser(14, 15, "Goblin", 20);
         }
 
         /// <summary>
