@@ -124,6 +124,8 @@ namespace AsLegacy
             private bool defenseEnabled = false;
 
             private readonly BaseSettings baseSettings;
+            private readonly Combat.State combatState;
+
             /// <summary>
             /// The current action being performed by this Character, 
             /// or null if it is performing no action.
@@ -142,58 +144,33 @@ namespace AsLegacy
             /// <summary>
             /// The current health of this Character, as an absolute value.
             /// </summary>
-            public float CurrentHealth
-            {
-                get => currentHealth;
-                set
-                {
-                    currentHealth = value;
-
-                    if (!IsAlive)
-                    {
-                        GlyphColor = deadColor;
-                        ActiveMode = Mode.Normal;
-
-                        (CurrentAction as IAction)?.Cancel();
-                        new World.Action(characterRemovalTime, () => RemoveCharacter(this));
-                    }
-                }
-            }
-            private float currentHealth;
+            public float CurrentHealth => combatState.CurrentHealth;
 
             /// <summary>
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
             /// </summary>
-            public float Health => CurrentHealth / MaxHealth;
+            public float Health => combatState.CurrentHealth / combatState.MaxHealth;
 
             /// <summary>
             /// Specifies whether this Character is alive.
             /// </summary>
-            public bool IsAlive => CurrentHealth > 0;
+            public bool IsAlive => combatState.CurrentHealth > 0;
 
             /// <summary>
             /// The legacy of this Character, represented as a numerical value (points).
             /// </summary>
-            public int Legacy
-            {
-                get => legacy;
-                protected set
-                {
-                    legacy = value;
-                    RerankCharacter(this);
-                }
-            }
-            private int legacy;
+            public int Legacy => combatState.Legacy;
 
-            /// <summary>
-            /// The maximum health of this Character.
-            /// </summary>
-            public abstract float MaxHealth { get; }
 
             /// <summary>
             /// The name of this Character.
             /// </summary>
             public string Name { get; private set; }
+
+            /// <summary>
+            /// Provides the point (global location) of this Character.
+            /// </summary>
+            public Point Point => new Point(Column, Row);
 
             /// <summary>
             /// Specifies the target of this Character.
@@ -231,9 +208,9 @@ namespace AsLegacy
                 mode = Mode.Normal;
                 Name = name;
 
-                currentHealth = MaxHealth;
-                Legacy = legacy;
                 this.baseSettings = baseSettings;
+                combatState = new Combat.State(baseSettings, legacy);
+                RerankCharacter(this);
             }
 
             /// <summary>
@@ -269,17 +246,7 @@ namespace AsLegacy
                         break;
                     case Mode.Attack:
                         // TODO :: Move towards if not in range of attack.
-                        new TargetedAction(this, target, standardAttackInterval,
-                            (c) =>
-                            {
-                                c.CurrentHealth -= standardAttackDamage;
-                            },
-                            (c) =>
-                            {
-                                return IsAlive && mode == Mode.Attack &&
-                                    c.IsAlive && c == target &&
-                                    IsAdjacentTo(c.Row, c.Column);
-                            }, true);
+                        Combat.PerformStandardAttack(this, target);
                         return true;
                     case Mode.Defend:
                         break;
