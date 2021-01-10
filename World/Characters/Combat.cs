@@ -14,8 +14,9 @@ namespace AsLegacy
             protected static class Combat
             {
                 /// <summary>
-                /// An interface to permit the Combat system to change the Combat States, and to 
-                /// prevent external constructs from doing so.
+                /// An interface to permit the Combat system to retrieve change the Combat States, 
+                /// and to prevent external constructs from doing so for values that should 
+                /// not be needed external to the system.
                 /// </summary>
                 private interface ICombat
                 {

@@ -21,11 +21,11 @@ namespace AsLegacy
             /// <summary>
             /// Defines the glyph to be shown when a Beast is in attack mode.
             /// </summary>
-            public override int AttackGlyph => 229;//'σ';
+            public override int AttackGlyph => 229;//'σ'
             /// <summary>
             /// Defines the glyph to be shown when a Beast is in defend mode.
             /// </summary>
-            public override int DefendGlyph => 239;//'∩';
+            public override int DefendGlyph => 239;//'∩'
             /// <summary>
             /// Defines the glyph to be shown when a Beast is in normal mode.
             /// </summary>
