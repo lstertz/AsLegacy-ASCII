@@ -1,39 +1,36 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace AsLegacy
+namespace AsLegacy.Characters
 {
     /// <summary>
-    /// Defines a Player, the focal character, on the World map, of the real-life player as 
+    /// Defines a Player, the focal Character, on the World map, of the real-life player as 
     /// they interact with the game.
     /// </summary>
     public class Player : ItemUser
     {
-        private const int normal = '@';
-
         /// <summary>
-        /// Defines the glyph to be shown when the Player is in attack mode.
+        /// Defines BaseSettings, the basic attributes of the Player, 
+        /// prior to instance-specific adjustments.
         /// </summary>
-        protected override int AttackGlyph => 235;
-
-        /// <summary>
-        /// Defines the glyph to be shown when the Player is in defend mode.
-        /// </summary>
-        protected override int DefendGlyph => 233;
-
-        /// <summary>
-        /// Defines the glyph to be shown when the Player is in normal mode.
-        /// </summary>
-        protected override int NormalGlyph => normal;
-
-        /// <summary>
-        /// The maximum health of this Player.
-        /// </summary>
-        public override float MaxHealth => 10.0f;
-
-        /// <summary>
-        /// Provides the point (global location) of this Player.
-        /// </summary>
-        public Point Point => new Point(Column, Row);
+        protected new class BaseSettings : ItemUser.BaseSettings
+        {
+            /// <summary>
+            /// Defines the color of the Player's Glyphs.
+            /// </summary>
+            public override Color GlyphColor => Color.Goldenrod;
+            /// <summary>
+            /// Defines the glyph to be shown when the Player is in attack mode.
+            /// </summary>
+            public override int AttackGlyph => 229;//'δ'
+            /// <suary>
+            /// Defines the glyph to be shown when the Player is in defend mode.
+            /// </summary>
+            public override int DefendGlyph => 233;//'Θ'
+            /// <suary>
+            /// Defines the glyph to be shown when the Player is in normal mode.
+            /// </summary>
+            public override int NormalGlyph => 64;//'@'
+        }
 
         /// <summary>
         /// Specifies the target of the Player.
@@ -57,7 +54,7 @@ namespace AsLegacy
         /// <param name="row">The row position of the new Player.</param>
         /// <param name="column">The column position of the new Player.</param>
         public Player(int row, int column) :
-            base(row, column, Color.Goldenrod, normal, "Player", 0)
+            base(row, column, "Player", new BaseSettings(), 0)
         {
 
         }
