@@ -269,16 +269,5 @@ namespace AsLegacy
             if (c == Player.Target)
                 Player.Target = null;
         }
-
-        /// <summary>
-        /// Re-ranks the provided Character.
-        /// </summary>
-        /// <param name="c">The Character to be resorted (or added) into the collection 
-        /// of ranked Characters.</param>
-        private static void RerankCharacter(Character c)
-        {
-            rankedCharacters.Remove(c);
-            rankedCharacters.Add(c);
-        }
     }
 }

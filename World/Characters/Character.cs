@@ -210,7 +210,7 @@ namespace AsLegacy
 
                 this.baseSettings = baseSettings;
                 combatState = new Combat.State(baseSettings, legacy);
-                RerankCharacter(this);
+                rankedCharacters.Add(this);
             }
 
             /// <summary>

@@ -104,22 +104,18 @@ namespace AsLegacy
                             if (!c.IsAlive)
                             {
                                 c.Die();
+                                rankedCharacters.Remove(c);
 
                                 if (c is ItemUser)
                                 {
                                     int halfLegacy = cState.Legacy / 2;
-                                    aState.Legacy += halfLegacy;
+                                    UpdateLegacy(attacker, halfLegacy);
                                     cState.Legacy -= halfLegacy;
 
-                                    // TODO :: Initiate respawn.
+                                    // TODO :: Initiate respawn, here or in Die.
                                 }
                                 else
-                                {
-                                    aState.Legacy += cState.Legacy;
-                                    cState.Legacy = 0;
-                                }
-
-                                RerankCharacter(attacker);
+                                    UpdateLegacy(attacker, cState.Legacy);
                             }
                         },
                         (c) =>
@@ -128,6 +124,22 @@ namespace AsLegacy
                                 c.IsAlive && c == attacker.target &&
                                 attacker.IsAdjacentTo(c.Row, c.Column);
                         }, true);
+                }
+
+                // TODO :: Probably make my own sorted HashSet, 
+                //          one that still uses hashcode to add/remove.
+
+                /// <summary>
+                /// Updates the legacy of the specified Character, and refreshes the ranking.
+                /// </summary>
+                /// <param name="c">The Character whose legacy is to be updated.</param>
+                /// <param name="legacyChange">The amount by which the legacy 
+                /// should change.</param>
+                private static void UpdateLegacy(Character c, int legacyChange)
+                {
+                    rankedCharacters.Remove(c);
+                    (c.combatState as ICombat).Legacy += legacyChange;
+                    rankedCharacters.Add(c);
                 }
             }
         }
