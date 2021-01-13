@@ -53,7 +53,7 @@ namespace AsLegacy
         /// <param name="name">The name of the new Beast.</param>
         /// <param name="legacy">The starting legacy of the new Beast.</param>
         public Beast(int row, int column, string name, int legacy) : 
-            base(row, column, name, new BaseSettings(), legacy)
+            base(row, column, name, new BaseSettings(), new Combat.Legacy(legacy))
         {
         }
     }
