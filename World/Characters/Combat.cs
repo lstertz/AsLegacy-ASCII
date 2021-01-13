@@ -14,7 +14,7 @@ namespace AsLegacy
             protected static class Combat
             {
                 /// <summary>
-                /// An interface to permit the Combat system to retrieve change the Combat States, 
+                /// An interface to permit the Combat system to retrieve/change the Combat States, 
                 /// and to prevent external constructs from doing so for values that should 
                 /// not be needed external to the system.
                 /// </summary>
@@ -30,8 +30,43 @@ namespace AsLegacy
                 }
 
                 /// <summary>
+                /// An interface to permit the Combat system to retrieve/change the Legacy value.
+                /// </summary>
+                private interface ILegacy
+                {
+                    public int Legacy { get; set; }
+                }
+
+                /// <summary>
+                /// Defines a Combat Legacy, which records the legacy of a Character.
+                /// </summary>
+                public class Legacy : ILegacy
+                {
+                    /// <summary>
+                    /// The current legacy of the Character, 
+                    /// represented as a numerical value (points).
+                    /// </summary>
+                    public virtual int CurrentLegacy { get; protected set; }
+                    int ILegacy.Legacy
+                    {
+                        get => CurrentLegacy;
+                        set => CurrentLegacy = value;
+                    }
+
+                    /// <summary>
+                    /// Constructs a new Combat Legacy.
+                    /// </summary>
+                    /// <param name="initialLegacy">The initial legacy of 
+                    /// the new Combat Legacy.</param>
+                    public Legacy(int initialLegacy)
+                    {
+                        CurrentLegacy = initialLegacy;
+                    }
+                }
+
+                /// <summary>
                 /// Defines a Combat State, which records the current state of a Character's 
-                /// combat-related values, including it's legacy.
+                /// combat-related values.
                 /// </summary>
                 public class State : ICombat
                 {
@@ -54,12 +89,17 @@ namespace AsLegacy
                     /// <summary>
                     /// The legacy of the Character, represented as a numerical value (points).
                     /// </summary>
-                    public int Legacy { get; private set; }
+                    public int Legacy 
+                    { 
+                        get => legacy.Legacy; 
+                        private set => legacy.Legacy = value; 
+                    }
                     int ICombat.Legacy
                     {
                         get => Legacy;
                         set => Legacy = value;
                     }
+                    private ILegacy legacy;
 
                     /// <summary>
                     /// The maximum health of the Character.
@@ -75,14 +115,14 @@ namespace AsLegacy
                     /// <param name="baseSettings">The Character.BaseSettings that define 
                     /// the base/initial values of the new State.</param>
                     /// <param name="legacy">The legacy of the new State.</param>
-                    public State(BaseSettings baseSettings, int legacy)
+                    public State(BaseSettings baseSettings, Legacy legacy)
                     {
                         baseMaxHealth = baseSettings.InitialBaseMaxHealth;
                         baseAttackDamage = baseSettings.InitialAttackDamage;
                         baseAttackInterval = baseSettings.InitialAttackInterval;
                         CurrentHealth = baseMaxHealth;
 
-                        Legacy = legacy;
+                        this.legacy = legacy;
                     }
                 }
 
