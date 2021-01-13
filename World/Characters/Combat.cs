@@ -147,13 +147,14 @@ namespace AsLegacy
                                 c.Die();
                                 rankedCharacters.Remove(c);
 
+                                // TODO :: Handle Player death differently.
                                 if (c is ItemUser)
                                 {
                                     int halfLegacy = cState.Legacy / 2;
                                     UpdateLegacy(attacker, halfLegacy);
                                     cState.Legacy -= halfLegacy;
 
-                                    // TODO :: Initiate respawn, here or in Die.
+                                    (c as ItemUser).Lineage.SpawnSuccessor();
                                 }
                                 else
                                     UpdateLegacy(attacker, cState.Legacy);
