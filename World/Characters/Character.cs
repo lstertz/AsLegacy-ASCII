@@ -202,7 +202,7 @@ namespace AsLegacy
             /// aspects of the new Character.</param>
             /// <param name="legacy">The starting legacy of the new Character.</param>
             protected Character(int row, int column, string name, 
-                BaseSettings baseSettings, int legacy) : base(row, column, Color.Transparent, 
+                BaseSettings baseSettings, Combat.Legacy legacy) : base(row, column, Color.Transparent, 
                     baseSettings.GlyphColor, baseSettings.NormalGlyph, false)
             {
                 mode = Mode.Normal;
@@ -357,7 +357,7 @@ namespace AsLegacy
             /// <summary>
             /// Initiates the death of this Character.
             /// </summary>
-            private void Die()
+            protected virtual void Die()
             {
                 GlyphColor = deadColor;
                 ActiveMode = Mode.Normal;

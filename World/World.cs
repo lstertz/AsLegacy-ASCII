@@ -1,5 +1,7 @@
 ﻿using AsLegacy.Abstractions;
 using AsLegacy.Characters;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace AsLegacy
@@ -88,6 +90,8 @@ namespace AsLegacy
         private static readonly SortedSet<Character> rankedCharacters =
             new SortedSet<Character>();
 
+        private static List<Point> openPositions = new List<Point>();
+
         /// <summary>
         /// The displayable environment of the World.
         /// </summary>
@@ -96,6 +100,8 @@ namespace AsLegacy
         {
             if (map[row][column] == 'T')
                 return new Tree();
+
+            openPositions.Add(new Point(column, row));
             return new Path();
         });
 
@@ -234,6 +240,21 @@ namespace AsLegacy
 
                 current.Value.Evaluate(timeDelta);
             }
+        }
+
+        /// <summary>
+        /// Provides a random passable position from the map.
+        /// </summary>
+        /// <returns>A Point, the randomly chosen passable position.</returns>
+        private static Point GetRandomPassablePosition()
+        {
+            Random r = new Random();
+
+            Point passablePoint = openPositions[r.Next(0, openPositions.Count - 1)];
+            while (!IsPassable(passablePoint.Y, passablePoint.X))
+                passablePoint = openPositions[r.Next(0, openPositions.Count - 1)];
+
+            return passablePoint;
         }
 
 

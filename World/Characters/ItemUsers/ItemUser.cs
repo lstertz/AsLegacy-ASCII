@@ -46,6 +46,11 @@ namespace AsLegacy.Characters
             public override float InitialBaseMaxHealth => 10.0f;
         }
 
+        /// <summary>
+        /// The Lineage of this ItemUser.
+        /// </summary>
+        public new ILineage Lineage { get; private set; }
+
 
         /// <summary>
         /// Constructs a new ItemUser.
@@ -55,8 +60,14 @@ namespace AsLegacy.Characters
         /// <param name="name">The string name given to the new Character.</param>
         /// <param name="legacy">The starting legacy of the new Character.</param>
         public ItemUser(int row, int column, string name, int legacy) :
-            base(row, column, name, new BaseSettings(), legacy)
+            this(row, column, name, new Lineage(name, legacy,
+                (r, c, n, l) => new ItemUser(r, c, n, l)))
         {
+        }
+        private ItemUser(int row, int column, string name, Lineage lineage) :
+            base(row, column, name, new BaseSettings(), lineage)
+        {
+            Lineage = lineage;
         }
 
         /// <summary>
@@ -70,8 +81,22 @@ namespace AsLegacy.Characters
         /// <param name="legacy">The starting legacy of the new Character.</param>
         protected ItemUser(int row, int column, 
             string name, BaseSettings baseSettings, int legacy) : 
-            base(row, column, name, baseSettings, legacy)
+            this(row, column, name, baseSettings, new Lineage(name, legacy, 
+                (r, c, n, l) => new ItemUser(r, c, n, baseSettings, l)))
         {
+        }
+        private ItemUser(int row, int column, 
+            string name, BaseSettings baseSettings, Lineage lineage) :
+            base(row, column, name, baseSettings, lineage)
+        {
+            Lineage = lineage;
+        }
+
+        protected override void Die()
+        {
+            base.Die();
+
+            (Lineage as Lineage).UponCurrentsDeath();
         }
     }
 }
