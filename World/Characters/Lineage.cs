@@ -13,6 +13,17 @@ namespace AsLegacy
             public interface ILineage
             {
                 /// <summary>
+                /// The current legacy of this Lineage, represented as a numerical value (points).
+                /// </summary>
+                int CurrentLegacy { get; }
+
+                /// <summary>
+                /// The highest recorded legacy of this Lineage, 
+                /// represented as a numerical value (points).
+                /// </summary>
+                int LegacyRecord { get; }
+
+                /// <summary>
                 /// Spawns a new successor (next generation) of this Lineage, 
                 /// if the last Character of this Lineage has died.
                 /// </summary>
@@ -27,21 +38,31 @@ namespace AsLegacy
             /// </summary>
             protected class Lineage : Combat.Legacy, ILineage
             {
+                /// <summary>
+                /// The current legacy of this Lineage, represented as a numerical value (points).
+                /// </summary>
                 public override int CurrentLegacy 
                 { 
                     get => legacy;
                     protected set
                     {
                         legacy = value;
-                        // TODO :: Update Legacy Record.
+                        if (legacy > LegacyRecord)
+                            LegacyRecord = legacy;
                     } 
                 }
                 private int legacy;
 
-                private string firstCharacterName;
+                /// <summary>
+                /// The highest recorded legacy of this Lineage, 
+                /// represented as a numerical value (points)
+                /// </summary>
+                public int LegacyRecord { get; private set; } = 0;
+
+                private readonly string firstCharacterName;
                 // TODO :: Track the names of Characters of the lineage.
 
-                private System.Action<int, int, string, Lineage> successorConstructor;
+                private readonly System.Action<int, int, string, Lineage> successorConstructor;
                 private bool hasLivingCharacter = true;
 
                 /// <summary>

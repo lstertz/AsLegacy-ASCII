@@ -99,7 +99,7 @@ namespace AsLegacy
                         get => Legacy;
                         set => Legacy = value;
                     }
-                    private ILegacy legacy;
+                    private readonly ILegacy legacy;
 
                     /// <summary>
                     /// The maximum health of the Character.
