@@ -7,7 +7,7 @@ namespace AsLegacy.Characters
     /// capable of holding and using Items, the functionality of which 
     /// is the responsibility of this class.
     /// </summary>
-    public class ItemUser : World.Character
+    public class ItemUser : World.Character, ILineal
     {
         /// <summary>
         /// Defines BaseSettings, the basic attributes of an ItemUser, 
@@ -46,10 +46,18 @@ namespace AsLegacy.Characters
             public override float InitialBaseMaxHealth => 10.0f;
         }
 
+
+        /// <summary>
+        /// The highest recorded legacy of this Item User's Lineage, 
+        /// represented as a numerical value (points)
+        /// </summary>
+        public override int LegacyRecord => lineage.LegacyRecord;
+
         /// <summary>
         /// The Lineage of this ItemUser.
         /// </summary>
-        public new ILineage Lineage { get; private set; }
+        public new ILineage Lineage { get => lineage; }
+        private readonly Lineage lineage;
 
 
         /// <summary>
@@ -67,7 +75,7 @@ namespace AsLegacy.Characters
         private ItemUser(int row, int column, string name, Lineage lineage) :
             base(row, column, name, new BaseSettings(), lineage)
         {
-            Lineage = lineage;
+            this.lineage = lineage;
         }
 
         /// <summary>
@@ -89,14 +97,13 @@ namespace AsLegacy.Characters
             string name, BaseSettings baseSettings, Lineage lineage) :
             base(row, column, name, baseSettings, lineage)
         {
-            Lineage = lineage;
+            this.lineage = lineage;
         }
 
         protected override void Die()
         {
             base.Die();
-
-            (Lineage as Lineage).UponCurrentsDeath();
+            lineage.UponCurrentsDeath();
         }
     }
 }

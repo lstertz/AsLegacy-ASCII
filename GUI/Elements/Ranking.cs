@@ -1,4 +1,5 @@
-﻿using SadConsole;
+﻿using AsLegacy.Characters;
+using SadConsole;
 using Colors = AsLegacy.Global.Colors;
 
 namespace AsLegacy.GUI
@@ -11,9 +12,9 @@ namespace AsLegacy.GUI
     {
         private const string rankTitle = "Rank ";
         private readonly int rankSpace = rankTitle.Length;
-        private const string nameTitle = "Name           ";
+        private const string nameTitle = "Name             ";
         private readonly int nameSpace = nameTitle.Length;
-        private const string legacyTitle = "Legacy        ";
+        private const string legacyTitle = "Legacy      ";
         private readonly int legacySpace = legacyTitle.Length;
 
         private readonly int tableRows;
@@ -83,7 +84,7 @@ namespace AsLegacy.GUI
             base.Draw(update);
 
             World.Character[] characters = World.RankedCharactersFor(0, tableRows);
-            for (int c = 0;  c < tableRows; c++)
+            for (int c = 0; c < tableRows; c++)
             {
                 int offset = 1;
                 string rank = (c + 1).ToString();
@@ -92,13 +93,20 @@ namespace AsLegacy.GUI
                 offset += rankSpace;
 
                 Clear(offset, c + 1, nameSpace - 1);
+                Clear(offset + nameSpace, c + 1, legacySpace - 1);
                 if (c < characters.Length)
-                    Print(offset, c + 1, characters[c].Name);
-                offset += nameSpace;
+                {
+                    ILineal lineal = characters[c] as ILineal;
 
-                Clear(offset, c + 1, legacySpace - 1);
-                if (c < characters.Length)
-                    Print(offset, c + 1, characters[c].Legacy.ToString());
+                    Print(offset, c + 1, characters[c].Name);
+                    offset += nameSpace;
+
+                    string legacy = characters[c].Legacy.ToString();
+                    if (lineal != null)
+                        legacy += " [" + lineal.LegacyRecord + "]";
+
+                    Print(offset, c + 1, legacy);
+                }
             }
         }
     }

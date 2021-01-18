@@ -161,6 +161,12 @@ namespace AsLegacy
             /// </summary>
             public int Legacy => combatState.Legacy;
 
+            /// <summary>
+            /// The highest recorded legacy of this Character, 
+            /// represented as a numerical value (points)
+            /// </summary>
+            public virtual int LegacyRecord => combatState.Legacy;
+
 
             /// <summary>
             /// The name of this Character.
