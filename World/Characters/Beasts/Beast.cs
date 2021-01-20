@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace AsLegacy
 {
@@ -54,6 +55,16 @@ namespace AsLegacy
             GiantRat = 0,
             Wolf = 1,
             Bear = 2
+        }
+
+        /// <summary>
+        /// Provides a random Beast Type.
+        /// </summary>
+        /// <returns>A random Beast Type.</returns>
+        public static Type GetRandomType()
+        {
+            Random r = new Random();
+            return (Type) r.Next(0, 3);
         }
 
         private static readonly string[] names = new string[] { "Giant Rat", "Wolf", "Bear" };
