@@ -250,9 +250,9 @@ namespace AsLegacy
         {
             Random r = new Random();
 
-            Point passablePoint = openPositions[r.Next(0, openPositions.Count - 1)];
+            Point passablePoint = openPositions[r.Next(0, openPositions.Count)];
             while (!IsPassable(passablePoint.Y, passablePoint.X))
-                passablePoint = openPositions[r.Next(0, openPositions.Count - 1)];
+                passablePoint = openPositions[r.Next(0, openPositions.Count)];
 
             return passablePoint;
         }
