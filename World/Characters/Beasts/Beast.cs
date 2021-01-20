@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace AsLegacy
 {
@@ -46,14 +47,51 @@ namespace AsLegacy
         }
 
         /// <summary>
+        /// The Type of the Beast, which may define its name, initial legacy, 
+        /// appearance, and base stats.
+        /// </summary>
+        public enum Type
+        {
+            GiantRat = 0,
+            Wolf = 1,
+            Bear = 2
+        }
+
+        /// <summary>
+        /// Provides a random Beast Type.
+        /// </summary>
+        /// <returns>A random Beast Type.</returns>
+        public static Type GetRandomType()
+        {
+            Random r = new Random();
+            return (Type) r.Next(0, 3);
+        }
+
+        private static readonly string[] names = new string[] { "Giant Rat", "Wolf", "Bear" };
+        private static readonly int[] initialLegacies = new int[] { 4, 8, 12 };
+
+        /// <summary>
         /// Constructs a new Beast at the provided row and column on the map.
         /// </summary>
         /// <param name="row">The row position of the new Beast.</param>
         /// <param name="column">The column position of the new Beast.</param>
         /// <param name="name">The name of the new Beast.</param>
         /// <param name="legacy">The starting legacy of the new Beast.</param>
-        public Beast(int row, int column, string name, int legacy) : 
-            base(row, column, name, new BaseSettings(), new Combat.Legacy(legacy))
+        public Beast(int row, int column, Type type) : 
+            base(row, column, names[(int)type], new BaseSettings(), 
+                new Combat.Legacy(initialLegacies[(int)type]))
+        {
+        }
+
+        /// <summary>
+        /// Constructs a new Beast at the provided point on the map.
+        /// </summary>
+        /// <param name="point">The position of the new Beast.</param>
+        /// <param name="name">The name of the new Beast.</param>
+        /// <param name="legacy">The starting legacy of the new Beast.</param>
+        public Beast(Point point, Type type) :
+            base(point.Y, point.X, names[(int)type], new BaseSettings(),
+                new Combat.Legacy(initialLegacies[(int)type]))
         {
         }
     }

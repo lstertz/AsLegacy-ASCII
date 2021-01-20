@@ -62,6 +62,7 @@ namespace AsLegacy
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
         };
+        private const int expectedBeastPopulation = 4;
 
         /// <summary>
         /// The number of columns within the World.
@@ -89,6 +90,7 @@ namespace AsLegacy
         private static readonly List<Character> presentCharacters = new List<Character>();
         private static readonly SortedSet<Character> rankedCharacters =
             new SortedSet<Character>();
+        private static int beastCount = 0;
 
         private static List<Point> openPositions = new List<Point>();
 
@@ -119,10 +121,10 @@ namespace AsLegacy
                 return;
 
             Player = new Player(12, 11);
-            new Beast(18, 13, "Wolf", 8);
-            new Beast(31, 29, "Giant Rat", 4);
-            new Beast(10, 32, "Bear", 12);
             new ItemUser(14, 15, "Goblin", 20);
+
+            for (int c = 0; c < expectedBeastPopulation; c++)
+                new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
         }
 
         /// <summary>
@@ -250,9 +252,9 @@ namespace AsLegacy
         {
             Random r = new Random();
 
-            Point passablePoint = openPositions[r.Next(0, openPositions.Count - 1)];
+            Point passablePoint = openPositions[r.Next(0, openPositions.Count)];
             while (!IsPassable(passablePoint.Y, passablePoint.X))
-                passablePoint = openPositions[r.Next(0, openPositions.Count - 1)];
+                passablePoint = openPositions[r.Next(0, openPositions.Count)];
 
             return passablePoint;
         }
@@ -273,6 +275,9 @@ namespace AsLegacy
 
             if (c is Character)
                 presentCharacters.Add(c as Character);
+
+            if (c is Beast)
+                beastCount++;
         }
 
         /// <summary>
@@ -289,6 +294,16 @@ namespace AsLegacy
 
             if (c == Player.Target)
                 Player.Target = null;
+
+            if (c is Beast)
+            {
+                beastCount--;
+                if (beastCount < expectedBeastPopulation)
+                    new Action(20000, () =>
+                    {
+                        new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
+                    });
+            }
         }
     }
 }
