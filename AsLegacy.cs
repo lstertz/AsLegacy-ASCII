@@ -40,7 +40,13 @@ namespace AsLegacy
 
         public override void Update(Console console, TimeSpan delta)
         {
-            World.Update(delta.Milliseconds);
+            if (World.HighestRankedCharacter.Legacy < Goal)
+                World.Update(delta.Milliseconds);
+            else
+            {
+                // TODO :: 36 : Display the game completion screen.
+                // TODO :: 36 : Create a Console that serves as the game completion screen.
+            }
         }
     }
 }
