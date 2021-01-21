@@ -24,6 +24,8 @@ namespace AsLegacy.GUI
         /// </summary>
         /// <param name="width">The width of the Ranking.</param>
         /// <param name="height">The height of the Ranking.</param>
+        /// <param name="displayGoal">Specifies whether the footer of the Ranking should 
+        /// be drawn to display the goal.</param>
         public Ranking(int width, int height, bool displayGoal = false) : base(width, height)
         {
             tableRows = height - 2;
