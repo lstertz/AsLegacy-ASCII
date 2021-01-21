@@ -24,15 +24,34 @@ namespace AsLegacy.GUI
         /// </summary>
         /// <param name="width">The width of the Ranking.</param>
         /// <param name="height">The height of the Ranking.</param>
-        public Ranking(int width, int height) : base(width, height)
+        /// <param name="displayGoal">Specifies whether the footer of the Ranking should 
+        /// be drawn to display the goal.</param>
+        public Ranking(int width, int height, bool displayGoal = false) : base(width, height)
         {
             tableRows = height - 2;
 
             DrawHeader();
             DrawFrame();
+            if (displayGoal)
+                DrawFooter();
 
             // TODO :: Add filter options.
             // TODO :: Add a scroll bar (child ControlsConsole).
+        }
+
+        /// <summary>
+        /// Draws a footer, over the bottom of the frame, to display 
+        /// the legacy goal of the game.
+        /// </summary>
+        private void DrawFooter()
+        {
+            string goal = System.Convert.ToString(AsLegacy.Goal);
+
+            SetGlyph(0, Height - 1, 222);
+            Fill(1, Height - 1, Width - 2, Colors.Transparent, Colors.White, 0);
+            Print(rankSpace + nameSpace + 1, Height - 1, "Goal", Colors.Black, Colors.White);
+            Print(Width - goal.Length - 1, Height - 1, goal, Colors.Black, Colors.White);
+            SetGlyph(Width - 1, Height - 1, 221);
         }
 
         /// <summary>

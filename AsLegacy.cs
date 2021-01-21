@@ -8,6 +8,11 @@ namespace AsLegacy
 {
     public class AsLegacy : UpdateConsoleComponent
     {
+        /// <summary>
+        /// The legacy (point) goal of the game.
+        /// </summary>
+        public const int Goal = 21;
+
         public const int Width = 80;
         public const int Height = 25;
 
