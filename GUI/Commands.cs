@@ -1,9 +1,11 @@
-﻿using AsLegacy.Global;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Input;
 using System;
 using Console = SadConsole.Console;
+
+using AsLegacy.Global;
+using AsLegacy.GUI.Screens;
 
 namespace AsLegacy.GUI
 {
@@ -64,9 +66,9 @@ namespace AsLegacy.GUI
             int x = focus.Column;
             int y = focus.Row;
 
-            int centerX = Display.MapViewPortHalfWidth;
-            int centerY = Display.MapViewPortHalfHeight;
-            Rectangle viewPort = Display.MapViewPort;
+            int centerX = PlayScreen.MapViewPortHalfWidth;
+            int centerY = PlayScreen.MapViewPortHalfHeight;
+            Rectangle viewPort = PlayScreen.MapViewPort;
 
             if (viewPort.Left == 0)
                 centerX = x;

@@ -108,6 +108,19 @@ namespace AsLegacy
         });
 
         /// <summary>
+        /// Provides the currently highest ranked Character.
+        /// </summary>
+        public static Character HighestRankedCharacter
+        {
+            get
+            {
+                Character[] characters = new Character[1];
+                rankedCharacters.CopyTo(characters, 0, 1);
+                return characters[0];
+            }
+        }
+
+        /// <summary>
         /// The Player Character.
         /// </summary>
         public static Player Player { get; private set; }

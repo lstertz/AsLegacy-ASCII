@@ -17,7 +17,7 @@ namespace AsLegacy.GUI.Panes
         public StatsPane(int width, int height) : 
             base("Stats", "Character data to be shown here.", width, height)
         {
-            ranking = new Ranking(width, 8, true)
+            ranking = new Ranking(8, true)
             {
                 Position = new Point(0, 15)
             };

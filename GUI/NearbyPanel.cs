@@ -1,6 +1,7 @@
 ﻿using SadConsole;
 
 using AsLegacy.GUI.Elements;
+using AsLegacy.GUI.Screens;
 
 namespace AsLegacy.GUI
 {
@@ -38,7 +39,7 @@ namespace AsLegacy.GUI
         {
             this.focus = focus;
 
-            while (Display.MapViewPortHeight / CharacterOverview.Height > Components.Count)
+            while (PlayScreen.MapViewPortHeight / CharacterOverview.Height > Components.Count)
                 Components.Add(new CharacterOverview(
                     Components.Count * CharacterOverview.Height, Focus));
         }
@@ -53,7 +54,7 @@ namespace AsLegacy.GUI
             base.Update(timeElapsed);
             
             World.Character[] nearbyCharacters = World.CharactersNear(Focus,
-                Display.MapViewPortHalfWidth, Display.MapViewPortHalfHeight);
+                PlayScreen.MapViewPortHalfWidth, PlayScreen.MapViewPortHalfHeight);
 
             while (nearbyCharacters.Length > Components.Count)
                 Components.Add(new CharacterOverview(
