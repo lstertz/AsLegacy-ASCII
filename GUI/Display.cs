@@ -13,6 +13,9 @@ namespace AsLegacy.GUI
         public const int Width = 80;
         public const int Height = 25;
 
+        /// <summary>
+        /// The screens available for the Display to show.
+        /// </summary>
         public enum Screens
         {
             Menu,
@@ -43,6 +46,10 @@ namespace AsLegacy.GUI
             ShowScreen(Screens.Play); // TODO :: Start on Menu.
         }
 
+        /// <summary>
+        /// Changes the Display to show only the specified screen.
+        /// </summary>
+        /// <param name="screen">The screen to be shown.</param>
         public static void ShowScreen(Screens screen)
         {
             // TODO :: Add an optional fade transition or wait of some kind.

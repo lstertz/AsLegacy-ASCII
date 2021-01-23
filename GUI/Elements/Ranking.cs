@@ -10,6 +10,9 @@ namespace AsLegacy.GUI
     /// </summary>
     public class Ranking : Console
     {
+        /// <summary>
+        /// The total width of a Ranking.
+        /// </summary>
         public const int TotalWidth = 36;
 
         private const string rankTitle = "Rank ";

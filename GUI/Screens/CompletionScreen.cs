@@ -1,12 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using SadConsole;
 using SadConsole.Components;
 using System;
-using System.Collections.Generic;
 using Console = SadConsole.Console;
-
-using AsLegacy.GUI.HUDs;
-using AsLegacy.Input;
 
 namespace AsLegacy.GUI.Screens
 {
