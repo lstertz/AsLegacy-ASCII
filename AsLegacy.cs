@@ -37,11 +37,8 @@ namespace AsLegacy
         {
             if (World.HighestRankedCharacter.Legacy < Goal)
                 World.Update(delta.Milliseconds);
-            else
-            {
-                // TODO :: 36 : Display the game completion screen.
-                // TODO :: 36 : Create a Console that serves as the game completion screen.
-            }
+            else if (Display.CurrentScreen != Display.Screens.Completion)
+                Display.ShowScreen(Display.Screens.Completion);
         }
     }
 }
