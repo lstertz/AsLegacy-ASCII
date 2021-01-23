@@ -14,11 +14,11 @@ namespace AsLegacy.GUI.HUDs
     {
         private const int height = 3;
 
-        private int frameGlyph = 0;
+        private readonly int frameGlyph = 0;
         protected World.Character focus;
 
-        private Meter activationMeter;
-        private Meter healthMeter;
+        private readonly Meter activationMeter;
+        private readonly Meter healthMeter;
 
         /// <summary>
         /// Constructs a new HUD.
