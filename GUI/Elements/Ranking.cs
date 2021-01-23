@@ -10,6 +10,8 @@ namespace AsLegacy.GUI
     /// </summary>
     public class Ranking : Console
     {
+        public const int TotalWidth = 36;
+
         private const string rankTitle = "Rank ";
         private readonly int rankSpace = rankTitle.Length;
         private const string nameTitle = "Name             ";
@@ -22,11 +24,10 @@ namespace AsLegacy.GUI
         /// <summary>
         /// Constructs a new Ranking.
         /// </summary>
-        /// <param name="width">The width of the Ranking.</param>
         /// <param name="height">The height of the Ranking.</param>
         /// <param name="displayGoal">Specifies whether the footer of the Ranking should 
         /// be drawn to display the goal.</param>
-        public Ranking(int width, int height, bool displayGoal = false) : base(width, height)
+        public Ranking(int height, bool displayGoal = false) : base(TotalWidth, height)
         {
             tableRows = height - 2;
 
@@ -48,10 +49,10 @@ namespace AsLegacy.GUI
             string goal = System.Convert.ToString(AsLegacy.Goal);
 
             SetGlyph(0, Height - 1, 222);
-            Fill(1, Height - 1, Width - 2, Colors.Transparent, Colors.White, 0);
+            Fill(1, Height - 1, TotalWidth - 2, Colors.Transparent, Colors.White, 0);
             Print(rankSpace + nameSpace + 1, Height - 1, "Goal", Colors.Black, Colors.White);
-            Print(Width - goal.Length - 1, Height - 1, goal, Colors.Black, Colors.White);
-            SetGlyph(Width - 1, Height - 1, 221);
+            Print(TotalWidth - goal.Length - 1, Height - 1, goal, Colors.Black, Colors.White);
+            SetGlyph(TotalWidth - 1, Height - 1, 221);
         }
 
         /// <summary>
@@ -66,16 +67,16 @@ namespace AsLegacy.GUI
                 SetGlyph(0, y, 179);
                 SetGlyph(rankSpace, y, 179);
                 SetGlyph(afterNameSpace, y, 179);
-                SetGlyph(Width - 1, y, 179);
+                SetGlyph(TotalWidth - 1, y, 179);
             }
-            SetGlyph(Width - 1, 0, 221);
+            SetGlyph(TotalWidth - 1, 0, 221);
 
             SetGlyph(0, Height - 1, 192);
-            for (int x = 1; x < Width - 1; x++)
+            for (int x = 1; x < TotalWidth - 1; x++)
                 SetGlyph(x, Height - 1, 196);
             SetGlyph(rankSpace, Height - 1, 193);
             SetGlyph(afterNameSpace, Height - 1, 193);
-            SetGlyph(Width - 1, Height - 1, 217);
+            SetGlyph(TotalWidth - 1, Height - 1, 217);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using Console = SadConsole.Console;
+﻿using SadConsole.Components;
+using Console = SadConsole.Console;
 
 using AsLegacy.GUI.Screens;
 
@@ -9,6 +10,9 @@ namespace AsLegacy.GUI
     /// </summary>
     public class Display
     {
+        public const int Width = 80;
+        public const int Height = 25;
+
         public enum Screens
         {
             Menu,
@@ -18,15 +22,22 @@ namespace AsLegacy.GUI
         }
 
 
+        public static Screens CurrentScreen { get; private set; }
+
         /// <summary>
         /// Initializes the Display.
         /// Required for any display output to be rendered, or screens to be created.
         /// </summary>
-        /// <param name="console">The Console to become the 
-        /// initialized Display Screens' Console.</param>
-        public static void Init(Console console)
+        /// <param name="gameManager">The UpdateConsoleComponent whose Update 
+        /// directs the processes of the game's progression.</param>
+        public static void Init(UpdateConsoleComponent gameManager)
         {
+            Console console = new Console(Width, Height);
+            SadConsole.Global.CurrentScreen = console;
+            console.Components.Add(gameManager);
+
             PlayScreen.Init(console);
+            CompletionScreen.Init(console);
             // TODO :: Implement other screens.
 
             ShowScreen(Screens.Play); // TODO :: Start on Menu.
@@ -34,8 +45,13 @@ namespace AsLegacy.GUI
 
         public static void ShowScreen(Screens screen)
         {
+            // TODO :: Add an optional fade transition or wait of some kind.
+
             PlayScreen.IsVisible = screen == Screens.Play;
+            CompletionScreen.IsVisible = screen == Screens.Completion;
             // TODO :: Implement for the other screens.
+
+            CurrentScreen = screen;
         }
     }
 }

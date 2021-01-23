@@ -4,6 +4,8 @@ using System;
 using Console = SadConsole.Console;
 using Game = SadConsole.Game;
 
+using AsLegacy.GUI;
+
 namespace AsLegacy
 {
     public class AsLegacy : UpdateConsoleComponent
@@ -13,9 +15,6 @@ namespace AsLegacy
         /// </summary>
         public const int Goal = 21;
 
-        public const int Width = 80;
-        public const int Height = 25;
-
         public static void Main()
         {
             new AsLegacy();
@@ -23,15 +22,11 @@ namespace AsLegacy
 
         public AsLegacy()
         {
-            Game.Create(Width, Height);
+            Game.Create(Display.Width, Display.Height);
             Game.OnInitialize = () =>
             {
-                Console console = new Console(Width, Height);
-                SadConsole.Global.CurrentScreen = console;
-                console.Components.Add(this);
-
                 World.Init();
-                Display.Init(console);
+                Display.Init(this);
             };
 
             Game.Instance.Run();

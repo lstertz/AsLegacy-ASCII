@@ -31,32 +31,32 @@ namespace AsLegacy.GUI.Screens
             {
                 {0, new Dictionary<int, int>() {
                     {0, 201},
-                    {AsLegacy.Height - 4, 204},
-                    {AsLegacy.Height - 1, 200}, 
+                    {Display.Height - 4, 204},
+                    {Display.Height - 1, 200}, 
                     {-1, 186} 
                 } },
                 {21, new Dictionary<int, int>() {
                     {0, 205},
-                    {AsLegacy.Height - 1, 205},
+                    {Display.Height - 1, 205},
                     {-1, 179}
                 } },
-                {AsLegacy.Width / 2, new Dictionary<int, int>()
+                {Display.Width / 2, new Dictionary<int, int>()
                 {
                     {0, 203},
-                    {AsLegacy.Height - 4, 185},
-                    {AsLegacy.Height - 1, 202},
+                    {Display.Height - 4, 185},
+                    {Display.Height - 1, 202},
                     {-1, 186}
                 } },
-                {AsLegacy.Width - 1, new Dictionary<int, int>()
+                {Display.Width - 1, new Dictionary<int, int>()
                 {
                     {0, 187},
-                    {AsLegacy.Height - 1, 188},
+                    {Display.Height - 1, 188},
                     {-1, 186}
                 } },
                 {-1, new Dictionary<int, int>()
                 {
                     {0, 205},
-                    {AsLegacy.Height - 1, 205}
+                    {Display.Height - 1, 205}
                 } }
             };
 
@@ -67,6 +67,9 @@ namespace AsLegacy.GUI.Screens
         /// </summary>
         public static Rectangle MapViewPort => screen.characters.ViewPort;
 
+        /// <summary>
+        /// Whether the screen is currently visible.
+        /// </summary>
         public static bool IsVisible
         {
             get => screen.console.IsVisible;
@@ -90,19 +93,24 @@ namespace AsLegacy.GUI.Screens
         /// Required for any screen output to be rendered, or for any 
         /// child consoles to be created for interaction.
         /// </summary>
-        /// <param name="console">The Console to become the initialized PlayScreen's Console.</param>
-        public static void Init(Console console)
+        /// <param name="parentConsole">The Console to become the 
+        /// initialized PlayScreen's Console's parent Console.</param>
+        public static void Init(Console parentConsole)
         {
             if (screen == null)
-                screen = new PlayScreen(console);
+                screen = new PlayScreen(parentConsole);
         }
 
         /// <summary>
         /// Constructs a new PlayScreen for the given Console.
         /// </summary>
-        /// <param name="console">The Console to be the new PlayScreen's Console.</param>
-        private PlayScreen(Console console)
+        /// <param name="parentConsole">The Console to become the 
+        /// new PlayScreen's Console's parent Console.</param>
+        private PlayScreen(Console parentConsole)
         {
+            console = new Console(Display.Width, Display.Height);
+            parentConsole.Children.Add(console);
+
             SetConsoleFrame(console);
             // Create stats for Player stats/inventory/equipment/legacy.
 
@@ -116,14 +124,14 @@ namespace AsLegacy.GUI.Screens
             commands.Components.Add(new PlayerCommandHandling());
             commands.IsFocused = true;
 
-            playerHUD = new PlayerHUD(AsLegacy.Width / 2 - 1)
+            playerHUD = new PlayerHUD(Display.Width / 2 - 1)
             {
-                Position = new Point(1, AsLegacy.Height - 4)
+                Position = new Point(1, Display.Height - 4)
             };
 
-            targetHUD = new TargetHUD(AsLegacy.Width / 2 - 1)
+            targetHUD = new TargetHUD(Display.Width / 2 - 1)
             {
-                Position = new Point(1, AsLegacy.Height - 7)
+                Position = new Point(1, Display.Height - 7)
             };
 
             environment = World.Environment;
@@ -131,15 +139,15 @@ namespace AsLegacy.GUI.Screens
             environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             environment.CenterViewPortOnPoint(World.Player.Point);
 
-            nearbyPanel = new NearbyPanel(AsLegacy.Width / 2 - MapViewPortWidth - 2,
+            nearbyPanel = new NearbyPanel(Display.Width / 2 - MapViewPortWidth - 2,
                 MapViewPortHeight, World.Player)
             {
                 Position = new Point(MapViewPortWidth + 2, 1)
             };
 
-            characterPanel = new CharacterPanel(AsLegacy.Width / 2 - 2, AsLegacy.Height - 2)
+            characterPanel = new CharacterPanel(Display.Width / 2 - 2, Display.Height - 2)
             {
-                Position = new Point(AsLegacy.Width / 2 + 1, 1)
+                Position = new Point(Display.Width / 2 + 1, 1)
             };
 
             console.Children.Add(environment);
@@ -151,7 +159,6 @@ namespace AsLegacy.GUI.Screens
             console.Children.Add(characterPanel);
 
             console.Components.Add(this);
-            this.console = console;
         }
 
         /// <summary>
