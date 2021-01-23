@@ -2,7 +2,7 @@
 C# ASCII prototype of the As Legacy game concept, built using SadConsole.
 
 ## Release
-The latest release is 0.0.3 (01/03/2021), for Windows only, found in the releases folder.
+The latest release is 0.1.0 (01/23/2021), for Windows only, found in the releases folder.
 
 ## Controls
 W,A,S,D (or arrow keys) - Move, when in normal mode.<br>
@@ -11,8 +11,12 @@ Hold-Alt - Activate defense mode.<br>
 Left mouse click to target a Character, either through the map or the map sidebar.<br>
 
 ## Notes
-The Wolf can be damaged by targeting it, being adjacent to it (left, right, up, down), and 
-being in attack mode. It will now die if it loses all of its health.
+An NPC can be damaged by targeting one, being adjacent to it (left, right, up, down), and 
+being in attack mode. It will die if it loses all of its health.<br>
+<br>
+A Beast NPC will transfer all of its legacy to its killer upon death, while the 
+Goblin will only transfer half of its current legacy; its remaining legacy will pass on 
+to its successor.
 
 ## Follow Us
 Development - https://trello.com/b/l1MBNnHy/as-legacy-c-ascii
