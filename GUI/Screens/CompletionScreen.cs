@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using SadConsole.Components;
+using SadConsole;
 using System;
 using Console = SadConsole.Console;
+
+using AsLegacy.Global;
+using SadConsole.Controls;
 
 namespace AsLegacy.GUI.Screens
 {
@@ -9,24 +12,26 @@ namespace AsLegacy.GUI.Screens
     /// Defines CompletionScreen, which serves as visual output controller for displaying 
     /// the details of a game's completion.
     /// </summary>
-    public class CompletionScreen : DrawConsoleComponent
+    public class CompletionScreen : ControlsConsole
     {
-        private const string completionMessage = " has won the game!";
-        private const int messageY = 6;
+        private const string playAgainLabel = "Play Again";
+        private static readonly int playAgainWidth = playAgainLabel.Length + 2;
 
-        private static CompletionScreen screen;
+        private const string completionMessage = " has won the game!";
+        private const int completionMessageY = 6;
+
+        private static ControlsConsole screen;
 
         /// <summary>
         /// Whether the screen is currently visible.
         /// </summary>
-        public static bool IsVisible
+        public static new bool IsVisible
         {
-            get => screen.console.IsVisible;
-            set => screen.console.IsVisible = value;
+            get => screen.IsVisible;
+            set => screen.IsVisible = value;
         }
 
-        private readonly Console console;
-
+        private readonly Label message;
 
         /// <summary>
         /// Initializes the CompletionScreen.
@@ -46,34 +51,48 @@ namespace AsLegacy.GUI.Screens
         /// </summary>
         /// <param name="parentConsole">The Console to become the 
         /// new CompletionScreen's Console's parent Console.</param>
-        private CompletionScreen(Console parentConsole)
+        private CompletionScreen(Console parentConsole) : 
+            base(parentConsole.Width, parentConsole.Height)
         {
-            console = new Console(Display.Width, Display.Height);
-            parentConsole.Children.Add(console);
+            ThemeColors = Colors.StandardTheme;
+            parentConsole.Children.Add(this);
+
+            message = new Label(Width)
+            {
+                Alignment = HorizontalAlignment.Center,
+                Position = new Point(0, completionMessageY),
+                TextColor = Colors.White
+            };
+            Add(message);
 
             Ranking ranking = new Ranking(12)
             {
                 Position = new Point(
-                    Display.Width / 2 - Ranking.TotalWidth / 2, 
-                    Display.Height - 13)
+                    Width / 2 - Ranking.TotalWidth / 2,
+                    Height - 16)
             };
-            console.Children.Add(ranking);
+            Children.Add(ranking);
 
-            console.Components.Add(this);
+            Button playAgain = new Button(playAgainWidth, 1)
+            {
+                Position = new Point(Width / 2 - playAgainWidth / 2, Height - 3),
+                Text = playAgainLabel
+            };
+            //playAgain.Click += (s, e) => CurrentPaneIndex--;
+            Add(playAgain);
         }
 
         /// <summary>
-        /// Updates the rendering of the CompletionScreen, primarily by updating 
+        /// Updates the details of the CompletionScreen, primarily by updating 
         /// the completion message.
         /// </summary>
-        /// <param name="console">The Console of the CompletionScreen.</param>
-        /// <param name="delta">The time passed since the last Draw call.</param>
-        public override void Draw(Console console, TimeSpan delta)
+        /// <param name="delta">The time passed since the last Update call.</param>
+        public override void Update(TimeSpan time)
         {
-            string message = World.HighestRankedCharacter.Name + completionMessage;
+            base.Update(time);
 
-            console.Clear(0, Display.Height / 2, Display.Width);
-            console.Print(Display.Width / 2 - message.Length / 2, messageY, message);
+            message.DisplayText = World.HighestRankedCharacter.Name + completionMessage;
+            message.IsDirty = true;
         }
     }
 }
