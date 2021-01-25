@@ -126,13 +126,22 @@ namespace AsLegacy
         public static Player Player { get; private set; }
 
         /// <summary>
-        /// Initializes the World with expected Characters.
+        /// Initializes the World with first-time starting Characters.
+        /// Initialization only works once, if the World needs to be re-initialized, use Reset.
         /// </summary>
         public static void Init()
         {
             if (Player != null)
                 return;
 
+            SeedCharacters();
+        }
+
+        /// <summary>
+        /// Populates the World with starting Characters.
+        /// </summary>
+        private static void SeedCharacters()
+        {
             Player = new Player(12, 11);
             new ItemUser(14, 15, "Goblin", 20);
 
@@ -240,6 +249,22 @@ namespace AsLegacy
         }
 
         /// <summary>
+        /// Resets the World.
+        /// This cancels all active Actions, removes all existing Characters, 
+        /// and populates new starting Characters.
+        /// </summary>
+        public static void Reset()
+        {
+            while (actions.First != null)
+                actions.First.Value.Cancel();
+
+            for (int c = presentCharacters.Count - 1; c >= 0; c--)
+                RemoveCharacter(presentCharacters[c], false);
+
+            SeedCharacters();
+        }
+
+        /// <summary>
         /// Updates the state of the World and any of its constructs.
         /// </summary>
         /// <param name="timeDelta">The time passed, in milliseconds, 
@@ -297,13 +322,13 @@ namespace AsLegacy
         /// Removes a Character from the World.
         /// </summary>
         /// <param name="c">The Character to be removed.</param>
-        private static void RemoveCharacter(Character c)
+        private static void RemoveCharacter(Character c, bool replaceBeasts = true)
         {
             presentCharacters.Remove(c);
             rankedCharacters.Remove(c);
 
-            if (c != Player) // TODO :: Handle Player death appropriately later.
-                characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
+            // TODO :: Handle Player death appropriately later.
+            characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
 
             if (c == Player.Target)
                 Player.Target = null;
@@ -311,7 +336,7 @@ namespace AsLegacy
             if (c is Beast)
             {
                 beastCount--;
-                if (beastCount < expectedBeastPopulation)
+                if (beastCount < expectedBeastPopulation && replaceBeasts)
                     new Action(20000, () =>
                     {
                         new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
