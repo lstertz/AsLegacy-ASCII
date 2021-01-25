@@ -8,14 +8,16 @@ namespace AsLegacy.GUI.HUDs
 {
     /// <summary>
     /// Defines the HUD aspect of a Display, 
-    /// which is responsible for showing the details of a focused Character.
+    /// which is responsible for showing the details of a specific Character.
     /// </summary>
     public abstract class HUD : Console
     {
         private const int height = 3;
 
         private readonly int frameGlyph = 0;
-        protected World.Character focus;
+
+        protected World.Character character { get => characterGetter(); }
+        private Func<World.Character> characterGetter;
 
         private readonly Meter activationMeter;
         private readonly Meter healthMeter;
@@ -26,12 +28,13 @@ namespace AsLegacy.GUI.HUDs
         /// </summary>
         /// <param name="width">The width of the HUD.</param>
         /// <param name="frameGlyph">The glyph used for the frame.</param>
-        /// <param name="focus">The focus of the HUD, and whose name will be 
+        /// <param name="characterGetter">Provides the character of the HUD, whose name will be 
         /// used as the title of the frame.</param>
-        public HUD(int width, int frameGlyph, World.Character focus) : base(width, height)
+        public HUD(int width, int frameGlyph, Func<World.Character> characterGetter) : 
+            base(width, height)
         {
             this.frameGlyph = frameGlyph;
-            this.focus = focus;
+            this.characterGetter = characterGetter;
 
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
@@ -58,29 +61,29 @@ namespace AsLegacy.GUI.HUDs
         }
 
         /// <summary>
-        /// Sets the frame of this HUD, using the current focus's name 
-        /// as the title of the frame, or with no title if the current focus is null.
+        /// Sets the frame of this HUD, using the current character's name 
+        /// as the title of the frame, or with no title if the current character is null.
         /// </summary>
         protected void SetFrame()
         {
             for (int x = 0; x < Width; x++)
                 SetGlyph(x, 0, frameGlyph);
 
-            if (focus != null)
-                Print(1, 0, " " + focus.Name + " ");
+            if (character != null)
+                Print(1, 0, " " + character.Name + " ");
         }
 
         /// <summary>
         /// Retrieves the activation progress of the action currently being 
-        /// performed by the current focus of the HUD, if there is one.
+        /// performed by the current character of the HUD, if there is one.
         /// </summary>
         /// <returns>The activation progress of the current action 
-        /// of the current focus, 0 otherwise.</returns>
+        /// of the current character, 0 otherwise.</returns>
         private float RetrieveActivation()
         {
-            if (focus != null)
+            if (character != null)
             {
-                World.Action action = focus.CurrentAction;
+                World.Action action = character.CurrentAction;
                 if (action != null)
                     return action.Activation;
             }
@@ -88,13 +91,13 @@ namespace AsLegacy.GUI.HUDs
         }
 
         /// <summary>
-        /// Retrieves the health of the current focus of the HUD, if there is one.
+        /// Retrieves the health of the current character of the HUD, if there is one.
         /// </summary>
-        /// <returns>The health of the current focus, 0 otherwise.</returns>
+        /// <returns>The health of the current character, 0 otherwise.</returns>
         private float RetrieveHealth()
         {
-            if (focus != null)
-                return focus.Health;
+            if (character != null)
+                return character.Health;
             return 0.0f;
         }
     }

@@ -1,10 +1,9 @@
-﻿using SadConsole;
+﻿using Microsoft.Xna.Framework;
+using SadConsole;
 using SadConsole.Controls;
 
-using Colors = AsLegacy.Global.Colors;
+using AsLegacy.Global;
 using AsLegacy.GUI.Panes;
-
-using Microsoft.Xna.Framework;
 
 namespace AsLegacy.GUI
 {
@@ -40,24 +39,12 @@ namespace AsLegacy.GUI
         /// <param name="height">The height of the Panel.</param>
         public CharacterPanel(int width, int height) : base(width, height)
         {
-            SadConsole.Themes.Colors colors = SadConsole.Themes.Colors.CreateDefault();
-            colors.ControlBack = Colors.Transparent;
-            colors.Text = Colors.FadedWhite;
-            colors.TextDark = Colors.White;
-            colors.TextLight = Colors.White;
-            colors.TextFocused = Colors.FadedWhite;
-            colors.TextSelected = Colors.White;
-            colors.TextSelectedDark = Colors.White;
-            colors.ControlBackLight = Colors.Transparent;
-            colors.ControlBackSelected = Colors.Transparent;
-            colors.ControlBackDark = Colors.Transparent;
-            colors.RebuildAppearances();
-            ThemeColors = colors;
+            ThemeColors = Colors.StandardTheme;
 
             Button left = new Button(1, 1)
             {
                 Position = new Point(0, 0),
-                Text = ((char)17).ToString(),
+                Text = ((char)17).ToString()
             };
             left.Click += (s, e) => CurrentPaneIndex--;
             Add(left);

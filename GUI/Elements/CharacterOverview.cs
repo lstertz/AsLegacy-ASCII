@@ -26,13 +26,6 @@ namespace AsLegacy.GUI.Elements
         /// </summary>
         public World.Character Character { get; set; }
 
-        /// <summary>
-        /// The expected Character (of the game player/viewer) that is viewing 
-        /// this CharacterOverview. The exact details or display may be tailored to be 
-        /// more meaningful from the perspective of this Character.
-        /// </summary>
-        public World.Character Viewer { get; set; }
-
         private readonly int y;
         private Rectangle box;
 
@@ -40,15 +33,12 @@ namespace AsLegacy.GUI.Elements
         /// Constructs a new CharacterOverview.
         /// </summary>
         /// <param name="y">The local y position of the CharacterOverview in its Console.</param>
-        /// <param name="viewer">The World Character who is viewing the overview.</param>
         /// <param name="character">The World Character whose details are to be shown.</param>
-        public CharacterOverview(int y, World.Character viewer, 
-            World.Character character = null)
+        public CharacterOverview(int y, World.Character character = null)
         {
             this.y = y;
 
             Character = character;
-            Viewer = viewer;
         }
 
         public override void OnAdded(SadConsole.Console console)
@@ -69,6 +59,9 @@ namespace AsLegacy.GUI.Elements
             if (Character == null)
                 return;
 
+            // TODO :: Refer to AsLegacy.Focus, comparing to World.Player when appropriate,
+            //          for displaying details relevant to the viewer.
+
             Color foreground = Character.Selected ? Colors.Selected : 
                 Character.Highlighted ? Colors.Highlighted : Colors.FadedWhite;
             console.Print(0, y, Character.Name, foreground);
@@ -88,7 +81,7 @@ namespace AsLegacy.GUI.Elements
 
             handled = true;
             if (state.Mouse.LeftClicked)
-                Viewer.Target = Character;
+                World.Player.Target = Character;
             else
                 World.Character.Highlight(Character);
         }

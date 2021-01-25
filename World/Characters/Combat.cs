@@ -145,7 +145,7 @@ namespace AsLegacy
                             if (!c.IsAlive)
                             {
                                 c.Die();
-                                rankedCharacters.Remove(c);
+                                rankedCharacters.Remove(c);  // TODO :: Remove once custom sorting is implemented.
 
                                 // TODO :: Handle Player death differently.
                                 if (c is ItemUser)

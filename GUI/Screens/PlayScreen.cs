@@ -82,7 +82,7 @@ namespace AsLegacy.GUI.Screens
         private readonly NearbyPanel nearbyPanel;
         private readonly CharacterPanel characterPanel;
 
-        private readonly PlayerHUD playerHUD;
+        private readonly FocusHUD playerHUD;
         private readonly TargetHUD targetHUD;
 
         private readonly Console console;
@@ -117,14 +117,14 @@ namespace AsLegacy.GUI.Screens
             characters = World.Characters;
             characters.Position = new Point(1, 1);
             characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
-            characters.CenterViewPortOnPoint(World.Player.Point);
+            characters.CenterViewPortOnPoint(AsLegacy.Focus.Point);
             characters.Components.Add(new PlayerTargetHandling());
 
-            commands = new Commands(World.Player);
+            commands = new Commands();
             commands.Components.Add(new PlayerCommandHandling());
             commands.IsFocused = true;
 
-            playerHUD = new PlayerHUD(Display.Width / 2 - 1)
+            playerHUD = new FocusHUD(Display.Width / 2 - 1)
             {
                 Position = new Point(1, Display.Height - 4)
             };
@@ -137,10 +137,10 @@ namespace AsLegacy.GUI.Screens
             environment = World.Environment;
             environment.Position = new Point(1, 1);
             environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
-            environment.CenterViewPortOnPoint(World.Player.Point);
+            environment.CenterViewPortOnPoint(AsLegacy.Focus.Point);
 
             nearbyPanel = new NearbyPanel(Display.Width / 2 - MapViewPortWidth - 2,
-                MapViewPortHeight, World.Player)
+                MapViewPortHeight)
             {
                 Position = new Point(MapViewPortWidth + 2, 1)
             };
@@ -197,8 +197,8 @@ namespace AsLegacy.GUI.Screens
         /// <param name="delta">The time passed since the last Draw call.</param>
         public override void Draw(Console console, TimeSpan delta)
         {
-            characters.CenterViewPortOnPoint(World.Player.Point);
-            environment.CenterViewPortOnPoint(World.Player.Point);
+            characters.CenterViewPortOnPoint(AsLegacy.Focus.Point);
+            environment.CenterViewPortOnPoint(AsLegacy.Focus.Point);
         }
     }
 }
