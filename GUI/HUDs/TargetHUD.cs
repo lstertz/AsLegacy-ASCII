@@ -13,7 +13,13 @@ namespace AsLegacy.GUI.HUDs
         /// The constructed TargetHUD has a default frame and is not visible.
         /// </summary>
         /// <param name="width">The width of the TargetHUD.</param>
-        public TargetHUD(int width) : base(width, 196, null)
+        public TargetHUD(int width) : base(width, 196, 
+            () => 
+            {
+                if (World.Player.Target != World.Player)
+                    return World.Player.Target;
+                return null;
+            })
         {
             IsVisible = false;
         }
@@ -24,17 +30,8 @@ namespace AsLegacy.GUI.HUDs
         /// <param name="timeElapsed">The time passed since the last update.</param>
         public override void Update(TimeSpan timeElapsed)
         {
-            World.Character target = World.Player.Target;
-            if (target == World.Player)
-                target = null;
-
-            if (target != focus)
-            {
-                focus = target;
-
-                SetFrame();
-                IsVisible = target != null;
-            }
+            SetFrame();
+            IsVisible = character != null;
 
             base.Update(timeElapsed);
         }

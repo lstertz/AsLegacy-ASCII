@@ -31,15 +31,11 @@ namespace AsLegacy.GUI
                 empty, down, empty
         };
 
-        private readonly World.Character focus;
-
         private int highlightCellX = -1;
         private int highlightCellY = -1;
 
-        public Commands(World.Character focus) : base(3, 3, cells)
-        {
-            this.focus = focus;
-        }
+        public Commands() : base(3, 3, cells)
+        { }
 
         /// <summary>
         /// Specifies which Commands Display Cell should be highlighted, which 
@@ -63,8 +59,8 @@ namespace AsLegacy.GUI
         {
             base.Draw(delta);
 
-            int x = focus.Column;
-            int y = focus.Row;
+            int x = World.Player.Column;
+            int y = World.Player.Row;
 
             int centerX = PlayScreen.MapViewPortHalfWidth;
             int centerY = PlayScreen.MapViewPortHalfHeight;
@@ -123,7 +119,7 @@ namespace AsLegacy.GUI
         private bool IsInteractable(int worldX, int worldY)
         {
             return World.IsPassable(worldX, worldY) &&
-                focus.ActiveMode == World.Character.Mode.Normal;
+                World.Player.ActiveMode == World.Character.Mode.Normal;
         }
     }
 }

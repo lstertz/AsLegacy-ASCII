@@ -15,6 +15,13 @@ namespace AsLegacy
         /// </summary>
         public const int Goal = 21;
 
+        /// <summary>
+        /// The current Character being focused on by the game player.
+        /// While playing, this is the World Player, when dead and in 'viewer mode' this may 
+        /// be any other living Character.
+        /// </summary>
+        public static World.Character Focus { get => World.Player; }
+
         public static void Main()
         {
             new AsLegacy();
