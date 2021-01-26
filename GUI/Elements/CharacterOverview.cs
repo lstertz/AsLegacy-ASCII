@@ -1,4 +1,5 @@
-﻿using AsLegacy.Global;
+﻿using AsLegacy.Characters;
+using AsLegacy.Global;
 using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Input;
@@ -62,9 +63,13 @@ namespace AsLegacy.GUI.Elements
             // TODO :: Refer to AsLegacy.Focus, comparing to World.Player when appropriate,
             //          for displaying details relevant to the viewer.
 
+            string name = Character.Name;
+            if (Character is ILineal lineal)
+                name = lineal.FullName;
+
             Color foreground = Character.Selected ? Colors.Selected : 
                 Character.Highlighted ? Colors.Highlighted : Colors.FadedWhite;
-            console.Print(0, y, Character.Name, foreground);
+            console.Print(0, y, name, foreground);
             console.Print(0, y + 1, "[Action]", foreground);
             console.Print(0, y + 2, "[Target]", foreground);
 

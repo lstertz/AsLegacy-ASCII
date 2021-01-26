@@ -5,6 +5,7 @@ using Console = SadConsole.Console;
 
 using AsLegacy.Global;
 using SadConsole.Controls;
+using AsLegacy.Characters;
 
 namespace AsLegacy.GUI.Screens
 {
@@ -17,6 +18,7 @@ namespace AsLegacy.GUI.Screens
         private const string playAgainLabel = "Play Again";
         private static readonly int playAgainWidth = playAgainLabel.Length + 2;
 
+        private const string prefixMessage = "The Lineage of ";
         private const string completionMessage = " has won the game!";
         private const int completionMessageY = 6;
 
@@ -95,7 +97,15 @@ namespace AsLegacy.GUI.Screens
         {
             base.Update(time);
 
-            message.DisplayText = World.HighestRankedCharacter.Name + completionMessage;
+            string prefix = "";
+            string name = World.HighestRankedCharacter.Name;
+            if (World.HighestRankedCharacter is ILineal lineal)
+            {
+                prefix = prefixMessage;
+                name = lineal.LineageName;
+            }
+
+            message.DisplayText = prefix + name + completionMessage;
             message.IsDirty = true;
         }
     }

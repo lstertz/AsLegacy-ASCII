@@ -24,6 +24,11 @@ namespace AsLegacy
                 int LegacyRecord { get; }
 
                 /// <summary>
+                /// The name of the Lineage.
+                /// </summary>
+                string Name { get; }
+
+                /// <summary>
                 /// Spawns a new successor (next generation) of this Lineage, 
                 /// if the last Character of this Lineage has died.
                 /// </summary>
@@ -53,11 +58,11 @@ namespace AsLegacy
                 }
                 private int legacy;
 
-                /// <summary>
-                /// The highest recorded legacy of this Lineage, 
-                /// represented as a numerical value (points)
-                /// </summary>
+                /// <inheritdoc/>
                 public int LegacyRecord { get; private set; } = 0;
+
+                /// <inheritdoc/>
+                public string Name { get; private set; }
 
                 private readonly string firstCharacterName;
                 // TODO :: Track the names of Characters of the lineage.
@@ -69,12 +74,17 @@ namespace AsLegacy
                 /// Constructs a new Lineage.
                 /// </summary>
                 /// <param name="firstCharacterName">The name of the first Character 
-                /// of the new Lineage.</param>
-                /// <param name="initialLegacy">The initial legacy of the new Lineage.</param>
-                public Lineage(string firstCharacterName, int initialLegacy, 
+                /// of the Lineage.</param>
+                /// <param name="initialLegacy">The initial legacy of the Lineage.</param>
+                /// <param name="name">The name of the Linage.</param>
+                /// <param name="successorConstructor">An Action to construct a 
+                /// successor for a new generation of the Lineage.</param>
+                public Lineage(string firstCharacterName, int initialLegacy, string name, 
                     System.Action<int, int, string, Lineage> successorConstructor) : 
                     base(initialLegacy)
                 {
+                    Name = name;
+
                     this.firstCharacterName = firstCharacterName;
                     this.successorConstructor = successorConstructor;
                 }
@@ -87,12 +97,12 @@ namespace AsLegacy
                     hasLivingCharacter = false;
                 }
 
+                /// <inheritdoc/>
                 public bool SpawnSuccessor()
                 {
                     if (hasLivingCharacter)
                         return false;
 
-                    // TODO :: Possibly enforce (check) for latest generation's death.
                     // TODO :: Update naming of successors.
 
                     Point point = GetRandomPassablePosition();
