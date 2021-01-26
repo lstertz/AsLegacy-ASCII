@@ -46,6 +46,11 @@ namespace AsLegacy.Characters
             public override float InitialBaseMaxHealth => 10.0f;
         }
 
+        /// <inheritdoc/>
+        public string FullName => Name + " of " + lineage.Name;
+
+        /// <inheritdoc/>
+        public string LineageName => lineage.Name;
 
         /// <summary>
         /// The highest recorded legacy of this Item User's Lineage, 
@@ -63,12 +68,13 @@ namespace AsLegacy.Characters
         /// <summary>
         /// Constructs a new ItemUser.
         /// </summary>
-        /// <param name="row">The row position of the new Character.</param>
-        /// <param name="column">The column position of the new Character.</param>
-        /// <param name="name">The string name given to the new Character.</param>
-        /// <param name="legacy">The starting legacy of the new Character.</param>
-        public ItemUser(int row, int column, string name, int legacy) :
-            this(row, column, name, new Lineage(name, legacy,
+        /// <param name="row">The row position of the ItemUser.</param>
+        /// <param name="column">The column position of the ItemUser.</param>
+        /// <param name="name">The string name given to the ItemUser.</param>
+        /// <param name="legacy">The starting legacy of the ItemUser.</param>
+        /// <param name="lineageName">The name of the ItemUser's Lineage.</param>
+        public ItemUser(int row, int column, string name, int legacy, string lineageName) :
+            this(row, column, name, new Lineage(name, legacy, lineageName,
                 (r, c, n, l) => new ItemUser(r, c, n, l)))
         {
         }
@@ -81,15 +87,16 @@ namespace AsLegacy.Characters
         /// <summary>
         /// Constructs a new ItemUser.
         /// </summary>
-        /// <param name="row">The row position of the new Character.</param>
-        /// <param name="column">The column position of the new Character.</param>
-        /// <param name="name">The string name given to the new Character.</param>
+        /// <param name="row">The row position of the ItemUser.</param>
+        /// <param name="column">The column position of the ItemUser.</param>
+        /// <param name="name">The string name given to the ItemUser.</param>
         /// <param name="baseSettings">The base settings that define various 
-        /// aspects of the new Character.</param>
-        /// <param name="legacy">The starting legacy of the new Character.</param>
+        /// aspects of the ItemUser.</param>
+        /// <param name="legacy">The starting legacy of the ItemUser.</param>
+        /// <param name="lineageName">The name of the ItemUser's Lineage.</param>
         protected ItemUser(int row, int column, 
-            string name, BaseSettings baseSettings, int legacy) : 
-            this(row, column, name, baseSettings, new Lineage(name, legacy, 
+            string name, BaseSettings baseSettings, int legacy, string lineageName) : 
+            this(row, column, name, baseSettings, new Lineage(name, legacy, lineageName, 
                 (r, c, n, l) => new ItemUser(r, c, n, baseSettings, l)))
         {
         }
@@ -100,6 +107,7 @@ namespace AsLegacy.Characters
             this.lineage = lineage;
         }
 
+        /// <inheritdoc/>
         protected override void Die()
         {
             base.Die();

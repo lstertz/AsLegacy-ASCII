@@ -92,7 +92,7 @@ namespace AsLegacy
             new SortedSet<Character>();
         private static int beastCount = 0;
 
-        private static List<Point> openPositions = new List<Point>();
+        private static readonly List<Point> openPositions = new List<Point>();
 
         /// <summary>
         /// The displayable environment of the World.
@@ -143,7 +143,7 @@ namespace AsLegacy
         private static void SeedCharacters()
         {
             Player = new Player(12, 11);
-            new ItemUser(14, 15, "Goblin", 20);
+            new ItemUser(14, 15, "Goblin", 20, "Orr");
 
             for (int c = 0; c < expectedBeastPopulation; c++)
                 new Beast(GetRandomPassablePosition(), Beast.GetRandomType());

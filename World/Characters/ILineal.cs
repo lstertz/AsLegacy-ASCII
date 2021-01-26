@@ -12,6 +12,14 @@
         /// </summary>
         int LegacyRecord { get; }
 
-        // TODO :: Lineage Name.
+        /// <summary>
+        /// The name of the Character's Lineage.
+        /// </summary>
+        string LineageName { get; }
+
+        /// <summary>
+        /// The full name, formatted Character name and Lineage name, of this ILineal Character.
+        /// </summary>
+        string FullName { get; }
     }
 }
