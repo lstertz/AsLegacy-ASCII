@@ -73,8 +73,8 @@ namespace AsLegacy.GUI.HUDs
             if (Character != null)
             {
                 string name = Character.Name;
-                if (Character is ILineal)
-                    name = (Character as ILineal).FullName;
+                if (Character is ILineal lineal)
+                    name = lineal.FullName;
 
                 Print(1, 0, " " + name + " ");
             }

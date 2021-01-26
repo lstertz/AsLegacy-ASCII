@@ -99,10 +99,10 @@ namespace AsLegacy.GUI.Screens
 
             string prefix = "";
             string name = World.HighestRankedCharacter.Name;
-            if (World.HighestRankedCharacter is ILineal)
+            if (World.HighestRankedCharacter is ILineal lineal)
             {
                 prefix = prefixMessage;
-                name = (World.HighestRankedCharacter as ILineal).LineageName;
+                name = lineal.LineageName;
             }
 
             message.DisplayText = prefix + name + completionMessage;

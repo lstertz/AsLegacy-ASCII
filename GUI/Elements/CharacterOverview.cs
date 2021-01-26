@@ -64,8 +64,8 @@ namespace AsLegacy.GUI.Elements
             //          for displaying details relevant to the viewer.
 
             string name = Character.Name;
-            if (Character is ILineal)
-                name = (Character as ILineal).FullName;
+            if (Character is ILineal lineal)
+                name = lineal.FullName;
 
             Color foreground = Character.Selected ? Colors.Selected : 
                 Character.Highlighted ? Colors.Highlighted : Colors.FadedWhite;

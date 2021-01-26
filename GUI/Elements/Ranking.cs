@@ -122,8 +122,7 @@ namespace AsLegacy.GUI
                     string name = characters[c].Name;
                     string legacy = characters[c].Legacy.ToString();
 
-                    ILineal lineal = characters[c] as ILineal;
-                    if (lineal != null)
+                    if (characters[c] is ILineal lineal)
                     {
                         name = lineal.LineageName;
                         legacy += " [" + lineal.LegacyRecord + "]";
