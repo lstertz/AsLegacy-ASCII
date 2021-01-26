@@ -119,14 +119,18 @@ namespace AsLegacy.GUI
                 Clear(offset + nameSpace, c + 1, legacySpace - 1);
                 if (c < characters.Length)
                 {
-                    ILineal lineal = characters[c] as ILineal;
-
-                    Print(offset, c + 1, characters[c].Name);
-                    offset += nameSpace;
-
+                    string name = characters[c].Name;
                     string legacy = characters[c].Legacy.ToString();
+
+                    ILineal lineal = characters[c] as ILineal;
                     if (lineal != null)
+                    {
+                        name = lineal.LineageName;
                         legacy += " [" + lineal.LegacyRecord + "]";
+                    }
+
+                    Print(offset, c + 1, name);
+                    offset += nameSpace;
 
                     Print(offset, c + 1, legacy);
                 }

@@ -1,4 +1,5 @@
-﻿using AsLegacy.GUI.Elements;
+﻿using AsLegacy.Characters;
+using AsLegacy.GUI.Elements;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -16,8 +17,8 @@ namespace AsLegacy.GUI.HUDs
 
         private readonly int frameGlyph = 0;
 
-        protected World.Character character { get => characterGetter(); }
-        private Func<World.Character> characterGetter;
+        protected World.Character Character { get => characterGetter(); }
+        private readonly Func<World.Character> characterGetter;
 
         private readonly Meter activationMeter;
         private readonly Meter healthMeter;
@@ -69,8 +70,14 @@ namespace AsLegacy.GUI.HUDs
             for (int x = 0; x < Width; x++)
                 SetGlyph(x, 0, frameGlyph);
 
-            if (character != null)
-                Print(1, 0, " " + character.Name + " ");
+            if (Character != null)
+            {
+                string name = Character.Name;
+                if (Character is ILineal)
+                    name = (Character as ILineal).FullName;
+
+                Print(1, 0, " " + name + " ");
+            }
         }
 
         /// <summary>
@@ -81,9 +88,9 @@ namespace AsLegacy.GUI.HUDs
         /// of the current character, 0 otherwise.</returns>
         private float RetrieveActivation()
         {
-            if (character != null)
+            if (Character != null)
             {
-                World.Action action = character.CurrentAction;
+                World.Action action = Character.CurrentAction;
                 if (action != null)
                     return action.Activation;
             }
@@ -96,8 +103,8 @@ namespace AsLegacy.GUI.HUDs
         /// <returns>The health of the current character, 0 otherwise.</returns>
         private float RetrieveHealth()
         {
-            if (character != null)
-                return character.Health;
+            if (Character != null)
+                return Character.Health;
             return 0.0f;
         }
     }

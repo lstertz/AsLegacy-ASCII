@@ -31,7 +31,7 @@ namespace AsLegacy.GUI.HUDs
         public override void Update(TimeSpan timeElapsed)
         {
             SetFrame();
-            IsVisible = character != null;
+            IsVisible = Character != null;
 
             base.Update(timeElapsed);
         }
