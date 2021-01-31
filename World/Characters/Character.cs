@@ -167,6 +167,10 @@ namespace AsLegacy
             /// </summary>
             public virtual int LegacyRecord => combatState.Legacy;
 
+            /// <summary>
+            /// The max health of this Character, as an absolute value.
+            /// </summary>
+            public float MaxHealth => combatState.MaxHealth;
 
             /// <summary>
             /// The name of this Character.
