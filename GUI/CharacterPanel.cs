@@ -29,7 +29,7 @@ namespace AsLegacy.GUI
         }
         private int currentPane = 0;
 
-        private readonly Pane[] panes = new Pane[3];
+        private readonly Pane[] panes = new Pane[3];  // TODO :: Reduce to 2.
 
         /// <summary>
         /// Constructs a new Character Panel, which defines all of the Panes 
@@ -57,20 +57,29 @@ namespace AsLegacy.GUI
             right.Click += (s, e) => CurrentPaneIndex++;
             Add(right);
 
+            Button skills = new Button(8, 1)
+            {
+                Position = new Point(width - 12, 0),
+                Text = "Skills"
+            };
+            skills.Click += (s, e) => CurrentPaneIndex = 2;  // TODO :: Show the pop-up window.
+            Add(skills);
+
             panes[0] = new StatsPane(width - 2, height)
             {
                 Position = new Point(1, 0)
             };
             Children.Add(panes[0]);
 
-            panes[1] = new Pane("Skills", "Skills to be managed here.", width - 2, height)
+            panes[1] = new Pane("Items", "Items to be managed here.", width - 2, height)
             {
                 Position = new Point(1, 0)
             };
             Children.Add(panes[1]);
             panes[1].IsVisible = false;
 
-            panes[2] = new Pane("Items", "Items to be managed here.", width - 2, height)
+            // TODO :: Change to a Popup.
+            panes[2] = new Pane("Skills", "Skills to be managed here.", width - 2, height)
             {
                 Position = new Point(1, 0)
             };
