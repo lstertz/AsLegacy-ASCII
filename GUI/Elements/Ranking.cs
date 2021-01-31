@@ -17,7 +17,7 @@ namespace AsLegacy.GUI
 
         private const string rankTitle = "Rank ";
         private readonly int rankSpace = rankTitle.Length;
-        private const string nameTitle = "Name             ";
+        private const string nameTitle = "Lineage          ";
         private readonly int nameSpace = nameTitle.Length;
         private const string legacyTitle = "Legacy      ";
         private readonly int legacySpace = legacyTitle.Length;
