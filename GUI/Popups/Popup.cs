@@ -14,6 +14,13 @@ namespace AsLegacy.GUI.Popups
         private string title;
         private string content;
 
+        /// <summary>
+        /// Constructs a new Popup.
+        /// </summary>
+        /// <param name="title">The title of the Popup, displayed center top of its window.</param>
+        /// <param name="content">The content of the Popup.</param>
+        /// <param name="width">The width of the Popup window.</param>
+        /// <param name="height">The height of the Popup window.</param>
         public Popup(string title, string content, int width, int height) : base(width, height)
         {
             ThemeColors = Colors.StandardTheme;
@@ -30,6 +37,7 @@ namespace AsLegacy.GUI.Popups
             this.content = content;
         }
 
+        /// <inheritdoc/>
         protected override void Invalidate()
         {
             base.Invalidate();
