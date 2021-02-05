@@ -76,6 +76,11 @@ namespace AsLegacy.GUI.Screens
             set => screen.console.IsVisible = value;
         }
 
+        public static void ShowSkills()
+        {
+
+        }
+
         private readonly ScrollingConsole characters;
         private readonly Console commands;
         private readonly ScrollingConsole environment;

@@ -4,6 +4,7 @@ using SadConsole.Controls;
 
 using AsLegacy.Global;
 using AsLegacy.GUI.Panes;
+using AsLegacy.GUI.Popups;
 
 namespace AsLegacy.GUI
 {
@@ -29,7 +30,9 @@ namespace AsLegacy.GUI
         }
         private int currentPane = 0;
 
-        private readonly Pane[] panes = new Pane[3];  // TODO :: Reduce to 2.
+        private readonly Pane[] panes = new Pane[2];
+
+        private Popup skillsPopup;
 
         /// <summary>
         /// Constructs a new Character Panel, which defines all of the Panes 
@@ -62,7 +65,7 @@ namespace AsLegacy.GUI
                 Position = new Point(width - 12, 0),
                 Text = "Skills"
             };
-            skills.Click += (s, e) => CurrentPaneIndex = 2;  // TODO :: Show the pop-up window.
+            skills.Click += (s, e) => skillsPopup.IsVisible = true;
             Add(skills);
 
             panes[0] = new StatsPane(width - 2, height)
@@ -78,13 +81,13 @@ namespace AsLegacy.GUI
             Children.Add(panes[1]);
             panes[1].IsVisible = false;
 
-            // TODO :: Change to a Popup.
-            panes[2] = new Pane("Skills", "Skills to be managed here.", width - 2, height)
+            // TOOD :: Move to PlayScreen.
+            skillsPopup = new Popup("Skills", "Skills to be managed here.", width - 2, height)
             {
                 Position = new Point(1, 0)
             };
-            Children.Add(panes[2]);
-            panes[2].IsVisible = false;
+            Children.Add(skillsPopup);
+            skillsPopup.IsVisible = false;
         }
     }
 }
