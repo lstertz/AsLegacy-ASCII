@@ -1,6 +1,7 @@
 ﻿using AsLegacy.Global;
 using Microsoft.Xna.Framework;
 using SadConsole;
+using SadConsole.Controls;
 
 namespace AsLegacy.GUI.Popups
 {
@@ -17,7 +18,13 @@ namespace AsLegacy.GUI.Popups
         {
             ThemeColors = Colors.StandardTheme;
 
-            // TODO :: Add close button.
+            Button close = new Button(1, 1)
+            {
+                Position = new Point(width - 3, 1),
+                Text = "X"
+            };
+            close.Click += (s, e) => IsVisible = false;
+            Add(close);
 
             this.title = title;
             this.content = content;

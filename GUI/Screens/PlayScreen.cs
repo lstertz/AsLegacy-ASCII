@@ -7,6 +7,7 @@ using Console = SadConsole.Console;
 
 using AsLegacy.GUI.HUDs;
 using AsLegacy.Input;
+using AsLegacy.GUI.Popups;
 
 namespace AsLegacy.GUI.Screens
 {
@@ -76,10 +77,15 @@ namespace AsLegacy.GUI.Screens
             set => screen.console.IsVisible = value;
         }
 
+        /// <summary>
+        /// Shows the PlayScreen's Skills Popup.
+        /// </summary>
         public static void ShowSkills()
         {
-
+            screen.skillsPopup.IsVisible = true;
         }
+
+        private readonly Popup skillsPopup;
 
         private readonly ScrollingConsole characters;
         private readonly Console commands;
@@ -118,6 +124,13 @@ namespace AsLegacy.GUI.Screens
 
             SetConsoleFrame(console);
             // Create stats for Player stats/inventory/equipment/legacy.
+
+            skillsPopup = new Popup("Skills", "Skills to be managed here.",
+                Display.Width - MapViewPortWidth - 1, Display.Height)
+             {
+                 Position = new Point(MapViewPortWidth + 1, 0),
+                 IsVisible = false
+             };
 
             characters = World.Characters;
             characters.Position = new Point(1, 1);
@@ -162,6 +175,8 @@ namespace AsLegacy.GUI.Screens
             console.Children.Add(playerHUD);
             console.Children.Add(targetHUD);
             console.Children.Add(characterPanel);
+
+            console.Children.Add(skillsPopup);
 
             console.Components.Add(this);
         }

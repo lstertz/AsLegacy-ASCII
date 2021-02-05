@@ -5,6 +5,7 @@ using SadConsole.Controls;
 using AsLegacy.Global;
 using AsLegacy.GUI.Panes;
 using AsLegacy.GUI.Popups;
+using AsLegacy.GUI.Screens;
 
 namespace AsLegacy.GUI
 {
@@ -65,7 +66,7 @@ namespace AsLegacy.GUI
                 Position = new Point(width - 12, 0),
                 Text = "Skills"
             };
-            skills.Click += (s, e) => skillsPopup.IsVisible = true;
+            skills.Click += (s, e) => PlayScreen.ShowSkills();
             Add(skills);
 
             panes[0] = new StatsPane(width - 2, height)
@@ -80,14 +81,6 @@ namespace AsLegacy.GUI
             };
             Children.Add(panes[1]);
             panes[1].IsVisible = false;
-
-            // TOOD :: Move to PlayScreen.
-            skillsPopup = new Popup("Skills", "Skills to be managed here.", width - 2, height)
-            {
-                Position = new Point(1, 0)
-            };
-            Children.Add(skillsPopup);
-            skillsPopup.IsVisible = false;
         }
     }
 }
