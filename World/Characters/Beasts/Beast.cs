@@ -31,18 +31,18 @@ namespace AsLegacy
         protected class GiantRatSettings : BeastSettings
         {
             /// <inheritdoc/>
-            public override Color GlyphColor => Color.DarkOrange;
+            public override Color GlyphColor => Color.LightPink;
             /// <inheritdoc/>
             public override Combat.Legacy InitialLegacy => new Combat.Legacy(4);
             /// <inheritdoc/>
             public override string Name => "Giant Rat";
 
             /// <inheritdoc/>
-            public override int AttackGlyph => 229;//'σ'
+            public override int AttackGlyph => 213;//'╒'
             /// <inheritdoc/>
-            public override int DefendGlyph => 239;//'∩'
+            public override int DefendGlyph => 214;//'╓'
             /// <inheritdoc/>
-            public override int NormalGlyph => 224;//'α'
+            public override int NormalGlyph => 114;//'r'
 
             /// <inheritdoc/>
             public override float InitialAttackDamage => 1f;
@@ -58,18 +58,18 @@ namespace AsLegacy
         protected class WolfSettings : BeastSettings
         {
             /// <inheritdoc/>
-            public override Color GlyphColor => Color.DarkOrange;
+            public override Color GlyphColor => Color.BurlyWood;
             /// <inheritdoc/>
             public override Combat.Legacy InitialLegacy => new Combat.Legacy(8);
             /// <inheritdoc/>
             public override string Name => "Wolf";
 
             /// <inheritdoc/>
-            public override int AttackGlyph => 229;//'σ'
+            public override int AttackGlyph => 228;//'Σ'
             /// <inheritdoc/>
-            public override int DefendGlyph => 239;//'∩'
+            public override int DefendGlyph => 210;//'╥'
             /// <inheritdoc/>
-            public override int NormalGlyph => 224;//'α'
+            public override int NormalGlyph => 239;//'∩'
 
             /// <inheritdoc/>
             public override float InitialAttackDamage => 1.5f;
@@ -90,13 +90,13 @@ namespace AsLegacy
             public override Combat.Legacy InitialLegacy => new Combat.Legacy(12);
             /// <inheritdoc/>
             public override string Name => "Bear";
-
+            
             /// <inheritdoc/>
-            public override int AttackGlyph => 229;//'σ'
+            public override int AttackGlyph => 226;//'Γ'
             /// <inheritdoc/>
-            public override int DefendGlyph => 239;//'∩'
+            public override int DefendGlyph => 66;//'B'
             /// <inheritdoc/>
-            public override int NormalGlyph => 224;//'α'
+            public override int NormalGlyph => 225;//'ß'
 
             /// <inheritdoc/>
             public override float InitialAttackDamage => 4f;
