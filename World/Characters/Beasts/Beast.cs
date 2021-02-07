@@ -10,41 +10,102 @@ namespace AsLegacy
     public class Beast : World.Character
     {
         /// <summary>
-        /// Defines BaseSettings, the basic attributes of a Beast, 
-        /// prior to instance-specific adjustments.
+        /// Defines the settings of a Beast.
         /// </summary>
-        protected new class BaseSettings : World.Character.BaseSettings
+        protected abstract class BeastSettings : BaseSettings
         {
             /// <summary>
-            /// Defines the color of a Beast's Glyphs.
+            /// The initial legacy of the Beast.
             /// </summary>
-            public override Color GlyphColor => Color.DarkOrange;
-            /// <summary>
-            /// Defines the glyph to be shown when a Beast is in attack mode.
-            /// </summary>
-            public override int AttackGlyph => 229;//'σ'
-            /// <summary>
-            /// Defines the glyph to be shown when a Beast is in defend mode.
-            /// </summary>
-            public override int DefendGlyph => 239;//'∩'
-            /// <summary>
-            /// Defines the glyph to be shown when a Beast is in normal mode.
-            /// </summary>
-            public override int NormalGlyph => 224;//'α'
+            public abstract Combat.Legacy InitialLegacy { get; }
 
             /// <summary>
-            /// The initial base attack damage of a Beast.
+            /// The name of the Beast.
             /// </summary>
-            public override float InitialAttackDamage => 1.67f;
-            /// <summary>
-            /// The initial base attack interval of a Beast.
-            /// </summary>
-            public override int InitialAttackInterval => 2000;
-            /// <summary>
-            /// The initial base maximum health of a Beast.
-            /// </summary>
-            public override float InitialBaseMaxHealth => 6.0f;
+            public abstract string Name { get; }
         }
+
+        /// <summary>
+        /// Defines the settings of a Giant Rat.
+        /// </summary>
+        protected class GiantRatSettings : BeastSettings
+        {
+            /// <inheritdoc/>
+            public override Color GlyphColor => Color.LightPink;
+            /// <inheritdoc/>
+            public override Combat.Legacy InitialLegacy => new Combat.Legacy(4);
+            /// <inheritdoc/>
+            public override string Name => "Giant Rat";
+
+            /// <inheritdoc/>
+            public override int AttackGlyph => 213;//'╒'
+            /// <inheritdoc/>
+            public override int DefendGlyph => 214;//'╓'
+            /// <inheritdoc/>
+            public override int NormalGlyph => 114;//'r'
+
+            /// <inheritdoc/>
+            public override float InitialAttackDamage => 1f;
+            /// <inheritdoc/>
+            public override int InitialAttackInterval => 2000;
+            /// <inheritdoc/>
+            public override float InitialBaseMaxHealth => 4.0f;
+        }
+
+        /// <summary>
+        /// Defines the settings of a Wolf.
+        /// </summary>
+        protected class WolfSettings : BeastSettings
+        {
+            /// <inheritdoc/>
+            public override Color GlyphColor => Color.BurlyWood;
+            /// <inheritdoc/>
+            public override Combat.Legacy InitialLegacy => new Combat.Legacy(8);
+            /// <inheritdoc/>
+            public override string Name => "Wolf";
+
+            /// <inheritdoc/>
+            public override int AttackGlyph => 228;//'Σ'
+            /// <inheritdoc/>
+            public override int DefendGlyph => 210;//'╥'
+            /// <inheritdoc/>
+            public override int NormalGlyph => 239;//'∩'
+
+            /// <inheritdoc/>
+            public override float InitialAttackDamage => 1.5f;
+            /// <inheritdoc/>
+            public override int InitialAttackInterval => 1500;
+            /// <inheritdoc/>
+            public override float InitialBaseMaxHealth => 7.0f;
+        }
+
+        /// <summary>
+        /// Defines the settings of a Bear.
+        /// </summary>
+        protected class BearSettings : BeastSettings
+        {
+            /// <inheritdoc/>
+            public override Color GlyphColor => Color.DarkOrange;
+            /// <inheritdoc/>
+            public override Combat.Legacy InitialLegacy => new Combat.Legacy(12);
+            /// <inheritdoc/>
+            public override string Name => "Bear";
+            
+            /// <inheritdoc/>
+            public override int AttackGlyph => 226;//'Γ'
+            /// <inheritdoc/>
+            public override int DefendGlyph => 66;//'B'
+            /// <inheritdoc/>
+            public override int NormalGlyph => 225;//'ß'
+
+            /// <inheritdoc/>
+            public override float InitialAttackDamage => 4f;
+            /// <inheritdoc/>
+            public override int InitialAttackInterval => 3000;
+            /// <inheritdoc/>
+            public override float InitialBaseMaxHealth => 10f;
+        }
+
 
         /// <summary>
         /// The Type of the Beast, which may define its name, initial legacy, 
@@ -67,8 +128,26 @@ namespace AsLegacy
             return (Type) r.Next(0, 3);
         }
 
-        private static readonly string[] names = new string[] { "Giant Rat", "Wolf", "Bear" };
-        private static readonly int[] initialLegacies = new int[] { 4, 8, 12 };
+        /// <summary>
+        /// Provides a new set of BeastSettings for the given Beast Type.
+        /// </summary>
+        /// <param name="type">The Type of Beast.</param>
+        /// <returns>A newly constructed BeastSettings.</returns>
+        private static BeastSettings GetBeastSettings(Type type)
+        {
+            switch (type)
+            {
+                case Type.GiantRat:
+                    return new GiantRatSettings();
+                case Type.Wolf:
+                    return new WolfSettings();
+                case Type.Bear:
+                    return new BearSettings();
+                default:
+                    throw new NotImplementedException("That Beast Type does " +
+                        "not have settings implemented yet.");
+            };
+        }
 
         /// <summary>
         /// Constructs a new Beast at the provided row and column on the map.
@@ -77,11 +156,8 @@ namespace AsLegacy
         /// <param name="column">The column position of the new Beast.</param>
         /// <param name="name">The name of the new Beast.</param>
         /// <param name="legacy">The starting legacy of the new Beast.</param>
-        public Beast(int row, int column, Type type) : 
-            base(row, column, names[(int)type], new BaseSettings(), 
-                new Combat.Legacy(initialLegacies[(int)type]))
-        {
-        }
+        public Beast(int row, int column, Type type) : this(row, column, GetBeastSettings(type))
+        { }
 
         /// <summary>
         /// Constructs a new Beast at the provided point on the map.
@@ -89,10 +165,11 @@ namespace AsLegacy
         /// <param name="point">The position of the new Beast.</param>
         /// <param name="name">The name of the new Beast.</param>
         /// <param name="legacy">The starting legacy of the new Beast.</param>
-        public Beast(Point point, Type type) :
-            base(point.Y, point.X, names[(int)type], new BaseSettings(),
-                new Combat.Legacy(initialLegacies[(int)type]))
-        {
-        }
+        public Beast(Point point, Type type) : this(point.Y, point.X, GetBeastSettings(type))
+        { }
+
+        private Beast(int row, int column, BeastSettings settings) : 
+            base(row, column, settings.Name, settings, settings.InitialLegacy)
+        { }
     }
 }
