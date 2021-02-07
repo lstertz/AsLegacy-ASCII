@@ -45,11 +45,11 @@ namespace AsLegacy
             public override int NormalGlyph => 224;//'α'
 
             /// <inheritdoc/>
-            public override float InitialAttackDamage => 1.67f;
+            public override float InitialAttackDamage => 1f;
             /// <inheritdoc/>
             public override int InitialAttackInterval => 2000;
             /// <inheritdoc/>
-            public override float InitialBaseMaxHealth => 6.0f;
+            public override float InitialBaseMaxHealth => 4.0f;
         }
 
         /// <summary>
@@ -72,11 +72,11 @@ namespace AsLegacy
             public override int NormalGlyph => 224;//'α'
 
             /// <inheritdoc/>
-            public override float InitialAttackDamage => 1.67f;
+            public override float InitialAttackDamage => 1.5f;
             /// <inheritdoc/>
-            public override int InitialAttackInterval => 2000;
+            public override int InitialAttackInterval => 1500;
             /// <inheritdoc/>
-            public override float InitialBaseMaxHealth => 6.0f;
+            public override float InitialBaseMaxHealth => 7.0f;
         }
 
         /// <summary>
@@ -99,11 +99,11 @@ namespace AsLegacy
             public override int NormalGlyph => 224;//'α'
 
             /// <inheritdoc/>
-            public override float InitialAttackDamage => 1.67f;
+            public override float InitialAttackDamage => 4f;
             /// <inheritdoc/>
-            public override int InitialAttackInterval => 2000;
+            public override int InitialAttackInterval => 3000;
             /// <inheritdoc/>
-            public override float InitialBaseMaxHealth => 6.0f;
+            public override float InitialBaseMaxHealth => 10f;
         }
 
 
