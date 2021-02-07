@@ -78,13 +78,24 @@ namespace AsLegacy.GUI.Screens
         }
 
         /// <summary>
+        /// Shows the PlayScreen's Items Popup.
+        /// </summary>
+        public static void ShowItems()
+        {
+            screen.itemsPopup.IsVisible = true;
+            screen.skillsPopup.IsVisible = false;
+        }
+
+        /// <summary>
         /// Shows the PlayScreen's Skills Popup.
         /// </summary>
         public static void ShowSkills()
         {
             screen.skillsPopup.IsVisible = true;
+            screen.itemsPopup.IsVisible = false;
         }
 
+        private readonly Popup itemsPopup;
         private readonly Popup skillsPopup;
 
         private readonly ScrollingConsole characters;
@@ -125,6 +136,12 @@ namespace AsLegacy.GUI.Screens
             SetConsoleFrame(console);
             // Create stats for Player stats/inventory/equipment/legacy.
 
+            itemsPopup = new Popup("Items", "Items to be managed here.",
+                Display.Width - MapViewPortWidth - 1, Display.Height)
+            {
+                Position = new Point(MapViewPortWidth + 1, 0),
+                IsVisible = false
+            };
             skillsPopup = new Popup("Skills", "Skills to be managed here.",
                 Display.Width - MapViewPortWidth - 1, Display.Height)
              {
@@ -176,6 +193,7 @@ namespace AsLegacy.GUI.Screens
             console.Children.Add(targetHUD);
             console.Children.Add(characterPanel);
 
+            console.Children.Add(itemsPopup);
             console.Children.Add(skillsPopup);
 
             console.Components.Add(this);
