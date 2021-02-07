@@ -3,8 +3,9 @@ using SadConsole;
 using SadConsole.Controls;
 
 using AsLegacy.Global;
-using AsLegacy.GUI.Panes;
 using AsLegacy.GUI.Screens;
+using System;
+using AsLegacy.Characters;
 
 namespace AsLegacy.GUI
 {
@@ -14,6 +15,8 @@ namespace AsLegacy.GUI
     /// </summary>
     public class CharacterPanel : ControlsConsole
     {
+        private readonly Ranking ranking;
+
         /// <summary>
         /// Constructs a new Character Panel, which defines all of the Panes 
         /// to show the details of the Player's Character.
@@ -24,9 +27,9 @@ namespace AsLegacy.GUI
         {
             ThemeColors = Colors.StandardTheme;
 
-            Button items = new Button(8, 1)
+            Button items = new Button(7, 1)
             {
-                Position = new Point(5, 0),
+                Position = new Point(9, 1),
                 Text = "Items"
             };
             items.Click += (s, e) => PlayScreen.ShowItems();
@@ -34,16 +37,50 @@ namespace AsLegacy.GUI
 
             Button skills = new Button(8, 1)
             {
-                Position = new Point(width - 12, 0),
+                Position = new Point(width - 16, 1),
                 Text = "Skills"
             };
             skills.Click += (s, e) => PlayScreen.ShowSkills();
             Add(skills);
 
-            Children.Add(new StatsPane(width - 2, height)
+            ranking = new Ranking(8, true)
             {
-                Position = new Point(1, 0)
-            });
+                Position = new Point(1, 15)
+            };
+            Children.Add(ranking);
+        }
+
+        /// <inheritdoc/>
+        protected override void Invalidate()
+        {
+            base.Invalidate();
+
+            DrawTitle();
+            DrawHealth();
+        }
+
+        /// <summary>
+        /// Draws the health stats onto the CharacterPanel.
+        /// </summary>
+        private void DrawHealth()
+        {
+            string health = MathF.Ceiling(AsLegacy.Focus.CurrentHealth).ToString();
+            string maxHealth = MathF.Ceiling(AsLegacy.Focus.MaxHealth).ToString();
+            Print(1, 3, "Health: " + health + "/" + maxHealth, Color.White);
+        }
+
+        /// <summary>
+        /// Draws the title (current focus Character's full name) onto the CharacterPanel.
+        /// </summary>
+        private void DrawTitle()
+        {
+            string title;
+            if (AsLegacy.Focus is ItemUser)
+                title = (AsLegacy.Focus as ItemUser).FullName;
+            else
+                title = AsLegacy.Focus.Name;
+
+            Print(Width / 2 - title.Length / 2, 0, title, Color.White);
         }
     }
 }
