@@ -21,7 +21,6 @@ namespace AsLegacy.GUI.Screens
         private readonly int newGameLabelWidth = NewGameLabel.Length + 2;
 
         private const string TitleMessage = "As Legacy";
-
         private const int TitleY = 10;
 
         private static ControlsConsole screen;
