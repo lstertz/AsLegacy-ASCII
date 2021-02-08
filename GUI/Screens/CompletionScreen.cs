@@ -83,7 +83,7 @@ namespace AsLegacy.GUI.Screens
             playAgain.Click += (s, e) =>
             {
                 World.Reset();
-                Display.ShowScreen(Display.Screens.Play);
+                Display.ShowScreen(Display.Screens.Settings);
             };
             Add(playAgain);
         }

@@ -40,6 +40,7 @@ namespace AsLegacy.GUI
             console.Components.Add(gameManager);
 
             StartScreen.Init(console);
+            SettingsScreen.Init(console);
             PlayScreen.Init(console);
             CompletionScreen.Init(console);
             // TODO :: Implement other screens.
@@ -56,6 +57,7 @@ namespace AsLegacy.GUI
             // TODO :: Add an optional fade transition or wait of some kind.
 
             StartScreen.IsVisible = screen == Screens.Start;
+            SettingsScreen.IsVisible = screen == Screens.Settings;
             PlayScreen.IsVisible = screen == Screens.Play;
             CompletionScreen.IsVisible = screen == Screens.Completion;
             // TODO :: Implement for the other screens.
