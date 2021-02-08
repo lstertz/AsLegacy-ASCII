@@ -18,8 +18,8 @@ namespace AsLegacy.GUI
         /// </summary>
         public enum Screens
         {
-            Menu,
             Start,
+            Settings,
             Play,
             Completion
         }
@@ -39,11 +39,12 @@ namespace AsLegacy.GUI
             SadConsole.Global.CurrentScreen = console;
             console.Components.Add(gameManager);
 
+            StartScreen.Init(console);
             PlayScreen.Init(console);
             CompletionScreen.Init(console);
             // TODO :: Implement other screens.
 
-            ShowScreen(Screens.Play); // TODO :: Start on Menu.
+            ShowScreen(Screens.Start);
         }
 
         /// <summary>
@@ -54,6 +55,7 @@ namespace AsLegacy.GUI
         {
             // TODO :: Add an optional fade transition or wait of some kind.
 
+            StartScreen.IsVisible = screen == Screens.Start;
             PlayScreen.IsVisible = screen == Screens.Play;
             CompletionScreen.IsVisible = screen == Screens.Completion;
             // TODO :: Implement for the other screens.
