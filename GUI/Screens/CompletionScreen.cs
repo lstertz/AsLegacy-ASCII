@@ -15,12 +15,12 @@ namespace AsLegacy.GUI.Screens
     /// </summary>
     public class CompletionScreen : ControlsConsole
     {
-        private const string playAgainLabel = "Play Again";
-        private static readonly int playAgainWidth = playAgainLabel.Length + 2;
+        private const string PlayAgainLabel = "Play Again";
+        private static readonly int playAgainWidth = PlayAgainLabel.Length + 2;
 
-        private const string prefixMessage = "The Lineage of ";
-        private const string completionMessage = " has won the game!";
-        private const int completionMessageY = 6;
+        private const string PrefixMessage = "The Lineage of ";
+        private const string CompletionMessage = " has won the game!";
+        private const int CompletionMessageY = 6;
 
         private static ControlsConsole screen;
 
@@ -62,7 +62,7 @@ namespace AsLegacy.GUI.Screens
             message = new Label(Width)
             {
                 Alignment = HorizontalAlignment.Center,
-                Position = new Point(0, completionMessageY),
+                Position = new Point(0, CompletionMessageY),
                 TextColor = Colors.White
             };
             Add(message);
@@ -78,7 +78,7 @@ namespace AsLegacy.GUI.Screens
             Button playAgain = new Button(playAgainWidth, 1)
             {
                 Position = new Point(Width / 2 - playAgainWidth / 2, Height - 3),
-                Text = playAgainLabel
+                Text = PlayAgainLabel
             };
             playAgain.Click += (s, e) =>
             {
@@ -101,11 +101,11 @@ namespace AsLegacy.GUI.Screens
             string name = World.HighestRankedCharacter.Name;
             if (World.HighestRankedCharacter is ILineal lineal)
             {
-                prefix = prefixMessage;
+                prefix = PrefixMessage;
                 name = lineal.LineageName;
             }
 
-            message.DisplayText = prefix + name + completionMessage;
+            message.DisplayText = prefix + name + CompletionMessage;
             message.IsDirty = true;
         }
     }
