@@ -5,7 +5,6 @@ using Console = SadConsole.Console;
 
 using AsLegacy.Global;
 using SadConsole.Controls;
-using AsLegacy.Characters;
 
 namespace AsLegacy.GUI.Screens
 {
@@ -36,8 +35,6 @@ namespace AsLegacy.GUI.Screens
             set => screen.IsVisible = value;
         }
 
-        private readonly Label message;
-
         /// <summary>
         /// Initializes the StartScreen.
         /// Required for any screen output to be rendered, or for any 
@@ -62,14 +59,13 @@ namespace AsLegacy.GUI.Screens
             ThemeColors = Colors.StandardTheme;
             parentConsole.Children.Add(this);
 
-            message = new Label(Width)
+            Add(new Label(Width)
             {
                 Alignment = HorizontalAlignment.Center,
                 DisplayText = TitleMessage,
                 Position = new Point(0, TitleY),
                 TextColor = Colors.White
-            };
-            Add(message);
+            });
 
             Button newGame = new Button(newGameLabelWidth, 1)
             {
@@ -78,7 +74,7 @@ namespace AsLegacy.GUI.Screens
             };
             newGame.Click += (s, e) =>
             {
-                Display.ShowScreen(Display.Screens.Play);
+                Display.ShowScreen(Display.Screens.Settings);
             };
             Add(newGame);
 
