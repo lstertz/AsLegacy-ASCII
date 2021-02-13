@@ -31,7 +31,11 @@ namespace AsLegacy.GUI.Screens
         public static new bool IsVisible
         {
             get => screen.IsVisible;
-            set => screen.IsVisible = value;
+            set
+            {
+                screen.IsVisible = value;
+                screen.IsFocused = value;
+            }
         }
 
         /// <summary>
