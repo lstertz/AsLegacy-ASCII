@@ -40,7 +40,6 @@ namespace AsLegacy.GUI.HUDs
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
                     SetBackground(x, y, Color.Black);
-            SetFrame();
 
             healthMeter = new Meter(1, 2, RetrieveHealth, Color.Red, Color.DarkRed, 3);
             Components.Add(healthMeter);
@@ -48,6 +47,14 @@ namespace AsLegacy.GUI.HUDs
             activationMeter = new Meter(14, 2, RetrieveActivation, Color.Goldenrod, 
                 new Color(138, 105, 20, 255), 15);
             Components.Add(activationMeter);
+        }
+
+        /// <inheritdoc/>
+        public override void Draw(TimeSpan timeElapsed)
+        {
+            base.Draw(timeElapsed);
+
+            SetFrame();
         }
 
         /// <summary>
