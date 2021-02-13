@@ -142,7 +142,7 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            Player = new Player(12, 11);
+            Player = new Player(12, 11, "Player");
             new ItemUser(14, 15, "Goblin", 20, "Orr");
 
             for (int c = 0; c < expectedBeastPopulation; c++)
@@ -262,6 +262,20 @@ namespace AsLegacy
                 RemoveCharacter(presentCharacters[c], false);
 
             SeedCharacters();
+        }
+
+        /// <summary>
+        /// Resets the Player with a new name.
+        /// </summary>
+        /// <remarks>This should be temporary until the World-Player relationship 
+        /// can be re-architected.</remarks>
+        /// <param name="name">The name of the new Player Character.</param>
+        public static void ResetPlayer(string name)
+        {
+            (Player.CurrentAction as IAction)?.Cancel();
+            RemoveCharacter(Player, false);
+
+            Player = new Player(12, 11, name);
         }
 
         /// <summary>
