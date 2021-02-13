@@ -33,8 +33,8 @@ namespace AsLegacy.GUI.Screens
                 {0, new Dictionary<int, int>() {
                     {0, 201},
                     {Display.Height - 4, 204},
-                    {Display.Height - 1, 200}, 
-                    {-1, 186} 
+                    {Display.Height - 1, 200},
+                    {-1, 186}
                 } },
                 {21, new Dictionary<int, int>() {
                     {0, 205},
@@ -148,10 +148,10 @@ namespace AsLegacy.GUI.Screens
             };
             skillsPopup = new Popup("Skills", "Skills to be managed here.",
                 Display.Width - MapViewPortWidth - 1, Display.Height)
-             {
-                 Position = new Point(MapViewPortWidth + 1, 0),
-                 IsVisible = false
-             };
+            {
+                Position = new Point(MapViewPortWidth + 1, 0),
+                IsVisible = false
+            };
 
             characters = World.Characters;
             characters.Position = new Point(1, 1);
