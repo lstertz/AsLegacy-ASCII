@@ -16,14 +16,15 @@ namespace AsLegacy.GUI.Screens
     /// </summary>
     public class SettingsScreen : ControlsConsole
     {
-        private const string CharacterNameLabel = "Character Name: ";
-        private readonly int CharacterNameLabelWidth = CharacterNameLabel.Length;
+        private const string CharacterNamePrompt = "Who starts this legacy?";
+        private const int CharacterPromptY = 7;
+        private const int CharacterNameY = CharacterPromptY + 2;
+
+        private const string CharacterNobiliary = "of";
 
         private const string PlayLabel = "Play";
         private readonly int PlayLabelWidth = PlayLabel.Length + 2;
-
-        private const string TitleMessage = "New Game Settings";
-        private const int TitleY = 2;
+        private const int PlayOffsetY = 4;
 
         private readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
         private readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
@@ -56,6 +57,7 @@ namespace AsLegacy.GUI.Screens
                 screen = new SettingsScreen(parentConsole);
         }
 
+        private TextBox lineageField;
         private TextBox nameField;
         private Button play;
 
@@ -73,36 +75,50 @@ namespace AsLegacy.GUI.Screens
             Add(new Label(Width)
             {
                 Alignment = HorizontalAlignment.Center,
-                DisplayText = TitleMessage,
-                Position = new Point(0, TitleY),
+                DisplayText = CharacterNamePrompt,
+                Position = new Point(0, CharacterPromptY),
                 TextColor = Colors.White
             });
 
-            Add(new Label(CharacterNameLabelWidth)
-            {
-                DisplayText = CharacterNameLabel,
-                Position = new Point(1, 6),
-                TextColor = Colors.White
-            });
             nameField = new TextBox(10)
             {
                 IsCaretVisible = true,
                 MaxLength = 9,
-                Position = new Point(CharacterNameLabelWidth + 1, 6)
+                Position = new Point(Width / 2 - 12, CharacterNameY),
+                TextAlignment = HorizontalAlignment.Right,
             };
             nameField.KeyPressed += ValidateInput;
             nameField.IsDirtyChanged += UpdatePlayEnablement;
             Add(nameField);
 
+            Add(new Label(CharacterNobiliary.Length)
+            {
+                Alignment = HorizontalAlignment.Center,
+                DisplayText = CharacterNobiliary,
+                Position = new Point(Width / 2 - 1, CharacterNameY),
+                TextColor = Colors.White,
+                UseMouse = false
+            });
+
+            lineageField = new TextBox(10)
+            {
+                IsCaretVisible = true,
+                MaxLength = 9,
+                Position = new Point(Width / 2 + 2, CharacterNameY)
+            };
+            lineageField.KeyPressed += ValidateInput;
+            lineageField.IsDirtyChanged += UpdatePlayEnablement;
+            Add(lineageField);
+
             play = new Button(PlayLabelWidth, 1)
             {
                 IsEnabled = false,
-                Position = new Point(Width / 2 - PlayLabelWidth / 2, Height - 4),
+                Position = new Point(Width / 2 - PlayLabelWidth / 2, Height - PlayOffsetY),
                 Text = PlayLabel
             };
             play.Click += (s, e) =>
             {
-                World.ResetPlayer(nameField.EditingText);
+                World.ResetPlayer(nameField.EditingText, lineageField.EditingText);
                 Display.ShowScreen(Display.Screens.Play);
             };
             Add(play);
@@ -131,7 +147,15 @@ namespace AsLegacy.GUI.Screens
         /// <param name="args">The event args.</param>
         private void UpdatePlayEnablement(object sender, EventArgs args)
         {
-            play.IsEnabled = nameField.EditingText.Length > 0;
+            string name = nameField.EditingText;
+            if (name == null)
+                name = nameField.Text;
+
+            string lineage = lineageField.EditingText;
+            if (lineage == null)
+                lineage = lineageField.Text;
+
+            play.IsEnabled = name.Length > 0 && lineage.Length > 0;
         }
     }
 }
