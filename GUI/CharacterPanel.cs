@@ -50,6 +50,14 @@ namespace AsLegacy.GUI
             Children.Add(ranking);
         }
 
+        /// <summary>
+        /// Forces a redraw of the CharacterPanel.
+        /// </summary>
+        public void Refresh()
+        {
+            Invalidate();
+        }
+
         /// <inheritdoc/>
         protected override void Invalidate()
         {
