@@ -142,7 +142,7 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            Player = new Player(12, 11, "Player");
+            Player = new Player(12, 11, "Player", "Legacy");
             new ItemUser(14, 15, "Goblin", 20, "Orr");
 
             for (int c = 0; c < expectedBeastPopulation; c++)
@@ -270,12 +270,13 @@ namespace AsLegacy
         /// <remarks>This should be temporary until the World-Player relationship 
         /// can be re-architected.</remarks>
         /// <param name="name">The name of the new Player Character.</param>
-        public static void ResetPlayer(string name)
+        /// <param name="lineageName">The name of the Player Character's Lineage.</param>
+        public static void ResetPlayer(string name, string lineageName)
         {
             (Player.CurrentAction as IAction)?.Cancel();
             RemoveCharacter(Player, false);
 
-            Player = new Player(12, 11, name);
+            Player = new Player(12, 11, name, lineageName);
         }
 
         /// <summary>

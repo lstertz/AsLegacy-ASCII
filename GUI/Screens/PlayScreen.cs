@@ -78,6 +78,8 @@ namespace AsLegacy.GUI.Screens
             {
                 screen.console.IsVisible = value;
                 screen.commands.IsFocused = value;
+
+                screen.Refresh();
             }
         }
 
@@ -230,6 +232,14 @@ namespace AsLegacy.GUI.Screens
                             console.SetGlyph(x, y, frameMap[-1][y]);
                     }
                 }
+        }
+
+        /// <summary>
+        /// Forces a redraw of this PlayScreen and its children.
+        /// </summary>
+        public void Refresh()
+        {
+            characterPanel.Refresh();
         }
 
         /// <summary>

@@ -11,10 +11,10 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase, IRankedCharacter
         {
-            private const int characterRemovalTime = 700;
-            private const int movementTime = 500;
+            private const int CharacterRemovalTime = 700;
+            private const int MovementTime = 500;
 
-            private readonly Color deadColor = Color.DarkGray;
+            private readonly Color DeadColor = Color.DarkGray;
 
             /// <summary>
             /// Defines BaseSettings, the basic attributes of a Character, 
@@ -303,7 +303,7 @@ namespace AsLegacy
 
                 if (IsPassable(intendedRow, intendedColumn))
                 {
-                    new Action(this, movementTime,
+                    new Action(this, MovementTime,
                         () =>
                         {
                             Move(this, intendedRow, intendedColumn);
@@ -369,11 +369,11 @@ namespace AsLegacy
             /// </summary>
             protected virtual void Die()
             {
-                GlyphColor = deadColor;
+                GlyphColor = DeadColor;
                 ActiveMode = Mode.Normal;
 
                 (CurrentAction as IAction)?.Cancel();
-                new World.Action(characterRemovalTime, () => RemoveCharacter(this));
+                new World.Action(CharacterRemovalTime, () => RemoveCharacter(this));
             }
 
             /// <summary>

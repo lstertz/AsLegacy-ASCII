@@ -53,8 +53,10 @@ namespace AsLegacy.Characters
         /// </summary>
         /// <param name="row">The row position of the new Player.</param>
         /// <param name="column">The column position of the new Player.</param>
-        public Player(int row, int column, string name) :
-            base(row, column, name, new BaseSettings(), 0, "Game")
+        /// <param name="name">The name of the current Player Character.</param>
+        /// <param name="lineageName">The name of the Player's Lineage.</param>
+        public Player(int row, int column, string name, string lineageName) :
+            base(row, column, name, new BaseSettings(), 0, lineageName)
         {
 
         }
