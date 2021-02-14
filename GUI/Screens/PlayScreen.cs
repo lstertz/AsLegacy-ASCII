@@ -78,6 +78,7 @@ namespace AsLegacy.GUI.Screens
             {
                 screen.console.IsVisible = value;
                 screen.commands.IsFocused = value;
+
                 screen.Refresh();
             }
         }
