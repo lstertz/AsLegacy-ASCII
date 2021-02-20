@@ -10,10 +10,10 @@ namespace AsLegacy.Characters
     public class ItemUser : World.Character, ILineal
     {
         /// <summary>
-        /// Defines BaseSettings, the basic attributes of an ItemUser, 
+        /// Defines Settings, the basic attributes of an ItemUser, 
         /// prior to instance-specific adjustments.
         /// </summary>
-        protected new class BaseSettings : World.Character.BaseSettings
+        protected class Settings : BaseSettings
         {
             /// <summary>
             /// Defines the color of an ItemUser's Glyphs.
@@ -79,7 +79,7 @@ namespace AsLegacy.Characters
         {
         }
         private ItemUser(int row, int column, string name, Lineage lineage) :
-            base(row, column, name, new BaseSettings(), lineage)
+            base(row, column, name, new Settings(), lineage)
         {
             this.lineage = lineage;
         }
@@ -95,13 +95,13 @@ namespace AsLegacy.Characters
         /// <param name="legacy">The starting legacy of the ItemUser.</param>
         /// <param name="lineageName">The name of the ItemUser's Lineage.</param>
         protected ItemUser(int row, int column, 
-            string name, BaseSettings baseSettings, int legacy, string lineageName) : 
+            string name, Settings baseSettings, int legacy, string lineageName) : 
             this(row, column, name, baseSettings, new Lineage(name, legacy, lineageName, 
                 (r, c, n, l) => new ItemUser(r, c, n, baseSettings, l)))
         {
         }
         private ItemUser(int row, int column, 
-            string name, BaseSettings baseSettings, Lineage lineage) :
+            string name, Settings baseSettings, Lineage lineage) :
             base(row, column, name, baseSettings, lineage)
         {
             this.lineage = lineage;
