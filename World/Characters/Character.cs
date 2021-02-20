@@ -54,6 +54,11 @@ namespace AsLegacy
 
 
             /// <summary>
+            /// The character's AI.
+            /// </summary>
+            public IAI AI { get; protected set; }
+
+            /// <summary>
             /// The character's present mode.
             /// </summary>
             public Mode ActiveMode
@@ -181,8 +186,10 @@ namespace AsLegacy
                 mode = Mode.Normal;
                 Name = name;
 
+                AI = baseSettings.AI;
                 this.baseSettings = baseSettings;
                 combatState = new Combat.State(baseSettings, legacy);
+
                 rankedCharacters.Add(this);
             }
 
