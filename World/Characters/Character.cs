@@ -17,58 +17,6 @@ namespace AsLegacy
             private readonly Color DeadColor = Color.DarkGray;
 
             /// <summary>
-            /// Defines BaseSettings, the basic attributes of a Character, 
-            /// prior to instance-specific adjustments.
-            /// </summary>
-            protected abstract class BaseSettings
-            {
-                /// <summary>
-                /// Defines the color of the Character's Glyphs.
-                /// </summary>
-                public abstract Color GlyphColor { get; }
-                /// <summary>
-                /// Defines the glyph to be shown when the Character is in attack mode.
-                /// </summary>
-                public abstract int AttackGlyph { get; }
-                /// <summary>
-                /// Defines the glyph to be shown when the Character is in defend mode.
-                /// </summary>
-                public abstract int DefendGlyph { get; }
-                /// <summary>
-                /// Defines the glyph to be shown when the Character is in normal mode.
-                /// </summary>
-                public abstract int NormalGlyph { get; }
-
-                /// <summary>
-                /// The initial base maximum health for this specific type of Character.
-                /// </summary>
-                public abstract float InitialBaseMaxHealth { get; }
-                /// <summary>
-                /// The initial standard attack damage for this specific type of Character.
-                /// </summary>
-                public abstract float InitialAttackDamage { get; }
-                /// <summary>
-                /// The initial standard attack interval for this specific type of Character.
-                /// </summary>
-                public abstract int InitialAttackInterval { get; }
-            }
-
-            /// <summary>
-            /// Highlights the provided Character, if it isn't null, and removes any 
-            /// existing highlight.
-            /// </summary>
-            /// <param name="c">The Character to be highlighted.</param>
-            public static void Highlight(Character c)
-            {
-                if (HighlightedTile != c && HighlightedTile != null)
-                    HighlightedTile.Highlighted = false;
-
-                if (c != null)
-                    c.Highlighted = true;
-            }
-
-
-            /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>
             public enum Direction
@@ -89,6 +37,21 @@ namespace AsLegacy
                 Attack,
                 Defend
             }
+
+            /// <summary>
+            /// Highlights the provided Character, if it isn't null, and removes any 
+            /// existing highlight.
+            /// </summary>
+            /// <param name="c">The Character to be highlighted.</param>
+            public static void Highlight(Character c)
+            {
+                if (HighlightedTile != c && HighlightedTile != null)
+                    HighlightedTile.Highlighted = false;
+
+                if (c != null)
+                    c.Highlighted = true;
+            }
+
 
             /// <summary>
             /// The character's present mode.
