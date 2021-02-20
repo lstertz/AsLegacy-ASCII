@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace AsLegacy.Characters
+﻿namespace AsLegacy.Characters
 {
     /// <summary>
     /// Defines a Player, the focal Character, on the World map, of the real-life player as 

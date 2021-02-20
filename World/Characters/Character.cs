@@ -54,9 +54,9 @@ namespace AsLegacy
 
 
             /// <summary>
-            /// The character's AI.
+            /// The character's current active AI.
             /// </summary>
-            public IAI AI { get; protected set; }
+            public IAI ActiveAI { get; protected set; }
 
             /// <summary>
             /// The character's present mode.
@@ -186,7 +186,7 @@ namespace AsLegacy
                 mode = Mode.Normal;
                 Name = name;
 
-                AI = baseSettings.AI;
+                ActiveAI = baseSettings.AI;
                 this.baseSettings = baseSettings;
                 combatState = new Combat.State(baseSettings, legacy);
 
