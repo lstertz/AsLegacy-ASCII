@@ -18,7 +18,7 @@ namespace AsLegacy.Characters
             /// <summary>
             /// Defines the default AI of an ItemUser.
             /// </summary>
-            public override IAI AI => throw new System.NotImplementedException();
+            public override IAI AI => new BasicAI();
 
             /// <summary>
             /// Defines the color of an ItemUser's Glyphs.
