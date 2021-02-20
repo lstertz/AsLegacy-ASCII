@@ -10,7 +10,7 @@
             /// <summary>
             /// Defines the default AI of a Beast.
             /// </summary>
-            public override IAI AI => throw new System.NotImplementedException();
+            public override IAI AI => new BasicAI();
 
             /// <summary>
             /// The initial legacy of the Beast.
