@@ -16,6 +16,11 @@ namespace AsLegacy.Characters
         protected class Settings : BaseSettings
         {
             /// <summary>
+            /// Defines the default AI of an ItemUser.
+            /// </summary>
+            public override IAI AI => throw new System.NotImplementedException();
+
+            /// <summary>
             /// Defines the color of an ItemUser's Glyphs.
             /// </summary>
             public override Color GlyphColor => Color.DarkSalmon;
