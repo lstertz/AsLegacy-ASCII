@@ -6,32 +6,8 @@ namespace AsLegacy.Characters
     /// Defines a Player, the focal Character, on the World map, of the real-life player as 
     /// they interact with the game.
     /// </summary>
-    public class Player : ItemUser
+    public partial class Player : ItemUser
     {
-        /// <summary>
-        /// Defines BaseSettings, the basic attributes of the Player, 
-        /// prior to instance-specific adjustments.
-        /// </summary>
-        protected new class BaseSettings : ItemUser.BaseSettings
-        {
-            /// <summary>
-            /// Defines the color of the Player's Glyphs.
-            /// </summary>
-            public override Color GlyphColor => Color.Goldenrod;
-            /// <summary>
-            /// Defines the glyph to be shown when the Player is in attack mode.
-            /// </summary>
-            public override int AttackGlyph => 229;//'δ'
-            /// <suary>
-            /// Defines the glyph to be shown when the Player is in defend mode.
-            /// </summary>
-            public override int DefendGlyph => 233;//'Θ'
-            /// <suary>
-            /// Defines the glyph to be shown when the Player is in normal mode.
-            /// </summary>
-            public override int NormalGlyph => 64;//'@'
-        }
-
         /// <summary>
         /// Specifies the target of the Player.
         /// The target will be selected, and will be the recipient of 
@@ -56,7 +32,7 @@ namespace AsLegacy.Characters
         /// <param name="name">The name of the current Player Character.</param>
         /// <param name="lineageName">The name of the Player's Lineage.</param>
         public Player(int row, int column, string name, string lineageName) :
-            base(row, column, name, new BaseSettings(), 0, lineageName)
+            base(row, column, name, new Settings(), 0, lineageName)
         {
 
         }
