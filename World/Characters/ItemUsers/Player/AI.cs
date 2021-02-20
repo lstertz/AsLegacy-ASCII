@@ -1,12 +1,13 @@
-﻿using static AsLegacy.World;
+﻿using AsLegacy.Characters;
+using static AsLegacy.World;
 
-namespace AsLegacy
+namespace AsLegacy.Characters
 {
-    public partial class Player
+    public partial class Player : ItemUser
     {
         /// <summary>
         /// Defines the AI for the Player Character.
-        protected class AI : Character.IAI
+        protected class AI : IAI
         {
             /// <inheritdoc/>
             public void UpdateModeOf(Character character) { }
