@@ -9,7 +9,7 @@
             /// a Character, as well as what action a Character should perform, 
             /// but not how the Character completes that that action.
             /// </summary>
-            protected interface IAI
+            public interface IAI
             {
                 /// <summary>
                 /// Determines and updates the Mode of the provided Character.

@@ -13,6 +13,11 @@ namespace AsLegacy
             protected abstract class BaseSettings
             {
                 /// <summary>
+                /// Defines the initial AI of the Character.
+                /// </summary>
+                public abstract IAI AI { get; }
+
+                /// <summary>
                 /// Defines the color of the Character's Glyphs.
                 /// </summary>
                 public abstract Color GlyphColor { get; }
