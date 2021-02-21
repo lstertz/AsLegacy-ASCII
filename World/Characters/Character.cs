@@ -9,7 +9,7 @@ namespace AsLegacy
         /// Represents an abstraction of a CharacterBase that has a presence within the World.
         /// Such characters exist in a formal sense and can be interacted with.
         /// </summary>
-        public abstract partial class Character : CharacterBase, IRankedCharacter
+        public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
             private const int CharacterRemovalTime = 700;
             private const int MovementTime = 500;
@@ -53,10 +53,9 @@ namespace AsLegacy
             }
 
 
-            /// <summary>
-            /// The character's current active AI.
-            /// </summary>
-            public IAI ActiveAI { get; protected set; }
+            /// <inheritdoc/>
+            IAI ICharacter.AI => ai;
+            protected IAI ai;
 
             /// <summary>
             /// The character's present mode.
@@ -186,7 +185,7 @@ namespace AsLegacy
                 mode = Mode.Normal;
                 Name = name;
 
-                ActiveAI = baseSettings.AI;
+                ai = baseSettings.AI;
                 this.baseSettings = baseSettings;
                 combatState = new Combat.State(baseSettings, legacy);
 
