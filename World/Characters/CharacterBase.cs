@@ -101,23 +101,23 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Moves the specificed CharacterBase to a new Row and Column location.
-            /// This technically swaps the CharacterBase with the CharacterBase presently at 
+            /// Moves this CharacterBase to a new Row and Column location.
+            /// This technically swaps this CharacterBase with the CharacterBase presently at 
             /// the new Row and Column.
             /// </summary>
-            /// <param name="c">The CharacterBase to be moved.</param>
-            /// <param name="newRow">The Row that the CharacterBase will be moved to.</param>
-            /// <param name="newColumn">The Column that the CharacterBase will be moved to.</param>
-            protected void Move(CharacterBase c, int newRow, int newColumn)
+            /// <param name="newRow">The Row that this CharacterBase will be moved to.</param>
+            /// <param name="newColumn">The Column that this CharacterBase 
+            /// will be moved to.</param>
+            protected void Move(int newRow, int newColumn)
             {
-                CharacterBase swapped = characters.ReplaceWith(newRow, newColumn, c);
-                characters.ReplaceWith(c.Row, c.Column, swapped);
+                CharacterBase swapped = characters.ReplaceWith(newRow, newColumn, this);
+                characters.ReplaceWith(Row, Column, swapped);
 
-                swapped.Row = c.Row;
-                swapped.Column = c.Column;
+                swapped.Row = Row;
+                swapped.Column = Column;
 
-                c.Row = newRow;
-                c.Column = newColumn;
+                Row = newRow;
+                Column = newColumn;
             }
 
             /// <summary>
