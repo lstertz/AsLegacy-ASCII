@@ -154,19 +154,7 @@ namespace AsLegacy
             /// The target will be the recipient of certain actions performed 
             /// by this Character.
             /// </summary>
-            public virtual Character Target
-            {
-                get => target;
-                set
-                {
-                    if (target == value)
-                        return;
-
-                    target = value;
-                    PerformForTarget();
-                }
-            }
-            protected Character target = null;
+            public virtual Character Target { get; set; }
 
 
             /// <summary>
