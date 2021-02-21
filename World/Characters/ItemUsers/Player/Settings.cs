@@ -11,6 +11,11 @@ namespace AsLegacy.Characters
         protected new class Settings : ItemUser.Settings
         {
             /// <summary>
+            /// Defines the AI of the Player.
+            /// </summary>
+            public override IAI AI => new AI();
+
+            /// <summary>
             /// Defines the color of the Player's Glyphs.
             /// </summary>
             public override Color GlyphColor => Color.Goldenrod;
