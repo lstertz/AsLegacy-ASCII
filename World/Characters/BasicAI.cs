@@ -25,6 +25,9 @@ namespace AsLegacy
                     if (character.CurrentAction != null)
                         return;
 
+                    if (character.Target != null && character.ActiveMode == Mode.Attack)
+                        character.AutoAttackOrMove();
+
                     Random r = new Random();
                     if (r.Next(MoveChance) == 0)
                     {

@@ -292,6 +292,28 @@ namespace AsLegacy
                 UpdateActiveMode();
             }
 
+            
+            /// <summary>
+            /// Performs either auto-attack or an auto-move on/towards 
+            /// the Character's target.
+            /// </summary>
+            protected void AutoAttackOrMove()
+            {
+                switch (ActiveMode)
+                {
+                    case Mode.Normal:
+                        // TODO :: Move towards if 'following' is enabled.
+                        break;
+                    case Mode.Attack:
+                        // TODO :: Move towards if not in range of attack.
+                        Combat.PerformStandardAttack(this, Target);
+                        return;
+                    case Mode.Defend:
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             /// <summary>
             /// Initiates the death of this Character.
