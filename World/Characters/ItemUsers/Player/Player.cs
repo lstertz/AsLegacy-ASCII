@@ -13,10 +13,10 @@
         /// </summary>
         public override World.Character Target
         {
-            get { return target; }
+            get => base.Target;
             set
             {
-                UpdateSelected(target, value);
+                UpdateSelected(base.Target, value);
                 base.Target = value;
             }
         }
