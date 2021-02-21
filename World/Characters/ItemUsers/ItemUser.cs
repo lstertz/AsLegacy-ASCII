@@ -7,45 +7,8 @@ namespace AsLegacy.Characters
     /// capable of holding and using Items, the functionality of which 
     /// is the responsibility of this class.
     /// </summary>
-    public class ItemUser : World.Character, ILineal
+    public partial class ItemUser : World.Character, ILineal
     {
-        /// <summary>
-        /// Defines BaseSettings, the basic attributes of an ItemUser, 
-        /// prior to instance-specific adjustments.
-        /// </summary>
-        protected new class BaseSettings : World.Character.BaseSettings
-        {
-            /// <summary>
-            /// Defines the color of an ItemUser's Glyphs.
-            /// </summary>
-            public override Color GlyphColor => Color.DarkSalmon;
-            /// <summary>
-            /// Defines the glyph to be shown when an ItemUser is in attack mode.
-            /// </summary>
-            public override int AttackGlyph => 231;//'τ'
-            /// <suary>
-            /// Defines the glyph to be shown when an ItemUser is in defend mode.
-            /// </summary>
-            public override int DefendGlyph => 232;//'φ'
-            /// <suary>
-            /// Defines the glyph to be shown when an ItemUser is in normal mode.
-            /// </summary>
-            public override int NormalGlyph => 227;//'π'
-
-            /// <summary>
-            /// The initial base attack damage of an ItemUser.
-            /// </summary>
-            public override float InitialAttackDamage => 1.67f;
-            /// <summary>
-            /// The initial base attack interval of an ItemUser.
-            /// </summary>
-            public override int InitialAttackInterval => 2000;
-            /// <summary>
-            /// The initial base maximum health of an ItemUser.
-            /// </summary>
-            public override float InitialBaseMaxHealth => 10.0f;
-        }
-
         /// <inheritdoc/>
         public string FullName => Name + " of " + lineage.Name;
 
@@ -79,7 +42,7 @@ namespace AsLegacy.Characters
         {
         }
         private ItemUser(int row, int column, string name, Lineage lineage) :
-            base(row, column, name, new BaseSettings(), lineage)
+            base(row, column, name, new Settings(), lineage)
         {
             this.lineage = lineage;
         }
@@ -95,13 +58,13 @@ namespace AsLegacy.Characters
         /// <param name="legacy">The starting legacy of the ItemUser.</param>
         /// <param name="lineageName">The name of the ItemUser's Lineage.</param>
         protected ItemUser(int row, int column, 
-            string name, BaseSettings baseSettings, int legacy, string lineageName) : 
+            string name, Settings baseSettings, int legacy, string lineageName) : 
             this(row, column, name, baseSettings, new Lineage(name, legacy, lineageName, 
                 (r, c, n, l) => new ItemUser(r, c, n, baseSettings, l)))
         {
         }
         private ItemUser(int row, int column, 
-            string name, BaseSettings baseSettings, Lineage lineage) :
+            string name, Settings baseSettings, Lineage lineage) :
             base(row, column, name, baseSettings, lineage)
         {
             this.lineage = lineage;

@@ -163,7 +163,7 @@ namespace AsLegacy
                         (c) =>
                         {
                             return attacker.IsAlive && attacker.mode == Mode.Attack &&
-                                c.IsAlive && c == attacker.target &&
+                                c.IsAlive && c == attacker.Target &&
                                 attacker.IsAdjacentTo(c.Row, c.Column);
                         }, true);
                 }

@@ -9,64 +9,12 @@ namespace AsLegacy
         /// Represents an abstraction of a CharacterBase that has a presence within the World.
         /// Such characters exist in a formal sense and can be interacted with.
         /// </summary>
-        public abstract partial class Character : CharacterBase, IRankedCharacter
+        public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
             private const int CharacterRemovalTime = 700;
             private const int MovementTime = 500;
 
             private readonly Color DeadColor = Color.DarkGray;
-
-            /// <summary>
-            /// Defines BaseSettings, the basic attributes of a Character, 
-            /// prior to instance-specific adjustments.
-            /// </summary>
-            protected abstract class BaseSettings
-            {
-                /// <summary>
-                /// Defines the color of the Character's Glyphs.
-                /// </summary>
-                public abstract Color GlyphColor { get; }
-                /// <summary>
-                /// Defines the glyph to be shown when the Character is in attack mode.
-                /// </summary>
-                public abstract int AttackGlyph { get; }
-                /// <summary>
-                /// Defines the glyph to be shown when the Character is in defend mode.
-                /// </summary>
-                public abstract int DefendGlyph { get; }
-                /// <summary>
-                /// Defines the glyph to be shown when the Character is in normal mode.
-                /// </summary>
-                public abstract int NormalGlyph { get; }
-
-                /// <summary>
-                /// The initial base maximum health for this specific type of Character.
-                /// </summary>
-                public abstract float InitialBaseMaxHealth { get; }
-                /// <summary>
-                /// The initial standard attack damage for this specific type of Character.
-                /// </summary>
-                public abstract float InitialAttackDamage { get; }
-                /// <summary>
-                /// The initial standard attack interval for this specific type of Character.
-                /// </summary>
-                public abstract int InitialAttackInterval { get; }
-            }
-
-            /// <summary>
-            /// Highlights the provided Character, if it isn't null, and removes any 
-            /// existing highlight.
-            /// </summary>
-            /// <param name="c">The Character to be highlighted.</param>
-            public static void Highlight(Character c)
-            {
-                if (HighlightedTile != c && HighlightedTile != null)
-                    HighlightedTile.Highlighted = false;
-
-                if (c != null)
-                    c.Highlighted = true;
-            }
-
 
             /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
@@ -89,6 +37,25 @@ namespace AsLegacy
                 Attack,
                 Defend
             }
+
+            /// <summary>
+            /// Highlights the provided Character, if it isn't null, and removes any 
+            /// existing highlight.
+            /// </summary>
+            /// <param name="c">The Character to be highlighted.</param>
+            public static void Highlight(Character c)
+            {
+                if (HighlightedTile != c && HighlightedTile != null)
+                    HighlightedTile.Highlighted = false;
+
+                if (c != null)
+                    c.Highlighted = true;
+            }
+
+
+            /// <inheritdoc/>
+            IAI ICharacter.AI => ai;
+            protected IAI ai;
 
             /// <summary>
             /// The character's present mode.
@@ -187,19 +154,7 @@ namespace AsLegacy
             /// The target will be the recipient of certain actions performed 
             /// by this Character.
             /// </summary>
-            public virtual Character Target
-            {
-                get => target;
-                set
-                {
-                    if (target == value)
-                        return;
-
-                    target = value;
-                    PerformForTarget();
-                }
-            }
-            protected Character target = null;
+            public virtual Character Target { get; set; }
 
 
             /// <summary>
@@ -218,8 +173,10 @@ namespace AsLegacy
                 mode = Mode.Normal;
                 Name = name;
 
+                ai = baseSettings.AI;
                 this.baseSettings = baseSettings;
                 combatState = new Combat.State(baseSettings, legacy);
+
                 rankedCharacters.Add(this);
             }
 
@@ -237,34 +194,6 @@ namespace AsLegacy
 
                 return (rowDiff == -1 && columnDiff == 0) || (rowDiff == 1 && columnDiff == 0) ||
                     (rowDiff == 0 && columnDiff == -1) || (rowDiff == 0 && columnDiff == 1);
-            }
-
-            /// <summary>
-            /// Initiates an appropriate action, to move towards or attack, at/towards the 
-            /// Character's target, as determined by the Character's current state.
-            /// </summary>
-            /// <returns>Whether an action was initiated.</returns>
-            public bool PerformForTarget()
-            {
-                if (target == null)
-                    return false;
-
-                switch (mode)
-                {
-                    case Mode.Normal:
-                        // TODO :: Move towards if 'following' is enabled.
-                        break;
-                    case Mode.Attack:
-                        // TODO :: Move towards if not in range of attack.
-                        Combat.PerformStandardAttack(this, target);
-                        return true;
-                    case Mode.Defend:
-                        break;
-                    default:
-                        break;
-                }
-
-                return false;
             }
 
             /// <summary>
@@ -303,10 +232,10 @@ namespace AsLegacy
 
                 if (IsPassable(intendedRow, intendedColumn))
                 {
-                    new Action(this, MovementTime,
+                    new Action(this, baseSettings.InitialMovementInterval,
                         () =>
                         {
-                            Move(this, intendedRow, intendedColumn);
+                            Move(intendedRow, intendedColumn);
 
                             if (repeatMovement == null || repeatMovement() == false)
                                 (CurrentAction as IAction).Cancel();
@@ -385,10 +314,7 @@ namespace AsLegacy
                 if (defenseEnabled)
                     ActiveMode = Mode.Defend;
                 else if (attackEnabled)
-                {
                     ActiveMode = Mode.Attack;
-                    PerformForTarget();
-                }
                 else
                     ActiveMode = Mode.Normal;
             }
