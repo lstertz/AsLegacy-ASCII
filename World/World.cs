@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
+using static AsLegacy.World.Character;
+
 namespace AsLegacy
 {
     /// <summary>
@@ -286,6 +288,16 @@ namespace AsLegacy
         /// since the last update.</param>
         public static void Update(int timeDelta)
         {
+            for (int c = 0, count = presentCharacters.Count; c < count; c++)
+            {
+                Character character = presentCharacters[c];
+                IAI ai = (character as ICharacter).AI;
+
+                ai.UpdateModeOf(character);
+                ai.UpdateTargetOf(character);
+                ai.InitiateActionFor(character);
+            }
+
             LinkedListNode<IAction> current;
             LinkedListNode<IAction> next = actions.First;
             while (next != null)
