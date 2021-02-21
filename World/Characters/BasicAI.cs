@@ -38,8 +38,9 @@ namespace AsLegacy
                         if (IsPassable(character.Row, character.Column + 1))
                             passableDirections.Add(Direction.Right);    
 
-                        character.MoveInDirection(
-                            passableDirections[r.Next(passableDirections.Count)]);
+                        if (passableDirections.Count != 0)
+                            character.MoveInDirection(
+                                passableDirections[r.Next(passableDirections.Count)]);
                     }
 
                 }
