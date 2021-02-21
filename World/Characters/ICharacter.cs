@@ -11,7 +11,7 @@ namespace AsLegacy
         private interface ICharacter
         {
             /// <summary>
-            /// The character's AI.
+            /// The Character's AI.
             /// </summary>
             IAI AI { get; }
         }
