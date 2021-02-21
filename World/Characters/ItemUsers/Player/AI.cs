@@ -16,7 +16,26 @@ namespace AsLegacy.Characters
             public void UpdateTargetOf(Character character) { }
 
             /// <inheritdoc/>
-            public void InitiateActionFor(Character character) { }
+            public void InitiateActionFor(Character character)
+            {
+                if (character.Target == null || character.CurrentAction != null)
+                    return;
+
+                switch (character.ActiveMode)
+                {
+                    case Mode.Normal:
+                        // TODO :: Move towards if 'following' is enabled.
+                        break;
+                    case Mode.Attack:
+                        // TODO :: Move towards if not in range of attack.
+                        Combat.PerformStandardAttack(character, character.Target);
+                        return;
+                    case Mode.Defend:
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }

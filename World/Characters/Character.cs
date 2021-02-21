@@ -197,34 +197,6 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Initiates an appropriate action, to move towards or attack, at/towards the 
-            /// Character's target, as determined by the Character's current state.
-            /// </summary>
-            /// <returns>Whether an action was initiated.</returns>
-            public bool PerformForTarget()
-            {
-                if (target == null)
-                    return false;
-
-                switch (mode)
-                {
-                    case Mode.Normal:
-                        // TODO :: Move towards if 'following' is enabled.
-                        break;
-                    case Mode.Attack:
-                        // TODO :: Move towards if not in range of attack.
-                        Combat.PerformStandardAttack(this, target);
-                        return true;
-                    case Mode.Defend:
-                        break;
-                    default:
-                        break;
-                }
-
-                return false;
-            }
-
-            /// <summary>
             /// Attempts to initiate Character movement in the specified direction.
             /// </summary>
             /// <param name="direction">The direction in which the Character is 
@@ -260,10 +232,10 @@ namespace AsLegacy
 
                 if (IsPassable(intendedRow, intendedColumn))
                 {
-                    new Action(this, MovementTime,
+                    new Action(this, baseSettings.InitialMovementInterval,
                         () =>
                         {
-                            Move(this, intendedRow, intendedColumn);
+                            Move(intendedRow, intendedColumn);
 
                             if (repeatMovement == null || repeatMovement() == false)
                                 (CurrentAction as IAction).Cancel();
@@ -342,10 +314,7 @@ namespace AsLegacy
                 if (defenseEnabled)
                     ActiveMode = Mode.Defend;
                 else if (attackEnabled)
-                {
                     ActiveMode = Mode.Attack;
-                    PerformForTarget();
-                }
                 else
                     ActiveMode = Mode.Normal;
             }
