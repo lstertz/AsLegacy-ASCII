@@ -46,6 +46,10 @@ namespace AsLegacy
                 /// The initial standard attack interval for this specific type of Character.
                 /// </summary>
                 public abstract int InitialAttackInterval { get; }
+                /// <summary>
+                /// The initial movement interval for this specific type of character.
+                /// </summary>
+                public abstract int InitialMovementInterval { get; }
             }
         }
     }
