@@ -105,7 +105,8 @@ namespace AsLegacy
             /// </summary>
             protected virtual void Destroy()
             {
-                actions.Remove(node);
+                if (actions.Contains(node.Value))
+                    actions.Remove(node);
             }
         }
 
