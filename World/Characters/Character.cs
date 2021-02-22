@@ -68,6 +68,8 @@ namespace AsLegacy
                 }
                 private set
                 {
+                    if (mode == value)
+                        return;
                     mode = value;
 
                     switch (value)
