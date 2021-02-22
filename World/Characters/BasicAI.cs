@@ -47,6 +47,32 @@ namespace AsLegacy
                     }
 
                 }
+
+                private Character RandomAdjacentCharacter(int row, int column)
+                {
+                    List<Character> characters = new List<Character>();
+                    Character up = CharacterAt(row - 1, column);
+                    Character down = CharacterAt(row + 1, column);
+                    Character left = CharacterAt(row, column - 1);
+                    Character right = CharacterAt(row, column + 1);
+
+                    if (up != null)
+                        characters.Add(up);
+                    if (down != null)
+                        characters.Add(down);
+                    if (left != null)
+                        characters.Add(left);
+                    if (right != null)
+                        characters.Add(right);
+
+                    if (characters.Count == 0)
+                        return null;
+                    if (characters.Count == 1)
+                        return characters[0];
+
+                    Random r = new Random();
+                    return characters[r.Next(characters.Count)];
+                }
             }
         }
     }
