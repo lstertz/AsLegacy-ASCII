@@ -12,21 +12,19 @@ namespace AsLegacy
             protected class BasicAI : IAI
             {
                 private const int DefenseChance = 5;
-                private const int DefenseTime = 300;
                 private const float SelfActivationDefenseLimit = 0.2f;
                 private const float TargetActivationDefenseRequirement = 0.8f;
 
                 private const int MoveChance = 100;
 
-                private int remainingDefenseTime = DefenseTime;
-
                 /// <inheritdoc/>
                 public void UpdateModeOf(Character character)
                 {
-                    if (character.ActiveMode == Mode.Defend)
+                    Character target = character.Target;
+                    if (character.ActiveMode == Mode.Defend && target != null)
                     {
-                        //remainingDefenseTime -= timeDelta; // TODO :: Add time delta to all AI.
-                        if (remainingDefenseTime > 0)
+                        if (target.CurrentAction != null && 
+                            target.CurrentAction.Activation > TargetActivationDefenseRequirement)
                             return;
                     }
 
@@ -37,10 +35,10 @@ namespace AsLegacy
                         CharacterAt(character.Row, character.Column + 1) != null)
                         potentialMode = Mode.Attack;
 
-                    if (potentialMode == Mode.Attack && character.Target != null)
+                    if (potentialMode == Mode.Attack && target != null)
                     {
                         World.Action selfAction = character.CurrentAction;
-                        World.Action targetAction = character.Target.CurrentAction;
+                        World.Action targetAction = target.CurrentAction;
 
                         if (selfAction != null && targetAction != null && 
                             selfAction.Activation < SelfActivationDefenseLimit && 
@@ -48,10 +46,7 @@ namespace AsLegacy
                         {
                             Random r = new Random();
                             if (r.Next(DefenseChance) == 0)
-                            {
-                                remainingDefenseTime = DefenseTime;
                                 potentialMode = Mode.Defend;
-                            }
                         }
                     }
 
