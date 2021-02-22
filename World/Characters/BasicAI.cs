@@ -11,13 +11,60 @@ namespace AsLegacy
             /// Defines the BasicAI that performs minimal AI functionality for any Character.
             protected class BasicAI : IAI
             {
+                private const int DefenseChance = 5;
+                private const int DefenseTime = 300;
+                private const float SelfActivationDefenseLimit = 0.2f;
+                private const float TargetActivationDefenseRequirement = 0.8f;
+
                 private const int MoveChance = 100;
 
-                /// <inheritdoc/>
-                public void UpdateModeOf(Character character) { }
+                private int remainingDefenseTime = DefenseTime;
 
                 /// <inheritdoc/>
-                public void UpdateTargetOf(Character character) { }
+                public void UpdateModeOf(Character character)
+                {
+                    if (character.ActiveMode == Mode.Defend)
+                    {
+                        //remainingDefenseTime -= timeDelta; // TODO :: Add time delta to all AI.
+                        if (remainingDefenseTime > 0)
+                            return;
+                    }
+
+                    Mode potentialMode = Mode.Normal;
+                    if (CharacterAt(character.Row - 1, character.Column) != null ||
+                        CharacterAt(character.Row + 1, character.Column) != null ||
+                        CharacterAt(character.Row, character.Column - 1) != null ||
+                        CharacterAt(character.Row, character.Column + 1) != null)
+                        potentialMode = Mode.Attack;
+
+                    if (potentialMode == Mode.Attack && character.Target != null)
+                    {
+                        World.Action selfAction = character.CurrentAction;
+                        World.Action targetAction = character.Target.CurrentAction;
+
+                        if (selfAction != null && targetAction != null && 
+                            selfAction.Activation < SelfActivationDefenseLimit && 
+                            targetAction.Activation > TargetActivationDefenseRequirement)
+                        {
+                            Random r = new Random();
+                            if (r.Next(DefenseChance) == 0)
+                            {
+                                remainingDefenseTime = DefenseTime;
+                                potentialMode = Mode.Defend;
+                            }
+                        }
+                    }
+
+                    character.ActiveMode = potentialMode;
+                }
+
+                /// <inheritdoc/>
+                public void UpdateTargetOf(Character character)
+                {
+                    if (character.ActiveMode == Mode.Attack)
+                        character.Target = RandomAdjacentCharacter(
+                            character.Row, character.Column);
+                }
 
                 /// <inheritdoc/>
                 public void InitiateActionFor(Character character)
@@ -27,6 +74,9 @@ namespace AsLegacy
 
                     if (character.Target != null && character.ActiveMode == Mode.Attack)
                         character.AutoAttackOrMove();
+
+                    if (character.ActiveMode != Mode.Normal)
+                        return;
 
                     Random r = new Random();
                     if (r.Next(MoveChance) == 0)
