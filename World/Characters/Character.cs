@@ -12,7 +12,6 @@ namespace AsLegacy
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
             private const int CharacterRemovalTime = 700;
-            private const int MovementTime = 500;
 
             private readonly Color DeadColor = Color.DarkGray;
 
