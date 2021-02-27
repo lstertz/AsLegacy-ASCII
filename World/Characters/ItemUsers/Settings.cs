@@ -45,6 +45,10 @@ namespace AsLegacy.Characters
             /// </summary>
             public override float InitialBaseMaxHealth => 10.0f;
             /// <summary>
+            /// The initial damage reduction, as a percentage, for an ItemUser in defend mode.
+            /// </summary>
+            public override float InitialDefenseDamageReduction => 0.1f;
+            /// <summary>
             /// The initial movement interval of an ItemUser.
             /// </summary>
             public override int InitialMovementInterval => 500;

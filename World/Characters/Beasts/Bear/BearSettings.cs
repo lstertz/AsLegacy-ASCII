@@ -34,6 +34,8 @@ namespace AsLegacy
             /// <inheritdoc/>
             public override float InitialBaseMaxHealth => 10f;
             /// <inheritdoc/>
+            public override float InitialDefenseDamageReduction => 0.2f;
+            /// <inheritdoc/>
             public override int InitialMovementInterval => 600;
         }
     }

@@ -12,7 +12,6 @@ namespace AsLegacy
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
             private const int CharacterRemovalTime = 700;
-            private const int MovementTime = 500;
 
             private readonly Color DeadColor = Color.DarkGray;
 
@@ -68,6 +67,8 @@ namespace AsLegacy
                 }
                 private set
                 {
+                    if (mode == value)
+                        return;
                     mode = value;
 
                     switch (value)
@@ -117,6 +118,20 @@ namespace AsLegacy
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
             /// </summary>
             public float Health => combatState.CurrentHealth / combatState.MaxHealth;
+
+            /// <summary>
+            /// Specifies whether this Character has been removed from the World, which 
+            /// occurs after the removal time has passed once the Character has died.
+            /// </summary>
+            public bool HasBeenRemoved
+            {
+                get
+                {
+                    if (IsAlive)
+                        return false;
+                    return characters.Get(Row, Column) != this;
+                }
+            }
 
             /// <summary>
             /// Specifies whether this Character is alive.
@@ -292,6 +307,28 @@ namespace AsLegacy
                 UpdateActiveMode();
             }
 
+            
+            /// <summary>
+            /// Performs either auto-attack on or an auto-move towards 
+            /// the Character's target.
+            /// </summary>
+            protected void AutoAttackOrMove()
+            {
+                switch (ActiveMode)
+                {
+                    case Mode.Normal:
+                        // TODO :: Move towards if 'following' is enabled.
+                        break;
+                    case Mode.Attack:
+                        // TODO :: Move towards if not in range of attack.
+                        Combat.PerformStandardAttack(this, Target);
+                        return;
+                    case Mode.Defend:
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             /// <summary>
             /// Initiates the death of this Character.

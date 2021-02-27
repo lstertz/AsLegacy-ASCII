@@ -1,4 +1,4 @@
-﻿using AsLegacy.Characters;
+﻿using System;
 using static AsLegacy.World;
 
 namespace AsLegacy.Characters
@@ -13,28 +13,22 @@ namespace AsLegacy.Characters
             public void UpdateModeOf(Character character) { }
 
             /// <inheritdoc/>
-            public void UpdateTargetOf(Character character) { }
+            public void UpdateTargetOf(Character character)
+            {
+                if (character.Target != null && character.Target.HasBeenRemoved)
+                    character.Target = null;
+            }
 
             /// <inheritdoc/>
             public void InitiateActionFor(Character character)
             {
-                if (character.Target == null || character.CurrentAction != null)
-                    return;
+                Player p = character as Player;
+                if (p == null)
+                    throw new InvalidOperationException("Player.AI is intended to only " +
+                        "operate upon Player Characters.");
 
-                switch (character.ActiveMode)
-                {
-                    case Mode.Normal:
-                        // TODO :: Move towards if 'following' is enabled.
-                        break;
-                    case Mode.Attack:
-                        // TODO :: Move towards if not in range of attack.
-                        Combat.PerformStandardAttack(character, character.Target);
-                        return;
-                    case Mode.Defend:
-                        break;
-                    default:
-                        break;
-                }
+                if (character.Target != null && character.CurrentAction == null)
+                    p.AutoAttackOrMove();
             }
         }
     }

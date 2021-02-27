@@ -105,7 +105,8 @@ namespace AsLegacy
             /// </summary>
             protected virtual void Destroy()
             {
-                actions.Remove(node);
+                if (actions.Contains(node.Value))
+                    actions.Remove(node);
             }
         }
 
@@ -167,10 +168,11 @@ namespace AsLegacy
                 /// before the action is to be performed.</param>
                 /// <param name="repeats">Whether the Action re-initializes 
                 /// itself after is resolves.</param>
-                /// <param name="action">The Action to be performed upon the targeted Character, 
-                /// by the performing Character.</param>
+                /// <param name="action">The Action to be performed upon the targeted Character,
+                /// provided as a parameter, by the performing Character.</param>
                 /// <param name="conditionalCheck">A Func to ensure that required conditions to 
-                /// resolve this Action for the targeted Character continue to be met.</param>
+                /// resolve this Action for the targeted Character, provided as a parameter,
+                /// continue to be met.</param>
                 public TargetedAction(Character performer, Character target,
                     int requiredActivationTime, Action<Character> action,
                     Func<Character, bool> conditionalCheck, bool repeats = false) : base(

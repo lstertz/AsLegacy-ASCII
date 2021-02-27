@@ -26,6 +26,8 @@ namespace AsLegacy
                     public float BaseMaxHealth { set; }
                     public float CurrentHealth { get; set; }
 
+                    public float DefenseDamageReduction { get; }
+
                     public int Legacy { get; set; }
                 }
 
@@ -86,6 +88,9 @@ namespace AsLegacy
                         set => CurrentHealth = value;
                     }
 
+                    float ICombat.DefenseDamageReduction { get => baseDefenseDamageReduction; }
+                    private readonly float baseDefenseDamageReduction;
+
                     /// <summary>
                     /// The legacy of the Character, represented as a numerical value (points).
                     /// </summary>
@@ -120,6 +125,7 @@ namespace AsLegacy
                         baseMaxHealth = baseSettings.InitialBaseMaxHealth;
                         baseAttackDamage = baseSettings.InitialAttackDamage;
                         baseAttackInterval = baseSettings.InitialAttackInterval;
+                        baseDefenseDamageReduction = baseSettings.InitialDefenseDamageReduction;
                         CurrentHealth = baseMaxHealth;
 
                         this.legacy = legacy;
@@ -137,27 +143,33 @@ namespace AsLegacy
                 {
                     ICombat aState = attacker.combatState;
                     new TargetedAction(attacker, target, aState.AttackInterval,
-                        (c) =>
+                        (t) =>
                         {
-                            ICombat cState = c.combatState;
-                            cState.CurrentHealth -= aState.AttackDamage;
+                            ICombat tState = t.combatState;
 
-                            if (!c.IsAlive)
+                            float damageReduction = 0.0f;
+                            if (t.ActiveMode == Mode.Defend)
+                                damageReduction = aState.AttackDamage * 
+                                    tState.DefenseDamageReduction;
+
+                            tState.CurrentHealth -= (aState.AttackDamage - damageReduction);
+
+                            if (!t.IsAlive)
                             {
-                                c.Die();
-                                rankedCharacters.Remove(c);  // TODO :: Remove once custom sorting is implemented.
+                                t.Die();
+                                rankedCharacters.Remove(t);  // TODO :: Remove once custom sorting is implemented.
 
                                 // TODO :: Handle Player death differently.
-                                if (c is ItemUser)
+                                if (t is ItemUser)
                                 {
-                                    int halfLegacy = cState.Legacy / 2;
+                                    int halfLegacy = tState.Legacy / 2;
                                     UpdateLegacy(attacker, halfLegacy);
-                                    cState.Legacy -= halfLegacy;
+                                    tState.Legacy -= halfLegacy;
 
-                                    (c as ItemUser).Lineage.SpawnSuccessor();
+                                    (t as ItemUser).Lineage.SpawnSuccessor();
                                 }
                                 else
-                                    UpdateLegacy(attacker, cState.Legacy);
+                                    UpdateLegacy(attacker, tState.Legacy);
                             }
                         },
                         (c) =>

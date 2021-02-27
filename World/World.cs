@@ -293,8 +293,8 @@ namespace AsLegacy
                 Character character = presentCharacters[c];
                 IAI ai = (character as ICharacter).AI;
 
-                ai.UpdateModeOf(character);
                 ai.UpdateTargetOf(character);
+                ai.UpdateModeOf(character);
                 ai.InitiateActionFor(character);
             }
 
@@ -356,9 +356,6 @@ namespace AsLegacy
 
             // TODO :: Handle Player death appropriately later.
             characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
-
-            if (c == Player.Target)
-                Player.Target = null;
 
             if (c is Beast)
             {

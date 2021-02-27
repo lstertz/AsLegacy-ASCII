@@ -35,10 +35,6 @@ namespace AsLegacy
                 public abstract int NormalGlyph { get; }
 
                 /// <summary>
-                /// The initial base maximum health for this specific type of Character.
-                /// </summary>
-                public abstract float InitialBaseMaxHealth { get; }
-                /// <summary>
                 /// The initial standard attack damage for this specific type of Character.
                 /// </summary>
                 public abstract float InitialAttackDamage { get; }
@@ -46,6 +42,15 @@ namespace AsLegacy
                 /// The initial standard attack interval for this specific type of Character.
                 /// </summary>
                 public abstract int InitialAttackInterval { get; }
+                /// <summary>
+                /// The initial base maximum health for this specific type of Character.
+                /// </summary>
+                public abstract float InitialBaseMaxHealth { get; }
+                /// <summary>
+                /// The initial damage reduction, as a percentage, for this specific 
+                /// type of Character in defend mode.
+                /// </summary>
+                public abstract float InitialDefenseDamageReduction { get; }
                 /// <summary>
                 /// The initial movement interval for this specific type of character.
                 /// </summary>

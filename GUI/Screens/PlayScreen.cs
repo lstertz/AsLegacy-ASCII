@@ -251,6 +251,8 @@ namespace AsLegacy.GUI.Screens
         {
             characters.CenterViewPortOnPoint(AsLegacy.Focus.Point);
             environment.CenterViewPortOnPoint(AsLegacy.Focus.Point);
+
+            characterPanel.Draw(delta);
         }
     }
 }
