@@ -79,7 +79,12 @@ namespace AsLegacy.GUI
         /// </summary>
         private void DrawHealth()
         {
-            string health = MathF.Ceiling(AsLegacy.Focus.CurrentHealth).ToString();
+            string health;
+            if (AsLegacy.Focus.CurrentHealth <= 0.0f)
+                health = "0";
+            else
+                health = MathF.Ceiling(AsLegacy.Focus.CurrentHealth).ToString();
+
             string maxHealth = MathF.Ceiling(AsLegacy.Focus.MaxHealth).ToString();
             Print(1, 3, "Health: " + health + "/" + maxHealth, Color.White);
         }
