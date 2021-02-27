@@ -56,7 +56,8 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public void UpdateTargetOf(Character character)
                 {
-                    if (character.ActiveMode == Mode.Attack)
+
+                    if (character.ActiveMode == Mode.Attack && character.CurrentAction == null)
                         character.Target = RandomAdjacentCharacter(
                             character.Row, character.Column);
                 }
@@ -90,9 +91,14 @@ namespace AsLegacy
                             character.MoveInDirection(
                                 passableDirections[r.Next(passableDirections.Count)]);
                     }
-
                 }
 
+                /// <summary>
+                /// Provides a random Character that is adjacent to the specified position.
+                /// </summary>
+                /// <param name="row">The Y-Axis of the position.</param>
+                /// <param name="column">The X-Axis of the position.</param>
+                /// <returns>A random adjacent Character.</returns>
                 private Character RandomAdjacentCharacter(int row, int column)
                 {
                     List<Character> characters = new List<Character>();

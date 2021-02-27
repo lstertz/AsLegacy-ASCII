@@ -295,7 +295,7 @@ namespace AsLegacy
 
             
             /// <summary>
-            /// Performs either auto-attack or an auto-move on/towards 
+            /// Performs either auto-attack on or an auto-move towards 
             /// the Character's target.
             /// </summary>
             protected void AutoAttackOrMove()
