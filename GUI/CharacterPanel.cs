@@ -67,6 +67,13 @@ namespace AsLegacy.GUI
             DrawHealth();
         }
 
+        /// <inheritdoc/>
+        public override void Draw(TimeSpan update)
+        {
+            Refresh();
+            base.Draw(update);
+        }
+
         /// <summary>
         /// Draws the health stats onto the CharacterPanel.
         /// </summary>
