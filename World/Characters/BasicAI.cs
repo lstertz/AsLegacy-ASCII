@@ -56,6 +56,8 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public void UpdateTargetOf(Character character)
                 {
+                    if (character.Target != null && !character.Target.IsAlive)
+                        character.Target = null;
 
                     if (character.ActiveMode == Mode.Attack && character.CurrentAction == null)
                         character.Target = RandomAdjacentCharacter(
