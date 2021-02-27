@@ -293,8 +293,8 @@ namespace AsLegacy
                 Character character = presentCharacters[c];
                 IAI ai = (character as ICharacter).AI;
 
-                ai.UpdateModeOf(character);
                 ai.UpdateTargetOf(character);
+                ai.UpdateModeOf(character);
                 ai.InitiateActionFor(character);
             }
 
