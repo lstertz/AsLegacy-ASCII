@@ -5,6 +5,7 @@ using Console = SadConsole.Console;
 using Game = SadConsole.Game;
 
 using AsLegacy.GUI;
+using AsLegacy.Characters;
 
 namespace AsLegacy
 {
@@ -20,11 +21,32 @@ namespace AsLegacy
         /// While playing, this is the World Player, when dead and in 'viewer mode' this may 
         /// be any other living Character.
         /// </summary>
-        public static World.Character Focus { get => World.Player; }
+        public static World.Character Focus { get => HasPlayer ? Player : focus; }
+        private static World.Character focus = null;
+
+        public static bool HasPlayer => Player != null;
+
+        public static Player Player => World.Player;
+        private static Player player = null;
 
         public static void Main()
         {
             new AsLegacy();
+        }
+
+        public static void SelectCharacter(World.Character character)
+        {
+            World.Player.Target = character;
+            return;
+            if (player != null)
+                player.Target = character;
+            else
+                focus = character;
+        }
+
+        public static void StartGame()
+        {
+
         }
 
         public AsLegacy()

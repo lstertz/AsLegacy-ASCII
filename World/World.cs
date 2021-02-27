@@ -182,6 +182,9 @@ namespace AsLegacy
         public static Character[] CharactersNear(Character character, int withinHorizontal, 
             int withinVertical)
         {
+            if (character == null)
+                return new Character[0];
+
             // TODO :: Optimize later, perhaps with 2D Linked Grid data structure support.
 
             Dictionary<Character, int> nearCharacters = new Dictionary<Character, int>();

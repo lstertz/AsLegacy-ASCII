@@ -34,6 +34,8 @@ namespace AsLegacy.GUI
         {
             base.Update(timeElapsed);
             
+            // TODO :: If no focus, support showing characters closest to current center of view.
+
             World.Character[] nearbyCharacters = World.CharactersNear(AsLegacy.Focus,
                 PlayScreen.MapViewPortHalfWidth, PlayScreen.MapViewPortHalfHeight);
 

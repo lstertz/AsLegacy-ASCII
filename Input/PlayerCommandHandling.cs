@@ -23,27 +23,33 @@ namespace AsLegacy.Input
         /// <param name="handled">A bool indicating whether the input was handled.</param>
         public override void ProcessKeyboard(Console console, Keyboard info, out bool handled)
         {
+            if (!AsLegacy.HasPlayer)
+            {
+                handled = false;
+                return;
+            }
+
             info.InitialRepeatDelay = float.PositiveInfinity;
             info.RepeatDelay = float.PositiveInfinity;
 
             handled = true;
 
             if (info.IsKeyPressed(Keys.Up) || info.IsKeyPressed(Keys.W))
-                World.Player.MoveInDirection(World.Character.Direction.Up, () =>
+                AsLegacy.Player.MoveInDirection(World.Character.Direction.Up, () =>
                     info.IsKeyDown(Keys.Up) || info.IsKeyDown(Keys.W));
             else if (info.IsKeyPressed(Keys.Down) || info.IsKeyPressed(Keys.S))
-                World.Player.MoveInDirection(World.Character.Direction.Down, () =>
+                AsLegacy.Player.MoveInDirection(World.Character.Direction.Down, () =>
                     info.IsKeyDown(Keys.Down) || info.IsKeyDown(Keys.S));
             else if (info.IsKeyPressed(Keys.Left) || info.IsKeyPressed(Keys.A))
-                World.Player.MoveInDirection(World.Character.Direction.Left, () =>
+                AsLegacy.Player.MoveInDirection(World.Character.Direction.Left, () =>
                     info.IsKeyDown(Keys.Left) || info.IsKeyDown(Keys.A));
             else if (info.IsKeyPressed(Keys.Right) || info.IsKeyPressed(Keys.D))
-                World.Player.MoveInDirection(World.Character.Direction.Right, () =>
+                AsLegacy.Player.MoveInDirection(World.Character.Direction.Right, () =>
                     info.IsKeyDown(Keys.Right) || info.IsKeyDown(Keys.D));
 
             if (info.IsKeyReleased(Keys.Space))
-                World.Player.ToggleAttackMode();
-            World.Player.EnableDefense(AltIsDown(info));
+                AsLegacy.Player.ToggleAttackMode();
+            AsLegacy.Player.EnableDefense(AltIsDown(info));
         }
 
         /// <summary>
@@ -67,6 +73,9 @@ namespace AsLegacy.Input
         {
             handled = false;
 
+            if (!AsLegacy.HasPlayer)
+                return;
+
             Commands c = console as Commands;
             int x = state.CellPosition.X - 1;
             int y = state.CellPosition.Y - 1;
@@ -76,16 +85,16 @@ namespace AsLegacy.Input
                 if (x == 0)
                 {
                     if (y == -1) // Up
-                        handled = World.Player.MoveInDirection(World.Character.Direction.Up);
+                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Up);
                     else if (y == 1) // Down
-                        handled = World.Player.MoveInDirection(World.Character.Direction.Down);
+                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Down);
                 }
                 else if (y == 0)
                 {
                     if (x == -1) // Left
-                        handled = World.Player.MoveInDirection(World.Character.Direction.Left);
+                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Left);
                     else if (x == 1) // Right
-                        handled = World.Player.MoveInDirection(World.Character.Direction.Right);
+                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Right);
                 }
 
                 c?.SetCellToHighlight(-1, -1);

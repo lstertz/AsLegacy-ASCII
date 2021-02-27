@@ -86,7 +86,7 @@ namespace AsLegacy.GUI.Elements
 
             handled = true;
             if (state.Mouse.LeftClicked)
-                World.Player.Target = Character;
+                AsLegacy.SelectCharacter(Character);
             else
                 World.Character.Highlight(Character);
         }

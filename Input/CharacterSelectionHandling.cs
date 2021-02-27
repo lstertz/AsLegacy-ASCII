@@ -5,10 +5,10 @@ using SadConsole;
 namespace AsLegacy.Input
 {
     /// <summary>
-    /// Defines the Player Target Handling Console Component to evaluate input 
-    /// to set the Player's character target.
+    /// Defines the Character Selection Handling Console Component to evaluate input 
+    /// to either set the Player's character target or set the game's focused Character.
     /// </summary>
-    public class PlayerTargetHandling : MouseConsoleComponent
+    public class CharacterSelectionHandling : MouseConsoleComponent
     {
         /// <summary>
         /// Handles mouse state changes.
@@ -24,7 +24,7 @@ namespace AsLegacy.Input
             int row = state.CellPosition.Y;
 
             if (state.Mouse.LeftClicked)
-                World.Player.Target = World.CharacterAt(row, column);
+                AsLegacy.SelectCharacter(World.CharacterAt(row, column));
             else
                 World.Character.Highlight(World.CharacterAt(row, column));
         }

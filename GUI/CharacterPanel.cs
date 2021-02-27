@@ -79,6 +79,9 @@ namespace AsLegacy.GUI
         /// </summary>
         private void DrawHealth()
         {
+            if (AsLegacy.Focus == null)
+                return;
+
             string health;
             if (AsLegacy.Focus.CurrentHealth <= 0.0f)
                 health = "0";
@@ -94,6 +97,9 @@ namespace AsLegacy.GUI
         /// </summary>
         private void DrawTitle()
         {
+            if (AsLegacy.Focus == null)
+                return;
+
             string title;
             if (AsLegacy.Focus is ItemUser)
                 title = (AsLegacy.Focus as ItemUser).FullName;
