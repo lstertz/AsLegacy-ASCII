@@ -13,7 +13,11 @@ namespace AsLegacy.Characters
             public void UpdateModeOf(Character character) { }
 
             /// <inheritdoc/>
-            public void UpdateTargetOf(Character character) { }
+            public void UpdateTargetOf(Character character)
+            {
+                if (character.Target != null && character.Target.HasBeenRemoved)
+                    character.Target = null;
+            }
 
             /// <inheritdoc/>
             public void InitiateActionFor(Character character)

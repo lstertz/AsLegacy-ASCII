@@ -120,6 +120,20 @@ namespace AsLegacy
             public float Health => combatState.CurrentHealth / combatState.MaxHealth;
 
             /// <summary>
+            /// Specifies whether this Character has been removed from the World, which 
+            /// occurs after the removal time has passed once the Character has died.
+            /// </summary>
+            public bool HasBeenRemoved
+            {
+                get
+                {
+                    if (IsAlive)
+                        return false;
+                    return characters.Get(Row, Column) != this;
+                }
+            }
+
+            /// <summary>
             /// Specifies whether this Character is alive.
             /// </summary>
             public bool IsAlive => combatState.CurrentHealth > 0;

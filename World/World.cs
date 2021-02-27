@@ -357,9 +357,6 @@ namespace AsLegacy
             // TODO :: Handle Player death appropriately later.
             characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
 
-            if (c == Player.Target)
-                Player.Target = null;
-
             if (c is Beast)
             {
                 beastCount--;
