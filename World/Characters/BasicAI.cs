@@ -23,25 +23,19 @@ namespace AsLegacy
                     Character target = character.Target;
                     if (character.ActiveMode == Mode.Defend && target != null)
                     {
-                        if (target.CurrentAction != null && 
+                        if (target.CurrentAction != null &&
                             target.CurrentAction.Activation > TargetActivationDefenseRequirement)
                             return;
                     }
 
-                    Mode potentialMode = Mode.Normal;
-                    if (CharacterAt(character.Row - 1, character.Column) != null ||
-                        CharacterAt(character.Row + 1, character.Column) != null ||
-                        CharacterAt(character.Row, character.Column - 1) != null ||
-                        CharacterAt(character.Row, character.Column + 1) != null)
-                        potentialMode = Mode.Attack;
-
-                    if (potentialMode == Mode.Attack && target != null)
+                    Mode potentialMode = target == null ? Mode.Normal : Mode.Attack;
+                    if (potentialMode == Mode.Attack)
                     {
                         World.Action selfAction = character.CurrentAction;
                         World.Action targetAction = target.CurrentAction;
 
-                        if (selfAction != null && targetAction != null && 
-                            selfAction.Activation < SelfActivationDefenseLimit && 
+                        if (selfAction != null && targetAction != null &&
+                            selfAction.Activation < SelfActivationDefenseLimit &&
                             targetAction.Activation > TargetActivationDefenseRequirement)
                         {
                             Random r = new Random();
@@ -59,7 +53,10 @@ namespace AsLegacy
                     if (character.Target != null && !character.Target.IsAlive)
                         character.Target = null;
 
-                    if (character.ActiveMode == Mode.Attack && character.CurrentAction == null)
+                    if (character.ActiveMode == Mode.Defend)
+                        return;
+
+                    if (character.Target == null || character.CurrentAction == null)
                         character.Target = RandomAdjacentCharacter(
                             character.Row, character.Column);
                 }
@@ -87,7 +84,7 @@ namespace AsLegacy
                         if (IsPassable(character.Row, character.Column - 1))
                             passableDirections.Add(Direction.Left);
                         if (IsPassable(character.Row, character.Column + 1))
-                            passableDirections.Add(Direction.Right);    
+                            passableDirections.Add(Direction.Right);
 
                         if (passableDirections.Count != 0)
                             character.MoveInDirection(
