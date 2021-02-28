@@ -143,7 +143,6 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            //Player = new Player(12, 11, "Player", "Legacy");
             new ItemUser(14, 15, "Goblin", 20, "Orr");
 
             for (int c = 0; c < expectedBeastPopulation; c++)
