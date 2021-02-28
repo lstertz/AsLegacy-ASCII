@@ -249,6 +249,9 @@ namespace AsLegacy.GUI.Screens
         /// <param name="delta">The time passed since the last Draw call.</param>
         public override void Draw(Console console, TimeSpan delta)
         {
+            if (!IsVisible)
+                return;
+
             Point center = new Point(0, 0); // TODO :: Support disembodied center when ther is no focus.
             if (AsLegacy.Focus != null)
                 center = AsLegacy.Focus.Point;

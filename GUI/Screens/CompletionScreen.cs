@@ -99,6 +99,9 @@ namespace AsLegacy.GUI.Screens
         /// <param name="delta">The time passed since the last Update call.</param>
         public override void Update(TimeSpan time)
         {
+            if (!IsVisible)
+                return;
+
             base.Update(time);
 
             string prefix = "";
