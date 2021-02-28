@@ -116,11 +116,8 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Width / 2 - PlayLabelWidth / 2, Height - PlayOffsetY),
                 Text = PlayLabel
             };
-            play.Click += (s, e) =>
-            {
-                World.ResetPlayer(nameField.EditingText, lineageField.EditingText);
-                Display.ShowScreen(Display.Screens.Play);
-            };
+            play.Click += (s, e) => AsLegacy.StartGame(
+                nameField.EditingText, lineageField.EditingText);
             Add(play);
 
             FocusedControl = nameField;

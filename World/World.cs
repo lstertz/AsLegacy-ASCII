@@ -123,18 +123,17 @@ namespace AsLegacy
         }
 
         /// <summary>
-        /// The Player Character.
+        /// Initializes the World in its original new game state.
+        /// This cancels all active Actions, removes all existing Characters, 
+        /// and populates new starting Characters.
         /// </summary>
-        public static Player Player { get; private set; }
-
-        /// <summary>
-        /// Initializes the World with first-time starting Characters.
-        /// Initialization only works once, if the World needs to be re-initialized, use Reset.
-        /// </summary>
-        public static void Init()
+        public static void InitNewWorld()
         {
-            if (Player != null)
-                return;
+            while (actions.First != null)
+                actions.First.Value.Cancel();
+
+            for (int c = presentCharacters.Count - 1; c >= 0; c--)
+                RemoveCharacter(presentCharacters[c], false);
 
             SeedCharacters();
         }
@@ -144,7 +143,7 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            Player = new Player(12, 11, "Player", "Legacy");
+            //Player = new Player(12, 11, "Player", "Legacy");
             new ItemUser(14, 15, "Goblin", 20, "Orr");
 
             for (int c = 0; c < expectedBeastPopulation; c++)
@@ -251,37 +250,6 @@ namespace AsLegacy
             rankedCharacters.CopyTo(characters, startIndex, c);
 
             return characters;
-        }
-
-        /// <summary>
-        /// Resets the World.
-        /// This cancels all active Actions, removes all existing Characters, 
-        /// and populates new starting Characters.
-        /// </summary>
-        public static void Reset()
-        {
-            while (actions.First != null)
-                actions.First.Value.Cancel();
-
-            for (int c = presentCharacters.Count - 1; c >= 0; c--)
-                RemoveCharacter(presentCharacters[c], false);
-
-            SeedCharacters();
-        }
-
-        /// <summary>
-        /// Resets the Player with a new name.
-        /// </summary>
-        /// <remarks>This should be temporary until the World-Player relationship 
-        /// can be re-architected.</remarks>
-        /// <param name="name">The name of the new Player Character.</param>
-        /// <param name="lineageName">The name of the Player Character's Lineage.</param>
-        public static void ResetPlayer(string name, string lineageName)
-        {
-            (Player.CurrentAction as IAction)?.Cancel();
-            RemoveCharacter(Player, false);
-
-            Player = new Player(12, 11, name, lineageName);
         }
 
         /// <summary>
