@@ -75,10 +75,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Width / 2 - newGameLabelWidth / 2, Height - 8),
                 Text = NewGameLabel
             };
-            newGame.Click += (s, e) =>
-            {
-                Display.ShowScreen(Display.Screens.Settings);
-            };
+            newGame.Click += (s, e) => Display.ShowScreen(Display.Screens.Settings);
             Add(newGame);
 
             Button continueGame = new Button(continueLabelWidth, 1)

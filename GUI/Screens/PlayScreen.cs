@@ -158,8 +158,8 @@ namespace AsLegacy.GUI.Screens
             characters = World.Characters;
             characters.Position = new Point(1, 1);
             characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
-            characters.CenterViewPortOnPoint(AsLegacy.Focus.Point);
-            characters.Components.Add(new PlayerTargetHandling());
+            characters.CenterViewPortOnPoint(new Point(0, 0));
+            characters.Components.Add(new CharacterSelectionHandling());
 
             commands = new Commands();
             commands.Components.Add(new PlayerCommandHandling());
@@ -178,7 +178,7 @@ namespace AsLegacy.GUI.Screens
             environment = World.Environment;
             environment.Position = new Point(1, 1);
             environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
-            environment.CenterViewPortOnPoint(AsLegacy.Focus.Point);
+            environment.CenterViewPortOnPoint(new Point(0, 0));
 
             nearbyPanel = new NearbyPanel(Display.Width / 2 - MapViewPortWidth - 2,
                 MapViewPortHeight)
@@ -249,8 +249,15 @@ namespace AsLegacy.GUI.Screens
         /// <param name="delta">The time passed since the last Draw call.</param>
         public override void Draw(Console console, TimeSpan delta)
         {
-            characters.CenterViewPortOnPoint(AsLegacy.Focus.Point);
-            environment.CenterViewPortOnPoint(AsLegacy.Focus.Point);
+            if (!IsVisible)
+                return;
+
+            Point center = new Point(0, 0); // TODO :: Support disembodied center when ther is no focus.
+            if (AsLegacy.Focus != null)
+                center = AsLegacy.Focus.Point;
+
+            characters.CenterViewPortOnPoint(center);
+            environment.CenterViewPortOnPoint(center);
 
             characterPanel.Draw(delta);
         }

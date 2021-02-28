@@ -84,11 +84,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Width / 2 - playAgainWidth / 2, Height - 3),
                 Text = PlayAgainLabel
             };
-            playAgain.Click += (s, e) =>
-            {
-                World.Reset();
-                Display.ShowScreen(Display.Screens.Settings);
-            };
+            playAgain.Click += (s, e) => Display.ShowScreen(Display.Screens.Settings);
             Add(playAgain);
         }
 
@@ -99,6 +95,9 @@ namespace AsLegacy.GUI.Screens
         /// <param name="delta">The time passed since the last Update call.</param>
         public override void Update(TimeSpan time)
         {
+            if (!IsVisible)
+                return;
+
             base.Update(time);
 
             string prefix = "";

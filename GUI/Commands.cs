@@ -59,8 +59,13 @@ namespace AsLegacy.GUI
         {
             base.Draw(delta);
 
-            int x = World.Player.Column;
-            int y = World.Player.Row;
+            int x = 0;
+            int y = 0;
+            if (AsLegacy.HasPlayer)
+            {
+                x = AsLegacy.Player.Column;
+                y = AsLegacy.Player.Row;
+            }
 
             int centerX = PlayScreen.MapViewPortHalfWidth;
             int centerY = PlayScreen.MapViewPortHalfHeight;
@@ -118,8 +123,11 @@ namespace AsLegacy.GUI
         /// <returns>Whether the input should be considered for a command.</returns>
         private bool IsInteractable(int worldX, int worldY)
         {
+            if (!AsLegacy.HasPlayer)
+                return false;
+
             return World.IsPassable(worldX, worldY) &&
-                World.Player.ActiveMode == World.Character.Mode.Normal;
+                AsLegacy.Player.ActiveMode == World.Character.Mode.Normal;
         }
     }
 }
