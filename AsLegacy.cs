@@ -37,7 +37,7 @@ namespace AsLegacy
         /// The Player Character of the game.
         /// This is null if the Player is in 'viewer mode'.
         /// </summary>
-        public static Player Player { get; private set; } = null;
+        public static Player Player => Player.Character;
 
         /// <summary>
         /// Entry execution point of the game.
@@ -73,7 +73,7 @@ namespace AsLegacy
             focus = null;
 
             World.InitNewWorld();
-            Player = new Player(12, 11, characterName, lineageName);
+            new Player(12, 11, characterName, lineageName);
 
             Display.ShowScreen(Display.Screens.Play);
         }

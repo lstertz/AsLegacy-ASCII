@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
 
 namespace AsLegacy.Characters
 {
@@ -8,7 +8,11 @@ namespace AsLegacy.Characters
     /// </summary>
     public partial class Player : ItemUser
     {
-
+        /// <summary>
+        /// The current Player Character.
+        /// Null if there is no active Player Character.
+        /// </summary>
+        public static Player Character { get; private set; } = null;
 
         /// <summary>
         /// Specifies the target of the Player.
@@ -39,6 +43,12 @@ namespace AsLegacy.Characters
 
         private Player(int row, int column, string name, Lineage lineage) : 
             base(row, column, name, new Settings(), lineage)
-        { }
+        {
+            if (Character != null && Character.IsAlive)
+                throw new InvalidOperationException("The current Player Character is still " +
+                    "active and cannot be replaced by a new instance.");
+
+            Character = this;
+        }
     }
 }
