@@ -88,12 +88,6 @@ namespace AsLegacy.Characters
         /// <param name="lineage">The Player's Lineage.</param>
         private Player(int row, int column, string name, Lineage lineage) : 
             base(row, column, name, new Settings(), lineage)
-        {
-            if (Character != null && Character.IsAlive)
-                throw new InvalidOperationException("The current Player Character is still " +
-                    "active and cannot be replaced by a new instance.");
-
-            Character = this;
-        }
+        { }
     }
 }

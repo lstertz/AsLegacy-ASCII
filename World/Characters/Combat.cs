@@ -159,7 +159,6 @@ namespace AsLegacy
                                 t.Die();
                                 rankedCharacters.Remove(t);  // TODO :: Remove once custom sorting is implemented.
 
-                                // TODO :: Handle Player death differently.
                                 if (t is ItemUser)
                                 {
                                     int halfLegacy = tState.Legacy / 2;

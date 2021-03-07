@@ -43,6 +43,7 @@ namespace AsLegacy.GUI.Elements
             Character = character;
         }
 
+        /// <inheritdoc/>
         public override void OnAdded(SadConsole.Console console)
         {
             base.OnAdded(console);
@@ -79,6 +80,7 @@ namespace AsLegacy.GUI.Elements
                 Colors.White, Colors.Black, bottomFrameGlyph);
         }
 
+        /// <inheritdoc/>
         public override void ProcessMouse(SadConsole.Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;

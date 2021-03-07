@@ -61,8 +61,6 @@ namespace AsLegacy.GUI.Popups
             };
             observe.Click += (s, e) => IsVisible = false;
             Add(observe);
-
-            // TODO :: XML.
         }
 
         /// <inheritdoc/>

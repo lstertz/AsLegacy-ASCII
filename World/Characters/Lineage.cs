@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace AsLegacy
+﻿namespace AsLegacy
 {
     public partial class World
     {
@@ -64,6 +62,10 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public string Name { get; private set; }
 
+                /// <summary>
+                /// The time that passes after the initiation of a successor spawn 
+                /// before a successor is actually spawned.
+                /// </summary>
                 protected virtual int spawnTime => 4000;
 
                 protected readonly string firstCharacterName;
@@ -110,6 +112,9 @@ namespace AsLegacy
                     return true;
                 }
 
+                /// <summary>
+                /// Called when a successor should be spawned.
+                /// </summary>
                 protected abstract void OnSpawnSuccessor();
             }
         }
