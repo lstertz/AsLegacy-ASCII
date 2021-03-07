@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.GUI.Screens;
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy.Characters
 {
@@ -13,9 +14,10 @@ namespace AsLegacy.Characters
 
             protected override void OnSpawnSuccessor()
             {
+                PlayScreen.ShowPlayerDeath();
                 // TODO :: Show pop-up, add the below as an action for 'Continue'.
-                Point point = World.GetRandomPassablePosition();
-                new Player(point.Y, point.X, firstCharacterName, this);
+                //Point point = World.GetRandomPassablePosition();
+                //new Player(point.Y, point.X, firstCharacterName, this);
             }
         }
     }
