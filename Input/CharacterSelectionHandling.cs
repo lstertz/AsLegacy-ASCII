@@ -1,6 +1,7 @@
 ﻿using SadConsole.Components;
 using SadConsole.Input;
 using SadConsole;
+using AsLegacy.GUI.Screens;
 
 namespace AsLegacy.Input
 {
@@ -19,6 +20,11 @@ namespace AsLegacy.Input
         public override void ProcessMouse(Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;
+            if (PlayScreen.IsShowingPopup)
+            {
+                World.Character.Highlight(null);
+                return;
+            }
 
             int column = state.CellPosition.X;
             int row = state.CellPosition.Y;
