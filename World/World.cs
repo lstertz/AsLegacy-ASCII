@@ -283,7 +283,7 @@ namespace AsLegacy
         /// Provides a random passable position from the map.
         /// </summary>
         /// <returns>A Point, the randomly chosen passable position.</returns>
-        private static Point GetRandomPassablePosition()
+        public static Point GetRandomPassablePosition()
         {
             Random r = new Random();
 

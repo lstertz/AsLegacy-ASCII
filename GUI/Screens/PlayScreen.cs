@@ -64,9 +64,10 @@ namespace AsLegacy.GUI.Screens
         private static PlayScreen screen;
 
         /// <summary>
-        /// The current position and size of the map viewport.
+        /// Whether the screen is currently showing a popup.
         /// </summary>
-        public static Rectangle MapViewPort => screen.characters.ViewPort;
+        public static bool IsShowingPopup => screen.itemsPopup.IsVisible ||
+            screen.skillsPopup.IsVisible || screen.playerDeathPopup.IsVisible;
 
         /// <summary>
         /// Whether the screen is currently visible.
@@ -84,11 +85,30 @@ namespace AsLegacy.GUI.Screens
         }
 
         /// <summary>
+        /// The current position and size of the map viewport.
+        /// </summary>
+        public static Rectangle MapViewPort => screen.characters.ViewPort;
+
+        /// <summary>
         /// Shows the PlayScreen's Items Popup.
         /// </summary>
         public static void ShowItems()
         {
+            if (screen.playerDeathPopup.IsVisible)
+                return;
+
             screen.itemsPopup.IsVisible = true;
+            screen.skillsPopup.IsVisible = false;
+        }
+
+        /// <summary>
+        /// Shows the PlayScreen's Player Death Popup.
+        /// </summary>
+        public static void ShowPlayerDeath()
+        {
+            screen.playerDeathPopup.IsVisible = true;
+
+            screen.itemsPopup.IsVisible = false;
             screen.skillsPopup.IsVisible = false;
         }
 
@@ -97,11 +117,15 @@ namespace AsLegacy.GUI.Screens
         /// </summary>
         public static void ShowSkills()
         {
+            if (screen.playerDeathPopup.IsVisible)
+                return;
+
             screen.skillsPopup.IsVisible = true;
             screen.itemsPopup.IsVisible = false;
         }
 
         private readonly Popup itemsPopup;
+        private readonly PlayerDeath playerDeathPopup;
         private readonly Popup skillsPopup;
 
         private readonly ScrollingConsole characters;
@@ -140,12 +164,16 @@ namespace AsLegacy.GUI.Screens
             parentConsole.Children.Add(console);
 
             SetConsoleFrame(console);
-            // Create stats for Player stats/inventory/equipment/legacy.
 
             itemsPopup = new Popup("Items", "Items to be managed here.",
                 Display.Width - MapViewPortWidth - 1, Display.Height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
+                IsVisible = false
+            };
+            playerDeathPopup = new PlayerDeath(Display.Width / 2, Display.Height / 2)
+            {
+                Position = new Point(Display.Width / 4, Display.Height / 4),
                 IsVisible = false
             };
             skillsPopup = new Popup("Skills", "Skills to be managed here.",
@@ -201,6 +229,7 @@ namespace AsLegacy.GUI.Screens
 
             console.Children.Add(itemsPopup);
             console.Children.Add(skillsPopup);
+            console.Children.Add(playerDeathPopup);
 
             console.Components.Add(this);
         }

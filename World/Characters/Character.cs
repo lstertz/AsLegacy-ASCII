@@ -11,7 +11,7 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
-            private const int CharacterRemovalTime = 700;
+            protected const int CharacterRemovalTime = 700;
 
             private readonly Color DeadColor = Color.DarkGray;
 
@@ -41,7 +41,8 @@ namespace AsLegacy
             /// Highlights the provided Character, if it isn't null, and removes any 
             /// existing highlight.
             /// </summary>
-            /// <param name="c">The Character to be highlighted.</param>
+            /// <param name="c">The Character to be highlighted, null if no 
+            /// Character should be highlighted.</param>
             public static void Highlight(Character c)
             {
                 if (HighlightedTile != c && HighlightedTile != null)

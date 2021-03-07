@@ -11,8 +11,15 @@ namespace AsLegacy.GUI.Popups
     /// </summary>
     public class Popup : ControlsConsole
     {
-        private string title;
-        private string content;
+        /// <summary>
+        /// The title of the Popup, displayed center top of its window.
+        /// </summary>
+        protected virtual string title { get; }
+
+        /// <summary>
+        /// The content of the Popup.
+        /// </summary>
+        protected virtual string content { get; }
 
         /// <summary>
         /// Constructs a new Popup.
@@ -21,17 +28,21 @@ namespace AsLegacy.GUI.Popups
         /// <param name="content">The content of the Popup.</param>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public Popup(string title, string content, int width, int height) : base(width, height)
+        public Popup(string title, string content, int width, int height, 
+            bool hasCloseButton = true) : base(width, height)
         {
             ThemeColors = Colors.StandardTheme;
 
-            Button close = new Button(1, 1)
+            if (hasCloseButton)
             {
-                Position = new Point(width - 3, 1),
-                Text = "X"
-            };
-            close.Click += (s, e) => IsVisible = false;
-            Add(close);
+                Button close = new Button(1, 1)
+                {
+                    Position = new Point(width - 3, 1),
+                    Text = "X"
+                };
+                close.Click += (s, e) => IsVisible = false;
+                Add(close);
+            }
 
             this.title = title;
             this.content = content;

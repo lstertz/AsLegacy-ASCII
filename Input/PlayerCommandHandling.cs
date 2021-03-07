@@ -5,6 +5,7 @@ using SadConsole.Input;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 using AsLegacy.GUI;
+using AsLegacy.GUI.Screens;
 
 namespace AsLegacy.Input
 {
@@ -23,16 +24,16 @@ namespace AsLegacy.Input
         /// <param name="handled">A bool indicating whether the input was handled.</param>
         public override void ProcessKeyboard(Console console, Keyboard info, out bool handled)
         {
+            handled = false;
             if (!AsLegacy.HasPlayer)
-            {
-                handled = false;
                 return;
-            }
 
             info.InitialRepeatDelay = float.PositiveInfinity;
             info.RepeatDelay = float.PositiveInfinity;
 
             handled = true;
+            if (PlayScreen.IsShowingPopup)
+                return;
 
             if (info.IsKeyPressed(Keys.Up) || info.IsKeyPressed(Keys.W))
                 AsLegacy.Player.MoveInDirection(World.Character.Direction.Up, () =>
@@ -73,7 +74,7 @@ namespace AsLegacy.Input
         {
             handled = false;
 
-            if (!AsLegacy.HasPlayer)
+            if (!AsLegacy.HasPlayer || PlayScreen.IsShowingPopup)
                 return;
 
             Commands c = console as Commands;

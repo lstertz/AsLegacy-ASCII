@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace AsLegacy.Characters
+﻿namespace AsLegacy.Characters
 {
     /// <summary>
     /// Defines an Item User, which is a Character that is 
@@ -24,8 +22,8 @@ namespace AsLegacy.Characters
         /// <summary>
         /// The Lineage of this ItemUser.
         /// </summary>
-        public new ILineage Lineage { get => lineage; }
-        private readonly Lineage lineage;
+        public ILineage CharacterLineage { get => lineage; }
+        protected readonly Lineage lineage;
 
 
         /// <summary>
@@ -37,14 +35,8 @@ namespace AsLegacy.Characters
         /// <param name="legacy">The starting legacy of the ItemUser.</param>
         /// <param name="lineageName">The name of the ItemUser's Lineage.</param>
         public ItemUser(int row, int column, string name, int legacy, string lineageName) :
-            this(row, column, name, new Lineage(name, legacy, lineageName,
-                (r, c, n, l) => new ItemUser(r, c, n, l)))
+            this(row, column, name, new Settings(), legacy, lineageName)
         {
-        }
-        private ItemUser(int row, int column, string name, Lineage lineage) :
-            base(row, column, name, new Settings(), lineage)
-        {
-            this.lineage = lineage;
         }
 
         /// <summary>
@@ -59,11 +51,11 @@ namespace AsLegacy.Characters
         /// <param name="lineageName">The name of the ItemUser's Lineage.</param>
         protected ItemUser(int row, int column, 
             string name, Settings baseSettings, int legacy, string lineageName) : 
-            this(row, column, name, baseSettings, new Lineage(name, legacy, lineageName, 
-                (r, c, n, l) => new ItemUser(r, c, n, baseSettings, l)))
+            this(row, column, name, baseSettings, new Lineage(name, legacy, 
+                lineageName))
         {
         }
-        private ItemUser(int row, int column, 
+        protected ItemUser(int row, int column, 
             string name, Settings baseSettings, Lineage lineage) :
             base(row, column, name, baseSettings, lineage)
         {

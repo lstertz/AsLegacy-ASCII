@@ -1,5 +1,6 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.Global;
+using AsLegacy.GUI.Screens;
 using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Input;
@@ -42,6 +43,7 @@ namespace AsLegacy.GUI.Elements
             Character = character;
         }
 
+        /// <inheritdoc/>
         public override void OnAdded(SadConsole.Console console)
         {
             base.OnAdded(console);
@@ -78,11 +80,15 @@ namespace AsLegacy.GUI.Elements
                 Colors.White, Colors.Black, bottomFrameGlyph);
         }
 
+        /// <inheritdoc/>
         public override void ProcessMouse(SadConsole.Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;
-            if (!box.Contains(state.ConsoleCellPosition))
+            if (PlayScreen.IsShowingPopup || !box.Contains(state.ConsoleCellPosition))
+            {
+                World.Character.Highlight(null);
                 return;
+            }
 
             handled = true;
             if (state.Mouse.LeftClicked)

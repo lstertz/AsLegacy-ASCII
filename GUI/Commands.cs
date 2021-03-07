@@ -123,7 +123,7 @@ namespace AsLegacy.GUI
         /// <returns>Whether the input should be considered for a command.</returns>
         private bool IsInteractable(int worldX, int worldY)
         {
-            if (!AsLegacy.HasPlayer)
+            if (!AsLegacy.HasPlayer || PlayScreen.IsShowingPopup)
                 return false;
 
             return World.IsPassable(worldX, worldY) &&
