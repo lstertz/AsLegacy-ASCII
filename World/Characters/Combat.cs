@@ -166,7 +166,7 @@ namespace AsLegacy
                                     UpdateLegacy(attacker, halfLegacy);
                                     tState.Legacy -= halfLegacy;
 
-                                    (t as ItemUser).Lineage.SpawnSuccessor();
+                                    (t as ItemUser).CharacterLineage.SpawnSuccessor();
                                 }
                                 else
                                     UpdateLegacy(attacker, tState.Legacy);

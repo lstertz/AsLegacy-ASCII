@@ -2,7 +2,7 @@
 
 namespace AsLegacy.Characters
 {
-    public partial class ItemUser : World.Character, ILineal
+    public partial class ItemUser
     {
         /// <summary>
         /// Defines Settings, the basic attributes of an ItemUser, 

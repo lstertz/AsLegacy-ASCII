@@ -41,7 +41,7 @@ namespace AsLegacy
             /// Defines Lineage, which is responsible for tracking the legacy, Characters, 
             /// and Items that define a lineage across generations.
             /// </summary>
-            protected class Lineage : Combat.Legacy, ILineage
+            protected abstract class Lineage : Combat.Legacy, ILineage
             {
                 /// <summary>
                 /// The current legacy of this Lineage, represented as a numerical value (points).
@@ -64,10 +64,11 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public string Name { get; private set; }
 
-                private readonly string firstCharacterName;
+                protected virtual int spawnTime => 4000;
+
+                protected readonly string firstCharacterName;
                 // TODO :: Track the names of Characters of the lineage.
 
-                private readonly System.Action<int, int, string, Lineage> successorConstructor;
                 private bool hasLivingCharacter = true;
 
                 /// <summary>
@@ -77,16 +78,11 @@ namespace AsLegacy
                 /// of the Lineage.</param>
                 /// <param name="initialLegacy">The initial legacy of the Lineage.</param>
                 /// <param name="name">The name of the Linage.</param>
-                /// <param name="successorConstructor">An Action to construct a 
-                /// successor for a new generation of the Lineage.</param>
-                public Lineage(string firstCharacterName, int initialLegacy, string name, 
-                    System.Action<int, int, string, Lineage> successorConstructor) : 
+                public Lineage(string firstCharacterName, int initialLegacy, string name) : 
                     base(initialLegacy)
                 {
                     Name = name;
-
                     this.firstCharacterName = firstCharacterName;
-                    this.successorConstructor = successorConstructor;
                 }
 
                 /// <summary>
@@ -98,22 +94,23 @@ namespace AsLegacy
                 }
 
                 /// <inheritdoc/>
-                public bool SpawnSuccessor()
+                public virtual bool SpawnSuccessor()
                 {
                     if (hasLivingCharacter)
                         return false;
 
                     // TODO :: Update naming of successors.
 
-                    Point point = GetRandomPassablePosition();
-                    new World.Action(4000, () =>
+                    new World.Action(spawnTime, () =>
                     {
-                        successorConstructor(point.Y, point.X, firstCharacterName, this);
+                        OnSpawnSuccessor();
                         hasLivingCharacter = true;
                     });
 
                     return true;
                 }
+
+                protected abstract void OnSpawnSuccessor();
             }
         }
     }
