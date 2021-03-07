@@ -11,7 +11,14 @@ namespace AsLegacy.GUI.Popups
     /// </summary>
     public class Popup : ControlsConsole
     {
+        /// <summary>
+        /// The title of the Popup, displayed center top of its window.
+        /// </summary>
         protected virtual string title { get; }
+
+        /// <summary>
+        /// The content of the Popup.
+        /// </summary>
         protected virtual string content { get; }
 
         /// <summary>

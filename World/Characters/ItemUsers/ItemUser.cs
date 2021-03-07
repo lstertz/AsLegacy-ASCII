@@ -23,7 +23,7 @@
         /// The Lineage of this ItemUser.
         /// </summary>
         public ILineage CharacterLineage { get => lineage; }
-        private readonly Lineage lineage;
+        protected readonly Lineage lineage;
 
 
         /// <summary>

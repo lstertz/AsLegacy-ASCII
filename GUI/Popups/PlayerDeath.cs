@@ -12,6 +12,7 @@ namespace AsLegacy.GUI.Popups
     /// </summary>
     public class PlayerDeath : Popup
     {
+        /// <inheritdoc/>
         protected override string title
         {
             get

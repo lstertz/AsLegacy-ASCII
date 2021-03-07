@@ -74,7 +74,7 @@ namespace AsLegacy
             Player.Reset();
 
             World.InitNewWorld();
-            new Player(12, 11, characterName, lineageName);
+            Player.Create(12, 11, characterName, lineageName);
 
             Display.ShowScreen(Display.Screens.Play);
         }
