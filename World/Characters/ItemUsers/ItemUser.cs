@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace AsLegacy.Characters
+﻿namespace AsLegacy.Characters
 {
     /// <summary>
     /// Defines an Item User, which is a Character that is 
@@ -9,19 +7,6 @@ namespace AsLegacy.Characters
     /// </summary>
     public partial class ItemUser : World.Character, ILineal
     {
-        protected new class Lineage : World.Character.Lineage
-        {
-            public Lineage(string firstCharacterName, int initialLegacy, string name) : 
-                base(firstCharacterName, initialLegacy, name) { }
-
-            protected override void OnSpawnSuccessor()
-            {
-                Point point = World.GetRandomPassablePosition();
-                new ItemUser(point.Y, point.X, firstCharacterName, new Settings(), this);
-            }
-        }
-
-
         /// <inheritdoc/>
         public string FullName => Name + " of " + lineage.Name;
 

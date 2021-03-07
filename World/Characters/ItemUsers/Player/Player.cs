@@ -8,21 +8,6 @@ namespace AsLegacy.Characters
     /// </summary>
     public partial class Player : ItemUser
     {
-        protected new class Lineage : ItemUser.Lineage
-        {
-            protected override int spawnTime => CharacterRemovalTime;
-
-            public Lineage(string firstCharacterName, int initialLegacy, string name) : 
-                base(firstCharacterName, initialLegacy, name) { }
-
-            protected override void OnSpawnSuccessor()
-            {
-                // TODO :: Show pop-up, add the below as an action for 'Continue'.
-                // TODO :: Update AsLegacy's Player instance.
-                Point point = World.GetRandomPassablePosition();
-                new Player(point.Y, point.X, firstCharacterName, this);
-            }
-        }
 
 
         /// <summary>
