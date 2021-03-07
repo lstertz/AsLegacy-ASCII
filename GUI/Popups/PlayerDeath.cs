@@ -1,7 +1,5 @@
 ﻿using AsLegacy.Characters;
-using AsLegacy.Global;
 using Microsoft.Xna.Framework;
-using SadConsole;
 using SadConsole.Controls;
 
 namespace AsLegacy.GUI.Popups
@@ -30,19 +28,41 @@ namespace AsLegacy.GUI.Popups
         /// <param name="height">The height of the Popup window.</param>
         public PlayerDeath(int width, int height) : base("", "", width, height, false)
         {
-            /*
-            Button close = new Button(1, 1)
+            Button quit = new Button(6, 1)
             {
-                Position = new Point(width - 3, 1),
-                Text = "X"
+                Position = new Point(5,  height - 2),
+                Text = "Quit"
             };
-            close.Click += (s, e) => IsVisible = false;
-            Add(close);
-            */
+            quit.Click += (s, e) =>
+            {
+                IsVisible = false;
+                Display.ShowScreen(Display.Screens.Start);
+            };
+            Add(quit);
 
-            // TODO :: Add Continue, Observe, and Quit buttons.
-
+            Button createSuccessor = new Button(10, 1)
+            {
+                Position = new Point(width / 2 - 5, height - 2),
+                Text = "Continue"
+            };
+            createSuccessor.Click += (s, e) =>
+            {
+                IsVisible = false;
+                Player.CreateSuccessor(Player.Character.Name);
+            };
+            Add(createSuccessor);
             // TODO :: 55 : Add Textbox for Successor's name.
+
+            Button observe = new Button(9, 1)
+            {
+                Position = new Point(width - 12, height - 2),
+                IsEnabled = false,
+                Text = "Observe"
+            };
+            observe.Click += (s, e) => IsVisible = false;
+            Add(observe);
+
+            // TODO :: XML.
         }
 
         /// <inheritdoc/>
