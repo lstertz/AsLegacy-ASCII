@@ -71,6 +71,7 @@ namespace AsLegacy
         public static void StartGame(string characterName, string lineageName)
         {
             focus = null;
+            Player.Reset();
 
             World.InitNewWorld();
             new Player(12, 11, characterName, lineageName);

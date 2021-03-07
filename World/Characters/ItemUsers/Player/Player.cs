@@ -15,6 +15,15 @@ namespace AsLegacy.Characters
         public static Player Character { get; private set; } = null;
 
         /// <summary>
+        /// Resets the known state of the Player, to where there is no active Player Character.
+        /// </summary>
+        public static void Reset()
+        {
+            Character = null;
+        }
+
+
+        /// <summary>
         /// Specifies the target of the Player.
         /// The target will be selected, and will be the recipient of 
         /// certain actions performed by the Player.
