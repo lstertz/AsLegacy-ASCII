@@ -58,7 +58,7 @@ namespace AsLegacy.GUI.Popups
                 Position = new Point(Width / 2 - 5, CharacterNameY)
             };
             nameField.KeyPressed += ValidateInput;
-            nameField.IsDirtyChanged += UpdatePlayEnablement;
+            nameField.IsDirtyChanged += UpdateCreateSuccessorEnablement;
             Add(nameField);
 
             Button quit = new Button(6, 1)
@@ -127,7 +127,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="sender">The event sender that triggers the update.</param>
         /// <param name="args">The event args.</param>
-        private void UpdatePlayEnablement(object sender, EventArgs args)
+        private void UpdateCreateSuccessorEnablement(object sender, EventArgs args)
         {
             string name = nameField.EditingText;
             if (name == null)
