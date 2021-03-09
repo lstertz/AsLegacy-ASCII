@@ -5,10 +5,10 @@ using SadConsole.Controls;
 namespace AsLegacy.GUI.Popups
 {
     /// <summary>
-    /// Defines the PlayerDeath Popup, which displays information and 
+    /// Defines the PlayerDeathPopup, which displays information and 
     /// options for the Player upon their Character's death.
     /// </summary>
-    public class PlayerDeath : Popup
+    public class PlayerDeathPopup : Popup
     {
         /// <inheritdoc/>
         protected override string title
@@ -22,11 +22,11 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
-        /// Constructs a new PlayerDeath Popup.
+        /// Constructs a new PlayerDeathPopup.
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public PlayerDeath(int width, int height) : base("", "", width, height, false)
+        public PlayerDeathPopup(int width, int height) : base("", "", width, height, false)
         {
             Button quit = new Button(6, 1)
             {

@@ -125,7 +125,7 @@ namespace AsLegacy.GUI.Screens
         }
 
         private readonly Popup itemsPopup;
-        private readonly PlayerDeath playerDeathPopup;
+        private readonly PlayerDeathPopup playerDeathPopup;
         private readonly Popup skillsPopup;
 
         private readonly ScrollingConsole characters;
@@ -171,7 +171,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
             };
-            playerDeathPopup = new PlayerDeath(Display.Width / 2, Display.Height / 2)
+            playerDeathPopup = new PlayerDeathPopup(Display.Width / 2, Display.Height / 2)
             {
                 Position = new Point(Display.Width / 4, Display.Height / 4),
                 IsVisible = false
