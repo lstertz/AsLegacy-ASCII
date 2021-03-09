@@ -123,7 +123,7 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
-        /// Updates the play Button's enabled state.
+        /// Updates the createSuccessor Button's enabled state.
         /// </summary>
         /// <param name="sender">The event sender that triggers the update.</param>
         /// <param name="args">The event args.</param>
