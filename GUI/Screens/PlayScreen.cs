@@ -281,6 +281,9 @@ namespace AsLegacy.GUI.Screens
             if (!IsVisible)
                 return;
 
+            if (!IsShowingPopup)
+                commands.IsFocused = true;
+
             Point center = new Point(0, 0); // TODO :: Support disembodied center when ther is no focus.
             if (AsLegacy.Focus != null)
                 center = AsLegacy.Focus.Point;
