@@ -19,8 +19,8 @@ namespace AsLegacy.GUI.Popups
         private const int CharacterPromptY = 4;
         private const int CharacterNameY = CharacterPromptY + 2;
 
-        private readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
-        private readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
+        private static readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
+        private static readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
 
         /// <inheritdoc/>
         protected override string title

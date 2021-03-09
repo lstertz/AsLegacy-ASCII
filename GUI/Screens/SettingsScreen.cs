@@ -23,11 +23,11 @@ namespace AsLegacy.GUI.Screens
         private const string CharacterNobiliary = "of";
 
         private const string PlayLabel = "Play";
-        private readonly int PlayLabelWidth = PlayLabel.Length + 2;
+        private static readonly int PlayLabelWidth = PlayLabel.Length + 2;
         private const int PlayOffsetY = 4;
 
-        private readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
-        private readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
+        private static readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
+        private static readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
 
         private static ControlsConsole screen;
 
