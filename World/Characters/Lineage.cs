@@ -1,4 +1,6 @@
-﻿namespace AsLegacy
+﻿using System;
+
+namespace AsLegacy
 {
     public partial class World
     {
@@ -68,45 +70,43 @@
                 /// </summary>
                 protected virtual int spawnTime => 4000;
 
-                protected readonly string firstCharacterName;
-                // TODO :: Track the names of Characters of the lineage.
+                protected string CharacterName => character == null ? "" : character.Name;
+                private Character character = null;
 
-                private bool hasLivingCharacter = true;
+                // TODO :: Track the names of Characters of the lineage.
 
                 /// <summary>
                 /// Constructs a new Lineage.
                 /// </summary>
-                /// <param name="firstCharacterName">The name of the first Character 
-                /// of the Lineage.</param>
                 /// <param name="initialLegacy">The initial legacy of the Lineage.</param>
-                /// <param name="name">The name of the Linage.</param>
-                public Lineage(string firstCharacterName, int initialLegacy, string name) : 
-                    base(initialLegacy)
+                /// <param name="name">The name of the Lineage.</param>
+                public Lineage(int initialLegacy, string name) : base(initialLegacy)
                 {
                     Name = name;
-                    this.firstCharacterName = firstCharacterName;
                 }
 
-                /// <summary>
-                /// Updates this Lineage with knowledge of the current Characters death.
-                /// </summary>
-                public void UponCurrentsDeath()
+                public void Init(Character firstCharacter)
                 {
-                    hasLivingCharacter = false;
+                    if (character == null)
+                        character = firstCharacter;
                 }
 
                 /// <inheritdoc/>
                 public virtual bool SpawnSuccessor()
                 {
-                    if (hasLivingCharacter)
+                    if (character == null || character.IsAlive)
                         return false;
 
                     // TODO :: Update naming of successors.
 
                     new World.Action(spawnTime, () =>
                     {
-                        OnSpawnSuccessor();
-                        hasLivingCharacter = true;
+                        OnSpawnSuccessor((successor) =>
+                        {
+                            // TODO :: 56 : Remove previous character from ranking and add successor.
+                            // TODO :: 56 : Update Combat's updating in the ranking to only update legacy value changes.
+                            // TODO :: 56 : Last selection remains after new Player spawns.
+                        });
                     });
 
                     return true;
@@ -115,7 +115,9 @@
                 /// <summary>
                 /// Called when a successor should be spawned.
                 /// </summary>
-                protected abstract void OnSpawnSuccessor();
+                /// <param name="uponSpawn">The callback to be called once a successor has 
+                /// been spawned, with the succeeding Character provided as a parameter.</param>
+                protected abstract void OnSpawnSuccessor(Action<Character> uponSpawn);
             }
         }
     }

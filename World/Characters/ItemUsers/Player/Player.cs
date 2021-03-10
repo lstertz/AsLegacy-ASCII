@@ -32,7 +32,8 @@ namespace AsLegacy.Characters
                 throw new InvalidOperationException("The current Player Character is still " +
                     "active and cannot be replaced by a new instance.");
 
-            Character = new Player(row, column, name, new Lineage(name, 0, lineageName));
+            Character = new Player(row, column, name, new Lineage(0, lineageName));
+            Character.lineage.Init(Character);
         }
 
         /// <summary>
@@ -51,8 +52,11 @@ namespace AsLegacy.Characters
                 throw new InvalidOperationException("The current Player Character is still " +
                     "active and cannot be replaced by a new instance.");
 
+            Lineage lineage = Character.lineage as Lineage;
             Point point = World.GetRandomPassablePosition();
-            Character = new Player(point.Y, point.X, name, Character.lineage as Lineage);
+            Character = new Player(point.Y, point.X, name, lineage);
+
+            lineage.UponSuccessorCreation(Character);
         }
 
         /// <summary>

@@ -51,22 +51,15 @@
         /// <param name="lineageName">The name of the ItemUser's Lineage.</param>
         protected ItemUser(int row, int column, 
             string name, Settings baseSettings, int legacy, string lineageName) : 
-            this(row, column, name, baseSettings, new Lineage(name, legacy, 
-                lineageName))
+            this(row, column, name, baseSettings, new Lineage(legacy, lineageName))
         {
+            this.lineage.Init(this);
         }
         protected ItemUser(int row, int column, 
             string name, Settings baseSettings, Lineage lineage) :
             base(row, column, name, baseSettings, lineage)
         {
             this.lineage = lineage;
-        }
-
-        /// <inheritdoc/>
-        protected override void Die()
-        {
-            base.Die();
-            lineage.UponCurrentsDeath();
         }
     }
 }
