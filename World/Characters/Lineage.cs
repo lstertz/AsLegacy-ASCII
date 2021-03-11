@@ -85,10 +85,15 @@ namespace AsLegacy
                     Name = name;
                 }
 
-                public void Init(Character firstCharacter)
+                public void Update(Character newCharacter)
                 {
-                    if (character == null)
-                        character = firstCharacter;
+                    if (character == null || !character.IsAlive)
+                    {
+                        character = newCharacter;
+                    }
+                    else
+                        throw new InvalidOperationException("A Lineage Character cannot be " +
+                            "updated while it has a living active Character.");
                 }
 
                 /// <inheritdoc/>
@@ -99,25 +104,14 @@ namespace AsLegacy
 
                     // TODO :: Update naming of successors.
 
-                    new World.Action(spawnTime, () =>
-                    {
-                        OnSpawnSuccessor((successor) =>
-                        {
-                            // TODO :: 56 : Remove previous character from ranking and add successor.
-                            // TODO :: 56 : Update Combat's updating in the ranking to only update legacy value changes.
-                            // TODO :: 56 : Last selection remains after new Player spawns.
-                        });
-                    });
-
+                    new World.Action(spawnTime, OnSpawnSuccessor);
                     return true;
                 }
 
                 /// <summary>
                 /// Called when a successor should be spawned.
                 /// </summary>
-                /// <param name="uponSpawn">The callback to be called once a successor has 
-                /// been spawned, with the succeeding Character provided as a parameter.</param>
-                protected abstract void OnSpawnSuccessor(Action<Character> uponSpawn);
+                protected abstract void OnSpawnSuccessor();
             }
         }
     }

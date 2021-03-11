@@ -33,7 +33,6 @@ namespace AsLegacy.Characters
                     "active and cannot be replaced by a new instance.");
 
             Character = new Player(row, column, name, new Lineage(0, lineageName));
-            Character.lineage.Init(Character);
         }
 
         /// <summary>
@@ -55,8 +54,6 @@ namespace AsLegacy.Characters
             Lineage lineage = Character.lineage as Lineage;
             Point point = World.GetRandomPassablePosition();
             Character = new Player(point.Y, point.X, name, lineage);
-
-            lineage.UponSuccessorCreation(Character);
         }
 
         /// <summary>
