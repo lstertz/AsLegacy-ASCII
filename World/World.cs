@@ -146,7 +146,7 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            new ItemUser(14, 15, "Goblin", 20, "Orr");
+            new ItemUser(14, 15, "Goblin", 10, "Orr");
 
             for (int c = 0; c < expectedBeastPopulation; c++)
                 new Beast(GetRandomPassablePosition(), Beast.GetRandomType());

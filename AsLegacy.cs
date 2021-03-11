@@ -18,7 +18,7 @@ namespace AsLegacy
         /// <summary>
         /// The legacy (point) goal of the game.
         /// </summary>
-        public const int Goal = 21;
+        public const int Goal = 25;
 
         /// <summary>
         /// The current Character being focused on by the game player.
