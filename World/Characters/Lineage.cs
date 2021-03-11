@@ -89,6 +89,9 @@ namespace AsLegacy
                 {
                     if (character == null || !character.IsAlive)
                     {
+                        rankedCharacters.Remove(character);
+                        rankedCharacters.Add(newCharacter);
+                        // TODO :: 56 : Last selection remains after new Player spawns.
                         character = newCharacter;
                     }
                     else
