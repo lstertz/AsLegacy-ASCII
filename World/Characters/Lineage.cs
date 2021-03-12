@@ -1,4 +1,6 @@
-﻿namespace AsLegacy
+﻿using System;
+
+namespace AsLegacy
 {
     public partial class World
     {
@@ -68,47 +70,43 @@
                 /// </summary>
                 protected virtual int spawnTime => 4000;
 
-                protected readonly string firstCharacterName;
-                // TODO :: Track the names of Characters of the lineage.
+                protected string CharacterName => character == null ? "" : character.Name;
+                private Character character = null;
 
-                private bool hasLivingCharacter = true;
+                // TODO :: Track the names of Characters of the lineage.
 
                 /// <summary>
                 /// Constructs a new Lineage.
                 /// </summary>
-                /// <param name="firstCharacterName">The name of the first Character 
-                /// of the Lineage.</param>
                 /// <param name="initialLegacy">The initial legacy of the Lineage.</param>
-                /// <param name="name">The name of the Linage.</param>
-                public Lineage(string firstCharacterName, int initialLegacy, string name) : 
-                    base(initialLegacy)
+                /// <param name="name">The name of the Lineage.</param>
+                public Lineage(int initialLegacy, string name) : base(initialLegacy)
                 {
                     Name = name;
-                    this.firstCharacterName = firstCharacterName;
                 }
 
-                /// <summary>
-                /// Updates this Lineage with knowledge of the current Characters death.
-                /// </summary>
-                public void UponCurrentsDeath()
+                public void Update(Character newCharacter)
                 {
-                    hasLivingCharacter = false;
+                    if (character == null || !character.IsAlive)
+                    {
+                        rankedCharacters.Remove(character);
+                        rankedCharacters.Add(newCharacter);
+                        character = newCharacter;
+                    }
+                    else
+                        throw new InvalidOperationException("A Lineage Character cannot be " +
+                            "updated while it has a living active Character.");
                 }
 
                 /// <inheritdoc/>
                 public virtual bool SpawnSuccessor()
                 {
-                    if (hasLivingCharacter)
+                    if (character == null || character.IsAlive)
                         return false;
 
                     // TODO :: Update naming of successors.
 
-                    new World.Action(spawnTime, () =>
-                    {
-                        OnSpawnSuccessor();
-                        hasLivingCharacter = true;
-                    });
-
+                    new World.Action(spawnTime, OnSpawnSuccessor);
                     return true;
                 }
 

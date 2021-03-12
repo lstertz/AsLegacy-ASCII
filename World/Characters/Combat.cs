@@ -156,19 +156,21 @@ namespace AsLegacy
 
                             if (!t.IsAlive)
                             {
-                                t.Die();
-                                rankedCharacters.Remove(t);  // TODO :: Remove once custom sorting is implemented.
+                                t.UponDeath();
 
                                 if (t is ItemUser)
                                 {
                                     int halfLegacy = tState.Legacy / 2;
                                     UpdateLegacy(attacker, halfLegacy);
-                                    tState.Legacy -= halfLegacy;
+                                    UpdateLegacy(t, -halfLegacy);
 
                                     (t as ItemUser).CharacterLineage.SpawnSuccessor();
                                 }
                                 else
+                                {
                                     UpdateLegacy(attacker, tState.Legacy);
+                                    rankedCharacters.Remove(t);
+                                }
                             }
                         },
                         (c) =>

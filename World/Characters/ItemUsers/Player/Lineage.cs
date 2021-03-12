@@ -1,4 +1,5 @@
 ﻿using AsLegacy.GUI.Screens;
+using System;
 
 namespace AsLegacy.Characters
 {
@@ -11,8 +12,7 @@ namespace AsLegacy.Characters
             protected override int spawnTime => CharacterRemovalTime;
 
             /// <inheritdoc/>
-            public Lineage(string firstCharacterName, int initialLegacy, string name) : 
-                base(firstCharacterName, initialLegacy, name) { }
+            public Lineage(int initialLegacy, string name) : base(initialLegacy, name) { }
 
             /// <summary>
             /// Shows the Player Death popup to let the Player decide whether to spawn 
@@ -20,6 +20,7 @@ namespace AsLegacy.Characters
             /// </summary>
             protected override void OnSpawnSuccessor()
             {
+                Character.Target = null;
                 PlayScreen.ShowPlayerDeath();
             }
         }

@@ -334,7 +334,7 @@ namespace AsLegacy
             /// <summary>
             /// Initiates the death of this Character.
             /// </summary>
-            protected virtual void Die()
+            protected virtual void UponDeath()
             {
                 GlyphColor = DeadColor;
                 ActiveMode = Mode.Normal;

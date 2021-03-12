@@ -133,7 +133,10 @@ namespace AsLegacy
                 actions.First.Value.Cancel();
 
             for (int c = presentCharacters.Count - 1; c >= 0; c--)
+            {
+                rankedCharacters.Remove(presentCharacters[c]);
                 RemoveCharacter(presentCharacters[c], false);
+            }
 
             SeedCharacters();
         }
@@ -143,7 +146,7 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            new ItemUser(14, 15, "Goblin", 20, "Orr");
+            new ItemUser(14, 15, "Goblin", 10, "Orr");
 
             for (int c = 0; c < expectedBeastPopulation; c++)
                 new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
@@ -322,7 +325,6 @@ namespace AsLegacy
         private static void RemoveCharacter(Character c, bool replaceBeasts = true)
         {
             presentCharacters.Remove(c);
-            rankedCharacters.Remove(c);
 
             // TODO :: Handle Player death appropriately later.
             characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));

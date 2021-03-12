@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace AsLegacy.Characters
 {
@@ -8,8 +9,7 @@ namespace AsLegacy.Characters
         protected new class Lineage : World.Character.Lineage
         {
             /// <inheritdoc/>
-            public Lineage(string firstCharacterName, int initialLegacy, string name) : 
-                base(firstCharacterName, initialLegacy, name) { }
+            public Lineage(int initialLegacy, string name) : base(initialLegacy, name) { }
 
             /// <summary>
             /// Spawns a new Item User to succeed the last of this Lineage.
@@ -17,7 +17,7 @@ namespace AsLegacy.Characters
             protected override void OnSpawnSuccessor()
             {
                 Point point = World.GetRandomPassablePosition();
-                new ItemUser(point.Y, point.X, firstCharacterName, new Settings(), this);
+                new ItemUser(point.Y, point.X, CharacterName, new Settings(), this);
             }
         }
     }
