@@ -16,28 +16,26 @@ namespace AsLegacy.GUI.Screens
     public class CompletionScreen : ControlsConsole
     {
         private const string PlayAgainLabel = "Play Again";
-        private static readonly int playAgainWidth = PlayAgainLabel.Length + 2;
+        private static readonly int PlayAgainWidth = PlayAgainLabel.Length + 2;
 
         private const string PrefixMessage = "The Lineage of ";
         private const string CompletionMessage = " has won the game!";
         private const int CompletionMessageY = 6;
 
-        private static ControlsConsole screen;
+        private static ControlsConsole Screen;
 
         /// <summary>
         /// Whether the screen is currently visible.
         /// </summary>
         public static new bool IsVisible
         {
-            get => screen.IsVisible;
+            get => Screen.IsVisible;
             set
             {
-                screen.IsVisible = value;
-                screen.IsFocused = value;
+                Screen.IsVisible = value;
+                Screen.IsFocused = value;
             }
         }
-
-        private readonly Label message;
 
         /// <summary>
         /// Initializes the CompletionScreen.
@@ -48,9 +46,11 @@ namespace AsLegacy.GUI.Screens
         /// initialized CompletionScreen's Console's parent Console.</param>
         public static void Init(Console parentConsole)
         {
-            if (screen == null)
-                screen = new CompletionScreen(parentConsole);
+            if (Screen == null)
+                Screen = new CompletionScreen(parentConsole);
         }
+
+        private readonly Label _message;
 
         /// <summary>
         /// Constructs a new CompletionScreen for the given Console.
@@ -63,13 +63,13 @@ namespace AsLegacy.GUI.Screens
             ThemeColors = Colors.StandardTheme;
             parentConsole.Children.Add(this);
 
-            message = new Label(Width)
+            _message = new Label(Width)
             {
                 Alignment = HorizontalAlignment.Center,
                 Position = new Point(0, CompletionMessageY),
                 TextColor = Colors.White
             };
-            Add(message);
+            Add(_message);
 
             Ranking ranking = new Ranking(12)
             {
@@ -79,9 +79,9 @@ namespace AsLegacy.GUI.Screens
             };
             Children.Add(ranking);
 
-            Button playAgain = new Button(playAgainWidth, 1)
+            Button playAgain = new Button(PlayAgainWidth, 1)
             {
-                Position = new Point(Width / 2 - playAgainWidth / 2, Height - 3),
+                Position = new Point(Width / 2 - PlayAgainWidth / 2, Height - 3),
                 Text = PlayAgainLabel
             };
             playAgain.Click += (s, e) => Display.ShowScreen(Display.Screens.Settings);
@@ -108,8 +108,8 @@ namespace AsLegacy.GUI.Screens
                 name = lineal.LineageName;
             }
 
-            message.DisplayText = prefix + name + CompletionMessage;
-            message.IsDirty = true;
+            _message.DisplayText = prefix + name + CompletionMessage;
+            _message.IsDirty = true;
         }
     }
 }

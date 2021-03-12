@@ -19,8 +19,8 @@ namespace AsLegacy.GUI.Elements
         /// </summary>
         public const int Height = 4;
 
-        private const int bottomFrameIndex = Height - 1;
-        private const int bottomFrameGlyph = 196;
+        private const int BottomFrameIndex = Height - 1;
+        private const int BottomFrameGlyph = 196;
 
         /// <summary>
         /// The Character whose overview details are displayed by this CharacterOverview.
@@ -28,8 +28,8 @@ namespace AsLegacy.GUI.Elements
         /// </summary>
         public World.Character Character { get; set; }
 
-        private readonly int y;
-        private Rectangle box;
+        private readonly int _y;
+        private Rectangle _box;
 
         /// <summary>
         /// Constructs a new CharacterOverview.
@@ -38,8 +38,7 @@ namespace AsLegacy.GUI.Elements
         /// <param name="character">The World Character whose details are to be shown.</param>
         public CharacterOverview(int y, World.Character character = null)
         {
-            this.y = y;
-
+            _y = y;
             Character = character;
         }
 
@@ -47,7 +46,7 @@ namespace AsLegacy.GUI.Elements
         public override void OnAdded(SadConsole.Console console)
         {
             base.OnAdded(console);
-            box = new Rectangle(0, y, console.Width, Height);
+            _box = new Rectangle(0, _y, console.Width, Height);
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace AsLegacy.GUI.Elements
         /// <param name="delta">The time passed since the last draw.</param>
         public override void Draw(SadConsole.Console console, TimeSpan delta)
         {
-            console.Clear(box);
+            console.Clear(_box);
 
             if (Character == null)
                 return;
@@ -71,20 +70,21 @@ namespace AsLegacy.GUI.Elements
 
             Color foreground = Character.Selected ? Colors.Selected : 
                 Character.Highlighted ? Colors.Highlighted : Colors.FadedWhite;
-            console.Print(0, y, name, foreground);
-            console.Print(0, y + 1, "[Action]", foreground);
-            console.Print(0, y + 2, "[Target]", foreground);
+            console.Print(0, _y, name, foreground);
+            console.Print(0, _y + 1, "[Action]", foreground);
+            console.Print(0, _y + 2, "[Target]", foreground);
 
-            console.DrawLine(new Point(0, y + bottomFrameIndex), 
-                new Point(console.Width - 1, y + bottomFrameIndex), 
-                Colors.White, Colors.Black, bottomFrameGlyph);
+            console.DrawLine(new Point(0, _y + BottomFrameIndex), 
+                new Point(console.Width - 1, _y + BottomFrameIndex), 
+                Colors.White, Colors.Black, BottomFrameGlyph);
         }
 
         /// <inheritdoc/>
-        public override void ProcessMouse(SadConsole.Console console, MouseConsoleState state, out bool handled)
+        public override void ProcessMouse(SadConsole.Console console, MouseConsoleState state, 
+            out bool handled)
         {
             handled = false;
-            if (PlayScreen.IsShowingPopup || !box.Contains(state.ConsoleCellPosition))
+            if (PlayScreen.IsShowingPopup || !_box.Contains(state.ConsoleCellPosition))
             {
                 World.Character.Highlight(null);
                 return;
@@ -99,11 +99,13 @@ namespace AsLegacy.GUI.Elements
 
 
         #region Unused Overrides
+        /// <inheritdoc/>
         public override void Update(SadConsole.Console console, TimeSpan delta)
         {
             return;
         }
 
+        /// <inheritdoc/>
         public override void ProcessKeyboard(SadConsole.Console console, Keyboard info, out bool handled)
         {
             handled = false;

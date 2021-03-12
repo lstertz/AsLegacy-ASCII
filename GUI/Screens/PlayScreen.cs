@@ -27,7 +27,7 @@ namespace AsLegacy.GUI.Screens
         /// The map is structured as {x, {y, glyph} }, where a -1 for x or y indicates that 
         /// the glyph applies for all values of that axis.
         /// </summary>
-        private static readonly Dictionary<int, Dictionary<int, int>> frameMap =
+        private static readonly Dictionary<int, Dictionary<int, int>> FrameMap =
             new Dictionary<int, Dictionary<int, int>>()
             {
                 {0, new Dictionary<int, int>() {
@@ -61,83 +61,33 @@ namespace AsLegacy.GUI.Screens
                 } }
             };
 
-        private static PlayScreen screen;
+        private static PlayScreen Screen;
 
         /// <summary>
         /// Whether the screen is currently showing a popup.
         /// </summary>
-        public static bool IsShowingPopup => screen.itemsPopup.IsVisible ||
-            screen.skillsPopup.IsVisible || screen.playerDeathPopup.IsVisible;
+        public static bool IsShowingPopup => Screen._itemsPopup.IsVisible ||
+            Screen._skillsPopup.IsVisible || Screen._playerDeathPopup.IsVisible;
 
         /// <summary>
         /// Whether the screen is currently visible.
         /// </summary>
         public static bool IsVisible
         {
-            get => screen.console.IsVisible;
+            get => Screen._console.IsVisible;
             set
             {
-                screen.console.IsVisible = value;
-                screen.commands.IsFocused = value;
+                Screen._console.IsVisible = value;
+                Screen._commands.IsFocused = value;
 
-                screen.Refresh();
+                Screen.Refresh();
             }
         }
 
         /// <summary>
         /// The current position and size of the map viewport.
         /// </summary>
-        public static Rectangle MapViewPort => screen.characters.ViewPort;
-
-        /// <summary>
-        /// Shows the PlayScreen's Items Popup.
-        /// </summary>
-        public static void ShowItems()
-        {
-            if (screen.playerDeathPopup.IsVisible)
-                return;
-
-            screen.itemsPopup.IsVisible = true;
-            screen.skillsPopup.IsVisible = false;
-        }
-
-        /// <summary>
-        /// Shows the PlayScreen's Player Death Popup.
-        /// </summary>
-        public static void ShowPlayerDeath()
-        {
-            screen.playerDeathPopup.IsVisible = true;
-
-            screen.itemsPopup.IsVisible = false;
-            screen.skillsPopup.IsVisible = false;
-        }
-
-        /// <summary>
-        /// Shows the PlayScreen's Skills Popup.
-        /// </summary>
-        public static void ShowSkills()
-        {
-            if (screen.playerDeathPopup.IsVisible)
-                return;
-
-            screen.skillsPopup.IsVisible = true;
-            screen.itemsPopup.IsVisible = false;
-        }
-
-        private readonly Popup itemsPopup;
-        private readonly PlayerDeathPopup playerDeathPopup;
-        private readonly Popup skillsPopup;
-
-        private readonly ScrollingConsole characters;
-        private readonly Console commands;
-        private readonly ScrollingConsole environment;
-        private readonly NearbyPanel nearbyPanel;
-        private readonly CharacterPanel characterPanel;
-
-        private readonly FocusHUD playerHUD;
-        private readonly TargetHUD targetHUD;
-
-        private readonly Console console;
+        public static Rectangle MapViewPort => Screen._characters.ViewPort;
 
 
         /// <summary>
@@ -149,9 +99,60 @@ namespace AsLegacy.GUI.Screens
         /// initialized PlayScreen's Console's parent Console.</param>
         public static void Init(Console parentConsole)
         {
-            if (screen == null)
-                screen = new PlayScreen(parentConsole);
+            if (Screen == null)
+                Screen = new PlayScreen(parentConsole);
         }
+
+        /// <summary>
+        /// Shows the PlayScreen's Items Popup.
+        /// </summary>
+        public static void ShowItems()
+        {
+            if (Screen._playerDeathPopup.IsVisible)
+                return;
+
+            Screen._itemsPopup.IsVisible = true;
+            Screen._skillsPopup.IsVisible = false;
+        }
+
+        /// <summary>
+        /// Shows the PlayScreen's Player Death Popup.
+        /// </summary>
+        public static void ShowPlayerDeath()
+        {
+            Screen._playerDeathPopup.IsVisible = true;
+
+            Screen._itemsPopup.IsVisible = false;
+            Screen._skillsPopup.IsVisible = false;
+        }
+
+        /// <summary>
+        /// Shows the PlayScreen's Skills Popup.
+        /// </summary>
+        public static void ShowSkills()
+        {
+            if (Screen._playerDeathPopup.IsVisible)
+                return;
+
+            Screen._skillsPopup.IsVisible = true;
+            Screen._itemsPopup.IsVisible = false;
+        }
+
+
+        private readonly Popup _itemsPopup;
+        private readonly PlayerDeathPopup _playerDeathPopup;
+        private readonly Popup _skillsPopup;
+
+        private readonly ScrollingConsole _characters;
+        private readonly Console _commands;
+        private readonly ScrollingConsole _environment;
+        private readonly NearbyPanel _nearbyPanel;
+        private readonly CharacterPanel _characterPanel;
+
+        private readonly FocusHUD _playerHUD;
+        private readonly TargetHUD _targetHUD;
+
+        private readonly Console _console;
 
         /// <summary>
         /// Constructs a new PlayScreen for the given Console.
@@ -160,78 +161,78 @@ namespace AsLegacy.GUI.Screens
         /// new PlayScreen's Console's parent Console.</param>
         private PlayScreen(Console parentConsole)
         {
-            console = new Console(Display.Width, Display.Height);
-            parentConsole.Children.Add(console);
+            _console = new Console(Display.Width, Display.Height);
+            parentConsole.Children.Add(_console);
 
-            SetConsoleFrame(console);
+            SetConsoleFrame(_console);
 
-            itemsPopup = new Popup("Items", "Items to be managed here.",
+            _itemsPopup = new Popup("Items", "Items to be managed here.",
                 Display.Width - MapViewPortWidth - 1, Display.Height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
             };
-            playerDeathPopup = new PlayerDeathPopup(Display.Width / 2, Display.Height / 2)
+            _playerDeathPopup = new PlayerDeathPopup(Display.Width / 2, Display.Height / 2)
             {
                 Position = new Point(Display.Width / 4, Display.Height / 4),
                 IsVisible = false
             };
-            skillsPopup = new Popup("Skills", "Skills to be managed here.",
+            _skillsPopup = new Popup("Skills", "Skills to be managed here.",
                 Display.Width - MapViewPortWidth - 1, Display.Height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
             };
 
-            characters = World.Characters;
-            characters.Position = new Point(1, 1);
-            characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
-            characters.CenterViewPortOnPoint(new Point(0, 0));
-            characters.Components.Add(new CharacterSelectionHandling());
+            _characters = World.Characters;
+            _characters.Position = new Point(1, 1);
+            _characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
+            _characters.CenterViewPortOnPoint(new Point(0, 0));
+            _characters.Components.Add(new CharacterSelectionHandling());
 
-            commands = new Commands();
-            commands.Components.Add(new PlayerCommandHandling());
-            commands.IsFocused = true;
+            _commands = new Commands();
+            _commands.Components.Add(new PlayerCommandHandling());
+            _commands.IsFocused = true;
 
-            playerHUD = new FocusHUD(Display.Width / 2 - 1)
+            _playerHUD = new FocusHUD(Display.Width / 2 - 1)
             {
                 Position = new Point(1, Display.Height - 4)
             };
 
-            targetHUD = new TargetHUD(Display.Width / 2 - 1)
+            _targetHUD = new TargetHUD(Display.Width / 2 - 1)
             {
                 Position = new Point(1, Display.Height - 7)
             };
 
-            environment = World.Environment;
-            environment.Position = new Point(1, 1);
-            environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
-            environment.CenterViewPortOnPoint(new Point(0, 0));
+            _environment = World.Environment;
+            _environment.Position = new Point(1, 1);
+            _environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
+            _environment.CenterViewPortOnPoint(new Point(0, 0));
 
-            nearbyPanel = new NearbyPanel(Display.Width / 2 - MapViewPortWidth - 2,
+            _nearbyPanel = new NearbyPanel(Display.Width / 2 - MapViewPortWidth - 2,
                 MapViewPortHeight)
             {
                 Position = new Point(MapViewPortWidth + 2, 1)
             };
 
-            characterPanel = new CharacterPanel(Display.Width / 2 - 2, Display.Height - 2)
+            _characterPanel = new CharacterPanel(Display.Width / 2 - 2, Display.Height - 2)
             {
                 Position = new Point(Display.Width / 2 + 1, 1)
             };
 
-            console.Children.Add(environment);
-            console.Children.Add(characters);
-            characters.Children.Add(commands);
-            console.Children.Add(nearbyPanel);
-            console.Children.Add(playerHUD);
-            console.Children.Add(targetHUD);
-            console.Children.Add(characterPanel);
+            _console.Children.Add(_environment);
+            _console.Children.Add(_characters);
+            _characters.Children.Add(_commands);
+            _console.Children.Add(_nearbyPanel);
+            _console.Children.Add(_playerHUD);
+            _console.Children.Add(_targetHUD);
+            _console.Children.Add(_characterPanel);
 
-            console.Children.Add(itemsPopup);
-            console.Children.Add(skillsPopup);
-            console.Children.Add(playerDeathPopup);
+            _console.Children.Add(_itemsPopup);
+            _console.Children.Add(_skillsPopup);
+            _console.Children.Add(_playerDeathPopup);
 
-            console.Components.Add(this);
+            _console.Components.Add(this);
         }
 
         /// <summary>
@@ -248,17 +249,17 @@ namespace AsLegacy.GUI.Screens
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
                 {
-                    if (frameMap.ContainsKey(x))
+                    if (FrameMap.ContainsKey(x))
                     {
-                        if (frameMap[x].ContainsKey(y))
-                            console.SetGlyph(x, y, frameMap[x][y]);
-                        else if (frameMap[x].ContainsKey(-1))
-                            console.SetGlyph(x, y, frameMap[x][-1]);
+                        if (FrameMap[x].ContainsKey(y))
+                            console.SetGlyph(x, y, FrameMap[x][y]);
+                        else if (FrameMap[x].ContainsKey(-1))
+                            console.SetGlyph(x, y, FrameMap[x][-1]);
                     }
-                    else if (frameMap.ContainsKey(-1))
+                    else if (FrameMap.ContainsKey(-1))
                     {
-                        if (frameMap[-1].ContainsKey(y))
-                            console.SetGlyph(x, y, frameMap[-1][y]);
+                        if (FrameMap[-1].ContainsKey(y))
+                            console.SetGlyph(x, y, FrameMap[-1][y]);
                     }
                 }
         }
@@ -268,7 +269,7 @@ namespace AsLegacy.GUI.Screens
         /// </summary>
         public void Refresh()
         {
-            characterPanel.Refresh();
+            _characterPanel.Refresh();
         }
 
         /// <summary>
@@ -282,16 +283,16 @@ namespace AsLegacy.GUI.Screens
                 return;
 
             if (!IsShowingPopup)
-                commands.IsFocused = true;
+                _commands.IsFocused = true;
 
             Point center = new Point(0, 0); // TODO :: Support disembodied center when ther is no focus.
             if (AsLegacy.Focus != null)
                 center = AsLegacy.Focus.Point;
 
-            characters.CenterViewPortOnPoint(center);
-            environment.CenterViewPortOnPoint(center);
+            _characters.CenterViewPortOnPoint(center);
+            _environment.CenterViewPortOnPoint(center);
 
-            characterPanel.Draw(delta);
+            _characterPanel.Draw(delta);
         }
     }
 }

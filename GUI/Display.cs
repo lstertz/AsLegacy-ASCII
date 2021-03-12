@@ -24,8 +24,8 @@ namespace AsLegacy.GUI
             Completion
         }
 
-
         public static Screens CurrentScreen { get; private set; }
+
 
         /// <summary>
         /// Initializes the Display.

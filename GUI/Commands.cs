@@ -15,26 +15,27 @@ namespace AsLegacy.GUI
     /// </summary>
     public class Commands : Console
     {
-        private static readonly Cell empty = new Cell(Colors.Transparent, Colors.Transparent);
-        private static readonly Cell up = new Cell(Colors.FadedWhite, Colors.Transparent, 30);
-        private static readonly Cell right = new Cell(Colors.FadedWhite, Colors.Transparent, 16);
-        private static readonly Cell down = new Cell(Colors.FadedWhite, Colors.Transparent, 31);
-        private static readonly Cell left = new Cell(Colors.FadedWhite, Colors.Transparent, 17);
+        private static readonly Cell Empty = new Cell(Colors.Transparent, Colors.Transparent);
+        private static readonly Cell Up = new Cell(Colors.FadedWhite, Colors.Transparent, 30);
+        private static readonly Cell Right = new Cell(Colors.FadedWhite, Colors.Transparent, 16);
+        private static readonly Cell Down = new Cell(Colors.FadedWhite, Colors.Transparent, 31);
+        private static readonly Cell Left = new Cell(Colors.FadedWhite, Colors.Transparent, 17);
 
         /// <summary>
         /// The Cells that make up the display of the available directions.
         /// </summary>
-        private static readonly Cell[] cells = new Cell[]
+        private static readonly Cell[] Cells = new Cell[]
         {
-                empty, up, empty,
-                left, empty, right,
-                empty, down, empty
+                Empty, Up, Empty,
+                Left, Empty, Right,
+                Empty, Down, Empty
         };
 
-        private int highlightCellX = -1;
-        private int highlightCellY = -1;
+        private int _highlightCellX = -1;
+        private int _highlightCellY = -1;
 
-        public Commands() : base(3, 3, cells)
+        /// <inheritdoc/>
+        public Commands() : base(3, 3, Cells)
         { }
 
         /// <summary>
@@ -46,8 +47,8 @@ namespace AsLegacy.GUI
         /// <param name="y">The local y of the Cell.</param>
         public void SetCellToHighlight(int x, int y)
         {
-            highlightCellX = x;
-            highlightCellY = y;
+            _highlightCellX = x;
+            _highlightCellY = y;
         }
 
         /// <summary>
@@ -88,6 +89,7 @@ namespace AsLegacy.GUI
             SetForeground(0, 1, GetDirectionColor(0, 1, y, x - 1));
         }
 
+        /// <inheritdoc/>
         public override bool ProcessMouse(MouseConsoleState state)
         {
             // Ensure that the PlayerCommandHandling Component processes.
@@ -109,7 +111,7 @@ namespace AsLegacy.GUI
             if (!IsInteractable(worldX, worldY))
                 return Colors.Transparent;
 
-            if (highlightCellX == x && highlightCellY == y)
+            if (_highlightCellX == x && _highlightCellY == y)
                 return Colors.White;
             return Colors.FadedWhite;
         }

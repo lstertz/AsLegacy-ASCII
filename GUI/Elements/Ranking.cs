@@ -15,14 +15,14 @@ namespace AsLegacy.GUI
         /// </summary>
         public const int TotalWidth = 36;
 
-        private const string rankTitle = "Rank ";
-        private readonly int rankSpace = rankTitle.Length;
-        private const string nameTitle = "Lineage          ";
-        private readonly int nameSpace = nameTitle.Length;
-        private const string legacyTitle = "Legacy      ";
-        private readonly int legacySpace = legacyTitle.Length;
+        private const string RankTitle = "Rank ";
+        private readonly int RankSpace = RankTitle.Length;
+        private const string NameTitle = "Lineage          ";
+        private readonly int NameSpace = NameTitle.Length;
+        private const string LegacyTitle = "Legacy      ";
+        private readonly int LegacySpace = LegacyTitle.Length;
 
-        private readonly int tableRows;
+        private readonly int TableRows;
 
         /// <summary>
         /// Constructs a new Ranking.
@@ -32,7 +32,7 @@ namespace AsLegacy.GUI
         /// be drawn to display the goal.</param>
         public Ranking(int height, bool displayGoal = false) : base(TotalWidth, height)
         {
-            tableRows = height - 2;
+            TableRows = height - 2;
 
             DrawHeader();
             DrawFrame();
@@ -53,7 +53,7 @@ namespace AsLegacy.GUI
 
             SetGlyph(0, Height - 1, 222);
             Fill(1, Height - 1, TotalWidth - 2, Colors.Transparent, Colors.White, 0);
-            Print(rankSpace + nameSpace + 1, Height - 1, "Goal", Colors.Black, Colors.White);
+            Print(RankSpace + NameSpace + 1, Height - 1, "Goal", Colors.Black, Colors.White);
             Print(TotalWidth - goal.Length - 1, Height - 1, goal, Colors.Black, Colors.White);
             SetGlyph(TotalWidth - 1, Height - 1, 221);
         }
@@ -63,12 +63,12 @@ namespace AsLegacy.GUI
         /// </summary>
         private void DrawFrame()
         {
-            int afterNameSpace = rankSpace + nameSpace;
+            int afterNameSpace = RankSpace + NameSpace;
             SetGlyph(0, 0, 222);
             for (int y = 1; y < Height - 1; y++)
             {
                 SetGlyph(0, y, 179);
-                SetGlyph(rankSpace, y, 179);
+                SetGlyph(RankSpace, y, 179);
                 SetGlyph(afterNameSpace, y, 179);
                 SetGlyph(TotalWidth - 1, y, 179);
             }
@@ -77,7 +77,7 @@ namespace AsLegacy.GUI
             SetGlyph(0, Height - 1, 192);
             for (int x = 1; x < TotalWidth - 1; x++)
                 SetGlyph(x, Height - 1, 196);
-            SetGlyph(rankSpace, Height - 1, 193);
+            SetGlyph(RankSpace, Height - 1, 193);
             SetGlyph(afterNameSpace, Height - 1, 193);
             SetGlyph(TotalWidth - 1, Height - 1, 217);
         }
@@ -89,13 +89,13 @@ namespace AsLegacy.GUI
         {
             int offset = 1;
 
-            Print(offset, 0, rankTitle, Colors.Black, Colors.White);
-            offset += rankSpace;
+            Print(offset, 0, RankTitle, Colors.Black, Colors.White);
+            offset += RankSpace;
 
-            Print(offset, 0, nameTitle, Colors.Black, Colors.White);
-            offset += nameSpace;
+            Print(offset, 0, NameTitle, Colors.Black, Colors.White);
+            offset += NameSpace;
 
-            Print(offset, 0, legacyTitle, Colors.Black, Colors.White);
+            Print(offset, 0, LegacyTitle, Colors.Black, Colors.White);
         }
 
         /// <summary>
@@ -106,17 +106,17 @@ namespace AsLegacy.GUI
         {
             base.Draw(update);
 
-            World.Character[] characters = World.RankedCharactersFor(0, tableRows);
-            for (int c = 0; c < tableRows; c++)
+            World.Character[] characters = World.RankedCharactersFor(0, TableRows);
+            for (int c = 0; c < TableRows; c++)
             {
                 int offset = 1;
                 string rank = (c + 1).ToString();
 
                 Print(offset, c + 1, rank);
-                offset += rankSpace;
+                offset += RankSpace;
 
-                Clear(offset, c + 1, nameSpace - 1);
-                Clear(offset + nameSpace, c + 1, legacySpace - 1);
+                Clear(offset, c + 1, NameSpace - 1);
+                Clear(offset + NameSpace, c + 1, LegacySpace - 1);
                 if (c < characters.Length)
                 {
                     string name = characters[c].Name;
@@ -129,7 +129,7 @@ namespace AsLegacy.GUI
                     }
 
                     Print(offset, c + 1, name);
-                    offset += nameSpace;
+                    offset += NameSpace;
 
                     Print(offset, c + 1, legacy);
                 }

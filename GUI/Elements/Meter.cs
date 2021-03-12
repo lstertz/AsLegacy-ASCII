@@ -13,41 +13,41 @@ namespace AsLegacy.GUI.Elements
         /// <summary>
         /// The length, in cells, of the meter itself (excludes the option header glyph).
         /// </summary>
-        public const int meterLength = 10;
+        public const int MeterLength = 10;
 
         /// <summary>
         /// The glyph for when a cell is empty.
         /// </summary>
-        public const int emptyGlyph = 0;
+        public const int EmptyGlyph = 0;
         /// <summary>
         /// The glyph for when a cell is mostly empty.
         /// </summary>
-        public const int mostlyEmptyGlyph = 176;
+        public const int MostlyEmptyGlyph = 176;
         /// <summary>
         /// The glyph for when a cell is half full.
         /// </summary>
-        public const int halfFullGlyph = 177;
+        public const int HalfFullGlyph = 177;
         /// <summary>
         /// The glyph for when a cell is mostly full.
         /// </summary>
-        public const int mostlyFullGlyph = 178;
+        public const int MostlyFullGlyph = 178;
         /// <summary>
         /// The glyph for when a cell is full.
         /// </summary>
-        public const int fullGlyph = 219;
+        public const int FullGlyph = 219;
 
-        private const float cellIncrement = 1.0f / meterLength;
-        private const float mostlyEmptyGlyphIncrement = 1.0f / 3.0f;
-        private const float halfFullGlyphIncrement = mostlyEmptyGlyphIncrement * 2;
+        private const float CellIncrement = 1.0f / MeterLength;
+        private const float MostlyEmptyGlyphIncrement = 1.0f / 3.0f;
+        private const float HalfFullGlyphIncrement = MostlyEmptyGlyphIncrement * 2;
 
-        private int headerGlyph;
-        Func<float> valueRetriever;
-        private int x;
-        private int y;
+        private int _headerGlyph;
+        Func<float> _valueRetriever;
+        private int _x;
+        private int _y;
 
-        private Color background;
-        private Color fill;
-        private float lastValue = float.NaN;
+        private Color _background;
+        private Color _fill;
+        private float _lastValue = float.NaN;
 
         /// <summary>
         /// Constructs a new Meter.
@@ -63,13 +63,13 @@ namespace AsLegacy.GUI.Elements
         public Meter(int x, int y, Func<float> valueRetriever, 
             Color fill, Color background, int headerGlyph = 0)
         {
-            this.x = x;
-            this.y = y;
-            this.valueRetriever = valueRetriever;
+            _x = x;
+            _y = y;
+            _valueRetriever = valueRetriever;
 
-            this.headerGlyph = headerGlyph;
-            this.background = background;
-            this.fill = fill;
+            _headerGlyph = headerGlyph;
+            _background = background;
+            _fill = fill;
         }
 
         /// <summary>
@@ -80,18 +80,18 @@ namespace AsLegacy.GUI.Elements
         {
             base.OnAdded(console);
 
-            int x = this.x;
-            if (headerGlyph != 0)
+            int x = _x;
+            if (_headerGlyph != 0)
             {
-                console.SetGlyph(x, y, headerGlyph);
-                console.SetForeground(x, y, fill);
+                console.SetGlyph(x, _y, _headerGlyph);
+                console.SetForeground(x, _y, _fill);
                 x++;
             }
 
-            for (int c = 0; c < meterLength; c++, x++)
+            for (int c = 0; c < MeterLength; c++, x++)
             {
-                console.SetBackground(x, y, background);
-                console.SetForeground(x, y, fill);
+                console.SetBackground(x, _y, _background);
+                console.SetForeground(x, _y, _fill);
             }
         }
 
@@ -102,33 +102,33 @@ namespace AsLegacy.GUI.Elements
         /// <param name="delta">The time passed since the last draw.</param>
         public override void Draw(SadConsole.Console console, TimeSpan delta)
         {
-            float value = valueRetriever();
-            if (lastValue == value)
+            float value = _valueRetriever();
+            if (_lastValue == value)
                 return;
 
-            int x = this.x;
-            if (headerGlyph != 0)
+            int x = _x;
+            if (_headerGlyph != 0)
             {
-                console.SetForeground(x, y, value > 0 ? fill : background);
+                console.SetForeground(x, _y, value > 0 ? _fill : _background);
                 x++;
             }
 
-            float cellValue = value / cellIncrement;
-            for (int c = 0; c < meterLength; c++, x++)
+            float cellValue = value / CellIncrement;
+            for (int c = 0; c < MeterLength; c++, x++)
             {
                 if (c >= cellValue)
-                    console.SetGlyph(x, y, emptyGlyph);
+                    console.SetGlyph(x, _y, EmptyGlyph);
                 else if (c < (int) cellValue)
-                    console.SetGlyph(x, y, fullGlyph);
+                    console.SetGlyph(x, _y, FullGlyph);
                 else
                 {
                     float glyphValue = cellValue % 1.0f;
-                    if (glyphValue < mostlyEmptyGlyphIncrement)
-                        console.SetGlyph(x, y, mostlyEmptyGlyph);
-                    else if (glyphValue < halfFullGlyphIncrement)
-                        console.SetGlyph(x, y, halfFullGlyph);
+                    if (glyphValue < MostlyEmptyGlyphIncrement)
+                        console.SetGlyph(x, _y, MostlyEmptyGlyph);
+                    else if (glyphValue < HalfFullGlyphIncrement)
+                        console.SetGlyph(x, _y, HalfFullGlyph);
                     else
-                        console.SetGlyph(x, y, mostlyFullGlyph);
+                        console.SetGlyph(x, _y, MostlyFullGlyph);
                 }
             }
         }

@@ -2,6 +2,9 @@
 
 namespace AsLegacy.Global
 {
+    /// <summary>
+    /// The global cache of commonly used Colors and Color Themes.
+    /// </summary>
     public static class Colors
     {
         public static SadConsole.Themes.Colors StandardTheme

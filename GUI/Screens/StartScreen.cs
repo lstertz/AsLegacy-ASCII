@@ -15,26 +15,26 @@ namespace AsLegacy.GUI.Screens
     public class StartScreen : ControlsConsole
     {
         private const string ContinueLabel = "Continue";
-        private readonly int continueLabelWidth = ContinueLabel.Length + 2;
+        private readonly int ContinueLabelWidth = ContinueLabel.Length + 2;
 
         private const string NewGameLabel = "New Game";
-        private readonly int newGameLabelWidth = NewGameLabel.Length + 2;
+        private readonly int NewGameLabelWidth = NewGameLabel.Length + 2;
 
         private const string TitleMessage = "As Legacy";
         private const int TitleY = 10;
 
-        private static ControlsConsole screen;
+        private static ControlsConsole Screen;
 
         /// <summary>
         /// Whether the screen is currently visible.
         /// </summary>
         public static new bool IsVisible
         {
-            get => screen.IsVisible;
+            get => Screen.IsVisible;
             set
             {
-                screen.IsVisible = value;
-                screen.IsFocused = value;
+                Screen.IsVisible = value;
+                Screen.IsFocused = value;
             }
         }
 
@@ -47,8 +47,8 @@ namespace AsLegacy.GUI.Screens
         /// initialized CompletionScreen's Console's parent Console.</param>
         public static void Init(Console parentConsole)
         {
-            if (screen == null)
-                screen = new StartScreen(parentConsole);
+            if (Screen == null)
+                Screen = new StartScreen(parentConsole);
         }
 
         /// <summary>
@@ -70,17 +70,17 @@ namespace AsLegacy.GUI.Screens
                 TextColor = Colors.White
             });
 
-            Button newGame = new Button(newGameLabelWidth, 1)
+            Button newGame = new Button(NewGameLabelWidth, 1)
             {
-                Position = new Point(Width / 2 - newGameLabelWidth / 2, Height - 8),
+                Position = new Point(Width / 2 - NewGameLabelWidth / 2, Height - 8),
                 Text = NewGameLabel
             };
             newGame.Click += (s, e) => Display.ShowScreen(Display.Screens.Settings);
             Add(newGame);
 
-            Button continueGame = new Button(continueLabelWidth, 1)
+            Button continueGame = new Button(ContinueLabelWidth, 1)
             {
-                Position = new Point(Width / 2 - continueLabelWidth / 2, Height - 6),
+                Position = new Point(Width / 2 - ContinueLabelWidth / 2, Height - 6),
                 Text = ContinueLabel,
                 IsEnabled = false
             };
