@@ -16,7 +16,7 @@ namespace AsLegacy.GUI
         /// <summary>
         /// The screens available for the Display to show.
         /// </summary>
-        public enum Screens
+        public enum Screen
         {
             Start,
             Settings,
@@ -24,7 +24,7 @@ namespace AsLegacy.GUI
             Completion
         }
 
-        public static Screens CurrentScreen { get; private set; }
+        public static Screen CurrentScreen { get; private set; }
 
 
         /// <summary>
@@ -45,21 +45,21 @@ namespace AsLegacy.GUI
             CompletionScreen.Init(console);
             // TODO :: Implement other screens.
 
-            ShowScreen(Screens.Start);
+            ShowScreen(Screen.Start);
         }
 
         /// <summary>
         /// Changes the Display to show only the specified screen.
         /// </summary>
         /// <param name="screen">The screen to be shown.</param>
-        public static void ShowScreen(Screens screen)
+        public static void ShowScreen(Screen screen)
         {
             // TODO :: Add an optional fade transition or wait of some kind.
 
-            StartScreen.IsVisible = screen == Screens.Start;
-            SettingsScreen.IsVisible = screen == Screens.Settings;
-            PlayScreen.IsVisible = screen == Screens.Play;
-            CompletionScreen.IsVisible = screen == Screens.Completion;
+            StartScreen.IsVisible = screen == Screen.Start;
+            SettingsScreen.IsVisible = screen == Screen.Settings;
+            PlayScreen.IsVisible = screen == Screen.Play;
+            CompletionScreen.IsVisible = screen == Screen.Completion;
             // TODO :: Implement for the other screens.
 
             CurrentScreen = screen;

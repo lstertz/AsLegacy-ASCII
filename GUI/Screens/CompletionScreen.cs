@@ -84,7 +84,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Width / 2 - PlayAgainWidth / 2, Height - 3),
                 Text = PlayAgainLabel
             };
-            playAgain.Click += (s, e) => Display.ShowScreen(Display.Screens.Settings);
+            playAgain.Click += (s, e) => Display.ShowScreen(Display.Screen.Settings);
             Add(playAgain);
         }
 

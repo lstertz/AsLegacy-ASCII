@@ -76,7 +76,7 @@ namespace AsLegacy
             World.InitNewWorld();
             Player.Create(12, 11, characterName, lineageName);
 
-            Display.ShowScreen(Display.Screens.Play);
+            Display.ShowScreen(Display.Screen.Play);
         }
 
 
@@ -102,13 +102,13 @@ namespace AsLegacy
         /// <param name="delta">The time passed since the last update.</param>
         public override void Update(Console console, TimeSpan delta)
         {
-            if (Display.CurrentScreen != Display.Screens.Play)
+            if (Display.CurrentScreen != Display.Screen.Play)
                 return;
 
             if (World.HighestRankedCharacter.Legacy < Goal)
                 World.Update(delta.Milliseconds);
-            else if (Display.CurrentScreen != Display.Screens.Completion)
-                Display.ShowScreen(Display.Screens.Completion);
+            else if (Display.CurrentScreen != Display.Screen.Completion)
+                Display.ShowScreen(Display.Screen.Completion);
         }
     }
 }

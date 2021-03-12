@@ -69,7 +69,7 @@ namespace AsLegacy.GUI.Popups
             quit.Click += (s, e) =>
             {
                 IsVisible = false;
-                Display.ShowScreen(Display.Screens.Start);
+                Display.ShowScreen(Display.Screen.Start);
             };
             Add(quit);
 
