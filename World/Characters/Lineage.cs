@@ -68,7 +68,7 @@ namespace AsLegacy
                 /// The time that passes after the initiation of a successor spawn 
                 /// before a successor is actually spawned.
                 /// </summary>
-                protected virtual int spawnTime => 4000;
+                protected virtual int SpawnTime => 4000;
 
                 protected string CharacterName => character == null ? "" : character.Name;
                 private Character character = null;
@@ -106,7 +106,7 @@ namespace AsLegacy
 
                     // TODO :: Update naming of successors.
 
-                    new World.Action(spawnTime, OnSpawnSuccessor);
+                    new World.Action(SpawnTime, OnSpawnSuccessor);
                     return true;
                 }
 

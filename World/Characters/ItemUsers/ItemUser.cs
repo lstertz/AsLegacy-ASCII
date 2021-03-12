@@ -7,23 +7,22 @@
     /// </summary>
     public partial class ItemUser : World.Character, ILineal
     {
-        /// <inheritdoc/>
-        public string FullName => Name + " of " + lineage.Name;
+        /// <summary>
+        /// The Lineage of this ItemUser.
+        /// </summary>
+        public ILineage CharacterLineage { get; private set; }
 
         /// <inheritdoc/>
-        public string LineageName => lineage.Name;
+        public string FullName => Name + " of " + CharacterLineage.Name;
 
         /// <summary>
         /// The highest recorded legacy of this Item User's Lineage, 
         /// represented as a numerical value (points)
         /// </summary>
-        public override int LegacyRecord => lineage.LegacyRecord;
+        public override int LegacyRecord => CharacterLineage.LegacyRecord;
 
-        /// <summary>
-        /// The Lineage of this ItemUser.
-        /// </summary>
-        public ILineage CharacterLineage { get => lineage; }
-        protected readonly Lineage lineage;
+        /// <inheritdoc/>
+        public string LineageName => CharacterLineage.Name;
 
 
         /// <summary>
@@ -58,7 +57,7 @@
             string name, Settings baseSettings, Lineage lineage) :
             base(row, column, name, baseSettings, lineage)
         {
-            this.lineage = lineage;
+            CharacterLineage = lineage;
             lineage.Update(this);
         }
     }

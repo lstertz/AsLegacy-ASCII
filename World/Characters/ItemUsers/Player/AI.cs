@@ -1,4 +1,5 @@
 ﻿using System;
+
 using static AsLegacy.World;
 
 namespace AsLegacy.Characters
