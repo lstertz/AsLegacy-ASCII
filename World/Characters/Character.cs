@@ -11,10 +11,6 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
-            protected const int CharacterRemovalTime = 700;
-
-            private static readonly Color DeadColor = Color.DarkGray;
-
             /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>
@@ -51,6 +47,13 @@ namespace AsLegacy
                 if (c != null)
                     c.Highlighted = true;
             }
+
+            /// <summary>
+            /// The time that passes after death before the Character is removed from the World.
+            /// </summary>
+            protected const int CharacterRemovalTime = 700;
+
+            private static readonly Color DeadColor = Color.DarkGray;
 
 
             /// <inheritdoc/>
