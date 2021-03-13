@@ -58,7 +58,7 @@ The As Legacy code project conforms to the following guidelines:
 * XML Documentation
 	* Requied for all public and protected members.
 	* Required for all methods/functions.
-	* Not required for private constructors.
+	* Not required for protected or private constructors.
 * File and folder structure follows similarly to any nested/inheriting class structure, 
 where a folder is warranted whenever a class has at least one nested class, consists of 
 several partial classes, or belong to a shared overarching concept with inheriting classes.

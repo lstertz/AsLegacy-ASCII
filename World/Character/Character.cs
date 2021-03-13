@@ -57,12 +57,12 @@ namespace AsLegacy
 
 
             /// <inheritdoc/>
-            IAI ICharacter.AI => AI;
+            IAI ICharacter.AI => CharacterAI;
 
             /// <summary>
             /// The Character's AI.
             /// </summary>
-            protected IAI AI { get; set; }
+            protected IAI CharacterAI { get; set; }
 
             /// <summary>
             /// The character's present mode.
@@ -184,7 +184,7 @@ namespace AsLegacy
                 _mode = Mode.Normal;
                 Name = name;
 
-                AI = baseSettings.AI;
+                CharacterAI = baseSettings.AI;
                 _baseSettings = baseSettings;
                 _combatState = new Combat.State(baseSettings, legacy);
 
