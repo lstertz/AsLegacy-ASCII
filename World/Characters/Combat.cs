@@ -20,14 +20,35 @@ namespace AsLegacy
                 /// </summary>
                 private interface ICombat
                 {
+                    /// <summary>
+                    /// The standard attack damage dealt by the Character.
+                    /// </summary>
                     public float AttackDamage { get; }
+
+                    /// <summary>
+                    /// The standard attack interval of the Character.
+                    /// </summary>
                     public int AttackInterval { get; }
 
+                    /// <summary>
+                    /// The maximum health of the Character.
+                    /// </summary>
                     public float BaseMaxHealth { set; }
+
+                    /// <summary>
+                    /// The current health of the Character, as an absolute value.
+                    /// </summary>
                     public float CurrentHealth { get; set; }
 
+                    /// <summary>
+                    /// The reduction in damage dealt to the Character when in defend mode.
+                    /// </summary>
                     public float DefenseDamageReduction { get; }
 
+                    /// <summary>
+                    /// The current legacy of the Character, 
+                    /// represented as a numerical value (points).
+                    /// </summary>
                     public int Legacy { get; set; }
                 }
 
@@ -36,6 +57,10 @@ namespace AsLegacy
                 /// </summary>
                 private interface ILegacy
                 {
+                    /// <summary>
+                    /// The current legacy of the Character, 
+                    /// represented as a numerical value (points).
+                    /// </summary>
                     public int Legacy { get; set; }
                 }
 
@@ -49,6 +74,8 @@ namespace AsLegacy
                     /// represented as a numerical value (points).
                     /// </summary>
                     public virtual int CurrentLegacy { get; protected set; }
+
+                    /// <inheritdoc/>
                     int ILegacy.Legacy
                     {
                         get => CurrentLegacy;
@@ -72,11 +99,13 @@ namespace AsLegacy
                 /// </summary>
                 public class State : ICombat
                 {
-                    float ICombat.AttackDamage { get => baseAttackDamage; }
-                    private readonly float baseAttackDamage;
+                    /// <inheritdoc/>
+                    float ICombat.AttackDamage { get => _baseAttackDamage; }
+                    private readonly float _baseAttackDamage;
 
-                    int ICombat.AttackInterval { get => baseAttackInterval; }
-                    private readonly int baseAttackInterval;
+                    /// <inheritdoc/>
+                    int ICombat.AttackInterval { get => _baseAttackInterval; }
+                    private readonly int _baseAttackInterval;
 
                     /// <summary>
                     /// The current health of the Character, as an absolute value.
@@ -88,30 +117,35 @@ namespace AsLegacy
                         set => CurrentHealth = value;
                     }
 
-                    float ICombat.DefenseDamageReduction { get => baseDefenseDamageReduction; }
-                    private readonly float baseDefenseDamageReduction;
+                    /// <inheritdoc/>
+                    float ICombat.DefenseDamageReduction { get => _baseDefenseDamageReduction; }
+                    private readonly float _baseDefenseDamageReduction;
 
                     /// <summary>
                     /// The legacy of the Character, represented as a numerical value (points).
                     /// </summary>
                     public int Legacy 
                     { 
-                        get => legacy.Legacy; 
-                        private set => legacy.Legacy = value; 
+                        get => _legacy.Legacy; 
+                        private set => _legacy.Legacy = value; 
                     }
+
+                    /// <inheritdoc/>
                     int ICombat.Legacy
                     {
                         get => Legacy;
                         set => Legacy = value;
                     }
-                    private readonly ILegacy legacy;
+                    private readonly ILegacy _legacy;
 
                     /// <summary>
                     /// The maximum health of the Character.
                     /// </summary>
-                    public float MaxHealth { get => baseMaxHealth; }  // TODO :: Alter by other states.
-                    float ICombat.BaseMaxHealth { set => baseMaxHealth = value; }
-                    private float baseMaxHealth;
+                    public float MaxHealth { get => _baseMaxHealth; }  // TODO :: Alter by other states.
+
+                    /// <inheritdoc/>
+                    float ICombat.BaseMaxHealth { set => _baseMaxHealth = value; }
+                    private float _baseMaxHealth;
 
 
                     /// <summary>
@@ -122,13 +156,13 @@ namespace AsLegacy
                     /// <param name="legacy">The legacy of the new State.</param>
                     public State(BaseSettings baseSettings, Legacy legacy)
                     {
-                        baseMaxHealth = baseSettings.InitialBaseMaxHealth;
-                        baseAttackDamage = baseSettings.InitialAttackDamage;
-                        baseAttackInterval = baseSettings.InitialAttackInterval;
-                        baseDefenseDamageReduction = baseSettings.InitialDefenseDamageReduction;
-                        CurrentHealth = baseMaxHealth;
+                        _baseMaxHealth = baseSettings.InitialBaseMaxHealth;
+                        _baseAttackDamage = baseSettings.InitialAttackDamage;
+                        _baseAttackInterval = baseSettings.InitialAttackInterval;
+                        _baseDefenseDamageReduction = baseSettings.InitialDefenseDamageReduction;
+                        CurrentHealth = _baseMaxHealth;
 
-                        this.legacy = legacy;
+                        _legacy = legacy;
                     }
                 }
 
@@ -141,11 +175,11 @@ namespace AsLegacy
                 /// <param name="target">The target of the attack.</param>
                 public static void PerformStandardAttack(Character attacker, Character target)
                 {
-                    ICombat aState = attacker.combatState;
+                    ICombat aState = attacker._combatState;
                     new TargetedAction(attacker, target, aState.AttackInterval,
                         (t) =>
                         {
-                            ICombat tState = t.combatState;
+                            ICombat tState = t._combatState;
 
                             float damageReduction = 0.0f;
                             if (t.ActiveMode == Mode.Defend)
@@ -175,14 +209,11 @@ namespace AsLegacy
                         },
                         (c) =>
                         {
-                            return attacker.IsAlive && attacker.mode == Mode.Attack &&
+                            return attacker.IsAlive && attacker._mode == Mode.Attack &&
                                 c.IsAlive && c == attacker.Target &&
                                 attacker.IsAdjacentTo(c.Row, c.Column);
                         }, true);
                 }
-
-                // TODO :: Probably make my own sorted HashSet, 
-                //          one that still uses hashcode to add/remove.
 
                 /// <summary>
                 /// Updates the legacy of the specified Character, and refreshes the ranking.
@@ -193,7 +224,7 @@ namespace AsLegacy
                 private static void UpdateLegacy(Character c, int legacyChange)
                 {
                     rankedCharacters.Remove(c);
-                    (c.combatState as ICombat).Legacy += legacyChange;
+                    (c._combatState as ICombat).Legacy += legacyChange;
                     rankedCharacters.Add(c);
                 }
             }

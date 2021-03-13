@@ -48,15 +48,15 @@ namespace AsLegacy
                 /// </summary>
                 public override int CurrentLegacy 
                 { 
-                    get => legacy;
+                    get => _legacy;
                     protected set
                     {
-                        legacy = value;
-                        if (legacy > LegacyRecord)
-                            LegacyRecord = legacy;
+                        _legacy = value;
+                        if (_legacy > LegacyRecord)
+                            LegacyRecord = _legacy;
                     } 
                 }
-                private int legacy;
+                private int _legacy;
 
                 /// <inheritdoc/>
                 public int LegacyRecord { get; private set; } = 0;
@@ -70,8 +70,8 @@ namespace AsLegacy
                 /// </summary>
                 protected virtual int SpawnTime => 4000;
 
-                protected string CharacterName => character == null ? "" : character.Name;
-                private Character character = null;
+                protected string CharacterName => _character == null ? "" : _character.Name;
+                private Character _character = null;
 
                 // TODO :: Track the names of Characters of the lineage.
 
@@ -87,11 +87,11 @@ namespace AsLegacy
 
                 public void Update(Character newCharacter)
                 {
-                    if (character == null || !character.IsAlive)
+                    if (_character == null || !_character.IsAlive)
                     {
-                        rankedCharacters.Remove(character);
+                        rankedCharacters.Remove(_character);
                         rankedCharacters.Add(newCharacter);
-                        character = newCharacter;
+                        _character = newCharacter;
                     }
                     else
                         throw new InvalidOperationException("A Lineage Character cannot be " +
@@ -101,7 +101,7 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public virtual bool SpawnSuccessor()
                 {
-                    if (character == null || character.IsAlive)
+                    if (_character == null || _character.IsAlive)
                         return false;
 
                     // TODO :: Update naming of successors.

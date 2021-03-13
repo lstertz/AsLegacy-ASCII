@@ -8,9 +8,17 @@ namespace AsLegacy
     /// </summary>
     interface IRankedCharacter : IComparable<World.Character>
     {
+        /// <summary>
+        /// The name of this Character.
+        /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// The legacy of this Character, represented as a numerical value (points).
+        /// </summary>
         int Legacy { get; }
 
+        /// <inheritdoc/>
         int IComparable<World.Character>.CompareTo(World.Character other)
         {
             if (Legacy > other.Legacy)
