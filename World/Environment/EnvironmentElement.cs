@@ -23,8 +23,7 @@ namespace AsLegacy
             protected EnvironmentElement(
                 Color background, Color glyphColor, int glyph, bool passable) :
                 base(background, glyphColor, glyph, passable)
-            {
-            }
+            { }
 
             /// <summary>
             /// Constructs a new Environment Element, to replace an existing Environment Element.
@@ -44,8 +43,8 @@ namespace AsLegacy
                 Color background, Color glyphColor, int glyph, bool passable) :
                 base(background, glyphColor, glyph, passable)
             {
-                if (environment != null)
-                    environment.ReplaceWith(row, column, this);
+                if (Environment != null)
+                    Environment.ReplaceWith(row, column, this);
             }
         }
     }

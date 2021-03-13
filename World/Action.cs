@@ -29,18 +29,18 @@ namespace AsLegacy
         /// </summary>
         public class Action : IAction
         {
-            private readonly System.Action action;
-            private readonly Func<bool> meetsConditions;
-            private readonly LinkedListNode<IAction> node;
-            private readonly bool repeats;
-
             /// <summary>
             /// Provides the time until the Action is activated, as a percentage (0 - 1), 
             /// of the required activation time.
             /// </summary>
-            public float Activation => passedActivationTime / requiredActivationTime;
-            protected float passedActivationTime = 0.0f;
-            protected float requiredActivationTime;
+            public float Activation => _passedActivationTime / _requiredActivationTime;
+            private float _passedActivationTime = 0.0f;
+            private readonly float _requiredActivationTime;
+
+            private readonly System.Action _action;
+            private readonly Func<bool> _meetsConditions;
+            private readonly LinkedListNode<IAction> _node;
+            private readonly bool _repeats;
 
 
             /// <summary>
@@ -56,38 +56,38 @@ namespace AsLegacy
             public Action(int requiredActivationTime, System.Action action,
                 Func<bool> conditionalCheck = null, bool repeats = false)
             {
-                this.action = action;
-                this.requiredActivationTime = requiredActivationTime;
-                this.repeats = repeats;
+                _action = action;
+                _requiredActivationTime = requiredActivationTime;
+                _repeats = repeats;
 
-                meetsConditions = conditionalCheck;
+                _meetsConditions = conditionalCheck;
 
                 // Add to the head so new Actions during an Update aren't 
                 // evaluated during that Update.
-                node = actions.AddFirst(this);
+                _node = Actions.AddFirst(this);
             }
 
             void IAction.Evaluate(int timeDelta)
             {
-                if (meetsConditions != null)
-                    if (!meetsConditions())
+                if (_meetsConditions != null)
+                    if (!_meetsConditions())
                     {
                         Destroy();
                         return;
                     }
 
-                passedActivationTime += timeDelta;
-                if (passedActivationTime >= requiredActivationTime)
+                _passedActivationTime += timeDelta;
+                if (_passedActivationTime >= _requiredActivationTime)
                 {
-                    action();
+                    _action();
 
-                    if (repeats)
+                    if (_repeats)
                     {
-                        passedActivationTime -= requiredActivationTime;
-                        while (passedActivationTime >= requiredActivationTime)
+                        _passedActivationTime -= _requiredActivationTime;
+                        while (_passedActivationTime >= _requiredActivationTime)
                         {
-                            action();
-                            passedActivationTime -= requiredActivationTime;
+                            _action();
+                            _passedActivationTime -= _requiredActivationTime;
                         }
                     }
                     else
@@ -105,8 +105,8 @@ namespace AsLegacy
             /// </summary>
             protected virtual void Destroy()
             {
-                if (actions.Contains(node.Value))
-                    actions.Remove(node);
+                if (Actions.Contains(_node.Value))
+                    Actions.Remove(_node);
             }
         }
 
@@ -117,7 +117,7 @@ namespace AsLegacy
             /// </summary>
             public class Action : World.Action
             {
-                private readonly Character performer;
+                private readonly Character _performer;
 
                 /// <summary>
                 /// Constructs a new Character Action.
@@ -135,21 +135,21 @@ namespace AsLegacy
                     bool repeats = false) : base(
                         requiredActivationTime, action, conditionalCheck, repeats)
                 {
-                    this.performer = performer;
+                    _performer = performer;
 
-                    if (characterActions.ContainsKey(performer))
+                    if (CharacterActions.ContainsKey(performer))
                     {
-                        (characterActions[performer] as IAction).Cancel();
-                        characterActions.Remove(performer);
+                        (CharacterActions[performer] as IAction).Cancel();
+                        CharacterActions.Remove(performer);
                     }
 
-                    characterActions.Add(performer, this);
+                    CharacterActions.Add(performer, this);
                 }
 
                 protected override void Destroy()
                 {
                     base.Destroy();
-                    characterActions.Remove(performer);
+                    CharacterActions.Remove(_performer);
                 }
             }
 

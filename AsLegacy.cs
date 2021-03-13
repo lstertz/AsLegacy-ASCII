@@ -25,8 +25,8 @@ namespace AsLegacy
         /// While playing, this is the World Player, when dead and in 'viewer mode' this may 
         /// be any other living Character.
         /// </summary>
-        public static World.Character Focus { get => Player != null ? Player : focus; }
-        private static World.Character focus = null;
+        public static World.Character Focus { get => Player != null ? Player : ObservedCharacter; }
+        private static World.Character ObservedCharacter = null;
 
         /// <summary>
         /// Specifies whether the game has a current Player Character.
@@ -57,7 +57,7 @@ namespace AsLegacy
             if (Player != null)
                 Player.Target = character;
             else
-                focus = character;
+                ObservedCharacter = character;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace AsLegacy
         /// the new Player Character.</param>
         public static void StartGame(string characterName, string lineageName)
         {
-            focus = null;
+            ObservedCharacter = null;
             Player.Reset();
 
             World.InitNewWorld();

@@ -22,7 +22,7 @@ namespace AsLegacy
                 protected set
                 {
                     base.Glyph = value;
-                    characters?.GetDisplay()?.Update(Row, Column);
+                    Characters?.GetDisplay()?.Update(Row, Column);
                 }
             }
 
@@ -35,7 +35,7 @@ namespace AsLegacy
                 protected set
                 {
                     base.GlyphColor = value;
-                    characters?.GetDisplay()?.Update(Row, Column);
+                    Characters?.GetDisplay()?.Update(Row, Column);
                 }
             }
             /// <summary>
@@ -50,7 +50,7 @@ namespace AsLegacy
                 set
                 {
                     base.Highlighted = value;
-                    characters?.GetDisplay()?.Update(Row, Column);
+                    Characters?.GetDisplay()?.Update(Row, Column);
                 }
             }
 
@@ -64,7 +64,7 @@ namespace AsLegacy
                 protected set
                 {
                     base.Selected = value;
-                    characters?.GetDisplay()?.Update(Row, Column);
+                    Characters?.GetDisplay()?.Update(Row, Column);
                 }
             }
 
@@ -110,8 +110,8 @@ namespace AsLegacy
             /// will be moved to.</param>
             protected void Move(int newRow, int newColumn)
             {
-                CharacterBase swapped = characters.ReplaceWith(newRow, newColumn, this);
-                characters.ReplaceWith(Row, Column, swapped);
+                CharacterBase swapped = Characters.ReplaceWith(newRow, newColumn, this);
+                Characters.ReplaceWith(Row, Column, swapped);
 
                 swapped.Row = Row;
                 swapped.Column = Column;

@@ -184,7 +184,7 @@ namespace AsLegacy.GUI.Screens
                 IsVisible = false
             };
 
-            _characters = World.Characters;
+            _characters = World.CharacterTiles;
             _characters.Position = new Point(1, 1);
             _characters.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             _characters.CenterViewPortOnPoint(new Point(0, 0));
@@ -204,7 +204,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(1, Display.Height - 7)
             };
 
-            _environment = World.Environment;
+            _environment = World.EnvironmentTiles;
             _environment.Position = new Point(1, 1);
             _environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             _environment.CenterViewPortOnPoint(new Point(0, 0));

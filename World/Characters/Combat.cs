@@ -203,7 +203,7 @@ namespace AsLegacy
                                 else
                                 {
                                     UpdateLegacy(attacker, tState.Legacy);
-                                    rankedCharacters.Remove(t);
+                                    RankedCharacters.Remove(t);
                                 }
                             }
                         },
@@ -223,9 +223,9 @@ namespace AsLegacy
                 /// should change.</param>
                 private static void UpdateLegacy(Character c, int legacyChange)
                 {
-                    rankedCharacters.Remove(c);
+                    RankedCharacters.Remove(c);
                     (c._combatState as ICombat).Legacy += legacyChange;
-                    rankedCharacters.Add(c);
+                    RankedCharacters.Add(c);
                 }
             }
         }

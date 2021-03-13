@@ -89,8 +89,8 @@ namespace AsLegacy
                 {
                     if (_character == null || !_character.IsAlive)
                     {
-                        rankedCharacters.Remove(_character);
-                        rankedCharacters.Add(newCharacter);
+                        RankedCharacters.Remove(_character);
+                        RankedCharacters.Add(newCharacter);
                         _character = newCharacter;
                     }
                     else

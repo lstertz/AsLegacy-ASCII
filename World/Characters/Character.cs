@@ -104,8 +104,8 @@ namespace AsLegacy
             {
                 get
                 {
-                    if (characterActions.ContainsKey(this))
-                        return characterActions[this];
+                    if (CharacterActions.ContainsKey(this))
+                        return CharacterActions[this];
 
                     return null;
                 }
@@ -125,7 +125,7 @@ namespace AsLegacy
             /// Specifies whether this Character has been removed from the World, which 
             /// occurs after the removal time has passed once the Character has died.
             /// </summary>
-            public bool HasBeenRemoved => IsAlive ? false : characters.Get(Row, Column) != this;
+            public bool HasBeenRemoved => IsAlive ? false : Characters.Get(Row, Column) != this;
 
             /// <summary>
             /// Specifies whether this Character is alive.
@@ -185,7 +185,7 @@ namespace AsLegacy
                 _baseSettings = baseSettings;
                 _combatState = new Combat.State(baseSettings, legacy);
 
-                rankedCharacters.Add(this);
+                RankedCharacters.Add(this);
             }
 
             /// <summary>

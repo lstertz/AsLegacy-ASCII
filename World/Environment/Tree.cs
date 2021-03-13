@@ -8,7 +8,7 @@ namespace AsLegacy
     /// </summary>
     public class Tree : World.EnvironmentElement
     {
-        private static int typeValue = 0;
+        private static int TypeValue = 0;
 
         /// <summary>
         /// Provides the glyph for a tree based on a pseudo-random 
@@ -17,14 +17,13 @@ namespace AsLegacy
         /// <returns>The pseudo-random glyph, either 5 or 6.</returns>
         private static int GetTreeGlyph()
         {
-            return (typeValue += 31) % 13 > 7 ? 5 : 6;
+            return (TypeValue += 31) % 13 > 7 ? 5 : 6;
         }
 
         /// <summary>
         /// Constructs a new Tree.
         /// </summary>
-        public Tree() : 
-            base(Color.Black, Color.ForestGreen, GetTreeGlyph(), false)
+        public Tree() : base(Color.Black, Color.ForestGreen, GetTreeGlyph(), false)
         { }
 
         /// <summary>
@@ -36,7 +35,6 @@ namespace AsLegacy
         /// to be used to replace any existing Environment Element.</param>
         public Tree(int row, int column) : 
             base(row, column, Color.Black, Color.ForestGreen, GetTreeGlyph(), false)
-        {
-        }
+        { }
     }
 }

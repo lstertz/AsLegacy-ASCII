@@ -11,10 +11,8 @@ namespace AsLegacy
         /// <summary>
         /// Constructs a new Path.
         /// </summary>
-        public Path() :
-            base(Color.Black, Color.SandyBrown, 176, true)
-        {
-        }
+        public Path() : base(Color.Black, Color.SandyBrown, 176, true)
+        { }
 
         /// <summary>
         /// Constructs a new Path, to replace an existing Environment Element.
@@ -25,7 +23,6 @@ namespace AsLegacy
         /// to be used to replace any existing Environment Element.</param>
         public Path(int row, int column) :
             base(row, column, Color.Black, Color.SandyBrown, 176, true)
-        {
-        }
+        { }
     }
 }
