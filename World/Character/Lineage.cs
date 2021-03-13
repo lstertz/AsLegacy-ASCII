@@ -70,6 +70,10 @@ namespace AsLegacy
                 /// </summary>
                 protected virtual int SpawnTime => 4000;
 
+                /// <summary>
+                /// The name of the current Character of this Lineage.
+                /// An empty string is provided if there is no current Character.
+                /// </summary>
                 protected string CharacterName => _character == null ? "" : _character.Name;
                 private Character _character = null;
 
@@ -85,6 +89,14 @@ namespace AsLegacy
                     Name = name;
                 }
 
+                /// <summary>
+                /// Updates the current Character of the Lineage, replacing either no 
+                /// preceeding Character or a preceeding Character that has died.
+                /// </summary>
+                /// <param name="newCharacter">The Character to become the new 
+                /// current Character of the Lineage.</param>
+                /// <exception cref="InvalidOperationException">Thrown if the Lineage's 
+                /// current Character exists and is still alive.</exception>
                 public void Update(Character newCharacter)
                 {
                     if (_character == null || !_character.IsAlive)
