@@ -1,5 +1,4 @@
 ﻿using AsLegacy.GUI.Screens;
-using System;
 
 namespace AsLegacy.Characters
 {
@@ -9,7 +8,7 @@ namespace AsLegacy.Characters
         protected new class Lineage : ItemUser.Lineage
         {
             /// <inheritdoc/>
-            protected override int spawnTime => CharacterRemovalTime;
+            protected override int SpawnTime => CharacterRemovalTime;
 
             /// <inheritdoc/>
             public Lineage(int initialLegacy, string name) : base(initialLegacy, name) { }

@@ -11,10 +11,6 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
-            protected const int CharacterRemovalTime = 700;
-
-            private readonly Color DeadColor = Color.DarkGray;
-
             /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>
@@ -52,10 +48,21 @@ namespace AsLegacy
                     c.Highlighted = true;
             }
 
+            /// <summary>
+            /// The time that passes after death before the Character is removed from the World.
+            /// </summary>
+            protected const int CharacterRemovalTime = 700;
+
+            private static readonly Color DeadColor = Color.DarkGray;
+
 
             /// <inheritdoc/>
-            IAI ICharacter.AI => ai;
-            protected IAI ai;
+            IAI ICharacter.AI => CharacterAI;
+
+            /// <summary>
+            /// The Character's AI.
+            /// </summary>
+            protected IAI CharacterAI { get; set; }
 
             /// <summary>
             /// The character's present mode.
@@ -64,36 +71,33 @@ namespace AsLegacy
             {
                 get
                 {
-                    return mode;
+                    return _mode;
                 }
                 private set
                 {
-                    if (mode == value)
+                    if (_mode == value)
                         return;
-                    mode = value;
+                    _mode = value;
 
                     switch (value)
                     {
                         case Mode.Normal:
-                            Glyph = baseSettings.NormalGlyph;
+                            Glyph = _baseSettings.NormalGlyph;
                             break;
                         case Mode.Attack:
-                            Glyph = baseSettings.AttackGlyph;
+                            Glyph = _baseSettings.AttackGlyph;
                             break;
                         case Mode.Defend:
-                            Glyph = baseSettings.DefendGlyph;
+                            Glyph = _baseSettings.DefendGlyph;
                             break;
                         default:
                             break;
                     }
                 }
             }
-            private Mode mode;
-            private bool attackEnabled = false;
-            private bool defenseEnabled = false;
-
-            private readonly BaseSettings baseSettings;
-            private readonly Combat.State combatState;
+            private Mode _mode;
+            private bool _attackEnabled = false;
+            private bool _defenseEnabled = false;
 
             /// <summary>
             /// The current action being performed by this Character, 
@@ -103,8 +107,8 @@ namespace AsLegacy
             {
                 get
                 {
-                    if (characterActions.ContainsKey(this))
-                        return characterActions[this];
+                    if (CharacterActions.ContainsKey(this))
+                        return CharacterActions[this];
 
                     return null;
                 }
@@ -113,51 +117,39 @@ namespace AsLegacy
             /// <summary>
             /// The current health of this Character, as an absolute value.
             /// </summary>
-            public float CurrentHealth => combatState.CurrentHealth;
+            public float CurrentHealth => _combatState.CurrentHealth;
 
             /// <summary>
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
             /// </summary>
-            public float Health => combatState.CurrentHealth / combatState.MaxHealth;
+            public float Health => _combatState.CurrentHealth / _combatState.MaxHealth;
 
             /// <summary>
             /// Specifies whether this Character has been removed from the World, which 
             /// occurs after the removal time has passed once the Character has died.
             /// </summary>
-            public bool HasBeenRemoved
-            {
-                get
-                {
-                    if (IsAlive)
-                        return false;
-                    return characters.Get(Row, Column) != this;
-                }
-            }
+            public bool HasBeenRemoved => IsAlive ? false : Characters.Get(Row, Column) != this;
 
             /// <summary>
             /// Specifies whether this Character is alive.
             /// </summary>
-            public bool IsAlive => combatState.CurrentHealth > 0;
+            public bool IsAlive => _combatState.CurrentHealth > 0;
 
-            /// <summary>
-            /// The legacy of this Character, represented as a numerical value (points).
-            /// </summary>
-            public int Legacy => combatState.Legacy;
+            /// <inheritdoc/>
+            public int Legacy => _combatState.Legacy;
 
             /// <summary>
             /// The highest recorded legacy of this Character, 
             /// represented as a numerical value (points)
             /// </summary>
-            public virtual int LegacyRecord => combatState.Legacy;
+            public virtual int LegacyRecord => _combatState.Legacy;
 
             /// <summary>
             /// The max health of this Character, as an absolute value.
             /// </summary>
-            public float MaxHealth => combatState.MaxHealth;
+            public float MaxHealth => _combatState.MaxHealth;
 
-            /// <summary>
-            /// The name of this Character.
-            /// </summary>
+            /// <inheritdoc/>
             public string Name { get; private set; }
 
             /// <summary>
@@ -171,6 +163,9 @@ namespace AsLegacy
             /// by this Character.
             /// </summary>
             public virtual Character Target { get; set; }
+
+            private readonly BaseSettings _baseSettings;
+            private readonly Combat.State _combatState;
 
 
             /// <summary>
@@ -186,14 +181,14 @@ namespace AsLegacy
                 BaseSettings baseSettings, Combat.Legacy legacy) : base(row, column, Color.Transparent, 
                     baseSettings.GlyphColor, baseSettings.NormalGlyph, false)
             {
-                mode = Mode.Normal;
+                _mode = Mode.Normal;
                 Name = name;
 
-                ai = baseSettings.AI;
-                this.baseSettings = baseSettings;
-                combatState = new Combat.State(baseSettings, legacy);
+                CharacterAI = baseSettings.AI;
+                _baseSettings = baseSettings;
+                _combatState = new Combat.State(baseSettings, legacy);
 
-                rankedCharacters.Add(this);
+                RankedCharacters.Add(this);
             }
 
             /// <summary>
@@ -223,7 +218,7 @@ namespace AsLegacy
             /// <returns>Whether the Character initiated an attempt to move.</returns>
             public bool MoveInDirection(Direction direction, Func<bool> repeatMovement = null)
             {
-                if (mode != Mode.Normal)
+                if (_mode != Mode.Normal)
                     return false;
 
                 int intendedRow = Row;
@@ -248,7 +243,7 @@ namespace AsLegacy
 
                 if (IsPassable(intendedRow, intendedColumn))
                 {
-                    new Action(this, baseSettings.InitialMovementInterval,
+                    new Action(this, _baseSettings.InitialMovementInterval,
                         () =>
                         {
                             Move(intendedRow, intendedColumn);
@@ -276,7 +271,7 @@ namespace AsLegacy
                         },
                         () =>
                         {
-                            return IsAlive && mode == Mode.Normal &&
+                            return IsAlive && _mode == Mode.Normal &&
                                 IsPassable(intendedRow, intendedColumn);
                         }, true);
                     return true;
@@ -290,7 +285,7 @@ namespace AsLegacy
             /// </summary>
             public void ToggleAttackMode()
             {
-                attackEnabled = !attackEnabled;
+                _attackEnabled = !_attackEnabled;
                 UpdateActiveMode();
             }
 
@@ -301,10 +296,10 @@ namespace AsLegacy
             /// <param name="enabled">Whether the Defend Mode should be enabled.</param>
             public void EnableDefense(bool enabled)
             {
-                if (defenseEnabled == enabled)
+                if (_defenseEnabled == enabled)
                     return;
 
-                defenseEnabled = enabled;
+                _defenseEnabled = enabled;
                 UpdateActiveMode();
             }
 
@@ -349,9 +344,9 @@ namespace AsLegacy
             /// </summary>
             private void UpdateActiveMode()
             {
-                if (defenseEnabled)
+                if (_defenseEnabled)
                     ActiveMode = Mode.Defend;
-                else if (attackEnabled)
+                else if (_attackEnabled)
                     ActiveMode = Mode.Attack;
                 else
                     ActiveMode = Mode.Normal;

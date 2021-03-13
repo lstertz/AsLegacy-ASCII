@@ -29,18 +29,18 @@ namespace AsLegacy.GUI.Screens
         private static readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
         private static readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
 
-        private static ControlsConsole screen;
+        private static ControlsConsole Screen;
 
         /// <summary>
         /// Whether the screen is currently visible.
         /// </summary>
         public static new bool IsVisible
         {
-            get => screen.IsVisible;
+            get => Screen.IsVisible;
             set
             {
-                screen.IsVisible = value;
-                screen.IsFocused = value;
+                Screen.IsVisible = value;
+                Screen.IsFocused = value;
             }
         }
 
@@ -53,13 +53,14 @@ namespace AsLegacy.GUI.Screens
         /// initialized CompletionScreen's Console's parent Console.</param>
         public static void Init(Console parentConsole)
         {
-            if (screen == null)
-                screen = new SettingsScreen(parentConsole);
+            if (Screen == null)
+                Screen = new SettingsScreen(parentConsole);
         }
 
-        private TextBox lineageField;
-        private TextBox nameField;
-        private Button play;
+
+        private TextBox _lineageField;
+        private TextBox _nameField;
+        private Button _play;
 
         /// <summary>
         /// Constructs a new StartScreen for the given Console.
@@ -80,16 +81,16 @@ namespace AsLegacy.GUI.Screens
                 TextColor = Colors.White
             });
 
-            nameField = new TextBox(10)
+            _nameField = new TextBox(10)
             {
                 IsCaretVisible = true,
                 MaxLength = 9,
                 Position = new Point(Width / 2 - 12, CharacterNameY),
                 TextAlignment = HorizontalAlignment.Right,
             };
-            nameField.KeyPressed += ValidateInput;
-            nameField.IsDirtyChanged += UpdatePlayEnablement;
-            Add(nameField);
+            _nameField.KeyPressed += ValidateInput;
+            _nameField.IsDirtyChanged += UpdatePlayEnablement;
+            Add(_nameField);
 
             Add(new Label(CharacterNobiliary.Length)
             {
@@ -100,27 +101,27 @@ namespace AsLegacy.GUI.Screens
                 UseMouse = false
             });
 
-            lineageField = new TextBox(10)
+            _lineageField = new TextBox(10)
             {
                 IsCaretVisible = true,
                 MaxLength = 9,
                 Position = new Point(Width / 2 + 2, CharacterNameY)
             };
-            lineageField.KeyPressed += ValidateInput;
-            lineageField.IsDirtyChanged += UpdatePlayEnablement;
-            Add(lineageField);
+            _lineageField.KeyPressed += ValidateInput;
+            _lineageField.IsDirtyChanged += UpdatePlayEnablement;
+            Add(_lineageField);
 
-            play = new Button(PlayLabelWidth, 1)
+            _play = new Button(PlayLabelWidth, 1)
             {
                 IsEnabled = false,
                 Position = new Point(Width / 2 - PlayLabelWidth / 2, Height - PlayOffsetY),
                 Text = PlayLabel
             };
-            play.Click += (s, e) => AsLegacy.StartGame(
-                nameField.EditingText, lineageField.EditingText);
-            Add(play);
+            _play.Click += (s, e) => AsLegacy.StartGame(
+                _nameField.EditingText, _lineageField.EditingText);
+            Add(_play);
 
-            FocusedControl = nameField;
+            FocusedControl = _nameField;
         }
 
         /// <summary>
@@ -144,15 +145,15 @@ namespace AsLegacy.GUI.Screens
         /// <param name="args">The event args.</param>
         private void UpdatePlayEnablement(object sender, EventArgs args)
         {
-            string name = nameField.EditingText;
+            string name = _nameField.EditingText;
             if (name == null)
-                name = nameField.Text;
+                name = _nameField.Text;
 
-            string lineage = lineageField.EditingText;
+            string lineage = _lineageField.EditingText;
             if (lineage == null)
-                lineage = lineageField.Text;
+                lineage = _lineageField.Text;
 
-            play.IsEnabled = name.Length > 0 && lineage.Length > 0;
+            _play.IsEnabled = name.Length > 0 && lineage.Length > 0;
         }
     }
 }

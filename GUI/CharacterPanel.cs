@@ -15,7 +15,7 @@ namespace AsLegacy.GUI
     /// </summary>
     public class CharacterPanel : ControlsConsole
     {
-        private readonly Ranking ranking;
+        private readonly Ranking _ranking;
 
         /// <summary>
         /// Constructs a new Character Panel, which defines all of the Panes 
@@ -43,11 +43,11 @@ namespace AsLegacy.GUI
             skills.Click += (s, e) => PlayScreen.ShowSkills();
             Add(skills);
 
-            ranking = new Ranking(8, true)
+            _ranking = new Ranking(8, true)
             {
                 Position = new Point(1, 15)
             };
-            Children.Add(ranking);
+            Children.Add(_ranking);
         }
 
         /// <summary>

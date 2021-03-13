@@ -14,7 +14,7 @@ namespace AsLegacy
     /// </summary>
     public static partial class World
     {
-        private static readonly char[][] map =
+        private static readonly char[][] Map =
         {
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
@@ -64,48 +64,49 @@ namespace AsLegacy
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
         };
-        private const int expectedBeastPopulation = 4;
+        private const int ExpectedBeastPopulation = 4;
 
         /// <summary>
         /// The number of columns within the World.
         /// </summary>
-        public static readonly int ColumnCount = map[0].Length;
+        public static readonly int ColumnCount = Map[0].Length;
 
         /// <summary>
         /// The number of rows within the World.
         /// </summary>
-        public static readonly int RowCount = map.Length;
+        public static readonly int RowCount = Map.Length;
 
-        private static readonly LinkedList<IAction> actions = new LinkedList<IAction>();
-        private static readonly Dictionary<Character, Action> characterActions = 
+        private static readonly LinkedList<IAction> Actions = new LinkedList<IAction>();
+        private static readonly Dictionary<Character, Action> CharacterActions =
             new Dictionary<Character, Action>();
 
         /// <summary>
         /// The displayable characters of the World.
         /// </summary>
-        public static TileSet<CharacterBase>.Display Characters => characters.GetDisplay();
-        private static readonly TileSet<CharacterBase> characters = new TileSet<CharacterBase>((row, column) =>
+        public static TileSet<CharacterBase>.Display CharacterTiles => Characters.GetDisplay();
+        private static readonly TileSet<CharacterBase> Characters =
+            new TileSet<CharacterBase>((row, column) =>
         {
             return new AbsentCharacter(row, column);
         });
 
-        private static readonly List<Character> presentCharacters = new List<Character>();
-        private static readonly SortedSet<Character> rankedCharacters =
+        private static readonly List<Character> PresentCharacters = new List<Character>();
+        private static readonly SortedSet<Character> RankedCharacters =
             new SortedSet<Character>();
-        private static int beastCount = 0;
+        private static int BeastCount = 0;
 
-        private static readonly List<Point> openPositions = new List<Point>();
+        private static readonly List<Point> OpenPositions = new List<Point>();
 
         /// <summary>
         /// The displayable environment of the World.
         /// </summary>
-        public static TileSet<Tile>.Display Environment => environment.GetDisplay();
-        private static readonly TileSet<Tile> environment = new TileSet<Tile>((row, column) =>
+        public static TileSet<Tile>.Display EnvironmentTiles => Environment.GetDisplay();
+        private static readonly TileSet<Tile> Environment = new TileSet<Tile>((row, column) =>
         {
-            if (map[row][column] == 'T')
+            if (Map[row][column] == 'T')
                 return new Tree();
 
-            openPositions.Add(new Point(column, row));
+            OpenPositions.Add(new Point(column, row));
             return new Path();
         });
 
@@ -117,7 +118,7 @@ namespace AsLegacy
             get
             {
                 Character[] characters = new Character[1];
-                rankedCharacters.CopyTo(characters, 0, 1);
+                RankedCharacters.CopyTo(characters, 0, 1);
                 return characters[0];
             }
         }
@@ -129,13 +130,13 @@ namespace AsLegacy
         /// </summary>
         public static void InitNewWorld()
         {
-            while (actions.First != null)
-                actions.First.Value.Cancel();
+            while (Actions.First != null)
+                Actions.First.Value.Cancel();
 
-            for (int c = presentCharacters.Count - 1; c >= 0; c--)
+            for (int c = PresentCharacters.Count - 1; c >= 0; c--)
             {
-                rankedCharacters.Remove(presentCharacters[c]);
-                RemoveCharacter(presentCharacters[c], false);
+                RankedCharacters.Remove(PresentCharacters[c]);
+                RemoveCharacter(PresentCharacters[c], false);
             }
 
             SeedCharacters();
@@ -148,7 +149,7 @@ namespace AsLegacy
         {
             new ItemUser(14, 15, "Goblin", 10, "Orr");
 
-            for (int c = 0; c < expectedBeastPopulation; c++)
+            for (int c = 0; c < ExpectedBeastPopulation; c++)
                 new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
         }
 
@@ -161,7 +162,7 @@ namespace AsLegacy
         /// null if there is not.</returns>
         public static Character CharacterAt(int row, int column)
         {
-            CharacterBase c = characters.Get(row, column);
+            CharacterBase c = Characters.Get(row, column);
 
             if (c == null || c is AbsentCharacter)
                 return null;
@@ -180,7 +181,7 @@ namespace AsLegacy
         /// <param name="withinVertical">The distance vertically that a 
         /// nearby Character may be.</param>
         /// <returns>A list of nearby characters, or an empty list if none were found.</returns>
-        public static Character[] CharactersNear(Character character, int withinHorizontal, 
+        public static Character[] CharactersNear(Character character, int withinHorizontal,
             int withinVertical)
         {
             if (character == null)
@@ -189,7 +190,7 @@ namespace AsLegacy
             // TODO :: Optimize later, perhaps with 2D Linked Grid data structure support.
 
             Dictionary<Character, int> nearCharacters = new Dictionary<Character, int>();
-            foreach (Character c in presentCharacters)
+            foreach (Character c in PresentCharacters)
             {
                 int columnDiff = character.Column - c.Column;
                 int rowDiff = character.Row - c.Row;
@@ -197,7 +198,7 @@ namespace AsLegacy
                 if (columnDiff == 0 && rowDiff == 0)
                     continue;
 
-                if (columnDiff <= withinHorizontal && columnDiff > -withinHorizontal && 
+                if (columnDiff <= withinHorizontal && columnDiff > -withinHorizontal &&
                     rowDiff <= withinVertical && rowDiff > -withinVertical)
                     nearCharacters.Add(c, character.SquaredDistanceTo(c));
             }
@@ -232,7 +233,7 @@ namespace AsLegacy
         /// <returns>True if the position is passable, false otherwise.</returns>
         public static bool IsPassable(int row, int column)
         {
-            return characters.IsPassable(row, column) && environment.IsPassable(row, column);
+            return Characters.IsPassable(row, column) && Environment.IsPassable(row, column);
         }
 
         /// <summary>
@@ -245,11 +246,11 @@ namespace AsLegacy
         public static Character[] RankedCharactersFor(int startIndex, int count)
         {
             int c = count;
-            if (c > rankedCharacters.Count)
-                c = rankedCharacters.Count - startIndex;
+            if (c > RankedCharacters.Count)
+                c = RankedCharacters.Count - startIndex;
 
             Character[] characters = new Character[c];
-            rankedCharacters.CopyTo(characters, startIndex, c);
+            RankedCharacters.CopyTo(characters, startIndex, c);
 
             return characters;
         }
@@ -261,9 +262,9 @@ namespace AsLegacy
         /// since the last update.</param>
         public static void Update(int timeDelta)
         {
-            for (int c = 0, count = presentCharacters.Count; c < count; c++)
+            for (int c = 0, count = PresentCharacters.Count; c < count; c++)
             {
-                Character character = presentCharacters[c];
+                Character character = PresentCharacters[c];
                 IAI ai = (character as ICharacter).AI;
 
                 ai.UpdateTargetOf(character);
@@ -272,7 +273,7 @@ namespace AsLegacy
             }
 
             LinkedListNode<IAction> current;
-            LinkedListNode<IAction> next = actions.First;
+            LinkedListNode<IAction> next = Actions.First;
             while (next != null)
             {
                 current = next;
@@ -290,9 +291,9 @@ namespace AsLegacy
         {
             Random r = new Random();
 
-            Point passablePoint = openPositions[r.Next(0, openPositions.Count)];
+            Point passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
             while (!IsPassable(passablePoint.Y, passablePoint.X))
-                passablePoint = openPositions[r.Next(0, openPositions.Count)];
+                passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
 
             return passablePoint;
         }
@@ -308,14 +309,14 @@ namespace AsLegacy
         /// <param name="c">The Character to be added.</param>
         private static void AddCharacter(int row, int column, CharacterBase c)
         {
-            if (characters != null)
-                characters.ReplaceWith(row, column, c);
+            if (Characters != null)
+                Characters.ReplaceWith(row, column, c);
 
             if (c is Character)
-                presentCharacters.Add(c as Character);
+                PresentCharacters.Add(c as Character);
 
             if (c is Beast)
-                beastCount++;
+                BeastCount++;
         }
 
         /// <summary>
@@ -324,15 +325,15 @@ namespace AsLegacy
         /// <param name="c">The Character to be removed.</param>
         private static void RemoveCharacter(Character c, bool replaceBeasts = true)
         {
-            presentCharacters.Remove(c);
+            PresentCharacters.Remove(c);
 
             // TODO :: Handle Player death appropriately later.
-            characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
+            Characters.ReplaceWith(c.Row, c.Column, new AbsentCharacter(c.Row, c.Column));
 
             if (c is Beast)
             {
-                beastCount--;
-                if (beastCount < expectedBeastPopulation && replaceBeasts)
+                BeastCount--;
+                if (BeastCount < ExpectedBeastPopulation && replaceBeasts)
                     new Action(20000, () =>
                     {
                         new Beast(GetRandomPassablePosition(), Beast.GetRandomType());

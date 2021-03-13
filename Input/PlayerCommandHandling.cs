@@ -15,13 +15,7 @@ namespace AsLegacy.Input
     /// </summary>
     public class PlayerCommandHandling : InputConsoleComponent
     {
-        /// <summary>
-        /// Handles keyboard state changes.
-        /// </summary>
-        /// </summary>
-        /// <param name="console">The Console to which this Component belongs.</param>
-        /// <param name="info">The state of the keyboard.</param>
-        /// <param name="handled">A bool indicating whether the input was handled.</param>
+        /// <inheritdoc/>
         public override void ProcessKeyboard(Console console, Keyboard info, out bool handled)
         {
             handled = false;
@@ -64,12 +58,7 @@ namespace AsLegacy.Input
             return info.IsKeyDown(Keys.LeftAlt) || info.IsKeyDown(Keys.RightAlt);
         }
 
-        /// <summary>
-        /// Handles mouse state changes.
-        /// </summary>
-        /// <param name="console">The Console to which this Component belongs.</param>
-        /// <param name="state">The state of the mouse.</param>
-        /// <param name="handled">A bool indicating whether the input was handled.</param>
+        /// <inheritdoc/>
         public override void ProcessMouse(Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;

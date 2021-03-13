@@ -11,12 +11,7 @@ namespace AsLegacy.Input
     /// </summary>
     public class CharacterSelectionHandling : MouseConsoleComponent
     {
-        /// <summary>
-        /// Handles mouse state changes.
-        /// </summary>
-        /// <param name="console">The Console to which this Component belongs.</param>
-        /// <param name="state">The state of the mouse.</param>
-        /// <param name="handled">A bool indicating whether the input was handled.</param>
+        /// <inheritdoc/>
         public override void ProcessMouse(Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;

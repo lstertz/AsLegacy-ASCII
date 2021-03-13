@@ -13,15 +13,15 @@ namespace AsLegacy.GUI.HUDs
     /// </summary>
     public abstract class HUD : Console
     {
-        private const int height = 3;
+        private const int DisplayHeight = 3;
 
-        private readonly int frameGlyph = 0;
+        private readonly int _frameGlyph = 0;
 
-        protected World.Character Character { get => characterGetter(); }
-        private readonly Func<World.Character> characterGetter;
+        protected World.Character Character { get => _characterGetter(); }
+        private readonly Func<World.Character> _characterGetter;
 
-        private readonly Meter activationMeter;
-        private readonly Meter healthMeter;
+        private readonly Meter _activationMeter;
+        private readonly Meter _healthMeter;
 
         /// <summary>
         /// Constructs a new HUD.
@@ -31,22 +31,22 @@ namespace AsLegacy.GUI.HUDs
         /// <param name="frameGlyph">The glyph used for the frame.</param>
         /// <param name="characterGetter">Provides the character of the HUD, whose name will be 
         /// used as the title of the frame.</param>
-        public HUD(int width, int frameGlyph, Func<World.Character> characterGetter) : 
-            base(width, height)
+        protected HUD(int width, int frameGlyph, Func<World.Character> characterGetter) : 
+            base(width, DisplayHeight)
         {
-            this.frameGlyph = frameGlyph;
-            this.characterGetter = characterGetter;
+            _frameGlyph = frameGlyph;
+            _characterGetter = characterGetter;
 
             for (int x = 0; x < width; x++)
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < DisplayHeight; y++)
                     SetBackground(x, y, Color.Black);
 
-            healthMeter = new Meter(1, 2, RetrieveHealth, Color.Red, Color.DarkRed, 3);
-            Components.Add(healthMeter);
+            _healthMeter = new Meter(1, 2, RetrieveHealth, Color.Red, Color.DarkRed, 3);
+            Components.Add(_healthMeter);
 
-            activationMeter = new Meter(14, 2, RetrieveActivation, Color.Goldenrod, 
+            _activationMeter = new Meter(14, 2, RetrieveActivation, Color.Goldenrod, 
                 new Color(138, 105, 20, 255), 15);
-            Components.Add(activationMeter);
+            Components.Add(_activationMeter);
         }
 
         /// <inheritdoc/>
@@ -57,10 +57,7 @@ namespace AsLegacy.GUI.HUDs
             SetFrame();
         }
 
-        /// <summary>
-        /// Updates the visuals of this HUD.
-        /// </summary>
-        /// <param name="timeElapsed">The time passed since the last update.</param>
+        /// <inheritdoc/>
         public override void Update(TimeSpan timeElapsed)
         {
             base.Update(timeElapsed);
@@ -75,7 +72,7 @@ namespace AsLegacy.GUI.HUDs
         protected void SetFrame()
         {
             for (int x = 0; x < Width; x++)
-                SetGlyph(x, 0, frameGlyph);
+                SetGlyph(x, 0, _frameGlyph);
 
             if (Character != null)
             {

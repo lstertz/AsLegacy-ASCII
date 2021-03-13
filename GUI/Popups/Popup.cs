@@ -14,12 +14,12 @@ namespace AsLegacy.GUI.Popups
         /// <summary>
         /// The title of the Popup, displayed center top of its window.
         /// </summary>
-        protected virtual string title { get; }
+        protected virtual string Title { get; }
 
         /// <summary>
         /// The content of the Popup.
         /// </summary>
-        protected virtual string content { get; }
+        protected virtual string Content { get; }
 
         /// <summary>
         /// Constructs a new Popup.
@@ -44,8 +44,8 @@ namespace AsLegacy.GUI.Popups
                 Add(close);
             }
 
-            this.title = title;
-            this.content = content;
+            Title = title;
+            Content = content;
         }
 
         /// <inheritdoc/>
@@ -63,10 +63,10 @@ namespace AsLegacy.GUI.Popups
             Fill(new Rectangle(0, 1, 1, Height - 2), Colors.White, Colors.Black, 186);
 
             Fill(new Rectangle(1, 1, Width - 2, Height - 2), Colors.White, Colors.Black, 0);
-            if (title != null)
-                Print(Width / 2 - title.Length / 2, 1, title, Color.White);
-            if (content != null)
-                Print(2, 2, content, Color.White);
+            if (Title != null)
+                Print(Width / 2 - Title.Length / 2, 1, Title, Color.White);
+            if (Content != null)
+                Print(2, 2, Content, Color.White);
         }
     }
 }

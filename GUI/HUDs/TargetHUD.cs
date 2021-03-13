@@ -24,10 +24,7 @@ namespace AsLegacy.GUI.HUDs
             IsVisible = false;
         }
 
-        /// <summary>
-        /// Updates the visuals of this TargetHUD.
-        /// </summary>
-        /// <param name="timeElapsed">The time passed since the last update.</param>
+        /// <inheritdoc/>
         public override void Update(TimeSpan timeElapsed)
         {
             SetFrame();

@@ -27,11 +27,11 @@ namespace AsLegacy
                 /// <param name="display">The Display to be converted.</param>
                 public static implicit operator ScrollingConsole(Display display)
                 {
-                    return display.console;
+                    return display._console;
                 }
 
-                private readonly ScrollingConsole console;
-                private readonly TileSet<T> tileSet;
+                private readonly ScrollingConsole _console;
+                private readonly TileSet<T> _tileSet;
 
                 /// <summary>
                 /// Constructs a new Display for the provided TileSet.
@@ -44,8 +44,8 @@ namespace AsLegacy
                     for (int c = 0, count = RowCount * ColumnCount; c < count; c++)
                         cells[c] = new Cell();
 
-                    this.tileSet = tileSet;
-                    console = ScrollingConsole.FromSurface(
+                    _tileSet = tileSet;
+                    _console = ScrollingConsole.FromSurface(
                         new Console(ColumnCount, RowCount, cells),
                         new Rectangle(0, 0, ColumnCount, RowCount));
                 }
@@ -60,16 +60,16 @@ namespace AsLegacy
                 /// is to be updated.</param>
                 public void Update(int row, int column)
                 {
-                    T tile = tileSet.tiles[row, column];
-                    console.SetForeground(column, row, (tile.Selected ? Global.Colors.Selected : 
+                    T tile = _tileSet._tiles[row, column];
+                    _console.SetForeground(column, row, (tile.Selected ? Global.Colors.Selected : 
                         tile.Highlighted ? Global.Colors.Highlighted : tile.GlyphColor));
-                    console.SetBackground(column, row, tile.Background);
-                    console.SetGlyph(column, row, tile.Glyph);
+                    _console.SetBackground(column, row, tile.Background);
+                    _console.SetGlyph(column, row, tile.Glyph);
                 }
             }
 
-            private readonly Display display;
-            private readonly T[,] tiles;
+            private readonly Display _display;
+            private readonly T[,] _tiles;
 
             /// <summary>
             /// Constructs a new TileSet, with Tiles created through the 
@@ -79,15 +79,15 @@ namespace AsLegacy
             /// of the new TileSet's Tiles.</param>
             public TileSet(Func<int, int, T> tileConstructor)
             {
-                display = new Display(this);
-                tiles = new T[RowCount, ColumnCount];
+                _display = new Display(this);
+                _tiles = new T[RowCount, ColumnCount];
 
                 for (int row = 0; row < RowCount; row++)
                 {
                     for (int col = 0; col < ColumnCount; col++)
                     {
-                        tiles[row, col] = tileConstructor(row, col);
-                        display.Update(row, col);
+                        _tiles[row, col] = tileConstructor(row, col);
+                        _display.Update(row, col);
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace AsLegacy
             {
                 if (row < 0 || column < 0 || RowCount <= row || ColumnCount <= column)
                     return null;
-                return tiles[row, column];
+                return _tiles[row, column];
             }
 
             /// <summary>
@@ -116,7 +116,7 @@ namespace AsLegacy
             {
                 if (row < 0 || column < 0 || RowCount <= row || ColumnCount <= column)
                     return false;
-                return tiles[row, column].Passable;
+                return _tiles[row, column].Passable;
             }
 
             /// <summary>
@@ -129,10 +129,10 @@ namespace AsLegacy
             /// <returns>The replaced Tile.</returns>
             public T ReplaceWith(int row, int column, T newTile)
             {
-                T replaced = tiles[row, column];
+                T replaced = _tiles[row, column];
 
-                tiles[row, column] = newTile;
-                display.Update(row, column);
+                _tiles[row, column] = newTile;
+                _display.Update(row, column);
 
                 return replaced;
             }
@@ -143,7 +143,7 @@ namespace AsLegacy
             /// <returns>The Display of this TileSet.</returns>
             public Display GetDisplay()
             {
-                return display;
+                return _display;
             }
         }
     }

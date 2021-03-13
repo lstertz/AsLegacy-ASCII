@@ -1,5 +1,4 @@
-﻿using AsLegacy.Abstractions;
-using static AsLegacy.World.Character;
+﻿using static AsLegacy.World.Character;
 
 namespace AsLegacy
 {

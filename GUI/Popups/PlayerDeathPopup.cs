@@ -23,18 +23,18 @@ namespace AsLegacy.GUI.Popups
         private static readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
 
         /// <inheritdoc/>
-        protected override string title
+        protected override string Title
         {
             get
             {
                 if (Player.Character != null)
                     return Player.Character.Name + " has died!";
-                return base.title;
+                return base.Title;
             }
         }
 
-        private Button createSuccessor;
-        private TextBox nameField;
+        private Button _createSuccessor;
+        private TextBox _nameField;
 
         /// <summary>
         /// Constructs a new PlayerDeathPopup.
@@ -51,15 +51,15 @@ namespace AsLegacy.GUI.Popups
                 TextColor = Colors.White
             });
 
-            nameField = new TextBox(10)
+            _nameField = new TextBox(10)
             {
                 IsCaretVisible = true,
                 MaxLength = 9,
                 Position = new Point(Width / 2 - 5, CharacterNameY)
             };
-            nameField.KeyPressed += ValidateInput;
-            nameField.IsDirtyChanged += UpdateCreateSuccessorEnablement;
-            Add(nameField);
+            _nameField.KeyPressed += ValidateInput;
+            _nameField.IsDirtyChanged += UpdateCreateSuccessorEnablement;
+            Add(_nameField);
 
             Button quit = new Button(6, 1)
             {
@@ -69,21 +69,21 @@ namespace AsLegacy.GUI.Popups
             quit.Click += (s, e) =>
             {
                 IsVisible = false;
-                Display.ShowScreen(Display.Screens.Start);
+                Display.ShowScreen(Display.Screen.Start);
             };
             Add(quit);
 
-            createSuccessor = new Button(10, 1)
+            _createSuccessor = new Button(10, 1)
             {
                 Position = new Point(width / 2 - 5, height - 2),
                 Text = "Continue"
             };
-            createSuccessor.Click += (s, e) =>
+            _createSuccessor.Click += (s, e) =>
             {
                 IsVisible = false;
-                Player.CreateSuccessor(nameField.EditingText);
+                Player.CreateSuccessor(_nameField.EditingText);
             };
-            Add(createSuccessor);
+            Add(_createSuccessor);
 
             Button observe = new Button(9, 1)
             {
@@ -94,7 +94,7 @@ namespace AsLegacy.GUI.Popups
             observe.Click += (s, e) => IsVisible = false;
             Add(observe);
 
-            FocusedControl = nameField;
+            FocusedControl = _nameField;
         }
 
         /// <inheritdoc/>
@@ -104,7 +104,7 @@ namespace AsLegacy.GUI.Popups
 
             // TODO :: Update with an addendum of some kind by default, e.g. Player II.
             if (IsVisible)
-              nameField.Text = Player.Character.Name;
+              _nameField.Text = Player.Character.Name;
             IsFocused = IsVisible;
         }
 
@@ -129,11 +129,11 @@ namespace AsLegacy.GUI.Popups
         /// <param name="args">The event args.</param>
         private void UpdateCreateSuccessorEnablement(object sender, EventArgs args)
         {
-            string name = nameField.EditingText;
+            string name = _nameField.EditingText;
             if (name == null)
-                name = nameField.Text;
+                name = _nameField.Text;
 
-            createSuccessor.IsEnabled = name.Length > 0;
+            _createSuccessor.IsEnabled = name.Length > 0;
         }
     }
 }

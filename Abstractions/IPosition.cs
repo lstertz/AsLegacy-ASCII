@@ -18,6 +18,9 @@ namespace AsLegacy.Abstractions
         public int Row { get; }
     }
 
+    /// <summary>
+    /// Extensions for working with implementations of IPosition.
+    /// </summary>
     public static class PositionExtensions
     {
         /// <summary>

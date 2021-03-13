@@ -25,8 +25,8 @@ namespace AsLegacy
         /// While playing, this is the World Player, when dead and in 'viewer mode' this may 
         /// be any other living Character.
         /// </summary>
-        public static World.Character Focus { get => Player != null ? Player : focus; }
-        private static World.Character focus = null;
+        public static World.Character Focus { get => Player != null ? Player : ObservedCharacter; }
+        private static World.Character ObservedCharacter = null;
 
         /// <summary>
         /// Specifies whether the game has a current Player Character.
@@ -57,7 +57,7 @@ namespace AsLegacy
             if (Player != null)
                 Player.Target = character;
             else
-                focus = character;
+                ObservedCharacter = character;
         }
 
         /// <summary>
@@ -70,13 +70,13 @@ namespace AsLegacy
         /// the new Player Character.</param>
         public static void StartGame(string characterName, string lineageName)
         {
-            focus = null;
+            ObservedCharacter = null;
             Player.Reset();
 
             World.InitNewWorld();
             Player.Create(12, 11, characterName, lineageName);
 
-            Display.ShowScreen(Display.Screens.Play);
+            Display.ShowScreen(Display.Screen.Play);
         }
 
 
@@ -102,13 +102,13 @@ namespace AsLegacy
         /// <param name="delta">The time passed since the last update.</param>
         public override void Update(Console console, TimeSpan delta)
         {
-            if (Display.CurrentScreen != Display.Screens.Play)
+            if (Display.CurrentScreen != Display.Screen.Play)
                 return;
 
             if (World.HighestRankedCharacter.Legacy < Goal)
                 World.Update(delta.Milliseconds);
-            else if (Display.CurrentScreen != Display.Screens.Completion)
-                Display.ShowScreen(Display.Screens.Completion);
+            else if (Display.CurrentScreen != Display.Screen.Completion)
+                Display.ShowScreen(Display.Screen.Completion);
         }
     }
 }

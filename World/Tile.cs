@@ -19,30 +19,30 @@ namespace AsLegacy
             /// </summary>
             public virtual int Glyph
             {
-                get => glyph;
-                protected set => glyph = value;
+                get => _glyph;
+                protected set => _glyph = value;
             }
-            private int glyph;
+            private int _glyph;
 
             /// <summary>
             /// The color of the glyph to visually represent the entity of the Tile.
             /// </summary>
             public virtual Color GlyphColor
             {
-                get => glyphColor;
-                protected set => glyphColor = value;
+                get => _glyphColor;
+                protected set => _glyphColor = value;
             }
-            private Color glyphColor;
+            private Color _glyphColor;
 
             /// <summary>
             /// The color of the area behind the glyph.
             /// </summary>
             public virtual Color Background
             {
-                get => background;
-                protected set => background = value;
+                get => _background;
+                protected set => _background = value;
             }
-            private Color background;
+            private Color _background;
 
             /// <summary>
             /// Specifies whether the Tile is highlighted, generally for 
@@ -51,12 +51,12 @@ namespace AsLegacy
             /// </summary>
             public virtual bool Highlighted
             {
-                get => highlighted;
+                get => _highlighted;
                 set
                 {
-                    if (value == highlighted)
+                    if (value == _highlighted)
                         return;
-                    highlighted = value;
+                    _highlighted = value;
 
                     if (HighlightedTile != this && HighlightedTile != null)
                     {
@@ -68,17 +68,17 @@ namespace AsLegacy
                         HighlightedTile = this;
                 }
             }
-            private bool highlighted;
+            private bool _highlighted;
 
             /// <summary>
             /// Specifies whether the Tile is selected.
             /// </summary>
             public virtual bool Selected
             {
-                get => selected;
-                protected set => selected = value;
+                get => _selected;
+                protected set => _selected = value;
             }
-            private bool selected;
+            private bool _selected;
 
             /// <summary>
             /// Specifies whether this Tile's entity can be passed through by others.
@@ -94,7 +94,7 @@ namespace AsLegacy
             /// of the new Tile.</param>
             /// <param name="passable">Specifies whether the new Tile's entity can be 
             /// passed through by others.</param>
-            public Tile(Color background, Color glyphColor, int glyph, bool passable)
+            protected Tile(Color background, Color glyphColor, int glyph, bool passable)
             {
                 Background = background;
                 GlyphColor = glyphColor;

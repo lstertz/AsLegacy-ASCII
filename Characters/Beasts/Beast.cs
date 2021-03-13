@@ -51,13 +51,12 @@ namespace AsLegacy
             };
         }
 
+
         /// <summary>
         /// Constructs a new Beast at the provided row and column on the map.
         /// </summary>
         /// <param name="row">The row position of the new Beast.</param>
         /// <param name="column">The column position of the new Beast.</param>
-        /// <param name="name">The name of the new Beast.</param>
-        /// <param name="legacy">The starting legacy of the new Beast.</param>
         public Beast(int row, int column, Type type) : this(row, column, GetBeastSettings(type))
         { }
 
@@ -65,8 +64,6 @@ namespace AsLegacy
         /// Constructs a new Beast at the provided point on the map.
         /// </summary>
         /// <param name="point">The position of the new Beast.</param>
-        /// <param name="name">The name of the new Beast.</param>
-        /// <param name="legacy">The starting legacy of the new Beast.</param>
         public Beast(Point point, Type type) : this(point.Y, point.X, GetBeastSettings(type))
         { }
 

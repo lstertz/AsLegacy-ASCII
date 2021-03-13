@@ -48,15 +48,15 @@ namespace AsLegacy
                 /// </summary>
                 public override int CurrentLegacy 
                 { 
-                    get => legacy;
+                    get => _legacy;
                     protected set
                     {
-                        legacy = value;
-                        if (legacy > LegacyRecord)
-                            LegacyRecord = legacy;
+                        _legacy = value;
+                        if (_legacy > LegacyRecord)
+                            LegacyRecord = _legacy;
                     } 
                 }
-                private int legacy;
+                private int _legacy;
 
                 /// <inheritdoc/>
                 public int LegacyRecord { get; private set; } = 0;
@@ -68,10 +68,14 @@ namespace AsLegacy
                 /// The time that passes after the initiation of a successor spawn 
                 /// before a successor is actually spawned.
                 /// </summary>
-                protected virtual int spawnTime => 4000;
+                protected virtual int SpawnTime => 4000;
 
-                protected string CharacterName => character == null ? "" : character.Name;
-                private Character character = null;
+                /// <summary>
+                /// The name of the current Character of this Lineage.
+                /// An empty string is provided if there is no current Character.
+                /// </summary>
+                protected string CharacterName => _character == null ? "" : _character.Name;
+                private Character _character = null;
 
                 // TODO :: Track the names of Characters of the lineage.
 
@@ -85,13 +89,21 @@ namespace AsLegacy
                     Name = name;
                 }
 
+                /// <summary>
+                /// Updates the current Character of the Lineage, replacing either no 
+                /// preceeding Character or a preceeding Character that has died.
+                /// </summary>
+                /// <param name="newCharacter">The Character to become the new 
+                /// current Character of the Lineage.</param>
+                /// <exception cref="InvalidOperationException">Thrown if the Lineage's 
+                /// current Character exists and is still alive.</exception>
                 public void Update(Character newCharacter)
                 {
-                    if (character == null || !character.IsAlive)
+                    if (_character == null || !_character.IsAlive)
                     {
-                        rankedCharacters.Remove(character);
-                        rankedCharacters.Add(newCharacter);
-                        character = newCharacter;
+                        RankedCharacters.Remove(_character);
+                        RankedCharacters.Add(newCharacter);
+                        _character = newCharacter;
                     }
                     else
                         throw new InvalidOperationException("A Lineage Character cannot be " +
@@ -101,12 +113,12 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public virtual bool SpawnSuccessor()
                 {
-                    if (character == null || character.IsAlive)
+                    if (_character == null || _character.IsAlive)
                         return false;
 
                     // TODO :: Update naming of successors.
 
-                    new World.Action(spawnTime, OnSpawnSuccessor);
+                    new World.Action(SpawnTime, OnSpawnSuccessor);
                     return true;
                 }
 
