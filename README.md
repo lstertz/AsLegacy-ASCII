@@ -42,7 +42,7 @@ The As Legacy code project conforms to the following guidelines:
 	* Abstract classes can only have protected or private constructors.
 * Enums
 	* Naming follows PascalCase.
-	* Named in the singular, unless its a set of bits/flags.
+	* Named in the singular, unless it's a set of bits/flags.
 * Constant members
 	* Includes fields defined as 'const' or 'static readonly'.
 	* Naming follows PascalCase.
