@@ -98,7 +98,7 @@ namespace AsLegacy
             /// The number of skill points that this Character has available 
             /// for investing in skills.
             /// </summary>
-            public int AvailableSkillPoints { get; protected set; } = 17;
+            public float AvailableSkillPoints { get; protected set; } = 17.3f;
 
             /// <summary>
             /// The Character's AI.
