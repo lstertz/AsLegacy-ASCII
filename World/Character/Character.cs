@@ -60,11 +60,6 @@ namespace AsLegacy
             IAI ICharacter.AI => CharacterAI;
 
             /// <summary>
-            /// The Character's AI.
-            /// </summary>
-            protected IAI CharacterAI { get; set; }
-
-            /// <summary>
             /// The character's present mode.
             /// </summary>
             public Mode ActiveMode
@@ -98,6 +93,17 @@ namespace AsLegacy
             private Mode _mode;
             private bool _attackEnabled = false;
             private bool _defenseEnabled = false;
+
+            /// <summary>
+            /// The number of skill points that this Character has available 
+            /// for investing in skills.
+            /// </summary>
+            public int AvailableSkillPoints { get; protected set; } = 17;
+
+            /// <summary>
+            /// The Character's AI.
+            /// </summary>
+            protected IAI CharacterAI { get; set; }
 
             /// <summary>
             /// The current action being performed by this Character, 

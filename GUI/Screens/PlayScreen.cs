@@ -177,8 +177,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Display.Width / 4, Display.Height / 4),
                 IsVisible = false
             };
-            _skillsPopup = new Popup("Skills", "Skills to be managed here.",
-                Display.Width - MapViewPortWidth - 1, Display.Height)
+            _skillsPopup = new SkillsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
