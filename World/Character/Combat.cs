@@ -180,13 +180,16 @@ namespace AsLegacy
                         (t) =>
                         {
                             ICombat tState = t._combatState;
+                            float dealtDamage = aState.AttackDamage;
 
                             float damageReduction = 0.0f;
                             if (t.ActiveMode == Mode.Defend)
                                 damageReduction = aState.AttackDamage * 
                                     tState.DefenseDamageReduction;
 
-                            tState.CurrentHealth -= (aState.AttackDamage - damageReduction);
+                            t.AvailableSkillPoints += dealtDamage;
+                            attacker.AvailableSkillPoints += dealtDamage;
+                            tState.CurrentHealth -= (dealtDamage - damageReduction);
 
                             if (!t.IsAlive)
                             {
