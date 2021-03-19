@@ -60,7 +60,7 @@ namespace AsLegacy.GUI.Popups
                 return;
 
             _availablePointsLabel.DisplayText =
-                $"{AvailablePointsText}{AsLegacy.Player.AvailableSkillPoints}";
+                $"{AvailablePointsText}{(int)AsLegacy.Player.AvailableSkillPoints}";
             _availablePointsLabel.IsDirty = true;
         }
     }
