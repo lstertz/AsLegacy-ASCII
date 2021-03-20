@@ -247,7 +247,7 @@ namespace AsLegacy
                         break;
                 }
 
-                int movementInterval = _baseSettings.InitialMovementInterval;
+                int movementInterval = _baseSettings.InitialNormalMovementInterval;
                 //if (_mode == Mode.Attack)
                     // Use Attack Movement interval.
 

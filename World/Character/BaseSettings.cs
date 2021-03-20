@@ -43,6 +43,11 @@ namespace AsLegacy
                 /// </summary>
                 public abstract int InitialAttackInterval { get; }
                 /// <summary>
+                /// The initial movement interval for this specific type of Character 
+                /// in attack mode.
+                /// </summary>
+                public abstract int InitialAttackMovementInterval { get; }
+                /// <summary>
                 /// The initial base maximum health for this specific type of Character.
                 /// </summary>
                 public abstract float InitialBaseMaxHealth { get; }
@@ -52,9 +57,10 @@ namespace AsLegacy
                 /// </summary>
                 public abstract float InitialDefenseDamageReduction { get; }
                 /// <summary>
-                /// The initial movement interval for this specific type of character.
+                /// The initial movement interval for this specific type of Character 
+                /// in normal mode.
                 /// </summary>
-                public abstract int InitialMovementInterval { get; }
+                public abstract int InitialNormalMovementInterval { get; }
             }
         }
     }
