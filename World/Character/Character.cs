@@ -224,7 +224,7 @@ namespace AsLegacy
             /// <returns>Whether the Character initiated an attempt to move.</returns>
             public bool MoveInDirection(Direction direction, Func<bool> repeatMovement = null)
             {
-                if (_mode != Mode.Normal)
+                if (_mode == Mode.Defend)
                     return false;
 
                 int intendedRow = Row;
@@ -247,9 +247,13 @@ namespace AsLegacy
                         break;
                 }
 
+                int movementInterval = _baseSettings.InitialMovementInterval;
+                //if (_mode == Mode.Attack)
+                    // Use Attack Movement interval.
+
                 if (IsPassable(intendedRow, intendedColumn))
                 {
-                    new Action(this, _baseSettings.InitialMovementInterval,
+                    new Action(this, movementInterval,
                         () =>
                         {
                             Move(intendedRow, intendedColumn);
@@ -277,7 +281,7 @@ namespace AsLegacy
                         },
                         () =>
                         {
-                            return IsAlive && _mode == Mode.Normal &&
+                            return IsAlive && _mode != Mode.Defend &&
                                 IsPassable(intendedRow, intendedColumn);
                         }, true);
                     return true;
