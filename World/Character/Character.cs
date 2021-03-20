@@ -249,6 +249,7 @@ namespace AsLegacy
 
                 if (IsPassable(intendedRow, intendedColumn))
                 {
+                    Mode movementMode = _mode;
                     int movementInterval = _mode == Mode.Normal ?
                         _baseSettings.InitialNormalMovementInterval :
                         _baseSettings.InitialAttackMovementInterval;
@@ -281,7 +282,7 @@ namespace AsLegacy
                         },
                         () =>
                         {
-                            return IsAlive && _mode != Mode.Defend &&
+                            return IsAlive && _mode == movementMode &&
                                 IsPassable(intendedRow, intendedColumn);
                         }, true);
                     return true;
