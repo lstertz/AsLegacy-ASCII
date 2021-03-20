@@ -247,12 +247,12 @@ namespace AsLegacy
                         break;
                 }
 
-                int movementInterval = _baseSettings.InitialNormalMovementInterval;
-                //if (_mode == Mode.Attack)
-                    // Use Attack Movement interval.
-
                 if (IsPassable(intendedRow, intendedColumn))
                 {
+                    int movementInterval = _mode == Mode.Normal ?
+                        _baseSettings.InitialNormalMovementInterval :
+                        _baseSettings.InitialAttackMovementInterval;
+
                     new Action(this, movementInterval,
                         () =>
                         {
