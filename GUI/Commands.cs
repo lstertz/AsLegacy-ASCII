@@ -129,7 +129,7 @@ namespace AsLegacy.GUI
                 return false;
 
             return World.IsPassable(worldX, worldY) &&
-                AsLegacy.Player.ActiveMode == World.Character.Mode.Normal;
+                AsLegacy.Player.ActiveMode != World.Character.Mode.Defend;
         }
     }
 }
