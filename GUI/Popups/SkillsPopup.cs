@@ -28,7 +28,7 @@ namespace AsLegacy.GUI.Popups
             {
                 Alignment = HorizontalAlignment.Right,
                 DisplayText = $"{AvailablePointsText}0",
-                Position = new Point(width - AvailablePointsMaxLength - 1, AvailablePointsY),
+                Position = new Point(width - AvailablePointsMaxLength - 2, AvailablePointsY),
                 TextColor = Colors.White
             };
             Add(_availablePointsLabel);
@@ -39,6 +39,32 @@ namespace AsLegacy.GUI.Popups
         {
             UpdateText();
             base.Invalidate();
+
+            SetGlyph(0, 3, 199, Colors.White, Colors.Black);
+            Fill(new Rectangle(1, 3, Width - 2, 1), Colors.White, Colors.Black, 196);
+            SetGlyph(21, 3, 194, Colors.White, Colors.Black);
+            Fill(new Rectangle(21, 4, 1, Height - 4), Colors.White, Colors.Black, 179);
+            SetGlyph(21, Height - 1, 207, Colors.White, Colors.Black);
+            SetGlyph(Width - 1, 3, 182, Colors.White, Colors.Black);
+
+            Fill(new Rectangle(22, Height - 10, Width - 23, 1), Colors.White, Colors.Black, 45);
+
+            string active = " Active ";
+            Print(2, 3, active, Color.White);
+            string text = " Concepts ";
+            Print(23, 3, text, Color.White);
+            string passives = " Passives ";
+            Print(23, Height - 10, passives, Color.White);
+
+            Print(2, 4, "Sample Skill");
+            Print(23, 5, "Sample Skill Concept " + ((char)7) + " " + ((char)7));
+            Print(Width - 6, 5, "## +");
+
+            Print(23, Height - 9, "Health +0.0");
+            Print(Width - 6, Height - 9, "## +");
+
+            string successor = "Successor Points: ##";
+            Print(Width - successor.Length - 2, Height - 2, successor);
         }
 
         /// <inheritdoc/>
