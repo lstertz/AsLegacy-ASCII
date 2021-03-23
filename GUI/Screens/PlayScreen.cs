@@ -80,6 +80,13 @@ namespace AsLegacy.GUI.Screens
                 Screen._console.IsVisible = value;
                 Screen._commands.IsFocused = value;
 
+                if (!value)
+                {
+                    Screen._itemsPopup.IsVisible = false;
+                    Screen._skillsPopup.IsVisible = false;
+                    Screen._playerDeathPopup.IsVisible = false;
+                }
+
                 Screen.Refresh();
             }
         }
