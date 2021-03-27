@@ -11,6 +11,11 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
+            public enum Attribute
+            {
+                BaseHealth
+            }
+
             /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>

@@ -15,7 +15,7 @@ namespace AsLegacy.GUI.Popups
         private const int AvailablePointsY = 4;
         private const int AvailablePointsMaxLength = 25;
 
-        private Label _availablePointsLabel;
+        private readonly Label _availablePointsLabel;
 
         /// <summary>
         /// Constructs a new SkillsPopup.
