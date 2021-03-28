@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.Characters;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace AsLegacy
@@ -110,6 +111,8 @@ namespace AsLegacy
             /// </summary>
             protected IAI CharacterAI { get; set; }
 
+            public Class Class { get; private set; }
+
             /// <summary>
             /// The current action being performed by this Character, 
             /// or null if it is performing no action.
@@ -196,6 +199,8 @@ namespace AsLegacy
                 Name = name;
 
                 CharacterAI = baseSettings.AI;
+                Class = Class.Get(baseSettings.ClassType);
+
                 _baseSettings = baseSettings;
                 _combatState = new Combat.State(baseSettings, legacy);
 

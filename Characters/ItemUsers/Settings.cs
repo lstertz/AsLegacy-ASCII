@@ -12,6 +12,8 @@ namespace AsLegacy.Characters
         {
             /// <inheritdoc/>
             public override IAI AI => new BasicAI();
+            /// <inheritdoc/>
+            public override Class.Type ClassType => Class.Type.Spellcaster; // TODO :: Update to allow for other Classes.
 
             /// <inheritdoc/>
             public override Color GlyphColor => Color.DarkSalmon;

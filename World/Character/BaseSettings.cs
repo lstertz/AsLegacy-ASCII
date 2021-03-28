@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.Characters;
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy
 {
@@ -16,6 +17,10 @@ namespace AsLegacy
                 /// Defines the initial AI of the Character.
                 /// </summary>
                 public abstract IAI AI { get; }
+                /// <summary>
+                /// Defines the type of the Class of the Character.
+                /// </summary>
+                public abstract Class.Type ClassType { get;}
 
                 /// <summary>
                 /// Defines the color of the Character's Glyphs.
