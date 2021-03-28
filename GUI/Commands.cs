@@ -15,16 +15,16 @@ namespace AsLegacy.GUI
     /// </summary>
     public class Commands : Console
     {
-        private static readonly Cell Empty = new Cell(Colors.Transparent, Colors.Transparent);
-        private static readonly Cell Up = new Cell(Colors.FadedWhite, Colors.Transparent, 30);
-        private static readonly Cell Right = new Cell(Colors.FadedWhite, Colors.Transparent, 16);
-        private static readonly Cell Down = new Cell(Colors.FadedWhite, Colors.Transparent, 31);
-        private static readonly Cell Left = new Cell(Colors.FadedWhite, Colors.Transparent, 17);
+        private static readonly Cell Empty = new(Colors.Transparent, Colors.Transparent);
+        private static readonly Cell Up = new(Colors.FadedWhite, Colors.Transparent, 30);
+        private static readonly Cell Right = new(Colors.FadedWhite, Colors.Transparent, 16);
+        private static readonly Cell Down = new(Colors.FadedWhite, Colors.Transparent, 31);
+        private static readonly Cell Left = new(Colors.FadedWhite, Colors.Transparent, 17);
 
         /// <summary>
         /// The Cells that make up the display of the available directions.
         /// </summary>
-        private static readonly Cell[] Cells = new Cell[]
+        private static readonly new Cell[] Cells = new Cell[]
         {
                 Empty, Up, Empty,
                 Left, Empty, Right,

@@ -73,6 +73,7 @@ namespace AsLegacy
             ObservedCharacter = null;
             Player.Reset();
 
+            Class.Init();
             World.InitNewWorld();
             Player.Create(12, 11, characterName, lineageName);
 
