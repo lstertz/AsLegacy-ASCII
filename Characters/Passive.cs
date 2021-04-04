@@ -34,7 +34,7 @@ namespace AsLegacy.Characters
         public override string GetDescription(int investment) => AffectedAttribute switch
         {
             Character.Attribute.MaxHealth =>
-                $"+{_algorithm(investment):N1} Max Health        ", // Extra space to ensure multi-lined pop-up. TODO :: Remove.
+                $"+{_algorithm(investment):N1} Max Health",
             _ => throw new NotSupportedException($"The specified attribute " +
                 $"{AffectedAttribute} is not supported for a passive description.")
         };

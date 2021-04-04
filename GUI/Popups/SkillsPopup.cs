@@ -98,7 +98,7 @@ namespace AsLegacy.GUI.Popups
             _hoveredButton = button;
 
             // TODO :: Add a newline to explicitly separate.
-            string content = passive.GetDescription(3) + passive.GetDescription(3, 4);
+            string content = passive.GetDescription(3) + "\n" + passive.GetDescription(3, 4);
 
             _hoverPopup.UpdateTitle(passive.Title);
             _hoverPopup.UpdateContent(content);

@@ -72,44 +72,56 @@ namespace AsLegacy.GUI.Popups
         /// <param name="newContent">The new content of the pop-up.</param>
         public void UpdateContent(string newContent)
         {
-            // TODO :: Support splitting by new line.
+            int totalContentLineCount = 0;
+            int longestContentWidth = 0;
+            string[] splitContent = newContent.Split('\n');
 
-            int contentLineCount = newContent.Length / _maxLineWidth;
-            if (newContent.Length % _maxLineWidth != 0)
-                contentLineCount++;
-            int requiredWidth = contentLineCount > 1 ? _maxWidth :
-                newContent.Length > _minWidth ? newContent.Length + FrameSpace : _minWidth;
-
-            _width = requiredWidth;
-            _height = contentLineCount + FrameSpace + TitleHeightSpace;
-
-            string remainingContent = newContent;
-            for (int c = 0; c < contentLineCount; c++)
+            for (int c = 0, count = splitContent.Length; c < count; c++)
             {
-                if (c >= _textLines.Count)
+                string content = splitContent[c];
+                int contentLineCount = content.Length / _maxLineWidth;
+                if (content.Length % _maxLineWidth != 0)
+                    contentLineCount++;
+                totalContentLineCount += contentLineCount;
+
+                int contentWidth = contentLineCount > 1 ? _maxWidth :
+                    content.Length > _minWidth ? content.Length + FrameSpace : _minWidth;
+                if (contentWidth > longestContentWidth)
+                    longestContentWidth = contentWidth;
+
+                string remainingContent = content;
+                for (int cc = 0; cc < contentLineCount; cc++)
                 {
-                    Label newLine = new(_maxLineWidth)
+                    int totalC = c + cc;
+                    if (totalC >= _textLines.Count)
                     {
-                        Position = new(FrameSpace / 2, TitleHeightSpace + FrameSpace / 2 + c)
-                    };
-                    _textLines.Add(newLine);
-                    Add(newLine);
-                }
+                        Label newLine = new(_maxLineWidth)
+                        {
+                            Position = new(FrameSpace / 2, 
+                                TitleHeightSpace + FrameSpace / 2 + totalC)
+                        };
+                        _textLines.Add(newLine);
+                        Add(newLine);
+                    }
 
-                string content = remainingContent;
-                if (c < contentLineCount - 1)
-                {
-                    content = remainingContent.Substring(0, _maxLineWidth);
-                    remainingContent = remainingContent.Substring(_maxLineWidth);
-                }
+                    string currentContent = remainingContent;
+                    if (cc < contentLineCount - 1)
+                    {
+                        currentContent = remainingContent.Substring(0, _maxLineWidth);
+                        remainingContent = remainingContent.Substring(_maxLineWidth);
+                    }
 
-                _textLines[c].DisplayText = content;
-                _textLines[c].IsEnabled = true;
-                _textLines[c].IsDirty = true;
+                    _textLines[totalC].DisplayText = currentContent;
+                    _textLines[totalC].IsEnabled = true;
+                    _textLines[totalC].IsDirty = true;
+                }
             }
 
-            for (int c = _textLines.Count - 1; c > contentLineCount - 1; c--)
-                _textLines[c].IsEnabled = false;
+            _width = longestContentWidth;
+            _height = totalContentLineCount + FrameSpace + TitleHeightSpace;
+
+            for (int c = _textLines.Count - 1; c > totalContentLineCount - 1; c--)
+                _textLines[c].IsVisible = false;
 
             Invalidate();
         }
