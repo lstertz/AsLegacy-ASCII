@@ -14,7 +14,7 @@ namespace AsLegacy
         {
             public enum Attribute
             {
-                BaseHealth
+                MaxHealth
             }
 
             /// <summary>
