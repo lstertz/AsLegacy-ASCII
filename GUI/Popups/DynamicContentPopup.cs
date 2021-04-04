@@ -12,7 +12,8 @@ namespace AsLegacy.GUI.Popups
     public class DynamicContentPopup : Popup
     {
         private const int TitleHeightSpace = 2;
-        private const int FrameSpace = 2;
+        private const int FrameSpaceHorizontal = 4;
+        private const int FrameSpaceVertical = 2;
 
         public override int Width => _width;
         private int _width;
@@ -44,7 +45,7 @@ namespace AsLegacy.GUI.Popups
             _maxWidth = maxWidth;
             _maxHeight = maxHeight;
 
-            _maxLineWidth = _maxWidth - FrameSpace;
+            _maxLineWidth = _maxWidth - FrameSpaceHorizontal;
 
             // TODO :: Support a scrollbar if over max height.
             // TODO :: Support a bullet at the start of each label.
@@ -85,7 +86,7 @@ namespace AsLegacy.GUI.Popups
                 totalContentLineCount += contentLineCount;
 
                 int contentWidth = contentLineCount > 1 ? _maxWidth :
-                    content.Length > _minWidth ? content.Length + FrameSpace : _minWidth;
+                    content.Length > _minWidth ? content.Length + FrameSpaceHorizontal : _minWidth;
                 if (contentWidth > longestContentWidth)
                     longestContentWidth = contentWidth;
 
@@ -97,8 +98,8 @@ namespace AsLegacy.GUI.Popups
                     {
                         Label newLine = new(_maxLineWidth)
                         {
-                            Position = new(FrameSpace / 2, 
-                                TitleHeightSpace + FrameSpace / 2 + totalC)
+                            Position = new(FrameSpaceHorizontal / 2, 
+                                TitleHeightSpace + FrameSpaceVertical / 2 + totalC)
                         };
                         _textLines.Add(newLine);
                         Add(newLine);
@@ -118,7 +119,7 @@ namespace AsLegacy.GUI.Popups
             }
 
             _width = longestContentWidth;
-            _height = totalContentLineCount + FrameSpace + TitleHeightSpace;
+            _height = totalContentLineCount + FrameSpaceVertical + TitleHeightSpace;
 
             for (int c = _textLines.Count - 1; c > totalContentLineCount - 1; c--)
                 _textLines[c].IsVisible = false;
