@@ -27,7 +27,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public SkillsPopup(int width, int height) : base("Skills", "", width, height)
+        public SkillsPopup(int width, int height) : base("Skills", width, height)
         {
             _availablePointsLabel = new Label(AvailablePointsMaxLength)
             {
