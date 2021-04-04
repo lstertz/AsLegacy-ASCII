@@ -173,8 +173,7 @@ namespace AsLegacy.GUI.Screens
 
             SetConsoleFrame(_console);
 
-            _itemsPopup = new Popup("Items", "Items to be managed here.",
-                Display.Width - MapViewPortWidth - 1, Display.Height)
+            _itemsPopup = new ItemsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
