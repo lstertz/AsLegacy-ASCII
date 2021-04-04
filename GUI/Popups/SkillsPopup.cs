@@ -3,6 +3,7 @@ using AsLegacy.Global;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
+using SadConsole.Input;
 using System.Collections.ObjectModel;
 
 namespace AsLegacy.GUI.Popups
@@ -22,13 +23,22 @@ namespace AsLegacy.GUI.Popups
         private readonly Label _availablePointsLabel;
         private readonly Button[] _passiveInvestmentButtons = new Button[MaxInvestmentCount];
 
+        private DynamicContentPopup _hoverPopup;
+        private Button _hoveredButton;
+
         /// <summary>
         /// Constructs a new SkillsPopup.
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public SkillsPopup(int width, int height) : base("Skills", "", width, height)
+        public SkillsPopup(int width, int height) : base("Skills", width, height)
         {
+            _hoverPopup = new DynamicContentPopup("", 10, 25, 20)
+            {
+                IsVisible = false
+            };
+            Children.Add(_hoverPopup);
+
             _availablePointsLabel = new Label(AvailablePointsMaxLength)
             {
                 Alignment = HorizontalAlignment.Right,
@@ -40,17 +50,22 @@ namespace AsLegacy.GUI.Popups
 
             for (int c = 0; c < MaxInvestmentCount; c++)
             {
-                _passiveInvestmentButtons[c] = new Button(1, 1)
+                int passiveIndex = c;
+                Button button = new Button(1, 1)
                 {
-                    IsEnabled = false,
+                    IsEnabled = true,
                     Position = new Point(width - 3, Height - 9 + c),
                     Text = "+"
                 };
-                Add(_passiveInvestmentButtons[c]);
-            }
+                button.MouseEnter += (sender, args) =>
+                {
+                    OnHoverBegin(sender, args, passiveIndex);
+                };
+                button.MouseExit += OnHoverEnd;
 
-            // TODO :: Split Class records to their own files.
-            // TODO :: Update documentation.
+                Add(button);
+                _passiveInvestmentButtons[c] = button;
+            }
         }
 
         /// <inheritdoc/>
@@ -69,6 +84,44 @@ namespace AsLegacy.GUI.Popups
             Print(Width - successor.Length - 2, Height - 2, successor);
         }
 
+        /// <summary>
+        /// Handles the start of the hovering of an investment button.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="args">The event arguments.</param>
+        /// <param name="passiveIndex">The index of the passive skill whose 
+        /// investment button is being hovered.</param>
+        private void OnHoverBegin(object sender, MouseEventArgs args, int passiveIndex)
+        {
+            Passive passive = AsLegacy.Player.Class.Passives[passiveIndex];
+            Button button = sender as Button;
+            _hoveredButton = button;
+
+            // TODO :: Add a newline to explicitly separate.
+            string content = passive.GetDescription(3) + passive.GetDescription(3, 4);
+
+            _hoverPopup.UpdateTitle(passive.Title);
+            _hoverPopup.UpdateContent(content);
+            _hoverPopup.Position = button.Position - 
+                new Point(_hoverPopup.Width, _hoverPopup.Height);
+            _hoverPopup.IsVisible = true;
+            _hoverPopup.IsDirty = true;
+        }
+
+        /// <summary>
+        /// Handles the end of the hovering of an investment button.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="args">The event arguments.</param>
+        private void OnHoverEnd(object sender, MouseEventArgs args)
+        {
+            if (_hoveredButton != sender as Button)
+                return;
+
+            _hoverPopup.IsVisible = false;
+            _hoveredButton = null;
+        }
+
         /// <inheritdoc/>
         protected override void OnVisibleChanged()
         {
@@ -82,6 +135,9 @@ namespace AsLegacy.GUI.Popups
                 for (int c = 0; c < MaxInvestmentCount; c++)
                     _passiveInvestmentButtons[c].IsVisible = c < passiveCount;
             }
+            else
+                for (int c = 0; c < MaxInvestmentCount; c++)
+                    _passiveInvestmentButtons[c].IsVisible = false;
 
             IsFocused = IsVisible;
         }
@@ -135,9 +191,14 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdatePassives()
         {
+            int testInvestment = 3;
+            string investment = testInvestment.ToString();
             ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
             for (int c = 0, count = passives.Count, y = Height - 9; c < count; c++, y++)
-                Print(23, y, $"{passives[c].Title} - {passives[c].GetDescription(3)}");
+            {
+                Print(23, y, passives[c].Title);
+                Print(Width - investment.Length - 4, y, investment);
+            }
         }
     }
 }

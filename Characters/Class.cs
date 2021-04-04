@@ -67,7 +67,7 @@ namespace AsLegacy.Characters
                 },
                 new Passive[]
                 {
-                    new (Character.Attribute.BaseHealth, "Endurance",
+                    new (Character.Attribute.MaxHealth, "Endurance",
                         (investment) => investment / 10.0f)
                 }));
         }

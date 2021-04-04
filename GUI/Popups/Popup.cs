@@ -9,26 +9,23 @@ namespace AsLegacy.GUI.Popups
     /// Defines a Popup, a Console for displaying potentially 
     /// interactive data as a window displaying on top of other content.
     /// </summary>
-    public class Popup : ControlsConsole
+    public abstract class Popup : ControlsConsole
     {
         /// <summary>
         /// The title of the Popup, displayed center top of its window.
         /// </summary>
-        protected virtual string Title { get; }
+        protected virtual string Title { get; set; }
 
-        /// <summary>
-        /// The content of the Popup.
-        /// </summary>
-        protected virtual string Content { get; }
+        public virtual new int Height { get => base.Height; }
+        public virtual new int Width { get => base.Width; }
 
         /// <summary>
         /// Constructs a new Popup.
         /// </summary>
         /// <param name="title">The title of the Popup, displayed center top of its window.</param>
-        /// <param name="content">The content of the Popup.</param>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public Popup(string title, string content, int width, int height, 
+        public Popup(string title, int width, int height, 
             bool hasCloseButton = true) : base(width, height)
         {
             ThemeColors = Colors.StandardTheme;
@@ -45,7 +42,6 @@ namespace AsLegacy.GUI.Popups
             }
 
             Title = title;
-            Content = content;
         }
 
         /// <inheritdoc/>
@@ -65,8 +61,6 @@ namespace AsLegacy.GUI.Popups
             Fill(new Rectangle(1, 1, Width - 2, Height - 2), Colors.White, Colors.Black, 0);
             if (Title != null)
                 Print(Width / 2 - Title.Length / 2, 1, Title, Color.White);
-            if (Content != null)
-                Print(2, 2, Content, Color.White);
         }
     }
 }

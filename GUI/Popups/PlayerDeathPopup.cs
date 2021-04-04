@@ -41,7 +41,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public PlayerDeathPopup(int width, int height) : base("", "", width, height, false)
+        public PlayerDeathPopup(int width, int height) : base("", width, height, false)
         {
             Add(new Label(Width)
             {

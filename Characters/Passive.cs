@@ -31,22 +31,24 @@ namespace AsLegacy.Characters
         }
 
         /// <inheritdoc/>
-        public override string GetDescription(int investment)
+        public override string GetDescription(int investment) => AffectedAttribute switch
         {
-            return AffectedAttribute switch
-            {
-                Character.Attribute.BaseHealth =>
-                    $"Base Health +{_algorithm(investment).ToString("N1")}",
-                _ => throw new NotSupportedException($"The specified attribute " +
-                    $"{AffectedAttribute.ToString()} is not supported for a passive description.")
-            };
-        }
+            Character.Attribute.MaxHealth =>
+                $"+{_algorithm(investment):N1} Max Health        ", // Extra space to ensure multi-lined pop-up. TODO :: Remove.
+            _ => throw new NotSupportedException($"The specified attribute " +
+                $"{AffectedAttribute} is not supported for a passive description.")
+        };
 
         /// <inheritdoc/>
-        public override string GetDescription(int investmentCurrent, int investmentNext)
+        public override string GetDescription(int investmentCurrent, int investmentNext) => 
+            AffectedAttribute switch
         {
-            throw new NotImplementedException();
-        }
+            Character.Attribute.MaxHealth =>
+                $"+{_algorithm(investmentNext) - _algorithm(investmentCurrent):N1}; " + 
+                "for next level",
+            _ => throw new NotSupportedException($"The specified attribute " +
+                $"{AffectedAttribute} is not supported for a passive description.")
+        };
 
         /// <summary>
         /// Calculates the affect to be applied to the Character attribute.
