@@ -21,6 +21,8 @@ namespace AsLegacy.GUI.Popups
         private int _height;
 
         private readonly int _maxLineWidth;
+        private int _requiredTitleWidth;
+        private int _requiredLineWidth;
 
         private readonly int _maxHeight;
         private readonly int _maxWidth;
@@ -46,6 +48,8 @@ namespace AsLegacy.GUI.Popups
             _maxHeight = maxHeight;
 
             _maxLineWidth = _maxWidth - FrameSpaceHorizontal;
+            _requiredLineWidth = _minWidth + FrameSpaceHorizontal;
+            _requiredTitleWidth = title.Length + FrameSpaceHorizontal;
 
             // TODO :: Support a scrollbar if over max height.
             // TODO :: Support a bullet at the start of each label.
@@ -118,7 +122,9 @@ namespace AsLegacy.GUI.Popups
                 }
             }
 
-            _width = longestContentWidth;
+            _requiredLineWidth = longestContentWidth;
+            _width = _requiredLineWidth > _requiredTitleWidth ? 
+                _requiredLineWidth : _requiredTitleWidth;
             _height = totalContentLineCount + FrameSpaceVertical + TitleHeightSpace;
 
             for (int c = _textLines.Count - 1; c > totalContentLineCount - 1; c--)
@@ -128,14 +134,16 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
-        /// Updates the title of the pop-up.
+        /// Updates the title of the pop-up, which may also resize the pop-up view.
         /// </summary>
         /// <param name="newTitle">The new title.</param>
         public void UpdateTitle(string newTitle)
         {
             Title = newTitle;
 
-            // TODO :: Expand width to fit title if needed.
+            _requiredTitleWidth = Title.Length + FrameSpaceHorizontal;
+            _width = _requiredLineWidth > _requiredTitleWidth ? 
+                _requiredLineWidth : _requiredTitleWidth;
         }
     }
 }
