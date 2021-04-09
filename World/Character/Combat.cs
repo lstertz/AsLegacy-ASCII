@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Characters;
+using System.Collections.Generic;
 
 namespace AsLegacy
 {
@@ -147,6 +148,8 @@ namespace AsLegacy
                     float ICombat.BaseMaxHealth { set => _baseMaxHealth = value; }
                     private float _baseMaxHealth;
 
+                    private Dictionary<Attribute, float> _skillAffects = new();
+
 
                     /// <summary>
                     /// Creates a new State.
@@ -164,6 +167,11 @@ namespace AsLegacy
 
                         _legacy = legacy;
                     }
+
+                    //public void UpdateAffect(Attribute attribute, int affectAamount)
+                    //{
+                        // TODO :: 66 : Update affects.
+                    //}
                 }
 
 

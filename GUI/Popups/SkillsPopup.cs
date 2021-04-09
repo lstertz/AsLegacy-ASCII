@@ -24,6 +24,7 @@ namespace AsLegacy.GUI.Popups
         private readonly Button[] _passiveInvestmentButtons = new Button[MaxInvestmentCount];
 
         private DynamicContentPopup _hoverPopup;
+        private int _hoveredPassiveIndex = -1;
         private Button _hoveredButton;
 
         /// <summary>
@@ -57,10 +58,8 @@ namespace AsLegacy.GUI.Popups
                     Position = new Point(width - 3, Height - 9 + c),
                     Text = "+"
                 };
-                button.MouseEnter += (sender, args) =>
-                {
-                    OnHoverBegin(sender, args, passiveIndex);
-                };
+                button.Click += (sender, args) => OnPassiveInvestment(sender, args, passiveIndex);
+                button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, passiveIndex);
                 button.MouseExit += OnHoverEnd;
 
                 Add(button);
@@ -75,6 +74,7 @@ namespace AsLegacy.GUI.Popups
 
             DrawFrame();
             UpdateContent();
+            UpdateHoverContent();
 
             Print(2, 4, "Sample Skill");
             Print(23, 5, "Sample Skill Concept " + ((char)7) + " " + ((char)7));
@@ -93,17 +93,12 @@ namespace AsLegacy.GUI.Popups
         /// investment button is being hovered.</param>
         private void OnHoverBegin(object sender, MouseEventArgs args, int passiveIndex)
         {
-            Passive passive = AsLegacy.Player.Class.Passives[passiveIndex];
             Button button = sender as Button;
             _hoveredButton = button;
 
-            // TODO :: Add a newline to explicitly separate.
-            string content = passive.GetDescription(3) + passive.GetDescription(3, 4);
+            _hoveredPassiveIndex = passiveIndex;
+            UpdateHoverContent();
 
-            _hoverPopup.UpdateTitle(passive.Title);
-            _hoverPopup.UpdateContent(content);
-            _hoverPopup.Position = button.Position - 
-                new Point(_hoverPopup.Width, _hoverPopup.Height);
             _hoverPopup.IsVisible = true;
             _hoverPopup.IsDirty = true;
         }
@@ -118,8 +113,24 @@ namespace AsLegacy.GUI.Popups
             if (_hoveredButton != sender as Button)
                 return;
 
+            _hoveredPassiveIndex = -1;
             _hoverPopup.IsVisible = false;
             _hoveredButton = null;
+        }
+
+        /// <summary>
+        /// Handles the investment of a passive skill.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="args">The event args.</param>
+        /// <param name="passiveIndex">The index of he passive skill to be invested in.</param>
+        private void OnPassiveInvestment(object sender, System.EventArgs args, int passiveIndex)
+        {
+            if (!AsLegacy.HasPlayer)
+                return;
+
+            // TODO :: Support various investment amounts (eg. 1, 5, 10, etc.).
+            AsLegacy.Player.InvestInSkill(AsLegacy.Player.Class.Passives[passiveIndex].ID, 1);
         }
 
         /// <inheritdoc/>
@@ -141,6 +152,7 @@ namespace AsLegacy.GUI.Popups
 
             IsFocused = IsVisible;
         }
+
 
         /// <summary>
         /// Draws the frame (divisions) within the popup.
@@ -177,6 +189,27 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
+        /// Updates the content of the investment hover pop-up, if it is active.
+        /// </summary>
+        private void UpdateHoverContent()
+        {
+            if (_hoveredButton == null)
+                return;
+
+            Passive passive = AsLegacy.Player.Class.Passives[_hoveredPassiveIndex];
+
+            int investment = AsLegacy.Player.GetInvestment(passive.ID);
+            string content = passive.GetDescription(investment) + "\n" +
+                passive.GetDescription(investment, investment + 1);
+
+            _hoverPopup.UpdateTitle(passive.Title);
+            _hoverPopup.UpdateContent(content);
+            _hoverPopup.Position = _hoveredButton.Position -
+                new Point(_hoverPopup.Width, _hoverPopup.Height);
+        }
+
+
+        /// <summary>
         /// Updates the available points label of the popup.
         /// </summary>
         private void UpdateAvailablePoints()
@@ -191,11 +224,11 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdatePassives()
         {
-            int testInvestment = 3;
-            string investment = testInvestment.ToString();
             ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
             for (int c = 0, count = passives.Count, y = Height - 9; c < count; c++, y++)
             {
+                string investment = AsLegacy.Player.GetInvestment(passives[c].ID).ToString();
+
                 Print(23, y, passives[c].Title);
                 Print(Width - investment.Length - 4, y, investment);
             }

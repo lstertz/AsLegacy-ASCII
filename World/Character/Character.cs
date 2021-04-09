@@ -1,6 +1,7 @@
 ﻿using AsLegacy.Characters;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 
 namespace AsLegacy
 {
@@ -180,7 +181,7 @@ namespace AsLegacy
 
             private readonly BaseSettings _baseSettings;
             private readonly Combat.State _combatState;
-
+            private readonly Dictionary<int, int> _skillInvestments = new();
 
             /// <summary>
             /// Constructs a new Character.
@@ -205,6 +206,55 @@ namespace AsLegacy
                 _combatState = new Combat.State(baseSettings, legacy);
 
                 RankedCharacters.Add(this);
+            }
+
+            /// <summary>
+            /// Specifies whether the Defend Mode is enabled, and updates 
+            /// the current active mode.
+            /// </summary>
+            /// <param name="enabled">Whether the Defend Mode should be enabled.</param>
+            public void EnableDefense(bool enabled)
+            {
+                if (_defenseEnabled == enabled)
+                    return;
+
+                _defenseEnabled = enabled;
+                UpdateActiveMode();
+            }
+
+            /// <summary>
+            /// Provides the amount of investment that this Character has in the identified skill.
+            /// </summary>
+            /// <param name="skillID">The ID of the skill whose investment 
+            /// is to be retrieved.</param>
+            /// <returns>The amount of investment.</returns>
+            public int GetInvestment(int skillID)
+            {
+                _skillInvestments.TryGetValue(skillID, out int amount);
+                return amount;
+            }
+
+            /// <summary>
+            /// Invests the specified amount in the identified skill.
+            /// </summary>
+            /// <param name="skillID">The ID of the skill to be invested in.</param>
+            /// <param name="amount">The investment amount.</param>
+            public void InvestInSkill(int skillID, int amount)
+            {
+                if (AvailableSkillPoints == 0)
+                    return;
+
+                if (AvailableSkillPoints < amount)
+                    amount = (int) AvailableSkillPoints;
+
+                AvailableSkillPoints -= amount;
+                if (!_skillInvestments.ContainsKey(skillID))
+                    _skillInvestments.Add(skillID, amount);
+                else
+                    _skillInvestments[skillID] += amount;
+
+                // TODO :: 66 : Get the skill's attribute and affect.
+                //_combatState.UpdateAffect()
             }
 
             /// <summary>
@@ -307,20 +357,6 @@ namespace AsLegacy
             public void ToggleAttackMode()
             {
                 _attackEnabled = !_attackEnabled;
-                UpdateActiveMode();
-            }
-
-            /// <summary>
-            /// Specifies whether the Defend Mode is enabled, and updates 
-            /// the current active mode.
-            /// </summary>
-            /// <param name="enabled">Whether the Defend Mode should be enabled.</param>
-            public void EnableDefense(bool enabled)
-            {
-                if (_defenseEnabled == enabled)
-                    return;
-
-                _defenseEnabled = enabled;
                 UpdateActiveMode();
             }
 
