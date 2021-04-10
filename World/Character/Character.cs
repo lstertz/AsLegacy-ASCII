@@ -254,8 +254,12 @@ namespace AsLegacy
                 else
                     _skillInvestments[talent] += amount;
 
-                // TODO :: 66 : Get the skill's attribute and affect.
-                //_combatState.UpdateAffect()
+                if (talent is Passive)
+                {
+                    Passive passive = talent as Passive;
+                    _combatState.UpdateAffect(passive.Affect,
+                        passive.GetAffect(_skillInvestments[talent]));
+                }
             }
 
             /// <summary>
