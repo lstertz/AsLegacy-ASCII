@@ -224,7 +224,7 @@ namespace AsLegacy
 
             /// <summary>
             /// Provides the amount of investment that this Character has 
-            /// in provided <see cref="Talent"/>.
+            /// in the provided <see cref="Talent"/>.
             /// </summary>
             /// <param name="talent">The <see cref="Talent"/> whose investment 
             /// is to be retrieved.</param>
@@ -236,7 +236,7 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Invests the specified amount in the identified <see cref="Talent"/>.
+            /// Invests the specified amount in the provided <see cref="Talent"/>.
             /// </summary>
             /// <param name="talent">The <see cref="Talent"/> to be invested in.</param>
             /// <param name="amount">The investment amount.</param>
