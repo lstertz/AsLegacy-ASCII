@@ -13,9 +13,9 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
-            public enum Attribute
+            public enum Affect
             {
-                MaxHealth
+                AdditionalMaxHealth
             }
 
             /// <summary>
@@ -192,8 +192,8 @@ namespace AsLegacy
             /// <param name="baseSettings">The base settings that define various 
             /// aspects of the new Character.</param>
             /// <param name="legacy">The starting legacy of the new Character.</param>
-            protected Character(int row, int column, string name, 
-                BaseSettings baseSettings, Combat.Legacy legacy) : base(row, column, Color.Transparent, 
+            protected Character(int row, int column, string name,
+                BaseSettings baseSettings, Combat.Legacy legacy) : base(row, column, Color.Transparent,
                     baseSettings.GlyphColor, baseSettings.NormalGlyph, false)
             {
                 _mode = Mode.Normal;
