@@ -130,7 +130,7 @@ namespace AsLegacy.GUI.Popups
                 return;
 
             // TODO :: Support various investment amounts (eg. 1, 5, 10, etc.).
-            AsLegacy.Player.InvestInSkill(AsLegacy.Player.Class.Passives[passiveIndex].ID, 1);
+            AsLegacy.Player.InvestInTalent(AsLegacy.Player.Class.Passives[passiveIndex], 1);
         }
 
         /// <inheritdoc/>
@@ -198,7 +198,7 @@ namespace AsLegacy.GUI.Popups
 
             Passive passive = AsLegacy.Player.Class.Passives[_hoveredPassiveIndex];
 
-            int investment = AsLegacy.Player.GetInvestment(passive.ID);
+            int investment = AsLegacy.Player.GetInvestment(passive);
             string content = passive.GetDescription(investment) + "\n" +
                 passive.GetDescription(investment, investment + 1);
 
@@ -227,7 +227,7 @@ namespace AsLegacy.GUI.Popups
             ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
             for (int c = 0, count = passives.Count, y = Height - 9; c < count; c++, y++)
             {
-                string investment = AsLegacy.Player.GetInvestment(passives[c].ID).ToString();
+                string investment = AsLegacy.Player.GetInvestment(passives[c]).ToString();
 
                 Print(23, y, passives[c].Title);
                 Print(Width - investment.Length - 4, y, investment);

@@ -181,7 +181,7 @@ namespace AsLegacy
 
             private readonly BaseSettings _baseSettings;
             private readonly Combat.State _combatState;
-            private readonly Dictionary<int, int> _skillInvestments = new();
+            private readonly Dictionary<Talent, int> _skillInvestments = new();
 
             /// <summary>
             /// Constructs a new Character.
@@ -223,35 +223,36 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Provides the amount of investment that this Character has in the identified skill.
+            /// Provides the amount of investment that this Character has 
+            /// in provided <see cref="Talent"/>.
             /// </summary>
-            /// <param name="skillID">The ID of the skill whose investment 
+            /// <param name="talent">The <see cref="Talent"/> whose investment 
             /// is to be retrieved.</param>
             /// <returns>The amount of investment.</returns>
-            public int GetInvestment(int skillID)
+            public int GetInvestment(Talent talent)
             {
-                _skillInvestments.TryGetValue(skillID, out int amount);
+                _skillInvestments.TryGetValue(talent, out int amount);
                 return amount;
             }
 
             /// <summary>
-            /// Invests the specified amount in the identified skill.
+            /// Invests the specified amount in the identified <see cref="Talent"/>.
             /// </summary>
-            /// <param name="skillID">The ID of the skill to be invested in.</param>
+            /// <param name="talent">The <see cref="Talent"/> to be invested in.</param>
             /// <param name="amount">The investment amount.</param>
-            public void InvestInSkill(int skillID, int amount)
+            public void InvestInTalent(Talent talent, int amount)
             {
                 if (AvailableSkillPoints == 0)
                     return;
 
                 if (AvailableSkillPoints < amount)
-                    amount = (int) AvailableSkillPoints;
+                    amount = (int)AvailableSkillPoints;
 
                 AvailableSkillPoints -= amount;
-                if (!_skillInvestments.ContainsKey(skillID))
-                    _skillInvestments.Add(skillID, amount);
+                if (!_skillInvestments.ContainsKey(talent))
+                    _skillInvestments.Add(talent, amount);
                 else
-                    _skillInvestments[skillID] += amount;
+                    _skillInvestments[talent] += amount;
 
                 // TODO :: 66 : Get the skill's attribute and affect.
                 //_combatState.UpdateAffect()
@@ -360,7 +361,7 @@ namespace AsLegacy
                 UpdateActiveMode();
             }
 
-            
+
             /// <summary>
             /// Performs either auto-attack on or an auto-move towards 
             /// the Character's target.
