@@ -7,12 +7,6 @@
     public abstract record Talent
     {
         /// <summary>
-        /// The unique ID of the <see cref="Talent"/>, to be used when any results of 
-        /// the <see cref="Talent"/> are referenced elsewhere.
-        /// </summary>
-        public int ID => GetHashCode();
-
-        /// <summary>
         /// The display title of the <see cref="Talent"/>.
         /// </summary>
         public string Title { get; private set; }

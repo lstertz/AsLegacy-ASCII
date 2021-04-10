@@ -142,13 +142,16 @@ namespace AsLegacy
                     /// <summary>
                     /// The maximum health of the Character.
                     /// </summary>
-                    public float MaxHealth { get => _baseMaxHealth; }  // TODO :: Alter by other states.
+                    public float MaxHealth 
+                    { 
+                        get => _baseMaxHealth + GetAffect(Affect.AdditionalMaxHealth); 
+                    }
 
                     /// <inheritdoc/>
                     float ICombat.BaseMaxHealth { set => _baseMaxHealth = value; }
                     private float _baseMaxHealth;
 
-                    private Dictionary<Attribute, float> _skillAffects = new();
+                    private Dictionary<Affect, float> _affects = new();
 
 
                     /// <summary>
@@ -168,10 +171,36 @@ namespace AsLegacy
                         _legacy = legacy;
                     }
 
-                    //public void UpdateAffect(Attribute attribute, int affectAamount)
-                    //{
-                        // TODO :: 66 : Update affects.
-                    //}
+                    /// <summary>
+                    /// Updates the amount of the specified affect being applied to 
+                    /// this Combat State.
+                    /// </summary>
+                    /// <param name="affect">The affect being updated.</param>
+                    /// <param name="affectAmount">The new amount of affect.</param>
+                    public void UpdateAffect(Affect affect, float affectAmount)
+                    {
+                        // TODO :: Temporarily heal immediately with additional health.
+                        if (affect == Affect.AdditionalMaxHealth)
+                            CurrentHealth += affectAmount - GetAffect(affect);
+
+                        if (!_affects.ContainsKey(affect))
+                            _affects.Add(affect, affectAmount);
+                        else
+                            _affects[affect] = affectAmount;
+                    }
+
+
+                    /// <summary>
+                    /// Provides the amount of the specified affect that is currently 
+                    /// applied to this Combat State.
+                    /// </summary>
+                    /// <param name="affect">The affect whose amount is to be retrieved.</param>
+                    /// <returns>The amount of affect.</returns>
+                    private float GetAffect(Affect affect)
+                    {
+                        _affects.TryGetValue(affect, out float amount);
+                        return amount;
+                    }
                 }
 
 
