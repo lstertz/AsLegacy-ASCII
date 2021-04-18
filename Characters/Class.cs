@@ -67,8 +67,12 @@ namespace AsLegacy.Characters
                 },
                 new Passive[]
                 {
-                    new (Character.Affect.AdditionalMaxHealth, "Endurance",
-                        (investment) => investment / 10.0f)
+                    new (Character.Affect.AdditionalMaxHealth)
+                    {
+                        Title = "Endurance",
+                        FormattableDescription = $" {0} to Max Health",
+                        Algorithm = (investment) => investment / 10.0f
+                    }
                 }));
         }
 

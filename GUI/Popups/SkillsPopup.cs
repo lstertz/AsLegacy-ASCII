@@ -199,8 +199,9 @@ namespace AsLegacy.GUI.Popups
             Passive passive = AsLegacy.Player.Class.Passives[_hoveredPassiveIndex];
 
             int investment = AsLegacy.Player.GetInvestment(passive);
-            string content = passive.GetDescription(investment) + "\n" +
-                passive.GetDescription(investment, investment + 1);
+            string content = $"{passive.GetDescription(investment)}\n" +
+                passive.GetDifferenceDescription(investment, investment + 1) + 
+                " for 1 point";
 
             _hoverPopup.UpdateTitle(passive.Title);
             _hoverPopup.UpdateContent(content);
