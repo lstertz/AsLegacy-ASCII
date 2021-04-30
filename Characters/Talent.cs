@@ -9,12 +9,26 @@ namespace AsLegacy.Characters
     /// </summary>
     public abstract record Talent
     {
+        /// <summary>
+        /// The color of the affect produced by this Talent, being applied in any textual 
+        /// or graphical display of the affect.
+        /// </summary>
         public Color AffectColor { get; init; } = Color.White;
 
+        /// <summary>
+        /// The algorithm that converts an investment in this Talent to its quantified affect.
+        /// </summary>
         public Func<int, float> Algorithm { private get; init; }
         
+        /// <summary>
+        /// The formatted string description to textually describe this Talent.
+        /// </summary>
         public string DescriptionFormat { get; private set; }
 
+        /// <summary>
+        /// The formattable string to create the formatted string description 
+        /// to textually describe this Talent.
+        /// </summary>
         public FormattableString FormattableDescription
         { 
             private get
@@ -46,6 +60,13 @@ namespace AsLegacy.Characters
         public string GetDescription(int investment) =>
             string.Format(DescriptionFormat, $"{Algorithm(investment):N1}");
 
+        /// <summary>
+        /// Provides the affect difference between the provided investments.
+        /// </summary>
+        /// <param name="investmentA">The original investment.</param>
+        /// <param name="investmentB">The investment whose difference from the 
+        /// original is to be described.</param>
+        /// <returns>A string describing the difference in value.</returns>
         public string GetDifferenceDescription(int investmentA, int investmentB)
         {
             float a = Algorithm(investmentA);
