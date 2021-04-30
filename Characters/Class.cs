@@ -54,22 +54,33 @@ namespace AsLegacy.Characters
         {
             Classes.Clear();
 
-            // Investments live on the Character and are passed through Talent algorithms to
-            //      determine the value of Effects and Skill qualities.
-
             // TODO :: Retrieve data-driven details (talents) and construct classes around them 
             //          for each Type of class. Populate Classes.
             // Populate manually for now.
             Classes.Add(Type.Spellcaster, new(
                 new Concept[]
                 {
-
+                    new()
+                    {
+                        Affinities = new ReadOnlyCollection<Affinity>(new Affinity[]
+                        {
+                            new()
+                            {
+                                Name = "Shock Ring",
+                                Element = Skill.Element.Lightning
+                            }
+                        }),
+                        Name = "Nova",
+                        Category = Skill.Category.Tertiary,
+                        Type = Skill.Type.AreaOfEffect
+                    }
                 },
                 new Passive[]
                 {
-                    new (Character.Affect.AdditionalMaxHealth)
+                    new ()
                     {
-                        Title = "Endurance",
+                        Name = "Endurance",
+                        Affect = Character.Affect.AdditionalMaxHealth,
                         FormattableDescription = $" {0} to Max Health",
                         Algorithm = (investment) => investment / 10.0f
                     }

@@ -16,7 +16,10 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         protected virtual string Title { get; set; }
 
+        /// <inheritdoc cref="CellSurface.Height"/>
         public virtual new int Height { get => base.Height; }
+
+        /// <inheritdoc cref="CellSurface.Width"/>
         public virtual new int Width { get => base.Width; }
 
         /// <summary>

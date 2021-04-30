@@ -203,7 +203,7 @@ namespace AsLegacy.GUI.Popups
                 passive.GetDifferenceDescription(investment, investment + 1) + 
                 " for 1 point";
 
-            _hoverPopup.UpdateTitle(passive.Title);
+            _hoverPopup.UpdateTitle(passive.Name);
             _hoverPopup.UpdateContent(content);
             _hoverPopup.Position = _hoveredButton.Position -
                 new Point(_hoverPopup.Width, _hoverPopup.Height);
@@ -230,7 +230,7 @@ namespace AsLegacy.GUI.Popups
             {
                 string investment = AsLegacy.Player.GetInvestment(passives[c]).ToString();
 
-                Print(23, y, passives[c].Title);
+                Print(23, y, passives[c].Name);
                 Print(Width - investment.Length - 4, y, investment);
             }
         }

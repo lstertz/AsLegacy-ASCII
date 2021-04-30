@@ -9,7 +9,7 @@ namespace AsLegacy.Characters
     /// </summary>
     public abstract record Talent
     {
-        public Color AffectTextColor { get; init; } = Color.White;
+        public Color AffectColor { get; init; } = Color.White;
 
         public Func<int, float> Algorithm { private get; init; }
         
@@ -31,17 +31,9 @@ namespace AsLegacy.Characters
 
 
         /// <summary>
-        /// The display title of the <see cref="Talent"/>.
+        /// The display name of the <see cref="Talent"/>.
         /// </summary>
-        public string Title { get; init; } = "";
-
-
-        /// <summary>
-        /// Constructs a new <see cref="Talent"/>.
-        /// </summary>
-        public Talent()
-        {
-        }
+        public string Name { get; init; } = "";
 
         /// <summary>
         /// Provides a description of the <see cref="Talent"/> as it should be with the 

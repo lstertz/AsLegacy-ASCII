@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.ObjectModel;
 
 namespace AsLegacy.Characters
 {
@@ -8,19 +8,10 @@ namespace AsLegacy.Characters
     /// </summary>
     public record Concept : Talent
     {
-        public Affinity[] Affinities { get; init; }
+        public ReadOnlyCollection<Affinity> Affinities { get; init; }
 
-        // TODO :: Define the properties of the Concept.
-        //          The properties specify how the Concept applies in non-skill-specific ways,
-        //              as well as how the Concept is categorized, which determines how 
-        //              the Concept's skills can be augmented by other Concepts.
+        public Skill.Category Category { get; init; }
 
-        /// <summary>
-        /// Constructs a new <see cref="Concept"/>.
-        /// </summary>
-        /// <param name="title">The title of the <see cref="Concept"/>.</param>
-        public Concept() : base()
-        {
-        }
+        public Skill.Type Type { get; init; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using static AsLegacy.World;
+﻿using static AsLegacy.World;
 
 namespace AsLegacy.Characters
 {
@@ -12,18 +11,6 @@ namespace AsLegacy.Characters
         /// <summary>
         /// The altered Character affect.
         /// </summary>
-        public Character.Affect Affect { get; private set; }
-
-        /// <summary>
-        /// Constructs a new <see cref="Passive"/>.
-        /// </summary>
-        /// <param name="affect">The altered Character affect.</param>
-        /// <param name="title">The title of the <see cref="Passive"/>.</param>
-        /// <param name="investmentAlgorithm">The algorithm that calculates the affect amount 
-        /// to be applied, for a specified investment.</param>
-        public Passive(Character.Affect affect) : base()
-        {
-            Affect = affect;
-        }
+        public Character.Affect Affect { get; init; }
     }
 }
