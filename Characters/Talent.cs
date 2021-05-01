@@ -18,7 +18,7 @@ namespace AsLegacy.Characters
         /// <summary>
         /// The algorithm that converts an investment in this Talent to its quantified affect.
         /// </summary>
-        public Func<int, float> Algorithm { private get; init; }
+        public Func<float, float> Algorithm { private get; init; }
         
         /// <summary>
         /// The formatted string description to textually describe this Talent.
