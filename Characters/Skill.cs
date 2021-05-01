@@ -2,6 +2,11 @@
 
 namespace AsLegacy.Characters
 {
+    /// <summary>
+    /// Defines a Skill, which produces visual and practical effects, 
+    /// based upon its <see cref="Affinity"/> and <see cref="Concept"/>s, 
+    /// when performed by a Character.
+    /// </summary>
     public record Skill
     {
         /// <summary>
@@ -15,7 +20,7 @@ namespace AsLegacy.Characters
         }
 
         /// <summary>
-        /// The elemental type of the skill.
+        /// The elemental classification of the skill.
         /// </summary>
         public enum Element
         {
@@ -38,10 +43,22 @@ namespace AsLegacy.Characters
             TargetEffect
         }
 
+        /// <summary>
+        /// The <see cref="Concept"/>s that augment this <see cref="Skill"/> with additional 
+        /// functionality and affects.
+        /// </summary>
         public ReadOnlyCollection<Concept> AugmentingConcepts { get; init; }
 
+        /// <summary>
+        /// The underlying <see cref="Affinity"/> that defines some of the core functionality 
+        /// of this <see cref="Skill"/>.
+        /// </summary>
         public Affinity Affinity { get; init; }
 
+        /// <summary>
+        /// The underlying <see cref="Concept"/> that defines some of the core functionality 
+        /// of this <see cref="Skill"/>.
+        /// </summary>
         public Concept Concept { get; init; }
     }
 }
