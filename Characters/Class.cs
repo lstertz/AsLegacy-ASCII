@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using static AsLegacy.World;
@@ -54,22 +55,48 @@ namespace AsLegacy.Characters
         {
             Classes.Clear();
 
-            // Investments live on the Character and are passed through Talent algorithms to
-            //      determine the value of Effects and Skill qualities.
-
             // TODO :: Retrieve data-driven details (talents) and construct classes around them 
             //          for each Type of class. Populate Classes.
             // Populate manually for now.
-            Classes.Add(Type.Spellcaster, new(
-                new Concept[]
+            Classes.Add(Type.Spellcaster, new()
+            {
+                Concepts = new(new Concept[]
                 {
-
-                },
-                new Passive[]
+                    new()
+                    {
+                        Affinities = new(new Affinity[]
+                        {
+                            new()
+                            {
+                                Name = "Shock Ring",
+                                AffectColor = Color.Yellow,
+                                Element = Skill.Element.Lightning,
+                                ActivationTime = 1.0f,
+                                Cooldown = 1.0f,
+                                FormattableDescription = $"Creates an expanding ring of lightning that deals {0} lightning damage to all enemies that it touches.",
+                                Algorithm = (conceptDamage) =>
+                                    conceptDamage + conceptDamage / 10.0f
+                            }
+                        }),
+                        Name = "Nova",
+                        Category = Skill.Category.Tertiary,
+                        Type = Skill.Type.AreaOfEffect,
+                        FormattableDescription = $"Deals {0} damage to all enemies in the area.",
+                        Algorithm = (investment) => 5 + investment
+                    }
+                }),
+                Passives = new(new Passive[]
                 {
-                    new (Character.Affect.AdditionalMaxHealth, "Endurance",
-                        (investment) => investment / 10.0f)
-                }));
+                    new()
+                    {
+                        Name = "Endurance",
+                        AffectColor = Color.Red,
+                        Affect = Character.Affect.AdditionalMaxHealth,
+                        FormattableDescription = $" {0} to Max Health", // Prefixed space for alignment.
+                        Algorithm = (investment) => investment / 10.0f
+                    }
+                })
+            });
         }
 
         /// <summary>
@@ -99,17 +126,11 @@ namespace AsLegacy.Characters
         /// <summary>
         /// The <see cref="Concept"/>s of this <see cref="Class"/>.
         /// </summary>
-        public ReadOnlyCollection<Concept> Concepts { get; private set; }
+        public ReadOnlyCollection<Concept> Concepts { get; init; }
 
         /// <summary>
         /// The <see cref="Passive"/>s of this <see cref="Class"/>.
         /// </summary>
-        public ReadOnlyCollection<Passive> Passives { get; private set; }
-
-        private Class(Concept[] concepts, Passive[] passives)
-        {
-            Concepts = new(concepts);
-            Passives = new(passives);
-        }
+        public ReadOnlyCollection<Passive> Passives { get; init; }
     }
 }

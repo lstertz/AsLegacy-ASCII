@@ -1,32 +1,28 @@
-﻿using System;
+﻿using System.Collections.ObjectModel;
 
 namespace AsLegacy.Characters
 {
     /// <summary>
     /// Defines a Concept, a Character Talent that is a singular concept defining the 
-    /// underlying purpose and properties of a set of modular skills.
+    /// underlying purpose and properties of a set of modular <see cref="Skill"/>s, which are 
+    /// represented abstractly by the Affinities (<see cref="Affinity"/>) of the Concept.
     /// </summary>
     public record Concept : Talent
     {
         /// <summary>
-        /// Constructs a new <see cref="Concept"/>.
+        /// A collection of <see cref="Affinity"/> that define the practical applications 
+        /// of this <see cref="Concept"/>.
         /// </summary>
-        /// <param name="title">The title of the <see cref="Concept"/>.</param>
-        public Concept(string title) :
-            base(title)
-        {
-        }
+        public ReadOnlyCollection<Affinity> Affinities { get; init; }
 
-        /// <inheritdoc/>
-        public override string GetDescription(int investment)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// The category of this <see cref="Concept"/> when considered as a <see cref="Skill"/>.
+        /// </summary>
+        public Skill.Category Category { get; init; }
 
-        /// <inheritdoc/>
-        public override string GetDescription(int investmentCurrent, int investmentNext)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// The type of this <see cref="Concept"/> when considered as a <see cref="Skill"/>.
+        /// </summary>
+        public Skill.Type Type { get; init; }
     }
 }
