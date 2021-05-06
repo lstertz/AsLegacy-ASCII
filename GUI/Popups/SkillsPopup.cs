@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Input;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace AsLegacy.GUI.Popups
@@ -14,14 +15,20 @@ namespace AsLegacy.GUI.Popups
     /// </summary>
     public class SkillsPopup : Popup
     {
+        private readonly string AffinityIcon = char.ToString((char)4);
         private const string AvailablePointsText = "Available Points: ";
         private const int AvailablePointsY = 4;
         private const int AvailablePointsMaxLength = 25;
 
-        private const int MaxInvestmentCount = 7;
+        private const int MaxConceptCount = 7;
+        private const int MaxPassiveCount = 7;
+
+        private const int TalentNameX = 23;
 
         private readonly Label _availablePointsLabel;
-        private readonly Button[] _passiveInvestmentButtons = new Button[MaxInvestmentCount];
+        private readonly Button[] _conceptInvestmentButtons = new Button[MaxConceptCount];
+        private readonly List<Label> _conceptAffinityLabels = new();
+        private readonly Button[] _passiveInvestmentButtons = new Button[MaxPassiveCount];
 
         private DynamicContentPopup _hoverPopup;
         private int _hoveredPassiveIndex = -1;
@@ -49,7 +56,24 @@ namespace AsLegacy.GUI.Popups
             };
             Add(_availablePointsLabel);
 
-            for (int c = 0; c < MaxInvestmentCount; c++)
+            for (int c = 0; c < MaxConceptCount; c++)
+            {
+                int conceptIndex = c;
+                Button button = new Button(1, 1)
+                {
+                    IsEnabled = false,
+                    Position = new Point(width - 3, 5 + c),
+                    Text = "+"
+                };
+                //button.Click += (sender, args) => OnPassiveInvestment(sender, args, conceptIndex);
+                //button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, conceptIndex);
+                //button.MouseExit += OnHoverEnd;
+
+                Add(button);
+                _conceptInvestmentButtons[c] = button;
+            }
+
+            for (int c = 0; c < MaxPassiveCount; c++)
             {
                 int passiveIndex = c;
                 Button button = new Button(1, 1)
@@ -77,8 +101,6 @@ namespace AsLegacy.GUI.Popups
             UpdateHoverContent();
 
             Print(2, 4, "Sample Skill");
-            Print(23, 5, "Sample Skill Concept " + ((char)7) + " " + ((char)7));
-            Print(Width - 6, 5, "## +");
 
             string successor = "Successor Points: ##";
             Print(Width - successor.Length - 2, Height - 2, successor);
@@ -142,13 +164,48 @@ namespace AsLegacy.GUI.Popups
             {
                 UpdateContent();
 
+                ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
+                int conceptCount = concepts.Count;
+                for (int c = 0; c < MaxConceptCount; c++)
+                {
+                    bool hasConcept = c < conceptCount;
+                    _conceptInvestmentButtons[c].IsVisible = hasConcept;
+
+                    if (hasConcept)
+                    {
+                        for (int cc = 0; cc < concepts[c].Affinities.Count; cc++)
+                        {
+                            Affinity affinity = concepts[c].Affinities[cc];
+                            Label affinityLabel = new(1)
+                            {
+                                DisplayText = AffinityIcon,
+                                Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
+                                TextColor = affinity.AffectColor
+                            };
+
+                            _conceptAffinityLabels.Add(affinityLabel);
+                            Add(affinityLabel);
+                        }
+                    }
+                }
+
                 int passiveCount = AsLegacy.Player.Class.Passives.Count;
-                for (int c = 0; c < MaxInvestmentCount; c++)
+                for (int c = 0; c < MaxPassiveCount; c++)
                     _passiveInvestmentButtons[c].IsVisible = c < passiveCount;
             }
             else
-                for (int c = 0; c < MaxInvestmentCount; c++)
+            {
+                for (int c = 0; c < MaxConceptCount; c++)
+                {
+                    _conceptInvestmentButtons[c].IsVisible = false;
+
+                    for (int cc = 0; cc < _conceptAffinityLabels.Count; cc++)
+                        Remove(_conceptAffinityLabels[cc]);
+                    _conceptAffinityLabels.Clear();
+                }
+                for (int c = 0; c < MaxPassiveCount; c++)
                     _passiveInvestmentButtons[c].IsVisible = false;
+            }
 
             IsFocused = IsVisible;
         }
@@ -171,9 +228,9 @@ namespace AsLegacy.GUI.Popups
             string active = " Active ";
             Print(2, 3, active, Color.White);
             string text = " Concepts ";
-            Print(23, 3, text, Color.White);
+            Print(TalentNameX, 3, text, Color.White);
             string passives = " Passives ";
-            Print(23, Height - 10, passives, Color.White);
+            Print(TalentNameX, Height - 10, passives, Color.White);
         }
 
         /// <summary>
@@ -185,6 +242,7 @@ namespace AsLegacy.GUI.Popups
                 return;
 
             UpdateAvailablePoints();
+            UpdateConcepts();
             UpdatePassives();
         }
 
@@ -221,6 +279,21 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
+        /// Updates the text of the concepts' descriptions in the popup.
+        /// </summary>
+        private void UpdateConcepts()
+        {
+            ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
+            for (int c = 0, count = concepts.Count, y = 5; c < count; c++, y++)
+            {
+                string investment = "33";// AsLegacy.Player.GetInvestment(concepts[c]).ToString();
+
+                Print(TalentNameX, y, concepts[c].Name);
+                Print(Width - investment.Length - 4, y, investment);
+            }
+        }
+
+        /// <summary>
         /// Updates the text of the passives' descriptions in the popup.
         /// </summary>
         private void UpdatePassives()
@@ -230,7 +303,7 @@ namespace AsLegacy.GUI.Popups
             {
                 string investment = AsLegacy.Player.GetInvestment(passives[c]).ToString();
 
-                Print(23, y, passives[c].Name);
+                Print(TalentNameX, y, passives[c].Name);
                 Print(Width - investment.Length - 4, y, investment);
             }
         }
