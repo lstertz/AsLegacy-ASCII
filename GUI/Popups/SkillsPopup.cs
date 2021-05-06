@@ -101,8 +101,6 @@ namespace AsLegacy.GUI.Popups
             UpdateHoverContent();
 
             Print(2, 4, "Sample Skill");
-            //Print(23, 5, "Sample Skill Concept " + ((char)7) + " " + ((char)7));
-            //Print(Width - 6, 5, "## +");
 
             string successor = "Successor Points: ##";
             Print(Width - successor.Length - 2, Height - 2, successor);
