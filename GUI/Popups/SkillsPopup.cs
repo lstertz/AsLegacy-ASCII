@@ -23,6 +23,8 @@ namespace AsLegacy.GUI.Popups
         private const int MaxConceptCount = 7;
         private const int MaxPassiveCount = 7;
 
+        private const int TalentNameX = 23;
+
         private readonly Label _availablePointsLabel;
         private readonly Button[] _conceptInvestmentButtons = new Button[MaxConceptCount];
         private readonly List<Label> _conceptAffinityLabels = new();
@@ -164,13 +166,13 @@ namespace AsLegacy.GUI.Popups
             {
                 UpdateContent();
 
-                // TODO :: Break out into function.
                 ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
                 int conceptCount = concepts.Count;
                 for (int c = 0; c < MaxConceptCount; c++)
                 {
                     bool hasConcept = c < conceptCount;
                     _conceptInvestmentButtons[c].IsVisible = hasConcept;
+
                     if (hasConcept)
                     {
                         for (int cc = 0; cc < concepts[c].Affinities.Count; cc++)
@@ -179,7 +181,7 @@ namespace AsLegacy.GUI.Popups
                             Label affinityLabel = new(1)
                             {
                                 DisplayText = AffinityIcon,
-                                Position = new(28, 5 + c),  // TODO :: Fix x position.
+                                Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
                                 TextColor = affinity.AffectColor
                             };
 
@@ -228,9 +230,9 @@ namespace AsLegacy.GUI.Popups
             string active = " Active ";
             Print(2, 3, active, Color.White);
             string text = " Concepts ";
-            Print(23, 3, text, Color.White);
+            Print(TalentNameX, 3, text, Color.White);
             string passives = " Passives ";
-            Print(23, Height - 10, passives, Color.White);
+            Print(TalentNameX, Height - 10, passives, Color.White);
         }
 
         /// <summary>
@@ -286,10 +288,9 @@ namespace AsLegacy.GUI.Popups
             ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
             for (int c = 0, count = concepts.Count, y = 5; c < count; c++, y++)
             {
-                string investment = AsLegacy.Player.GetInvestment(concepts[c]).ToString();
+                string investment = "33";// AsLegacy.Player.GetInvestment(concepts[c]).ToString();
 
-                Print(23, y, concepts[c].Name);  // TODO :: Probably move to initial showing.
-                // TODO :: Show affinity.
+                Print(TalentNameX, y, concepts[c].Name);
                 Print(Width - investment.Length - 4, y, investment);
             }
         }
@@ -304,7 +305,7 @@ namespace AsLegacy.GUI.Popups
             {
                 string investment = AsLegacy.Player.GetInvestment(passives[c]).ToString();
 
-                Print(23, y, passives[c].Name);
+                Print(TalentNameX, y, passives[c].Name);
                 Print(Width - investment.Length - 4, y, investment);
             }
         }
