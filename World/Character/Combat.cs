@@ -171,6 +171,16 @@ namespace AsLegacy
                         _character = character;
                         _legacy = legacy;
                     }
+
+                    /// <summary>
+                    /// Temporary method to increase the CurrentHealth with an increase 
+                    /// in the MaxHealth.
+                    /// </summary>
+                    /// <param name="previousMax">The previous max health.</param>
+                    public void UpdateForNewMaxHealth(float previousMax)
+                    {
+                        CurrentHealth += MaxHealth - previousMax;
+                    }
                 }
 
 

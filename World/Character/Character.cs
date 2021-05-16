@@ -245,18 +245,25 @@ namespace AsLegacy
                 if (AvailableSkillPoints < amount)
                     amount = (int)AvailableSkillPoints;
 
+                float previousMaxHealth = MaxHealth;
+
                 AvailableSkillPoints -= amount;
                 if (!_talentInvestments.ContainsKey(talent))
                 {
-                    _talentInvestments.Add(talent, amount);
-
                     Influence.Attribute affectedAttribute = talent.Influence.AffectedAttribute;
                     if (!_attributeInfluencers.ContainsKey(affectedAttribute))
                         _attributeInfluencers.Add(affectedAttribute, new());
                     _attributeInfluencers[affectedAttribute].Add(talent);
+
+                    _talentInvestments.Add(talent, amount);
                 }
                 else
                     _talentInvestments[talent] += amount;
+
+                // TODO :: Remove.
+                // Temporarily update current health for the change in max health.
+                if (talent.Influence.AffectedAttribute == Influence.Attribute.MaxHealth)
+                    _combatState.UpdateForNewMaxHealth(previousMaxHealth);
             }
 
             /// <summary>
@@ -399,12 +406,13 @@ namespace AsLegacy
             protected virtual float GetAffect(Influence.Attribute affectAttribute,
                 float initialBaseValue = 0.0f)
             {
+                float baseValue = initialBaseValue;
+
                 if (!_attributeInfluencers.ContainsKey(affectAttribute))
-                    return 0;
+                    return baseValue;
                 List<Talent> influencers = _attributeInfluencers[affectAttribute];
 
                 float scale = 1.0f;
-                float baseValue = initialBaseValue;
                 for (int c = 0, count = influencers.Count; c < count; c++)
                 {
                     Talent talent = influencers[c];
