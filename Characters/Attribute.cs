@@ -8,7 +8,7 @@ namespace AsLegacy.Characters
 
         public float BaseScale { get; init; } = 1.0f;
 
-        public float BaseValue { get; init } = 0.0f;
+        public float BaseValue { get; init; } = 0.0f;
 
         public string Name { get; init; }
     }
