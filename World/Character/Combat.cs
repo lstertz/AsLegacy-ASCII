@@ -112,7 +112,7 @@ namespace AsLegacy
                     /// The current health of the Character, as an absolute value.
                     /// </summary>
                     public float CurrentHealth { get; private set; }
-                    float ICombat.CurrentHealth 
+                    float ICombat.CurrentHealth
                     {
                         get => CurrentHealth;
                         set => CurrentHealth = value;
@@ -125,10 +125,10 @@ namespace AsLegacy
                     /// <summary>
                     /// The legacy of the Character, represented as a numerical value (points).
                     /// </summary>
-                    public int Legacy 
-                    { 
-                        get => _legacy.Legacy; 
-                        private set => _legacy.Legacy = value; 
+                    public int Legacy
+                    {
+                        get => _legacy.Legacy;
+                        private set => _legacy.Legacy = value;
                     }
 
                     /// <inheritdoc/>
@@ -142,11 +142,13 @@ namespace AsLegacy
                     /// <summary>
                     /// The maximum health of the Character.
                     /// </summary>
-                    public float MaxHealth 
-                    { 
-                        get => _character.GetAffect(Influence.Aspect.MaxHealth, _baseMaxHealth); 
+                    public float MaxHealth
+                    {
+                        get => _character.GetAffect(_maxHealth);
                     }
+                    private readonly Attribute _maxHealth;
 
+                    // TODO :: Possibly merge with _maxHealth?
                     /// <inheritdoc/>
                     float ICombat.BaseMaxHealth { set => _baseMaxHealth = value; }
                     private float _baseMaxHealth;
@@ -167,6 +169,13 @@ namespace AsLegacy
                         _baseAttackInterval = baseSettings.InitialAttackInterval;
                         _baseDefenseDamageReduction = baseSettings.InitialDefenseDamageReduction;
                         CurrentHealth = _baseMaxHealth;
+
+                        _maxHealth = new Attribute()
+                        {
+                            Aspects = new(new Aspect[] { Aspect.MaxHealth }),
+                            BaseValue = _baseMaxHealth,
+                            Name = "Max Health"
+                        };
 
                         _character = character;
                         _legacy = legacy;
@@ -201,7 +210,7 @@ namespace AsLegacy
 
                             float damageReduction = 0.0f;
                             if (t.ActiveMode == Mode.Defend)
-                                damageReduction = aState.AttackDamage * 
+                                damageReduction = aState.AttackDamage *
                                     tState.DefenseDamageReduction;
 
                             t.AvailableSkillPoints += dealtDamage;
