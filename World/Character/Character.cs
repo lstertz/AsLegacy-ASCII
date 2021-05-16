@@ -224,31 +224,31 @@ namespace AsLegacy
             /// for the specified attribute.
             /// </summary>
             /// <param name="affectAttribute">The attribute whose affect is being provided.</param>
-            /// <param name="initialBaseValue">An overriding initial base value, to which 
-            /// any additive value will be added to.</param>
-            /// <param name="initialScale">An overriding initial scale, to which any 
-            /// additional scalars will be added to.</param>
             /// <returns>The totaled (additive influencers) and scaled (scaling influencers) 
             /// affect for the specified attribute. 0 if this Character has not invested 
             /// in any of the attribute's related <see cref="Talent"/>s or there were no 
             /// additive influencing <see cref="Talent"/>s invested in with the 
             /// default <paramref name="initialBaseValue"/>.</returns>
-            public virtual float GetAffect(Characters.Attribute affectAttribute,
-                float initialBaseValue = 0.0f, float initialScale = 1.0f)
+            public virtual float GetAffect(Characters.Attribute affectAttribute)
             {
-                float baseValue = initialBaseValue;
-                float scale = initialScale;
+                float baseValue = affectAttribute.BaseValue;
+                float scale = affectAttribute.BaseScale;
 
-                // TODO :: Add totals from the aspects of the attribute.
+                for (int c = 0, count = affectAttribute.Aspects.Count; c < count; c++)
+                {
+                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue, out float aspectScale);
+                    baseValue += aspectBaseValue;
+                    scale += aspectScale;
+                }
 
                 return baseValue * scale;
             }
 
             private void GetAspectInfluences(Aspect aspect, out float totalBaseValue, 
-                out float totalScale)
+                out float totalScaleChange)
             {
                 totalBaseValue = 0.0f;
-                totalScale = 1.0f;
+                totalScaleChange = 0.0f;
 
                 if (!_aspectInfluencers.ContainsKey(aspect))
                     return;
@@ -268,7 +268,7 @@ namespace AsLegacy
                             totalBaseValue += affect;
                             break;
                         case Influence.Purpose.Scale:
-                            totalScale += affect;
+                            totalScaleChange += affect;
                             break;
                         default:
                             throw new NotImplementedException($"The influence purpose " +
