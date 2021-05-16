@@ -144,14 +144,14 @@ namespace AsLegacy
                     /// </summary>
                     public float MaxHealth 
                     { 
-                        get => _baseMaxHealth + GetAffect(Affect.AdditionalMaxHealth); 
+                        get => _character.GetAffect(Influence.Attribute.MaxHealth, _baseMaxHealth); 
                     }
 
                     /// <inheritdoc/>
                     float ICombat.BaseMaxHealth { set => _baseMaxHealth = value; }
                     private float _baseMaxHealth;
 
-                    private Dictionary<Affect, float> _affects = new();
+                    private Character _character;
 
 
                     /// <summary>
@@ -160,7 +160,7 @@ namespace AsLegacy
                     /// <param name="baseSettings">The Character.BaseSettings that define 
                     /// the base/initial values of the new State.</param>
                     /// <param name="legacy">The legacy of the new State.</param>
-                    public State(BaseSettings baseSettings, Legacy legacy)
+                    public State(Character character, BaseSettings baseSettings, Legacy legacy)
                     {
                         _baseMaxHealth = baseSettings.InitialBaseMaxHealth;
                         _baseAttackDamage = baseSettings.InitialAttackDamage;
@@ -168,38 +168,8 @@ namespace AsLegacy
                         _baseDefenseDamageReduction = baseSettings.InitialDefenseDamageReduction;
                         CurrentHealth = _baseMaxHealth;
 
+                        _character = character;
                         _legacy = legacy;
-                    }
-
-                    /// <summary>
-                    /// Updates the amount of the specified affect being applied to 
-                    /// this Combat State.
-                    /// </summary>
-                    /// <param name="affect">The affect being updated.</param>
-                    /// <param name="affectAmount">The new amount of affect.</param>
-                    public void UpdateAffect(Affect affect, float affectAmount)
-                    {
-                        // TODO :: Temporarily heal immediately with additional health.
-                        if (affect == Affect.AdditionalMaxHealth)
-                            CurrentHealth += affectAmount - GetAffect(affect);
-
-                        if (!_affects.ContainsKey(affect))
-                            _affects.Add(affect, affectAmount);
-                        else
-                            _affects[affect] = affectAmount;
-                    }
-
-
-                    /// <summary>
-                    /// Provides the amount of the specified affect that is currently 
-                    /// applied to this Combat State.
-                    /// </summary>
-                    /// <param name="affect">The affect whose amount is to be retrieved.</param>
-                    /// <returns>The amount of affect.</returns>
-                    private float GetAffect(Affect affect)
-                    {
-                        _affects.TryGetValue(affect, out float amount);
-                        return amount;
                     }
                 }
 
