@@ -9,6 +9,8 @@
         public enum Attribute
         {
             AreaOfEffectDamage,
+            Activation,
+            Cooldown,
             MaxHealth
         }
 

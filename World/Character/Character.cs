@@ -220,6 +220,53 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Provides the complete affect, based on the Character's investments, 
+            /// for the specified attribute.
+            /// </summary>
+            /// <param name="affectAttribute">The attribute whose affect is being provided.</param>
+            /// <param name="initialBaseValue">An overriding initial base value, to which 
+            /// any additive value will be added to.</param>
+            /// <returns>The totaled (additive influencers) and scaled (scaling influencers) 
+            /// affect for the specified attribute. 0 if this Character has not invested 
+            /// in any of the attribute's related <see cref="Talent"/>s or there were no 
+            /// additive influencing <see cref="Talent"/>s invested in with the 
+            /// default <paramref name="initialBaseValue"/>.</returns>
+            public virtual float GetAffect(Influence.Attribute affectAttribute,
+                float initialBaseValue = 0.0f)
+            {
+                float baseValue = initialBaseValue;
+
+                if (!_attributeInfluencers.ContainsKey(affectAttribute))
+                    return baseValue;
+                List<Talent> influencers = _attributeInfluencers[affectAttribute];
+
+                float scale = 1.0f;
+                for (int c = 0, count = influencers.Count; c < count; c++)
+                {
+                    Talent talent = influencers[c];
+                    if (!_talentInvestments.ContainsKey(talent))
+                        continue;
+
+                    float affect = talent.GetAffect(_talentInvestments[talent]);
+                    Influence influence = talent.Influence;
+                    switch (influence.AffectOnAttribute)
+                    {
+                        case Influence.Purpose.Add:
+                            baseValue += affect;
+                            break;
+                        case Influence.Purpose.Scale:
+                            scale += affect;
+                            break;
+                        default:
+                            throw new NotImplementedException($"The influence purpose " +
+                                $"{influence.AffectOnAttribute} is not supported.");
+                    }
+                }
+
+                return baseValue * scale;
+            }
+
+            /// <summary>
             /// Provides the amount of investment that this Character has 
             /// in the provided <see cref="Talent"/>.
             /// </summary>
@@ -390,52 +437,6 @@ namespace AsLegacy
                     default:
                         break;
                 }
-            }
-
-            /// <summary>
-            /// Provides the complete affect for the specified attribute.
-            /// </summary>
-            /// <param name="affectAttribute">The attribute whose affect is being provided.</param>
-            /// <param name="initialBaseValue">An overriding initial base value, to which 
-            /// any additive value will be added to.</param>
-            /// <returns>The totaled (additive influencers) and scaled (scaling influencers) 
-            /// affect for the specified attribute. 0 if this Character has not invested 
-            /// in any of the attribute's related <see cref="Talent"/>s or there were no 
-            /// additive influencing <see cref="Talent"/>s invested in with the 
-            /// default <paramref name="initialBaseValue"/>.</returns>
-            protected virtual float GetAffect(Influence.Attribute affectAttribute,
-                float initialBaseValue = 0.0f)
-            {
-                float baseValue = initialBaseValue;
-
-                if (!_attributeInfluencers.ContainsKey(affectAttribute))
-                    return baseValue;
-                List<Talent> influencers = _attributeInfluencers[affectAttribute];
-
-                float scale = 1.0f;
-                for (int c = 0, count = influencers.Count; c < count; c++)
-                {
-                    Talent talent = influencers[c];
-                    if (!_talentInvestments.ContainsKey(talent))
-                        continue;
-
-                    float affect = talent.GetAffect(_talentInvestments[talent]);
-                    Influence influence = talent.Influence;
-                    switch (influence.AffectOnAttribute)
-                    {
-                        case Influence.Purpose.Add:
-                            baseValue += affect;
-                            break;
-                        case Influence.Purpose.Scale:
-                            scale += affect;
-                            break;
-                        default:
-                            throw new NotImplementedException($"The influence purpose " +
-                                $"{influence.AffectOnAttribute} is not supported.");
-                    }
-                }
-
-                return baseValue * scale;
             }
 
             /// <summary>

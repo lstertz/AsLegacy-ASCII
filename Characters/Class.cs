@@ -71,9 +71,9 @@ namespace AsLegacy.Characters
                                 Name = "Shock Ring",
                                 AffectColor = Color.Yellow,
                                 Element = Skill.Element.Lightning,
-                                ActivationTime = 1.0f,
+                                Activation = 1.0f,
                                 Cooldown = 1.0f,
-                                FormattableDescription = $"Creates an expanding ring of lightning that deals {0} lightning damage to all enemies that it touches.",
+                                FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
                                 // TODO :: Define how the attributes of the affinity can be influenced, and any dynamic ones.
                             }
                         }),
