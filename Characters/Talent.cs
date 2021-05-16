@@ -1,64 +1,27 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 
 namespace AsLegacy.Characters
 {
     /// <summary>
-    /// Defines a Talent, the basic representation to define a quality of 
+    /// Defines a Talent, the basic representation to define an attribute affect of 
     /// a Character <see cref="Class"/>.
     /// </summary>
-    public abstract record Talent
+    public abstract record Talent : DescribableAffect
     {
-        /// <summary>
-        /// The color of the affect produced by this Talent, being applied in any textual 
-        /// or graphical display of the affect.
-        /// </summary>
-        public Color AffectColor { get; init; } = Color.White;
-
         /// <summary>
         /// The algorithm that converts an investment in this Talent to its quantified affect.
         /// </summary>
         public Func<float, float> Algorithm { private get; init; }
-        
-        /// <summary>
-        /// The formatted string description to textually describe this Talent.
-        /// </summary>
-        public string DescriptionFormat { get; private set; }
 
         /// <summary>
-        /// The formattable string to create the formatted string description 
-        /// to textually describe this Talent.
+        /// The influence of this <see cref="Talent"/>; how it is applied respective to 
+        /// other Character concepts.
         /// </summary>
-        public FormattableString FormattableDescription
-        { 
-            private get
-            {
-                return _formattableDescription;
-            }
-            init
-            {
-                _formattableDescription = value;
-                DescriptionFormat = value.Format;
-            }
-        }
-        private FormattableString _formattableDescription = $"";
+        public Influence Influence {get; init;}
 
-
-        /// <summary>
-        /// The display name of the <see cref="Talent"/>.
-        /// </summary>
-        public string Name { get; init; } = "";
-
-        /// <summary>
-        /// Provides a description of the <see cref="Talent"/> as it should be with the 
-        /// specified investment.
-        /// </summary>
-        /// <param name="investment">The theoretical amount of points invested in 
-        /// the <see cref="Talent"/>, to be used in generating a matching description.</param>
-        /// <returns>A description, for displaying details of the <see cref="Talent"/> when 
-        /// it has the specified investment.</returns>
-        public string GetDescription(int investment) =>
-            string.Format(DescriptionFormat, $"{Algorithm(investment):N1}");
+        /// <inheritdoc/>
+        public override string GetDescription(World.Character character) =>
+            string.Format(_descriptionFormat, $"{Algorithm(character.GetInvestment(this)):N1}");
 
         /// <summary>
         /// Provides the affect difference between the provided investments.

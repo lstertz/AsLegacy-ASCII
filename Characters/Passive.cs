@@ -8,9 +8,5 @@ namespace AsLegacy.Characters
     /// </summary>
     public record Passive : Talent
     {
-        /// <summary>
-        /// The altered Character affect.
-        /// </summary>
-        public Character.Affect Affect { get; init; }
     }
 }

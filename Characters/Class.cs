@@ -74,14 +74,18 @@ namespace AsLegacy.Characters
                                 ActivationTime = 1.0f,
                                 Cooldown = 1.0f,
                                 FormattableDescription = $"Creates an expanding ring of lightning that deals {0} lightning damage to all enemies that it touches.",
-                                Algorithm = (conceptDamage) =>
-                                    conceptDamage + conceptDamage / 10.0f
+                                // TODO :: Define how the attributes of the affinity can be influenced, and any dynamic ones.
                             }
                         }),
                         Name = "Nova",
                         Category = Skill.Category.Tertiary,
                         Type = Skill.Type.AreaOfEffect,
                         FormattableDescription = $"Deals {0} damage to all enemies in the area.",
+                        Influence = new()
+                        {
+                            AffectOnAttribute = Influence.Purpose.Add,
+                            AffectedAttribute = Influence.Attribute.AreaOfEffectDamage
+                        },
                         Algorithm = (investment) => 5 + investment
                     }
                 }),
@@ -91,8 +95,12 @@ namespace AsLegacy.Characters
                     {
                         Name = "Endurance",
                         AffectColor = Color.Red,
-                        Affect = Character.Affect.AdditionalMaxHealth,
                         FormattableDescription = $" {0} to Max Health", // Prefixed space for alignment.
+                        Influence = new()
+                        {
+                            AffectOnAttribute = Influence.Purpose.Add,
+                            AffectedAttribute = Influence.Attribute.MaxHealth
+                        },
                         Algorithm = (investment) => investment / 10.0f
                     }
                 })
