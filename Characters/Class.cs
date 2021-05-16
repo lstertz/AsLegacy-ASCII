@@ -83,8 +83,8 @@ namespace AsLegacy.Characters
                         FormattableDescription = $"Deals {0} damage to all enemies in the area.",
                         Influence = new()
                         {
-                            AffectOnAttribute = Influence.Purpose.Add,
-                            AffectedAttribute = Influence.Attribute.AreaOfEffectDamage
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.AreaOfEffectDamage
                         },
                         Algorithm = (investment) => 5 + investment
                     }
@@ -98,8 +98,8 @@ namespace AsLegacy.Characters
                         FormattableDescription = $" {0} to Max Health", // Prefixed space for alignment.
                         Influence = new()
                         {
-                            AffectOnAttribute = Influence.Purpose.Add,
-                            AffectedAttribute = Influence.Attribute.MaxHealth
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.MaxHealth
                         },
                         Algorithm = (investment) => investment / 10.0f
                     }

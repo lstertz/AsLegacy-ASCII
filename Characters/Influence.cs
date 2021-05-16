@@ -6,22 +6,14 @@
     /// </summary>
     public record Influence
     {
-        public enum Attribute
-        {
-            AreaOfEffectDamage,
-            Activation,
-            Cooldown,
-            MaxHealth
-        }
-
         public enum Purpose
         {
             Add,
             Scale
         }
 
-        public Attribute AffectedAttribute { get; init; }
+        public Aspect AffectedAspect { get; init; }
 
-        public Purpose AffectOnAttribute { get; init; }
+        public Purpose AffectOnAspect { get; init; }
     }
 }

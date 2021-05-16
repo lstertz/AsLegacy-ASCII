@@ -144,7 +144,7 @@ namespace AsLegacy
                     /// </summary>
                     public float MaxHealth 
                     { 
-                        get => _character.GetAffect(Influence.Attribute.MaxHealth, _baseMaxHealth); 
+                        get => _character.GetAffect(Influence.Aspect.MaxHealth, _baseMaxHealth); 
                     }
 
                     /// <inheritdoc/>
