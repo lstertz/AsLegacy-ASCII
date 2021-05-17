@@ -32,7 +32,6 @@ namespace AsLegacy.GUI.Popups
 
         private DynamicContentPopup _hoverPopup;
         private int _hoveredPassiveIndex = -1;
-        private Button _hoveredButton;
 
         /// <summary>
         /// Constructs a new SkillsPopup.
@@ -41,7 +40,7 @@ namespace AsLegacy.GUI.Popups
         /// <param name="height">The height of the Popup window.</param>
         public SkillsPopup(int width, int height) : base("Skills", width, height)
         {
-            _hoverPopup = new DynamicContentPopup("", 10, 25, 20)
+            _hoverPopup = new DynamicContentPopup("", 10, 40, 20)
             {
                 IsVisible = false
             };
@@ -83,7 +82,7 @@ namespace AsLegacy.GUI.Popups
                     Text = "+"
                 };
                 button.Click += (sender, args) => OnPassiveInvestment(sender, args, passiveIndex);
-                button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, passiveIndex);
+                button.MouseEnter += (sender, args) => OnHoverPassiveBegin(sender, args, passiveIndex);
                 button.MouseExit += OnHoverEnd;
 
                 Add(button);
@@ -98,7 +97,6 @@ namespace AsLegacy.GUI.Popups
 
             DrawFrame();
             UpdateContent();
-            UpdateHoverContent();
 
             Print(2, 4, "Sample Skill");
 
@@ -113,31 +111,47 @@ namespace AsLegacy.GUI.Popups
         /// <param name="args">The event arguments.</param>
         /// <param name="passiveIndex">The index of the passive skill whose 
         /// investment button is being hovered.</param>
-        private void OnHoverBegin(object sender, MouseEventArgs args, int passiveIndex)
+        private void OnHoverPassiveBegin(object sender, MouseEventArgs args, int passiveIndex)
         {
-            Button button = sender as Button;
-            _hoveredButton = button;
-
             _hoveredPassiveIndex = passiveIndex;
-            UpdateHoverContent();
+            UpdateHoverPassiveContent(sender as Button);
 
             _hoverPopup.IsVisible = true;
             _hoverPopup.IsDirty = true;
         }
 
         /// <summary>
-        /// Handles the end of the hovering of an investment button.
+        /// Handles the start of the hovering of an affinity icon.
+        /// </summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="args">The event arguments.</param>
+        /// <param name="conceptIndex">The index of the concept whose 
+        /// affinity icon is being hovered.</param>
+        /// <param name="affinityIndex">The index of the affinity icon, within its 
+        /// concept's collection of affinities, that is being hovered.</param>
+        private void OnHoverAffinityBegin(object sender, MouseEventArgs args, 
+            int conceptIndex, int affinityIndex)
+        {
+            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
+
+            _hoverPopup.UpdateTitle(affinity.Name);
+            _hoverPopup.UpdateContent(affinity.GetDescription(AsLegacy.Player));
+            _hoverPopup.Position = (sender as Label).Position -
+                new Point(_hoverPopup.Width, 0);
+
+            _hoverPopup.IsVisible = true;
+            _hoverPopup.IsDirty = true;
+        }
+
+        /// <summary>
+        /// Handles the end of the hovering of a button.
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="args">The event arguments.</param>
         private void OnHoverEnd(object sender, MouseEventArgs args)
         {
-            if (_hoveredButton != sender as Button)
-                return;
-
             _hoveredPassiveIndex = -1;
             _hoverPopup.IsVisible = false;
-            _hoveredButton = null;
         }
 
         /// <summary>
@@ -153,6 +167,7 @@ namespace AsLegacy.GUI.Popups
 
             // TODO :: Support various investment amounts (eg. 1, 5, 10, etc.).
             AsLegacy.Player.InvestInTalent(AsLegacy.Player.Class.Passives[passiveIndex], 1);
+            UpdateHoverPassiveContent(sender as Button);
         }
 
         /// <inheritdoc/>
@@ -173,8 +188,10 @@ namespace AsLegacy.GUI.Popups
 
                     if (hasConcept)
                     {
+                        int conceptIndex = c;
                         for (int cc = 0; cc < concepts[c].Affinities.Count; cc++)
                         {
+                            int affinityIndex = cc;
                             Affinity affinity = concepts[c].Affinities[cc];
                             Label affinityLabel = new(1)
                             {
@@ -182,6 +199,9 @@ namespace AsLegacy.GUI.Popups
                                 Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
                                 TextColor = affinity.AffectColor
                             };
+                            affinityLabel.MouseEnter += (sender, args) => OnHoverAffinityBegin(
+                                sender, args, conceptIndex, affinityIndex);
+                            affinityLabel.MouseExit += OnHoverEnd;
 
                             _conceptAffinityLabels.Add(affinityLabel);
                             Add(affinityLabel);
@@ -249,21 +269,23 @@ namespace AsLegacy.GUI.Popups
         /// <summary>
         /// Updates the content of the investment hover pop-up, if it is active.
         /// </summary>
-        private void UpdateHoverContent()
+        private void UpdateHoverPassiveContent(Button hoveredButton)
         {
-            if (_hoveredButton == null)
+            // TODO :: Abstract to any Talent content?
+
+            if (hoveredButton == null)
                 return;
 
             Passive passive = AsLegacy.Player.Class.Passives[_hoveredPassiveIndex];
 
             int investment = AsLegacy.Player.GetInvestment(passive);
-            string content = $"{passive.GetDescription(investment)}\n" +
+            string content = $"{passive.GetDescription(AsLegacy.Player)}\n" +
                 passive.GetDifferenceDescription(investment, investment + 1) + 
                 " for 1 point";
 
             _hoverPopup.UpdateTitle(passive.Name);
             _hoverPopup.UpdateContent(content);
-            _hoverPopup.Position = _hoveredButton.Position -
+            _hoverPopup.Position = hoveredButton.Position -
                 new Point(_hoverPopup.Width, _hoverPopup.Height);
         }
 

@@ -119,6 +119,7 @@ namespace AsLegacy.GUI.Popups
                     _textLines[totalC].DisplayText = currentContent;
                     _textLines[totalC].IsEnabled = true;
                     _textLines[totalC].IsDirty = true;
+                    _textLines[totalC].IsVisible = true;
                 }
             }
 

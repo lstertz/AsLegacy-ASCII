@@ -13,11 +13,6 @@ namespace AsLegacy
         /// </summary>
         public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
         {
-            public enum Affect
-            {
-                AdditionalMaxHealth
-            }
-
             /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>
@@ -181,7 +176,9 @@ namespace AsLegacy
 
             private readonly BaseSettings _baseSettings;
             private readonly Combat.State _combatState;
-            private readonly Dictionary<Talent, int> _skillInvestments = new();
+
+            private readonly Dictionary<Talent, int> _talentInvestments = new();
+            private readonly Dictionary<Aspect, List<Talent>> _aspectInfluencers = new();
 
             /// <summary>
             /// Constructs a new Character.
@@ -203,7 +200,7 @@ namespace AsLegacy
                 Class = Class.Get(baseSettings.ClassType);
 
                 _baseSettings = baseSettings;
-                _combatState = new Combat.State(baseSettings, legacy);
+                _combatState = new Combat.State(this, baseSettings, legacy);
 
                 RankedCharacters.Add(this);
             }
@@ -223,15 +220,39 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Provides the complete affect, based on the Character's investments, 
+            /// for the specified attribute.
+            /// </summary>
+            /// <param name="affectAttribute">The attribute whose affect is being provided.</param>
+            /// <returns>The totaled (additive influencers) and scaled (scaling influencers) 
+            /// affect for the specified attribute, or the attribute's default calculated value 
+            /// if this Character has not invested in any of the attribute's 
+            /// related <see cref="Talent"/>s.</returns>
+            public virtual float GetAffect(Characters.Attribute affectAttribute)
+            {
+                float baseValue = affectAttribute.BaseValue;
+                float scale = affectAttribute.BaseScale;
+
+                for (int c = 0, count = affectAttribute.Aspects.Count; c < count; c++)
+                {
+                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue, out float aspectScale);
+                    baseValue += aspectBaseValue;
+                    scale += aspectScale;
+                }
+
+                return baseValue * scale;
+            }
+
+            /// <summary>
             /// Provides the amount of investment that this Character has 
             /// in the provided <see cref="Talent"/>.
             /// </summary>
             /// <param name="talent">The <see cref="Talent"/> whose investment 
             /// is to be retrieved.</param>
-            /// <returns>The amount of investment.</returns>
+            /// <returns>The amount of investment; 0 if there has been no investment.</returns>
             public int GetInvestment(Talent talent)
             {
-                _skillInvestments.TryGetValue(talent, out int amount);
+                _talentInvestments.TryGetValue(talent, out int amount);
                 return amount;
             }
 
@@ -248,18 +269,25 @@ namespace AsLegacy
                 if (AvailableSkillPoints < amount)
                     amount = (int)AvailableSkillPoints;
 
-                AvailableSkillPoints -= amount;
-                if (!_skillInvestments.ContainsKey(talent))
-                    _skillInvestments.Add(talent, amount);
-                else
-                    _skillInvestments[talent] += amount;
+                float previousMaxHealth = MaxHealth;
 
-                if (talent is Passive)
+                AvailableSkillPoints -= amount;
+                if (!_talentInvestments.ContainsKey(talent))
                 {
-                    Passive passive = talent as Passive;
-                    _combatState.UpdateAffect(passive.Affect,
-                        passive.GetAffect(_skillInvestments[talent]));
+                    Aspect affectedAttribute = talent.Influence.AffectedAspect;
+                    if (!_aspectInfluencers.ContainsKey(affectedAttribute))
+                        _aspectInfluencers.Add(affectedAttribute, new());
+                    _aspectInfluencers[affectedAttribute].Add(talent);
+
+                    _talentInvestments.Add(talent, amount);
                 }
+                else
+                    _talentInvestments[talent] += amount;
+
+                // TODO :: Remove.
+                // Temporarily update current health for the change in max health.
+                if (talent.Influence.AffectedAspect == Aspect.MaxHealth)
+                    _combatState.UpdateForNewMaxHealth(previousMaxHealth);
             }
 
             /// <summary>
@@ -398,6 +426,48 @@ namespace AsLegacy
 
                 (CurrentAction as IAction)?.Cancel();
                 new World.Action(CharacterRemovalTime, () => RemoveCharacter(this));
+            }
+
+
+            /// <summary>
+            /// Provides the cumulative base value and scale change associated with the 
+            /// specified <see cref="Aspect"/> for this <see cref="Character"/>.
+            /// </summary>
+            /// <param name="aspect">The aspect whose cumulative base value and scale change
+            /// are to be provided.</param>
+            /// <param name="totalBaseValue">The cumulative base value.</param>
+            /// <param name="totalScaleChange">The cumulative scale change.</param>
+            private void GetAspectInfluences(Aspect aspect, out float totalBaseValue,
+                out float totalScaleChange)
+            {
+                totalBaseValue = 0.0f;
+                totalScaleChange = 0.0f;
+
+                if (!_aspectInfluencers.ContainsKey(aspect))
+                    return;
+                List<Talent> influencers = _aspectInfluencers[aspect];
+
+                for (int c = 0, count = influencers.Count; c < count; c++)
+                {
+                    Talent talent = influencers[c];
+                    if (!_talentInvestments.ContainsKey(talent))
+                        continue;
+
+                    float affect = talent.GetAffect(_talentInvestments[talent]);
+                    Influence influence = talent.Influence;
+                    switch (influence.AffectOnAspect)
+                    {
+                        case Influence.Purpose.Add:
+                            totalBaseValue += affect;
+                            break;
+                        case Influence.Purpose.Scale:
+                            totalScaleChange += affect;
+                            break;
+                        default:
+                            throw new NotImplementedException($"The influence purpose " +
+                                $"{influence.AffectOnAspect} is not supported.");
+                    }
+                }
             }
 
             /// <summary>

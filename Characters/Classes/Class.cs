@@ -71,18 +71,43 @@ namespace AsLegacy.Characters
                                 Name = "Shock Ring",
                                 AffectColor = Color.Yellow,
                                 Element = Skill.Element.Lightning,
-                                ActivationTime = 1.0f,
+                                Activation = 1.0f,
                                 Cooldown = 1.0f,
-                                FormattableDescription = $"Creates an expanding ring of lightning that deals {0} lightning damage to all enemies that it touches.",
-                                Algorithm = (conceptDamage) =>
-                                    conceptDamage + conceptDamage / 10.0f
+                                CustomAttributes = new(new Attribute[] 
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[] 
+                                        {
+                                            Aspect.AreaOfEffectDamage,
+                                            Aspect.LightningDamage
+                                        }),
+                                        BaseValue = 0,
+                                        Name = "Lightning Damage"
+                                    },
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectRange
+                                        }),
+                                        BaseValue = 1,
+                                        Name = "Range"
+                                    }
+                                }),
+                                FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
                             }
                         }),
                         Name = "Nova",
                         Category = Skill.Category.Tertiary,
                         Type = Skill.Type.AreaOfEffect,
-                        FormattableDescription = $"Deals {0} damage to all enemies in the area.",
-                        Algorithm = (investment) => 5 + investment
+                        FormattableDescription = $"Up to {0} damage enemies within range.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.AreaOfEffectDamage
+                        },
+                        Algorithm = (investment) => 2 * investment
                     }
                 }),
                 Passives = new(new Passive[]
@@ -91,8 +116,12 @@ namespace AsLegacy.Characters
                     {
                         Name = "Endurance",
                         AffectColor = Color.Red,
-                        Affect = Character.Affect.AdditionalMaxHealth,
                         FormattableDescription = $" {0} to Max Health", // Prefixed space for alignment.
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.MaxHealth
+                        },
                         Algorithm = (investment) => investment / 10.0f
                     }
                 })

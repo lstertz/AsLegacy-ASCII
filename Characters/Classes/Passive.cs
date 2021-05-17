@@ -1,6 +1,4 @@
-﻿using static AsLegacy.World;
-
-namespace AsLegacy.Characters
+﻿namespace AsLegacy.Characters
 {
     /// <summary>
     /// Defines a Passive, a Character Talent that defines a passive alteration 
@@ -8,9 +6,5 @@ namespace AsLegacy.Characters
     /// </summary>
     public record Passive : Talent
     {
-        /// <summary>
-        /// The altered Character affect.
-        /// </summary>
-        public Character.Affect Affect { get; init; }
     }
 }
