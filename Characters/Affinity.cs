@@ -37,6 +37,9 @@ namespace AsLegacy.Characters
         }
         private Attribute _activation;
 
+        /// <summary>
+        /// Any additional <see cref="Attribute"/>s that define this <see cref="Affinity"/>.
+        /// </summary>
         public ReadOnlyCollection<Attribute> CustomAttributes { get; init; } = 
             new(System.Array.Empty<Attribute>());
 

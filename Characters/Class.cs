@@ -73,20 +73,41 @@ namespace AsLegacy.Characters
                                 Element = Skill.Element.Lightning,
                                 Activation = 1.0f,
                                 Cooldown = 1.0f,
+                                CustomAttributes = new(new Attribute[] 
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[] 
+                                        {
+                                            Aspect.AreaOfEffectDamage,
+                                            Aspect.LightningDamage
+                                        }),
+                                        BaseValue = 0,
+                                        Name = "Lightning Damage"
+                                    },
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectRange
+                                        }),
+                                        BaseValue = 1,
+                                        Name = "Range"
+                                    }
+                                }),
                                 FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
-                                // TODO :: Define how the attributes of the affinity can be influenced, and any dynamic ones.
                             }
                         }),
                         Name = "Nova",
                         Category = Skill.Category.Tertiary,
                         Type = Skill.Type.AreaOfEffect,
-                        FormattableDescription = $"Deals {0} damage to all enemies in the area.",
+                        FormattableDescription = $"Up to {0} damage enemies within range.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Add,
                             AffectedAspect = Aspect.AreaOfEffectDamage
                         },
-                        Algorithm = (investment) => 5 + investment
+                        Algorithm = (investment) => 2 * investment
                     }
                 }),
                 Passives = new(new Passive[]
