@@ -244,6 +244,14 @@ namespace AsLegacy
                 return baseValue * scale;
             }
 
+            /// <summary>
+            /// Provides the cumulative base value and scale change associated with the 
+            /// specified <see cref="Aspect"/> for this <see cref="Character"/>.
+            /// </summary>
+            /// <param name="aspect">The aspect whose cumulative base value and scale change
+            /// are to be provided.</param>
+            /// <param name="totalBaseValue">The cumulative base value.</param>
+            /// <param name="totalScaleChange">The cumulative scale change.</param>
             private void GetAspectInfluences(Aspect aspect, out float totalBaseValue, 
                 out float totalScaleChange)
             {
@@ -276,9 +284,6 @@ namespace AsLegacy
                     }
                 }
             }
-
-            // TODO :: GetAffect for a construct that details several attributes whose adds/scales 
-            //          should be combined for a final result, with overrides for initial values.
 
             /// <summary>
             /// Provides the amount of investment that this Character has 
