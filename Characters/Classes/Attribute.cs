@@ -3,8 +3,9 @@
 namespace AsLegacy.Characters
 {
     /// <summary>
-    /// Defines an Attribute, a single quality of an <see cref="Affinity"/> that specifies 
-    /// some feature or quantified affect of that <see cref="Affinity"/>.
+    /// Defines an Attribute, a single quality of an <see cref="Affinity"/> or <see cref="Skill"/>
+    /// that specifies some feature or quantified affect of that 
+    /// <see cref="Affinity"/> or <see cref="Skill"/>.
     /// </summary>
     public record Attribute
     {

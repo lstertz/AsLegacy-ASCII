@@ -225,10 +225,9 @@ namespace AsLegacy
             /// </summary>
             /// <param name="affectAttribute">The attribute whose affect is being provided.</param>
             /// <returns>The totaled (additive influencers) and scaled (scaling influencers) 
-            /// affect for the specified attribute. 0 if this Character has not invested 
-            /// in any of the attribute's related <see cref="Talent"/>s or there were no 
-            /// additive influencing <see cref="Talent"/>s invested in with the 
-            /// default <paramref name="initialBaseValue"/>.</returns>
+            /// affect for the specified attribute, or the attribute's default calculated value 
+            /// if this Character has not invested in any of the attribute's 
+            /// related <see cref="Talent"/>s.</returns>
             public virtual float GetAffect(Characters.Attribute affectAttribute)
             {
                 float baseValue = affectAttribute.BaseValue;
@@ -242,47 +241,6 @@ namespace AsLegacy
                 }
 
                 return baseValue * scale;
-            }
-
-            /// <summary>
-            /// Provides the cumulative base value and scale change associated with the 
-            /// specified <see cref="Aspect"/> for this <see cref="Character"/>.
-            /// </summary>
-            /// <param name="aspect">The aspect whose cumulative base value and scale change
-            /// are to be provided.</param>
-            /// <param name="totalBaseValue">The cumulative base value.</param>
-            /// <param name="totalScaleChange">The cumulative scale change.</param>
-            private void GetAspectInfluences(Aspect aspect, out float totalBaseValue, 
-                out float totalScaleChange)
-            {
-                totalBaseValue = 0.0f;
-                totalScaleChange = 0.0f;
-
-                if (!_aspectInfluencers.ContainsKey(aspect))
-                    return;
-                List<Talent> influencers = _aspectInfluencers[aspect];
-
-                for (int c = 0, count = influencers.Count; c < count; c++)
-                {
-                    Talent talent = influencers[c];
-                    if (!_talentInvestments.ContainsKey(talent))
-                        continue;
-
-                    float affect = talent.GetAffect(_talentInvestments[talent]);
-                    Influence influence = talent.Influence;
-                    switch (influence.AffectOnAspect)
-                    {
-                        case Influence.Purpose.Add:
-                            totalBaseValue += affect;
-                            break;
-                        case Influence.Purpose.Scale:
-                            totalScaleChange += affect;
-                            break;
-                        default:
-                            throw new NotImplementedException($"The influence purpose " +
-                                $"{influence.AffectOnAspect} is not supported.");
-                    }
-                }
             }
 
             /// <summary>
@@ -468,6 +426,48 @@ namespace AsLegacy
 
                 (CurrentAction as IAction)?.Cancel();
                 new World.Action(CharacterRemovalTime, () => RemoveCharacter(this));
+            }
+
+
+            /// <summary>
+            /// Provides the cumulative base value and scale change associated with the 
+            /// specified <see cref="Aspect"/> for this <see cref="Character"/>.
+            /// </summary>
+            /// <param name="aspect">The aspect whose cumulative base value and scale change
+            /// are to be provided.</param>
+            /// <param name="totalBaseValue">The cumulative base value.</param>
+            /// <param name="totalScaleChange">The cumulative scale change.</param>
+            private void GetAspectInfluences(Aspect aspect, out float totalBaseValue,
+                out float totalScaleChange)
+            {
+                totalBaseValue = 0.0f;
+                totalScaleChange = 0.0f;
+
+                if (!_aspectInfluencers.ContainsKey(aspect))
+                    return;
+                List<Talent> influencers = _aspectInfluencers[aspect];
+
+                for (int c = 0, count = influencers.Count; c < count; c++)
+                {
+                    Talent talent = influencers[c];
+                    if (!_talentInvestments.ContainsKey(talent))
+                        continue;
+
+                    float affect = talent.GetAffect(_talentInvestments[talent]);
+                    Influence influence = talent.Influence;
+                    switch (influence.AffectOnAspect)
+                    {
+                        case Influence.Purpose.Add:
+                            totalBaseValue += affect;
+                            break;
+                        case Influence.Purpose.Scale:
+                            totalScaleChange += affect;
+                            break;
+                        default:
+                            throw new NotImplementedException($"The influence purpose " +
+                                $"{influence.AffectOnAspect} is not supported.");
+                    }
+                }
             }
 
             /// <summary>
