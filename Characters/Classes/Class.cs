@@ -101,7 +101,7 @@ namespace AsLegacy.Characters
                         Name = "Nova",
                         Category = Skill.Category.Tertiary,
                         Type = Skill.Type.AreaOfEffect,
-                        FormattableDescription = $"Up to {0} damage enemies within range.",
+                        FormattableDescription = $" {0} damage to enemies within range.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Add,
