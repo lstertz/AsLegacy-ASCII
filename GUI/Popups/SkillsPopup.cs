@@ -60,7 +60,8 @@ namespace AsLegacy.GUI.Popups
                 int conceptIndex = c;
                 Button button = new Button(1, 1)
                 {
-                    IsEnabled = false,
+                    FocusOnClick = false,
+                    IsEnabled = true,
                     Position = new Point(width - 3, 5 + c),
                     Text = "+"
                 };
@@ -77,6 +78,7 @@ namespace AsLegacy.GUI.Popups
                 int passiveIndex = c;
                 Button button = new Button(1, 1)
                 {
+                    FocusOnClick = false,
                     IsEnabled = true,
                     Position = new Point(width - 3, Height - 9 + c),
                     Text = "+"
