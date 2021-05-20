@@ -31,7 +31,7 @@ namespace AsLegacy.GUI.Popups
         private readonly Button[] _passiveInvestmentButtons = new Button[MaxPassiveCount];
 
         private DynamicContentPopup _hoverPopup;
-        private int _hoveredPassiveIndex = -1;
+        private int _hoveredInvestmentIndex = -1;
 
         /// <summary>
         /// Constructs a new SkillsPopup.
@@ -57,7 +57,7 @@ namespace AsLegacy.GUI.Popups
 
             for (int c = 0; c < MaxConceptCount; c++)
             {
-                int conceptIndex = c;
+                int index = c;
                 Button button = new Button(1, 1)
                 {
                     FocusOnClick = false,
@@ -65,9 +65,9 @@ namespace AsLegacy.GUI.Popups
                     Position = new Point(width - 3, 5 + c),
                     Text = "+"
                 };
-                //button.Click += (sender, args) => OnPassiveInvestment(sender, args, conceptIndex);
-                //button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, conceptIndex);
-                //button.MouseExit += OnHoverEnd;
+                button.Click += (sender, args) => OnInvestment(sender, args, index);
+                button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, index);
+                button.MouseExit += OnHoverEnd;
 
                 Add(button);
                 _conceptInvestmentButtons[c] = button;
@@ -75,7 +75,7 @@ namespace AsLegacy.GUI.Popups
 
             for (int c = 0; c < MaxPassiveCount; c++)
             {
-                int passiveIndex = c;
+                int index = c + MaxConceptCount;
                 Button button = new Button(1, 1)
                 {
                     FocusOnClick = false,
@@ -83,8 +83,8 @@ namespace AsLegacy.GUI.Popups
                     Position = new Point(width - 3, Height - 9 + c),
                     Text = "+"
                 };
-                button.Click += (sender, args) => OnPassiveInvestment(sender, args, passiveIndex);
-                button.MouseEnter += (sender, args) => OnHoverPassiveBegin(sender, args, passiveIndex);
+                button.Click += (sender, args) => OnInvestment(sender, args, index);
+                button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, index);
                 button.MouseExit += OnHoverEnd;
 
                 Add(button);
@@ -113,10 +113,10 @@ namespace AsLegacy.GUI.Popups
         /// <param name="args">The event arguments.</param>
         /// <param name="passiveIndex">The index of the passive skill whose 
         /// investment button is being hovered.</param>
-        private void OnHoverPassiveBegin(object sender, MouseEventArgs args, int passiveIndex)
+        private void OnHoverBegin(object sender, MouseEventArgs args, int passiveIndex)
         {
-            _hoveredPassiveIndex = passiveIndex;
-            UpdateHoverPassiveContent(sender as Button);
+            _hoveredInvestmentIndex = passiveIndex;
+            UpdateHoverContent(sender as Button);
 
             _hoverPopup.IsVisible = true;
             _hoverPopup.IsDirty = true;
@@ -131,7 +131,7 @@ namespace AsLegacy.GUI.Popups
         /// affinity icon is being hovered.</param>
         /// <param name="affinityIndex">The index of the affinity icon, within its 
         /// concept's collection of affinities, that is being hovered.</param>
-        private void OnHoverAffinityBegin(object sender, MouseEventArgs args, 
+        private void OnHoverAffinityBegin(object sender, MouseEventArgs args,
             int conceptIndex, int affinityIndex)
         {
             Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
@@ -152,7 +152,7 @@ namespace AsLegacy.GUI.Popups
         /// <param name="args">The event arguments.</param>
         private void OnHoverEnd(object sender, MouseEventArgs args)
         {
-            _hoveredPassiveIndex = -1;
+            _hoveredInvestmentIndex = -1;
             _hoverPopup.IsVisible = false;
         }
 
@@ -161,15 +161,21 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="args">The event args.</param>
-        /// <param name="passiveIndex">The index of he passive skill to be invested in.</param>
-        private void OnPassiveInvestment(object sender, System.EventArgs args, int passiveIndex)
+        /// <param name="index">The index of the talent to be invested in.</param>
+        private void OnInvestment(object sender, System.EventArgs args, int index)
         {
             if (!AsLegacy.HasPlayer)
                 return;
 
             // TODO :: Support various investment amounts (eg. 1, 5, 10, etc.).
-            AsLegacy.Player.InvestInTalent(AsLegacy.Player.Class.Passives[passiveIndex], 1);
-            UpdateHoverPassiveContent(sender as Button);
+            Talent talent;
+            if (index >= MaxConceptCount)
+                talent = AsLegacy.Player.Class.Passives[index - MaxConceptCount];
+            else
+                talent = AsLegacy.Player.Class.Concepts[index];
+
+            AsLegacy.Player.InvestInTalent(talent, 1);
+            UpdateHoverContent(sender as Button);
         }
 
         /// <inheritdoc/>
@@ -271,24 +277,27 @@ namespace AsLegacy.GUI.Popups
         /// <summary>
         /// Updates the content of the investment hover pop-up, if it is active.
         /// </summary>
-        private void UpdateHoverPassiveContent(Button hoveredButton)
+        private void UpdateHoverContent(Button hoveredButton)
         {
-            // TODO :: Abstract to any Talent content?
-
-            if (hoveredButton == null)
+            if (hoveredButton == null || _hoveredInvestmentIndex == -1)
                 return;
 
-            Passive passive = AsLegacy.Player.Class.Passives[_hoveredPassiveIndex];
+            bool isPassive = _hoveredInvestmentIndex >= MaxConceptCount;
+            Talent talent;
+            if (isPassive)
+                talent = AsLegacy.Player.Class.Passives[_hoveredInvestmentIndex - MaxConceptCount];
+            else
+                talent = AsLegacy.Player.Class.Concepts[_hoveredInvestmentIndex];
 
-            int investment = AsLegacy.Player.GetInvestment(passive);
-            string content = $"{passive.GetDescription(AsLegacy.Player)}\n" +
-                passive.GetDifferenceDescription(investment, investment + 1) + 
+            int investment = AsLegacy.Player.GetInvestment(talent);
+            string content = $"{talent.GetDescription(AsLegacy.Player)}\n" +
+                talent.GetDifferenceDescription(investment, investment + 1) +
                 " for 1 point";
 
-            _hoverPopup.UpdateTitle(passive.Name);
+            _hoverPopup.UpdateTitle(talent.Name);
             _hoverPopup.UpdateContent(content);
             _hoverPopup.Position = hoveredButton.Position -
-                new Point(_hoverPopup.Width, _hoverPopup.Height);
+                new Point(_hoverPopup.Width, isPassive ? _hoverPopup.Height : 0);
         }
 
 
@@ -310,7 +319,7 @@ namespace AsLegacy.GUI.Popups
             ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
             for (int c = 0, count = concepts.Count, y = 5; c < count; c++, y++)
             {
-                string investment = "33";// AsLegacy.Player.GetInvestment(concepts[c]).ToString();
+                string investment = AsLegacy.Player.GetInvestment(concepts[c]).ToString();
 
                 Print(TalentNameX, y, concepts[c].Name);
                 Print(Width - investment.Length - 4, y, investment);
