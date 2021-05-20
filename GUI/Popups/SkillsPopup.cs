@@ -111,11 +111,11 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="args">The event arguments.</param>
-        /// <param name="passiveIndex">The index of the passive skill whose 
+        /// <param name="index">The index of the talent whose 
         /// investment button is being hovered.</param>
-        private void OnHoverBegin(object sender, MouseEventArgs args, int passiveIndex)
+        private void OnHoverBegin(object sender, MouseEventArgs args, int index)
         {
-            _hoveredInvestmentIndex = passiveIndex;
+            _hoveredInvestmentIndex = index;
             UpdateHoverContent(sender as Button);
 
             _hoverPopup.IsVisible = true;
@@ -157,7 +157,7 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
-        /// Handles the investment of a passive skill.
+        /// Handles the investment of a talent.
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="args">The event args.</param>
