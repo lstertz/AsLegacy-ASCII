@@ -27,7 +27,7 @@ namespace AsLegacy.GUI.Popups
 
         private readonly Label _availablePointsLabel;
         private readonly Button[] _conceptInvestmentButtons = new Button[MaxConceptCount];
-        private readonly List<Label> _conceptAffinityLabels = new();
+        private readonly List<Button> _conceptAffinityButtons = new();
         private readonly Button[] _passiveInvestmentButtons = new Button[MaxPassiveCount];
 
         private DynamicContentPopup _hoverPopup;
@@ -138,7 +138,7 @@ namespace AsLegacy.GUI.Popups
 
             _hoverPopup.UpdateTitle(affinity.Name);
             _hoverPopup.UpdateContent(affinity.GetDescription(AsLegacy.Player));
-            _hoverPopup.Position = (sender as Label).Position -
+            _hoverPopup.Position = (sender as Button).Position -
                 new Point(_hoverPopup.Width, 0);
 
             _hoverPopup.IsVisible = true;
@@ -201,18 +201,23 @@ namespace AsLegacy.GUI.Popups
                         {
                             int affinityIndex = cc;
                             Affinity affinity = concepts[c].Affinities[cc];
-                            Label affinityLabel = new(1)
-                            {
-                                DisplayText = AffinityIcon,
-                                Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
-                                TextColor = affinity.AffectColor
-                            };
-                            affinityLabel.MouseEnter += (sender, args) => OnHoverAffinityBegin(
-                                sender, args, conceptIndex, affinityIndex);
-                            affinityLabel.MouseExit += OnHoverEnd;
 
-                            _conceptAffinityLabels.Add(affinityLabel);
-                            Add(affinityLabel);
+                            SadConsole.Themes.Colors colors = Colors.StandardTheme;
+                            colors.Text = affinity.AffectColor;
+                            colors.RebuildAppearances();
+
+                            Button affinityButton = new(1)
+                            {
+                                Text = AffinityIcon,
+                                Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
+                                ThemeColors = colors
+                            };
+                            affinityButton.MouseEnter += (sender, args) => OnHoverAffinityBegin(
+                                sender, args, conceptIndex, affinityIndex);
+                            affinityButton.MouseExit += OnHoverEnd;
+
+                            _conceptAffinityButtons.Add(affinityButton);
+                            Add(affinityButton);
                         }
                     }
                 }
@@ -227,9 +232,9 @@ namespace AsLegacy.GUI.Popups
                 {
                     _conceptInvestmentButtons[c].IsVisible = false;
 
-                    for (int cc = 0; cc < _conceptAffinityLabels.Count; cc++)
-                        Remove(_conceptAffinityLabels[cc]);
-                    _conceptAffinityLabels.Clear();
+                    for (int cc = 0; cc < _conceptAffinityButtons.Count; cc++)
+                        Remove(_conceptAffinityButtons[cc]);
+                    _conceptAffinityButtons.Clear();
                 }
                 for (int c = 0; c < MaxPassiveCount; c++)
                     _passiveInvestmentButtons[c].IsVisible = false;
