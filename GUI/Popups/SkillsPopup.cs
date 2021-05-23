@@ -33,6 +33,8 @@ namespace AsLegacy.GUI.Popups
         private DynamicContentPopup _hoverPopup;
         private int _hoveredInvestmentIndex = -1;
 
+        private ConfirmationPopup _learnSkillPopup;
+
         /// <summary>
         /// Constructs a new SkillsPopup.
         /// </summary>
@@ -40,17 +42,24 @@ namespace AsLegacy.GUI.Popups
         /// <param name="height">The height of the Popup window.</param>
         public SkillsPopup(int width, int height) : base("Skills", width, height)
         {
-            _hoverPopup = new DynamicContentPopup("", 10, 40, 20)
+            _hoverPopup = new("", 10, 40, 20)
             {
                 IsVisible = false
             };
             Children.Add(_hoverPopup);
 
+            _learnSkillPopup = new("Learn Skill", "", 40, 7)
+            {
+                Position = new(width / 2 - 20, height / 2 - 3),
+                IsVisible = false
+            };
+            Children.Add(_learnSkillPopup);
+
             _availablePointsLabel = new Label(AvailablePointsMaxLength)
             {
                 Alignment = HorizontalAlignment.Right,
                 DisplayText = $"{AvailablePointsText}0",
-                Position = new Point(width - AvailablePointsMaxLength - 2, AvailablePointsY),
+                Position = new(width - AvailablePointsMaxLength - 2, AvailablePointsY),
                 TextColor = Colors.White
             };
             Add(_availablePointsLabel);
@@ -58,11 +67,11 @@ namespace AsLegacy.GUI.Popups
             for (int c = 0; c < MaxConceptCount; c++)
             {
                 int index = c;
-                Button button = new Button(1, 1)
+                Button button = new(1, 1)
                 {
                     CanFocus = false,
                     IsEnabled = true,
-                    Position = new Point(width - 3, 5 + c),
+                    Position = new(width - 3, 5 + c),
                     Text = "+"
                 };
                 button.Click += (sender, args) => OnInvestment(sender, args, index);
@@ -76,11 +85,11 @@ namespace AsLegacy.GUI.Popups
             for (int c = 0; c < MaxPassiveCount; c++)
             {
                 int index = c + MaxConceptCount;
-                Button button = new Button(1, 1)
+                Button button = new(1, 1)
                 {
                     CanFocus = false,
                     IsEnabled = true,
-                    Position = new Point(width - 3, Height - 9 + c),
+                    Position = new(width - 3, Height - 9 + c),
                     Text = "+"
                 };
                 button.Click += (sender, args) => OnInvestment(sender, args, index);
@@ -104,6 +113,25 @@ namespace AsLegacy.GUI.Popups
 
             string successor = "Successor Points: ##";
             Print(Width - successor.Length - 2, Height - 2, successor);
+        }
+
+        public override bool ProcessMouse(MouseConsoleState state)
+        {
+            // TODO :: Process mouse to unhighlight a clicked affinity button.
+            if (_learnSkillPopup.IsVisible)
+                return true;
+
+            return base.ProcessMouse(state);
+        }
+
+        private void OnClickAffinity(object sender, MouseEventArgs args, 
+            int conceptIndex, int affinityIndex)
+        {
+            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
+            _learnSkillPopup.Prompt = $"Learn the {affinity.Name} skill?";
+            _learnSkillPopup.IsVisible = true;
+
+            _hoverPopup.IsVisible = false;
         }
 
         /// <summary>
@@ -208,11 +236,14 @@ namespace AsLegacy.GUI.Popups
 
                             Button affinityButton = new(1)
                             {
+                                CanFocus = false,
                                 Text = AffinityIcon,
                                 Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
                                 ThemeColors = colors
                             };
                             affinityButton.MouseEnter += (sender, args) => OnHoverAffinityBegin(
+                                sender, args, conceptIndex, affinityIndex);
+                            affinityButton.MouseButtonClicked += (sender, args) => OnClickAffinity(
                                 sender, args, conceptIndex, affinityIndex);
                             affinityButton.MouseExit += OnHoverEnd;
 
