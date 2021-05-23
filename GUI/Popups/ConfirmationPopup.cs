@@ -17,6 +17,14 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         public Action OnConfirmation { get; set; } = null;
 
+        /// <summary>
+        /// The action to be performed when the user rejects.
+        /// </summary>
+        public Action OnRejection { get; set; } = null;
+
+        /// <summary>
+        /// The prompt displayed to the user.
+        /// </summary>
         public string Prompt 
         { 
             get
@@ -64,7 +72,7 @@ namespace AsLegacy.GUI.Popups
                 Position = new(2 * width / 3 - 2, height - 2),
                 Text = "No"
             };
-            no.Click += (s, e) => IsVisible = false;
+            no.Click += (s, e) => Reject();
             Add(no);
         }
 
@@ -82,6 +90,15 @@ namespace AsLegacy.GUI.Popups
         {
             IsVisible = false;
             OnConfirmation?.Invoke();
+        }
+
+        /// <summary>
+        /// Performs operations for rejection of the prompt.
+        /// </summary>
+        private void Reject()
+        {
+            IsVisible = false;
+            OnRejection?.Invoke();
         }
     }
 }

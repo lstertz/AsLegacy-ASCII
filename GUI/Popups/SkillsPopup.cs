@@ -115,20 +115,38 @@ namespace AsLegacy.GUI.Popups
             Print(Width - successor.Length - 2, Height - 2, successor);
         }
 
+        /// <inheritdoc/>
         public override bool ProcessMouse(MouseConsoleState state)
         {
-            // TODO :: Process mouse to unhighlight a clicked affinity button.
             if (_learnSkillPopup.IsVisible)
                 return true;
 
             return base.ProcessMouse(state);
         }
 
+        /// <summary>
+        /// Handles the clicking of an affinity button.
+        /// </summary>
+        /// <param name="sender">The event sender (the affinity button).</param>
+        /// <param name="args">The event arguments.</param>
+        /// <param name="conceptIndex">The index of the concept whose 
+        /// affinity icon is being clicked.</param>
+        /// <param name="affinityIndex">The index of the affinity icon, within its 
+        /// concept's collection of affinities, that is being clicked.</param>
         private void OnClickAffinity(object sender, MouseEventArgs args, 
             int conceptIndex, int affinityIndex)
         {
             Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
             _learnSkillPopup.Prompt = $"Learn the {affinity.Name} skill?";
+            _learnSkillPopup.OnConfirmation = () => 
+            { 
+                // TODO :: 74 : Learn the skill.
+                (sender as Button).IsFocused = false; 
+            };
+            _learnSkillPopup.OnRejection = () => 
+            { 
+                (sender as Button).IsFocused = false; 
+            };
             _learnSkillPopup.IsVisible = true;
 
             _hoverPopup.IsVisible = false;
@@ -236,7 +254,6 @@ namespace AsLegacy.GUI.Popups
 
                             Button affinityButton = new(1)
                             {
-                                CanFocus = false,
                                 Text = AffinityIcon,
                                 Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
                                 ThemeColors = colors
