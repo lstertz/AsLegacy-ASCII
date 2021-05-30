@@ -50,7 +50,7 @@ namespace AsLegacy.Characters
         public ReadOnlyCollection<Concept> AugmentingConcepts { get; init; }
 
         /// <summary>
-        /// The underlying <see cref="Affinity"/> that defines some of the core functionality 
+        /// The underlying affinity that defines some of the core functionality 
         /// of this <see cref="Skill"/>.
         /// </summary>
         public Affinity Affinity { get; init; }

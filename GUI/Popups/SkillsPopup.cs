@@ -109,8 +109,6 @@ namespace AsLegacy.GUI.Popups
             DrawFrame();
             UpdateContent();
 
-            Print(2, 4, "Sample Skill");
-
             string successor = "Successor Points: ##";
             Print(Width - successor.Length - 2, Height - 2, successor);
         }
@@ -139,8 +137,15 @@ namespace AsLegacy.GUI.Popups
             Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
             _learnSkillPopup.Prompt = $"Learn the {affinity.Name} skill?";
             _learnSkillPopup.OnConfirmation = () => 
-            { 
-                // TODO :: 74 : Learn the skill.
+            {
+                Skill skill = new()
+                {
+                    Affinity = affinity,
+                    Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
+                };
+                AsLegacy.Player.LearnSkill(skill);
+                Invalidate();
+
                 (sender as Button).IsFocused = false; 
             };
             _learnSkillPopup.OnRejection = () => 
@@ -325,6 +330,7 @@ namespace AsLegacy.GUI.Popups
             UpdateAvailablePoints();
             UpdateConcepts();
             UpdatePassives();
+            UpdateActiveSkills();
         }
 
         /// <summary>
@@ -392,6 +398,16 @@ namespace AsLegacy.GUI.Popups
                 Print(TalentNameX, y, passives[c].Name);
                 Print(Width - investment.Length - 4, y, investment);
             }
+        }
+
+        /// <summary>
+        /// Updates the list of the active skills to be displayed in the popup.
+        /// </summary>
+        private void UpdateActiveSkills()
+        {
+            string[] skillNames = AsLegacy.Player.SkillNames;
+            for (int c = 0, count = skillNames.Length; c < count; c++)
+                Print(2, 4 + c, skillNames[c]);
         }
     }
 }

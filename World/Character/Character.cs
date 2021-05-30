@@ -168,6 +168,20 @@ namespace AsLegacy
             public Point Point => new Point(Column, Row);
 
             /// <summary>
+            /// Provides the names of the <see cref="Skill"/>s known to this Character.
+            /// </summary>
+            public string[] SkillNames
+            {
+                get
+                {
+                    string[] names = new string[_skills.Count];
+                    _skills.Keys.CopyTo(names, 0);
+                    return names;
+                }
+            }
+            private readonly Dictionary<string, Skill> _skills = new();
+
+            /// <summary>
             /// Specifies the target of this Character.
             /// The target will be the recipient of certain actions performed 
             /// by this Character.
@@ -304,6 +318,22 @@ namespace AsLegacy
 
                 return (rowDiff == -1 && columnDiff == 0) || (rowDiff == 1 && columnDiff == 0) ||
                     (rowDiff == 0 && columnDiff == -1) || (rowDiff == 0 && columnDiff == 1);
+            }
+
+            /// <summary>
+            /// Attempts to have this Character learn the specified Skill.
+            /// </summary>
+            /// <param name="skill">The skill to be learned.</param>
+            /// <returns>Whether the skill was learned; false if the Character already 
+            /// knew the skill through some other means, true otherwise.</returns>
+            public bool LearnSkill(Skill skill)
+            {
+                string name = skill.Affinity.Name;
+                if (_skills.ContainsKey(name))
+                    return false;
+
+                _skills.Add(name, skill);
+                return true;
             }
 
             /// <summary>
