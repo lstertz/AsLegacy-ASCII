@@ -61,8 +61,7 @@ namespace AsLegacy.GUI.Popups
             Button yes = new(5, 1)
             {
                 Position = new(width / 3 - 2,  height - 2),
-                Text = "Yes",
-                IsEnabled = false
+                Text = "Yes"
             };
             yes.Click += (s, e) => Confirm();
             Add(yes);
