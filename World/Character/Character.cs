@@ -348,6 +348,15 @@ namespace AsLegacy
                     return false;
 
                 _skills.Add(name, skill);
+                for (int c = 0, count = _equippedSkills.Length; c < count; c++)
+                {
+                    if (_equippedSkills[c] == null)
+                    {
+                        _equippedSkills[c] = name;
+                        break;
+                    }
+                }
+
                 return true;
             }
 
