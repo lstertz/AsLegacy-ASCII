@@ -130,6 +130,21 @@ namespace AsLegacy
             public float CurrentHealth => _combatState.CurrentHealth;
 
             /// <summary>
+            /// Provides the names of the skills that this Character currently has equipped.
+            /// Empty skill slots are represented as null.
+            /// </summary>
+            public string[] EquippedSkills
+            {
+                get
+                {
+                    string[] skills = new string[_equippedSkills.Length];
+                    Array.Copy(_equippedSkills, skills, _equippedSkills.Length);
+                    return skills;
+                }
+            }
+            private string[] _equippedSkills = new string[6];
+
+            /// <summary>
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
             /// </summary>
             public float Health => _combatState.CurrentHealth / _combatState.MaxHealth;
