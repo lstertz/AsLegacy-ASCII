@@ -10,10 +10,10 @@ using System.Collections.ObjectModel;
 namespace AsLegacy.GUI.Popups
 {
     /// <summary>
-    /// Defines the SkillsPopup, which displays information and 
+    /// Defines the TalentsPopup, which displays information and 
     /// options for the Player to manage their Character's skills.
     /// </summary>
-    public class SkillsPopup : Popup
+    public class TalentsPopup : Popup
     {
         private readonly string AffinityIcon = char.ToString((char)4);
         private const string AvailablePointsText = "Available Points: ";
@@ -36,11 +36,11 @@ namespace AsLegacy.GUI.Popups
         private ConfirmationPopup _learnSkillPopup;
 
         /// <summary>
-        /// Constructs a new SkillsPopup.
+        /// Constructs a new TalentsPopup.
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public SkillsPopup(int width, int height) : base("Skills", width, height)
+        public TalentsPopup(int width, int height) : base("Talents", width, height)
         {
             _hoverPopup = new("", 10, 40, 20)
             {
@@ -311,7 +311,7 @@ namespace AsLegacy.GUI.Popups
 
             Fill(new Rectangle(22, Height - 10, Width - 23, 1), Colors.White, Colors.Black, 45);
 
-            string active = " Active ";
+            string active = " Skills ";
             Print(2, 3, active, Color.White);
             string text = " Concepts ";
             Print(TalentNameX, 3, text, Color.White);

@@ -15,6 +15,11 @@ namespace AsLegacy.GUI
     /// </summary>
     public class CharacterPanel : ControlsConsole
     {
+        private const int EquippedSkillsStartingY = 10;
+        private const int HealthY = 3;
+
+        private static readonly string EmptySkillSlotGlyph = "-";
+
         private readonly Ranking _ranking;
 
         /// <summary>
@@ -35,13 +40,13 @@ namespace AsLegacy.GUI
             items.Click += (s, e) => PlayScreen.ShowItems();
             Add(items);
 
-            Button skills = new Button(8, 1)
+            Button talents = new Button(9, 1)
             {
                 Position = new Point(width - 16, 1),
-                Text = "Skills"
+                Text = "Talents"
             };
-            skills.Click += (s, e) => PlayScreen.ShowSkills();
-            Add(skills);
+            talents.Click += (s, e) => PlayScreen.ShowTalents();
+            Add(talents);
 
             _ranking = new Ranking(8, true)
             {
@@ -63,8 +68,12 @@ namespace AsLegacy.GUI
         {
             base.Invalidate();
 
+            if (AsLegacy.Focus == null)
+                return;
+
             DrawTitle();
             DrawHealth();
+            DrawEquippedSkills();
         }
 
         /// <inheritdoc/>
@@ -75,13 +84,32 @@ namespace AsLegacy.GUI
         }
 
         /// <summary>
+        /// Draws the equipped skills onto the CharacterPanel.
+        /// </summary>
+        private void DrawEquippedSkills()
+        {
+            Print(1, EquippedSkillsStartingY, "Equipped Skills", Color.White);
+            string[] equippedSkills = AsLegacy.Focus.EquippedSkills;
+            for (int c = 0, count = equippedSkills.Length; c < count; c++)
+            {
+                string text = equippedSkills[c];
+                if (string.IsNullOrEmpty(text))
+                    text = EmptySkillSlotGlyph;
+
+                int y = EquippedSkillsStartingY + c / 2 + 1;
+                bool printLeft = c % 2 == 0;
+                if (printLeft)
+                    Print(1, y, $"{c + 1}: {text}", Color.White);
+                else
+                    Print(Width / 2 + 1, y, $"{c + 1}: {text}", Color.White);
+            }
+        }
+
+        /// <summary>
         /// Draws the health stats onto the CharacterPanel.
         /// </summary>
         private void DrawHealth()
         {
-            if (AsLegacy.Focus == null)
-                return;
-
             string health;
             if (AsLegacy.Focus.CurrentHealth <= 0.0f)
                 health = "0";
@@ -89,7 +117,7 @@ namespace AsLegacy.GUI
                 health = MathF.Ceiling(AsLegacy.Focus.CurrentHealth).ToString();
 
             string maxHealth = MathF.Ceiling(AsLegacy.Focus.MaxHealth).ToString();
-            Print(1, 3, "Health: " + health + "/" + maxHealth, Color.White);
+            Print(1, HealthY, $"Health: {health}/{maxHealth}", Color.White);
         }
 
         /// <summary>
@@ -97,9 +125,6 @@ namespace AsLegacy.GUI
         /// </summary>
         private void DrawTitle()
         {
-            if (AsLegacy.Focus == null)
-                return;
-
             string title;
             if (AsLegacy.Focus is ItemUser)
                 title = (AsLegacy.Focus as ItemUser).FullName;
