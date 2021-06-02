@@ -35,13 +35,13 @@ namespace AsLegacy.GUI
             items.Click += (s, e) => PlayScreen.ShowItems();
             Add(items);
 
-            Button skills = new Button(8, 1)
+            Button talents = new Button(9, 1)
             {
                 Position = new Point(width - 16, 1),
-                Text = "Skills"
+                Text = "Talents"
             };
-            skills.Click += (s, e) => PlayScreen.ShowSkills();
-            Add(skills);
+            talents.Click += (s, e) => PlayScreen.ShowTalents();
+            Add(talents);
 
             _ranking = new Ranking(8, true)
             {

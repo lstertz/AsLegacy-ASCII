@@ -67,7 +67,7 @@ namespace AsLegacy.GUI.Screens
         /// Whether the screen is currently showing a popup.
         /// </summary>
         public static bool IsShowingPopup => Screen._itemsPopup.IsVisible ||
-            Screen._skillsPopup.IsVisible || Screen._playerDeathPopup.IsVisible;
+            Screen._talentsPopup.IsVisible || Screen._playerDeathPopup.IsVisible;
 
         /// <summary>
         /// Whether the screen is currently visible.
@@ -83,7 +83,7 @@ namespace AsLegacy.GUI.Screens
                 if (!value)
                 {
                     Screen._itemsPopup.IsVisible = false;
-                    Screen._skillsPopup.IsVisible = false;
+                    Screen._talentsPopup.IsVisible = false;
                     Screen._playerDeathPopup.IsVisible = false;
                 }
 
@@ -119,7 +119,7 @@ namespace AsLegacy.GUI.Screens
                 return;
 
             Screen._itemsPopup.IsVisible = true;
-            Screen._skillsPopup.IsVisible = false;
+            Screen._talentsPopup.IsVisible = false;
         }
 
         /// <summary>
@@ -130,25 +130,25 @@ namespace AsLegacy.GUI.Screens
             Screen._playerDeathPopup.IsVisible = true;
 
             Screen._itemsPopup.IsVisible = false;
-            Screen._skillsPopup.IsVisible = false;
+            Screen._talentsPopup.IsVisible = false;
         }
 
         /// <summary>
-        /// Shows the PlayScreen's Skills Popup.
+        /// Shows the PlayScreen's Talents Popup.
         /// </summary>
-        public static void ShowSkills()
+        public static void ShowTalents()
         {
             if (Screen._playerDeathPopup.IsVisible)
                 return;
 
-            Screen._skillsPopup.IsVisible = true;
+            Screen._talentsPopup.IsVisible = true;
             Screen._itemsPopup.IsVisible = false;
         }
 
 
         private readonly Popup _itemsPopup;
         private readonly PlayerDeathPopup _playerDeathPopup;
-        private readonly Popup _skillsPopup;
+        private readonly Popup _talentsPopup;
 
         private readonly ScrollingConsole _characters;
         private readonly Console _commands;
@@ -183,7 +183,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Display.Width / 4, Display.Height / 4),
                 IsVisible = false
             };
-            _skillsPopup = new SkillsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
+            _talentsPopup = new TalentsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
@@ -234,7 +234,7 @@ namespace AsLegacy.GUI.Screens
             _console.Children.Add(_characterPanel);
 
             _console.Children.Add(_itemsPopup);
-            _console.Children.Add(_skillsPopup);
+            _console.Children.Add(_talentsPopup);
             _console.Children.Add(_playerDeathPopup);
 
             _console.Components.Add(this);
