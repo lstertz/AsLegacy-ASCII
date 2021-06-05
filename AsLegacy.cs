@@ -44,6 +44,7 @@ namespace AsLegacy
         /// </summary>
         public static void Main()
         {
+            SadConsole.Global.LoadFont("Fonts/AsLegacy.font");
             new AsLegacy();
         }
 
@@ -86,7 +87,7 @@ namespace AsLegacy
         /// </summary>
         public AsLegacy()
         {
-            Game.Create(Display.Width, Display.Height);
+            Game.Create("AsLegacy", Display.Width, Display.Height);
             Game.OnInitialize = () =>
             {
                 Display.Init(this);
