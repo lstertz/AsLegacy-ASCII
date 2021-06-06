@@ -60,5 +60,14 @@ namespace AsLegacy.Characters
         /// of this <see cref="Skill"/>.
         /// </summary>
         public Concept Concept { get; init; }
+
+        
+        /// <summary>
+        /// Performs this skill, resulting in its effects.
+        /// </summary>
+        public void Activate()
+        {
+            // TODO :: Create an Effect and send it to the World for it to initiate graphical/practical results.
+        }
     }
 }
