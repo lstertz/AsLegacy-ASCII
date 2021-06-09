@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.Characters.Skills;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

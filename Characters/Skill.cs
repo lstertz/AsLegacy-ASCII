@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace AsLegacy.Characters
+namespace AsLegacy.Characters.Skills
 {
     /// <summary>
     /// Defines a Skill, which produces visual and practical effects, 
@@ -17,6 +17,14 @@ namespace AsLegacy.Characters
             Primary,
             Secondary,
             Tertiary
+        }
+
+        /// <summary>
+        /// The type of effects that can be produced by a skill.
+        /// </summary>
+        public enum Effect
+        {
+            ExpandingRing
         }
 
         /// <summary>
@@ -61,13 +69,18 @@ namespace AsLegacy.Characters
         /// </summary>
         public Concept Concept { get; init; }
 
-        
+
         /// <summary>
-        /// Performs this skill, resulting in its effects.
+        /// Provides the <see cref="Affect"/>s that define the effects of this <see cref="Skill"/>.
         /// </summary>
-        public void Activate()
+        /// <remarks>Affects should be realized in the order provided, one after the other 
+        /// as their effects complete.</remarks>
+        public Affect[] GetAffects()
         {
-            // TODO :: Create an Effect and send it to the World for it to initiate graphical/practical results.
+            // TODO :: Evaluate this Skill's Affinity, Concept, and Augmenting Concepts to 
+            //          determine the affect(s) it should produce.
+
+            return new Affect[0];
         }
     }
 }

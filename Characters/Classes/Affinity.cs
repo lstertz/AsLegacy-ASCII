@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using AsLegacy.Characters.Skills;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace AsLegacy.Characters

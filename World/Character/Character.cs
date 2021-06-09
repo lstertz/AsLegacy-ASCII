@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Characters;
+using AsLegacy.Characters.Skills;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -180,7 +181,7 @@ namespace AsLegacy
             /// <summary>
             /// Provides the point (global location) of this Character.
             /// </summary>
-            public Point Point => new Point(Column, Row);
+            public Point Point => new(Column, Row);
 
             /// <summary>
             /// Provides the names of the <see cref="Skill"/>s known to this Character.
