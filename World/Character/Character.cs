@@ -287,6 +287,18 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Initiates the activation and subsequent performance of 
+            /// the identified <see cref="Skill"/>.
+            /// </summary>
+            /// <param name="skill">The name identifying the <see cref="Skill"/>.</param>
+            public void InitiateSkill(string skill)
+            {
+                // TODO :: Start action for skill activation.
+                // TODO :: Get Skill Affets, provide to World, once skill activates.
+                // TODO :: Start cooldown.
+            }
+
+            /// <summary>
             /// Invests the specified amount in the provided <see cref="Talent"/>.
             /// </summary>
             /// <param name="talent">The <see cref="Talent"/> to be invested in.</param>
