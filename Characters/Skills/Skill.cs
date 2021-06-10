@@ -52,16 +52,24 @@ namespace AsLegacy.Characters.Skills
         }
 
         /// <summary>
-        /// The <see cref="Concept"/>s that augment this <see cref="Skill"/> with additional 
-        /// functionality and affects.
+        /// The time, in seconds, required for this Skill to be activated.
         /// </summary>
-        public ReadOnlyCollection<Concept> AugmentingConcepts { get; init; }
+        public float Activation
+        {
+            get => Affinity.Activation; // TODO :: Incorporate augmenting concepts.
+        }
 
         /// <summary>
         /// The underlying affinity that defines some of the core functionality 
         /// of this <see cref="Skill"/>.
         /// </summary>
         public Affinity Affinity { get; init; }
+
+        /// <summary>
+        /// The <see cref="Concept"/>s that augment this <see cref="Skill"/> with additional 
+        /// functionality and affects.
+        /// </summary>
+        public ReadOnlyCollection<Concept> AugmentingConcepts { get; init; }
 
         /// <summary>
         /// The underlying <see cref="Concept"/> that defines some of the core functionality 

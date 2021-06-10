@@ -21,7 +21,8 @@ namespace AsLegacy.Characters
         private const string CooldownName = "Cooldown";
 
         /// <summary>
-        /// The time required for any effects of this <see cref="Affinity"/> to be realized.
+        /// The time, in seconds, required for any effects 
+        /// of this <see cref="Affinity"/> to be realized.
         /// </summary>
         public float Activation
         {
@@ -30,7 +31,7 @@ namespace AsLegacy.Characters
             {
                 Aspects = new(new Aspect[]
                 {
-                        Aspect.Activation
+                    Aspect.Activation
                 }),
                 BaseValue = value,
                 Name = ActivationName

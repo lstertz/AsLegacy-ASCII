@@ -290,12 +290,26 @@ namespace AsLegacy
             /// Initiates the activation and subsequent performance of 
             /// the identified <see cref="Skill"/>.
             /// </summary>
-            /// <param name="skill">The name identifying the <see cref="Skill"/>.</param>
-            public void InitiateSkill(string skill)
+            /// <param name="skillName">The name identifying the <see cref="Skill"/>.</param>
+            public void InitiateSkill(string skillName)
             {
-                // TODO :: Start action for skill activation.
-                // TODO :: Get Skill Affets, provide to World, once skill activates.
-                // TODO :: Start cooldown.
+                if (skillName == null)
+                    return;
+
+                Skill skill = _skills[skillName];
+                new Action(this, (int)(skill.Activation * 1000.0f),
+                    () =>
+                    {
+                        Affect[] affects = skill.GetAffects();
+                        // TODO :: Provide to World.
+
+                        // TODO :: Start cooldown.
+                    },
+                    () =>
+                    {
+                        // TODO :: May be defined by the Skill.
+                        return true;
+                    });
             }
 
             /// <summary>
