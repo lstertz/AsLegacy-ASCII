@@ -20,14 +20,6 @@ namespace AsLegacy.Characters.Skills
         }
 
         /// <summary>
-        /// The type of effects that can be produced by a skill.
-        /// </summary>
-        public enum Effect
-        {
-            ExpandingRing
-        }
-
-        /// <summary>
         /// The elemental classification of the skill.
         /// </summary>
         public enum Element

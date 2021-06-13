@@ -11,9 +11,10 @@
 
         public float Range { get; init; }
 
-        public Skill.Effect Type { get; init; }
+        public Skill.Type Type { get; init; }
 
 
         // TODO :: Other effect details.
+        // TODO :: Origin and Target at least.
     }
 }
