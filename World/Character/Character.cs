@@ -297,17 +297,39 @@ namespace AsLegacy
                     return;
 
                 Skill skill = _skills[skillName];
-                new Action(this, (int)(skill.Activation * 1000.0f),
+                int activationInMilliseconds = (int)(skill.Activation * 1000.0f);
+                new Action(this, activationInMilliseconds,
                     () =>
                     {
                         Affect[] affects = skill.GetAffects();
-                        // TODO :: Provide to World.
+                        Effect lastMadeEffect = null;
+                        for (int c = affects.Length - 1; c >= 0; c--)
+                        {
+                            Affect affect = affects[c];
+                            switch (affects[c].Type)
+                            {
+                                case Concept.Type.AreaOfEffect:
+                                    lastMadeEffect = new ExpandingRingEffect()
+                                    {
+                                        BaseDamage = affects[c].BaseDamage,
+                                        Element = affects[c].Element,
+                                        Followup = lastMadeEffect,
+                                        Range = affects[c].Range
+                                    };
+                                    break;
+                                default:
+                                    throw new NotImplementedException($"The concept type, " +
+                                        $"{affects[c].Type}, is not yet supported to be " +
+                                        $"realized as a skill effect.");
+                            }
+                        }
 
-                        // TODO :: Start cooldown.
+                        lastMadeEffect.Start();
+                        // TODO : 79 :: Start cooldown.
                     },
                     () =>
                     {
-                        // TODO :: May be defined by the Skill.
+                        // May be defined by the Skill.
                         return true;
                     });
             }

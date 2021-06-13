@@ -162,7 +162,7 @@ namespace AsLegacy
                 /// <summary>
                 /// Constructs a new Character TargetedAction.
                 /// </summary>
-                /// <param name="character">The performing Character.</param>
+                /// <param name="performer">The performing Character.</param>
                 /// <param name="target">The targeted Character.</param>
                 /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
                 /// before the action is to be performed.</param>
