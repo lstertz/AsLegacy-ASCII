@@ -98,6 +98,15 @@ namespace AsLegacy
         private static readonly List<Point> OpenPositions = new List<Point>();
 
         /// <summary>
+        /// The displayable effects of the World.
+        /// </summary>
+        public static TileSet<Tile>.Display EffectTiles => Effects.GetDisplay();
+        private static readonly TileSet<Tile> Effects = new TileSet<Tile>((row, column) =>
+        {
+            return new EffectGraphic(Color.Transparent, ' ');
+        });
+
+        /// <summary>
         /// The displayable environment of the World.
         /// </summary>
         public static TileSet<Tile>.Display EnvironmentTiles => Environment.GetDisplay();
