@@ -75,12 +75,26 @@ namespace AsLegacy.Characters.Skills
         /// </summary>
         /// <remarks>Affects should be realized in the order provided, one after the other 
         /// as their effects complete.</remarks>
-        public Affect[] GetAffects()
+        /// <param name="character">The character whose specific skill affects 
+        /// are being provided.</param>
+        public Affect[] GetAffects(World.Character character)
         {
             // TODO :: Evaluate this Skill's Affinity, Concept, and Augmenting Concepts to 
-            //          determine the affect(s) it should produce.
+            //          determine the affect(s) it should produce, right now assume the Nova.
 
-            return new Affect[0];
+            return new Affect[]
+                {
+                    new()
+                    {
+                        AffectColor = Affinity.AffectColor,
+                        BaseDamage = character.GetAffect(Affinity.CustomAttributes[0]),
+                        Element = Affinity.Element,
+                        Origin = character.Point,
+                        Range = character.GetAffect(Affinity.CustomAttributes[1]),
+                        Target = character.Point,
+                        Type = Concept.Type
+                    }
+                };
         }
     }
 }

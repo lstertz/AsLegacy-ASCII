@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Characters.Skills;
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy
 {
@@ -11,15 +12,30 @@ namespace AsLegacy
         /// </summary>
         private class ExpandingRingEffect : Effect
         {
+            private const int TimePerRangeUnit = 500;
+
             public float BaseDamage { get; init; }
 
             public Skill.Element Element { get; init; }
 
             public float Range { get; init; }
 
-            protected override void Update()
+            private int _passedTime = 0;
+
+            protected override void Update(int timeDelta)
             {
-                // TODO :: Perform graphical effect (update effect tiles).
+                _passedTime += timeDelta;
+
+                if (_passedTime > TimePerRangeUnit)
+                {
+                    Stop();
+                    return;
+                }
+
+                SetGraphic(Target.X, Target.Y, 219);
+
+
+                // TODO :: Perform actual ring graphical effect.
 
                 // TODO : 78 :: Perform practical effect (apply damage to affected characters).
             }

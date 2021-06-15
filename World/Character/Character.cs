@@ -297,24 +297,28 @@ namespace AsLegacy
                     return;
 
                 Skill skill = _skills[skillName];
+                Affect[] affects = skill.GetAffects(this);
                 int activationInMilliseconds = (int)(skill.Activation * 1000.0f);
                 new Action(this, activationInMilliseconds,
                     () =>
                     {
-                        Affect[] affects = skill.GetAffects();
                         Effect lastMadeEffect = null;
                         for (int c = affects.Length - 1; c >= 0; c--)
                         {
                             Affect affect = affects[c];
                             switch (affects[c].Type)
                             {
-                                case Concept.Type.AreaOfEffect:
+                                case Skill.Type.AreaOfEffect:
                                     lastMadeEffect = new ExpandingRingEffect()
                                     {
+                                        Color = affects[c].AffectColor,
                                         BaseDamage = affects[c].BaseDamage,
                                         Element = affects[c].Element,
                                         Followup = lastMadeEffect,
-                                        Range = affects[c].Range
+                                        Origin = affects[c].Origin,
+                                        Performer = this,
+                                        Range = affects[c].Range,
+                                        Target = affects[c].Target
                                     };
                                     break;
                                 default:
@@ -325,6 +329,7 @@ namespace AsLegacy
                         }
 
                         lastMadeEffect.Start();
+
                         // TODO : 79 :: Start cooldown.
                     },
                     () =>
