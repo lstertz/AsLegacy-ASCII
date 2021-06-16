@@ -152,6 +152,7 @@ namespace AsLegacy.GUI.Screens
 
         private readonly ScrollingConsole _characters;
         private readonly Console _commands;
+        private readonly ScrollingConsole _effects;
         private readonly ScrollingConsole _environment;
         private readonly NearbyPanel _nearbyPanel;
         private readonly CharacterPanel _characterPanel;
@@ -209,6 +210,11 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(1, Display.Height - 7)
             };
 
+            _effects = World.EffectTiles;
+            _effects.Position = new Point(1, 1);
+            _effects.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
+            _effects.CenterViewPortOnPoint(new Point(0, 0));
+
             _environment = World.EnvironmentTiles;
             _environment.Position = new Point(1, 1);
             _environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
@@ -226,6 +232,7 @@ namespace AsLegacy.GUI.Screens
             };
 
             _console.Children.Add(_environment);
+            _console.Children.Add(_effects);
             _console.Children.Add(_characters);
             _characters.Children.Add(_commands);
             _console.Children.Add(_nearbyPanel);
@@ -295,6 +302,7 @@ namespace AsLegacy.GUI.Screens
                 center = AsLegacy.Focus.Point;
 
             _characters.CenterViewPortOnPoint(center);
+            _effects.CenterViewPortOnPoint(center);
             _environment.CenterViewPortOnPoint(center);
 
             _characterPanel.Draw(delta);

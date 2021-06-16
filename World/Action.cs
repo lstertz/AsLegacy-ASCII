@@ -11,6 +11,11 @@ namespace AsLegacy
         protected interface IAction
         {
             /// <summary>
+            /// The time passed  between the current evaluation and the last evaluation.
+            /// </summary>
+            int LastTimeDelta { get; }
+
+            /// <summary>
             /// Initiates any operations to be performed upon the cancellation of this Action.
             /// </summary>
             void Cancel();
@@ -33,9 +38,13 @@ namespace AsLegacy
             /// Provides the time until the Action is activated, as a percentage (0 - 1), 
             /// of the required activation time.
             /// </summary>
-            public float Activation => _passedActivationTime / _requiredActivationTime;
+            public float Activation => _requiredActivationTime == 0 ? 1 :
+                _passedActivationTime / _requiredActivationTime;
             private float _passedActivationTime = 0.0f;
             private readonly float _requiredActivationTime;
+
+            /// <inheritdoc/>
+            public int LastTimeDelta { get; private set; }
 
             private readonly System.Action _action;
             private readonly Func<bool> _meetsConditions;
@@ -47,10 +56,11 @@ namespace AsLegacy
             /// Constructs a new Action.
             /// </summary>
             /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
-            /// before the action is to be performed.</param>
+            /// before the action is to be performed. A value of 0 indicates that the 
+            /// action should be performed once for each evaluation.</param>
             /// <param name="repeats">Whether the Action re-initializes 
             /// itself after is resolves.</param>
-            /// <param name="action">The Action to be performed upon resolution of this Action.</param>
+            /// <param name="action">The action to be performed upon resolution of this Action.</param>
             /// <param name="conditionalCheck">A Func to ensure that required conditions to 
             /// resolve this Action continue to be met.</param>
             public Action(int requiredActivationTime, System.Action action,
@@ -69,6 +79,8 @@ namespace AsLegacy
 
             void IAction.Evaluate(int timeDelta)
             {
+                LastTimeDelta = timeDelta;
+
                 if (_meetsConditions != null)
                     if (!_meetsConditions())
                     {
@@ -77,7 +89,15 @@ namespace AsLegacy
                     }
 
                 _passedActivationTime += timeDelta;
-                if (_passedActivationTime >= _requiredActivationTime)
+                if (_requiredActivationTime == 0)
+                {
+                    _action();
+                    if (!_repeats)
+                        Destroy();
+
+                    return;
+                }
+                else if (_passedActivationTime >= _requiredActivationTime)
                 {
                     _action();
 
@@ -95,6 +115,7 @@ namespace AsLegacy
                 }
             }
 
+            /// <inheritdoc/>
             void IAction.Cancel()
             {
                 Destroy();
@@ -131,7 +152,7 @@ namespace AsLegacy
                 /// <param name="conditionalCheck">A Func to ensure that required conditions to 
                 /// resolve this Action continue to be met.</param>
                 public Action(Character performer, int requiredActivationTime,
-                    System.Action action, Func<bool> conditionalCheck = null, 
+                    System.Action action, Func<bool> conditionalCheck = null,
                     bool repeats = false) : base(
                         requiredActivationTime, action, conditionalCheck, repeats)
                 {
@@ -146,6 +167,7 @@ namespace AsLegacy
                     CharacterActions.Add(performer, this);
                 }
 
+                /// <inheritdoc/>
                 protected override void Destroy()
                 {
                     base.Destroy();
@@ -162,7 +184,7 @@ namespace AsLegacy
                 /// <summary>
                 /// Constructs a new Character TargetedAction.
                 /// </summary>
-                /// <param name="character">The performing Character.</param>
+                /// <param name="performer">The performing Character.</param>
                 /// <param name="target">The targeted Character.</param>
                 /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
                 /// before the action is to be performed.</param>

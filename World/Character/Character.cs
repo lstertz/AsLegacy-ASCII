@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Characters;
+using AsLegacy.Characters.Skills;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -180,7 +181,7 @@ namespace AsLegacy
             /// <summary>
             /// Provides the point (global location) of this Character.
             /// </summary>
-            public Point Point => new Point(Column, Row);
+            public Point Point => new(Column, Row);
 
             /// <summary>
             /// Provides the names of the <see cref="Skill"/>s known to this Character.
@@ -283,6 +284,59 @@ namespace AsLegacy
             {
                 _talentInvestments.TryGetValue(talent, out int amount);
                 return amount;
+            }
+
+            /// <summary>
+            /// Initiates the activation and subsequent performance of 
+            /// the identified <see cref="Skill"/>.
+            /// </summary>
+            /// <param name="skillName">The name identifying the <see cref="Skill"/>.</param>
+            public void InitiateSkill(string skillName)
+            {
+                if (skillName == null)
+                    return;
+
+                Skill skill = _skills[skillName];
+                Affect[] affects = skill.GetAffects(this);
+                int activationInMilliseconds = (int)(skill.Activation * 1000.0f);
+                new Action(this, activationInMilliseconds,
+                    () =>
+                    {
+                        Effect lastMadeEffect = null;
+                        for (int c = affects.Length - 1; c >= 0; c--)
+                        {
+                            Affect affect = affects[c];
+                            switch (affects[c].Type)
+                            {
+                                case Skill.Type.AreaOfEffect:
+                                    lastMadeEffect = new ExpandingRingEffect()
+                                    {
+                                        Color = affects[c].AffectColor,
+                                        BaseDamage = affects[c].BaseDamage,
+                                        Element = affects[c].Element,
+                                        Followup = lastMadeEffect,
+                                        Origin = affects[c].Origin,
+                                        Performer = this,
+                                        Range = affects[c].Range,
+                                        Target = affects[c].Target
+                                    };
+                                    break;
+                                default:
+                                    throw new NotImplementedException($"The concept type, " +
+                                        $"{affects[c].Type}, is not yet supported to be " +
+                                        $"realized as a skill effect.");
+                            }
+                        }
+
+                        lastMadeEffect.Start();
+
+                        // TODO : 79 :: Start cooldown.
+                    },
+                    () =>
+                    {
+                        // May be defined by the Skill.
+                        return true;
+                    });
             }
 
             /// <summary>

@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Characters;
+using AsLegacy.Characters.Skills;
 using AsLegacy.Global;
 using Microsoft.Xna.Framework;
 using SadConsole;

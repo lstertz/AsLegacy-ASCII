@@ -41,6 +41,18 @@ namespace AsLegacy.Input
             else if (info.IsKeyPressed(Keys.Right) || info.IsKeyPressed(Keys.D))
                 AsLegacy.Player.MoveInDirection(World.Character.Direction.Right, () =>
                     info.IsKeyDown(Keys.Right) || info.IsKeyDown(Keys.D));
+            else if (info.IsKeyPressed(Keys.D1) || info.IsKeyPressed(Keys.NumPad1))
+                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[0]);
+            else if (info.IsKeyPressed(Keys.D2) || info.IsKeyPressed(Keys.NumPad2))
+                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[1]);
+            else if (info.IsKeyPressed(Keys.D3) || info.IsKeyPressed(Keys.NumPad3))
+                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[2]);
+            else if (info.IsKeyPressed(Keys.D4) || info.IsKeyPressed(Keys.NumPad4))
+                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[3]);
+            else if (info.IsKeyPressed(Keys.D5) || info.IsKeyPressed(Keys.NumPad5))
+                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[4]);
+            else if (info.IsKeyPressed(Keys.D6) || info.IsKeyPressed(Keys.NumPad6))
+                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[5]);
 
             if (info.IsKeyReleased(Keys.Space))
                 AsLegacy.Player.ToggleAttackMode();
