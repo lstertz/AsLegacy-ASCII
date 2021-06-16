@@ -54,8 +54,6 @@ namespace AsLegacy.Input
             else if (info.IsKeyPressed(Keys.D6) || info.IsKeyPressed(Keys.NumPad6))
                 AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[5]);
 
-            // TODO :: Handle skill hotkey presses.
-
             if (info.IsKeyReleased(Keys.Space))
                 AsLegacy.Player.ToggleAttackMode();
             AsLegacy.Player.EnableDefense(AltIsDown(info));
