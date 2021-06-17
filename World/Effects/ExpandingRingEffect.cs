@@ -43,6 +43,8 @@ namespace AsLegacy
             private int _passedTime = 0;
             private int _lastBaseRadius = -1;
 
+            private bool _dealtDamage = false;
+
             protected override void Update(int timeDelta)
             {
                 _passedTime += timeDelta;
@@ -63,10 +65,15 @@ namespace AsLegacy
 
                 int baseRadius = (int)currentRadius;
                 if (baseRadius != _lastBaseRadius)
+                {
+                    // TODO : 78 :: Calculate damage to deal to last ring's tiles.
+                    // TODO : 78 :: Deal damage to last ring's tiles.
                     ClearGraphics();
+                }
                 _lastBaseRadius = baseRadius;
 
-                // TODO : 78 :: Perform practical effect (apply damage to affected characters).
+                float damage = BaseDamage;
+                // TODO : 78 :: Calculate damage to deal to current ring's tiles.
                 if (currentRadius < 1)
                     SetGraphic(Target.X, Target.Y, 219);
                 else
@@ -79,12 +86,18 @@ namespace AsLegacy
 
                     for (int y = yMin; y < yMax; y++)
                     {
+                        DealDamageAt(xMin, y, damage);
                         SetGraphic(xMin, y, displayInnerRing ? 222 : 221);
+
+                        DealDamageAt(xMax, y, damage);
                         SetGraphic(xMax, y, displayInnerRing ? 221 : 222);
                     }
 
                     for (int x = xMin; x <= xMax; x++)
                     {
+                        DealDamageAt(x, yMin, damage);
+                        DealDamageAt(x, yMax, damage);
+
                         if (x == xMin)
                         {
                             SetGraphic(x, yMin, displayInnerRing ? 260 : 256);
@@ -102,6 +115,18 @@ namespace AsLegacy
                         }
                     }
                 }
+            }
+
+            private void DealDamageAt(int x, int y, float damage)
+            {
+                Character c = CharacterAt(y, x);
+                if (c == null || c == Performer)
+                    return;
+
+                // TODO : 80 :: Notify performer that its skill dealt damage (to gain a skill point).
+                _dealtDamage = true;
+
+                c.ReceiveDamage(Performer, damage, Element);
             }
         }
     }
