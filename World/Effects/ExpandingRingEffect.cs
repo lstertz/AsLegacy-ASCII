@@ -14,14 +14,15 @@ namespace AsLegacy
             /// <summary>
             /// How long, if unmodified, the effect lasts for each range unit.
             /// </summary>
-            private const float BaseTimePerRangeUnit = 45.0f;
+            private const float TimePerRangeUnit = 45.0f;
 
             /// <summary>
             /// The maximum modification for how long each effects lasts for each range unit.
-            /// This value must be less than <see cref="BaseTimePerRangeUnit"/>, or else 
-            /// the effect will never complete.
+            /// The closer to 1 this value is, the great the time spent for each range unit is 
+            /// as the range reaches its limit. The value must be less than 1, otherwise the 
+            /// effect will never complete.
             /// </summary>
-            private const float RangeTimeModifier = 30.0f;
+            private const float RangeTimeModifier = 2.0f/3.0f;
 
             /// <summary>
             /// The base damage (the expected maximum) to be applied per range unit.
@@ -41,7 +42,7 @@ namespace AsLegacy
             public float Range { get; init; }
 
             private int _passedTime = 0;
-            private int _lastBaseRadius = -1;
+            private float _lastRadius = 0.0f;
 
             private bool _dealtDamage = false;
 
@@ -50,13 +51,13 @@ namespace AsLegacy
                 _passedTime += timeDelta;
 
                 float maxRadius = Range + 1;
-                float unmodifiedRadius = _passedTime / BaseTimePerRangeUnit;
+                float unmodifiedRadius = _passedTime / TimePerRangeUnit;
                 float basePercentRadius = unmodifiedRadius / maxRadius;
 
                 // Modify the radius to make it increase more slowly the further the 
-                // value is from the origin, up to an increase defined by the RangeTimeModifier.
-                float currentRadius = _passedTime / 
-                    (BaseTimePerRangeUnit + RangeTimeModifier * basePercentRadius);
+                // value is from the origin.
+                float timeUnitIncrease = TimePerRangeUnit * RangeTimeModifier * basePercentRadius;
+                float currentRadius = _passedTime / (TimePerRangeUnit + timeUnitIncrease);
                 if (currentRadius >= maxRadius)
                 {
                     Stop();
