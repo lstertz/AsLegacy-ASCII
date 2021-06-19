@@ -492,6 +492,19 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Specifies that this character has been dealt damage.
+            /// The provided damage may be reduced (or eliminated) before being applied 
+            /// to this character's health.
+            /// </summary>
+            /// <param name="attacker">The dealer of the damage.</param>
+            /// <param name="damage">The amount of damage dealt to this character.</param>
+            /// <param name="element">The elemental type of the damage dealt.</param>
+            public void ReceiveDamage(Character attacker, float damage, Skill.Element element)
+            {
+                _combatState.ReceiveDamage(attacker, damage, element);
+            }
+
+            /// <summary>
             /// Toggles whether Attack Mode is enabled, and updates 
             /// the current active mode.
             /// </summary>

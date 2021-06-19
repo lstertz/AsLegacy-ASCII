@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Characters;
+using AsLegacy.Characters.Skills;
 using System.Collections.Generic;
 
 namespace AsLegacy
@@ -182,6 +183,46 @@ namespace AsLegacy
                     }
 
                     /// <summary>
+                    /// Specifies that dealt damage should be handled by this combat state.
+                    /// The provided damage may be reduced (or eliminated) before being applied.
+                    /// </summary>
+                    /// <param name="attacker">The dealer of the damage.</param>
+                    /// <param name="damage">The amount of damage dealt.</param>
+                    /// <param name="element">The elemental type of the damage dealt.</param>
+                    public void ReceiveDamage(Character attacker, 
+                        float damage, Skill.Element element)
+                    {
+                        if (!_character.IsAlive)
+                            return;
+
+                        float damageReduction = 0.0f;
+                        if (_character.ActiveMode == Mode.Defend)
+                            damageReduction = damage * (this as ICombat).DefenseDamageReduction;
+                        CurrentHealth -= (damage - damageReduction);
+
+                        // TODO :: Reduce damage based on elemental type.
+
+                        if (!_character.IsAlive)
+                        {
+                            _character.UponDeath();
+
+                            if (_character is ItemUser)
+                            {
+                                int halfLegacy = Legacy / 2;
+                                UpdateLegacy(attacker, halfLegacy);
+                                UpdateLegacy(_character, -halfLegacy);
+
+                                (_character as ItemUser).CharacterLineage.SpawnSuccessor();
+                            }
+                            else
+                            {
+                                UpdateLegacy(attacker, Legacy);
+                                RankedCharacters.Remove(_character);
+                            }
+                        }
+                    }
+
+                    /// <summary>
                     /// Temporary method to increase the CurrentHealth with an increase 
                     /// in the MaxHealth.
                     /// </summary>
@@ -205,36 +246,12 @@ namespace AsLegacy
                     new TargetedAction(attacker, target, aState.AttackInterval,
                         (t) =>
                         {
-                            ICombat tState = t._combatState;
                             float dealtDamage = aState.AttackDamage;
-
-                            float damageReduction = 0.0f;
-                            if (t.ActiveMode == Mode.Defend)
-                                damageReduction = aState.AttackDamage *
-                                    tState.DefenseDamageReduction;
+                            t._combatState.ReceiveDamage(attacker, 
+                                dealtDamage, Skill.Element.Physical);
 
                             t.AvailableSkillPoints += dealtDamage;
                             attacker.AvailableSkillPoints += dealtDamage;
-                            tState.CurrentHealth -= (dealtDamage - damageReduction);
-
-                            if (!t.IsAlive)
-                            {
-                                t.UponDeath();
-
-                                if (t is ItemUser)
-                                {
-                                    int halfLegacy = tState.Legacy / 2;
-                                    UpdateLegacy(attacker, halfLegacy);
-                                    UpdateLegacy(t, -halfLegacy);
-
-                                    (t as ItemUser).CharacterLineage.SpawnSuccessor();
-                                }
-                                else
-                                {
-                                    UpdateLegacy(attacker, tState.Legacy);
-                                    RankedCharacters.Remove(t);
-                                }
-                            }
                         },
                         (c) =>
                         {
