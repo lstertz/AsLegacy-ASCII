@@ -17,6 +17,19 @@ namespace AsLegacy
             public Color Color { get; init; }
 
             /// <summary>
+            /// The locations currently under effect.
+            /// </summary>
+            public Point[] EffectLocations
+            {
+                get
+                {
+                    Point[] locations = new Point[_graphicLocations.Count];
+                    _graphicLocations.CopyTo(locations);
+                    return locations;
+                }
+            }
+
+            /// <summary>
             /// The <see cref="Effect"/> to be performed after the resolution of this effect.
             /// </summary>
             public Effect Followup { get; init; } = null;

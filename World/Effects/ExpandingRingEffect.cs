@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Characters.Skills;
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy
 {
@@ -58,25 +59,31 @@ namespace AsLegacy
                 // value is from the origin.
                 float timeUnitIncrease = TimePerRangeUnit * RangeTimeModifier * basePercentRadius;
                 float currentRadius = _passedTime / (TimePerRangeUnit + timeUnitIncrease);
+                float deltaRadius = currentRadius - _lastRadius;
                 if (currentRadius >= maxRadius)
                 {
+                    DealRemainderDamage(currentRadius, deltaRadius);
+                    _lastRadius = 0.0f;
+
                     Stop();
                     return;
                 }
 
+                float radiusRemainder = 0.0f;
                 int baseRadius = (int)currentRadius;
-                if (baseRadius != _lastBaseRadius)
+                if (baseRadius != (int)_lastRadius)
                 {
-                    // TODO : 78 :: Calculate damage to deal to last ring's tiles.
-                    // TODO : 78 :: Deal damage to last ring's tiles.
+                    radiusRemainder = DealRemainderDamage(currentRadius, deltaRadius);
                     ClearGraphics();
                 }
-                _lastBaseRadius = baseRadius;
+                _lastRadius = currentRadius;
 
-                float damage = BaseDamage;
-                // TODO : 78 :: Calculate damage to deal to current ring's tiles.
+                float damage = BaseDamage * (deltaRadius - radiusRemainder);
                 if (currentRadius < 1)
+                {
                     SetGraphic(Target.X, Target.Y, 219);
+                    DealDamageAt(Target.X, Target.Y, damage);
+                }
                 else
                 {
                     bool displayInnerRing = currentRadius - baseRadius < 0.5f;
@@ -118,6 +125,13 @@ namespace AsLegacy
                 }
             }
 
+            /// <summary>
+            /// Deals damage, if appropriate, to the <see cref="Character"/> at 
+            /// the specific location.
+            /// </summary>
+            /// <param name="x">The x axis value of the location.</param>
+            /// <param name="y">The y axis value of the location.</param>
+            /// <param name="damage">The damage to dealt.</param>
             private void DealDamageAt(int x, int y, float damage)
             {
                 Character c = CharacterAt(y, x);
@@ -128,6 +142,25 @@ namespace AsLegacy
                 _dealtDamage = true;
 
                 c.ReceiveDamage(Performer, damage, Element);
+            }
+
+            /// <summary>
+            /// Deals any damage that should be dealt within the last radius unit, 
+            /// based on the current radius and the last delta.
+            /// </summary>
+            /// <param name="currentRadius">The current radius of the effect.</param>
+            /// <param name="deltaRadius">The change in radius since the last effect update.</param>
+            /// <returns>The remainder of the last radius unit for which damage was applied.</returns>
+            private float DealRemainderDamage(float currentRadius, float deltaRadius)
+            {
+                float radiusRemainder = deltaRadius - (currentRadius - ((int)currentRadius));
+                float damageRemainder = BaseDamage * radiusRemainder;
+
+                Point[] lastLocations = EffectLocations;
+                for (int c = 0, count = lastLocations.Length; c < count; c++)
+                    DealDamageAt(lastLocations[c].X, lastLocations[c].Y, damageRemainder);
+
+                return radiusRemainder;
             }
         }
     }
