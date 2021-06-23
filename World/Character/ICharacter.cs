@@ -13,6 +13,13 @@ namespace AsLegacy
             /// The Character's AI.
             /// </summary>
             IAI AI { get; }
+
+            /// <summary>
+            /// Updates a Character's internal processes for the given passed time.
+            /// </summary>
+            /// <param name="timeDelta">The amount of time passed since 
+            /// the last update.</param>
+            void Update(int timeDelta);
         }
     }
 }

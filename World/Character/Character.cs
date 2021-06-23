@@ -108,7 +108,17 @@ namespace AsLegacy
             /// </summary>
             protected IAI CharacterAI { get; set; }
 
+            /// <summary>
+            /// The class of this Character.
+            /// </summary>
             public Class Class { get; private set; }
+
+            /// <summary>
+            /// The cooldown of this Character, as a percentage (0 - 1), of how much of 
+            /// a current cooldown time remains.
+            /// </summary>
+            public float Cooldown => TotalCooldown == 0 ? 
+                0.0f : 1.0f - (PassedCooldown * 1.0f) / TotalCooldown;
 
             /// <summary>
             /// The current action being performed by this Character, 
@@ -161,6 +171,11 @@ namespace AsLegacy
             /// </summary>
             public bool IsAlive => _combatState.CurrentHealth > 0;
 
+            /// <summary>
+            /// Specifies whether this Character is in a cooldown stage.
+            /// </summary>
+            public bool IsInCooldown => TotalCooldown > 0;
+
             /// <inheritdoc/>
             public int Legacy => _combatState.Legacy;
 
@@ -177,6 +192,11 @@ namespace AsLegacy
 
             /// <inheritdoc/>
             public string Name { get; private set; }
+
+            /// <summary>
+            /// How much time has passed since the current cooldown stage had begun.
+            /// </summary>
+            protected int PassedCooldown { get; set; }
 
             /// <summary>
             /// Provides the point (global location) of this Character.
@@ -203,6 +223,12 @@ namespace AsLegacy
             /// by this Character.
             /// </summary>
             public virtual Character Target { get; set; }
+
+            /// <summary>
+            /// The total cooldown time for the current cooldown stage being experienced
+            /// by this Character.
+            /// </summary>
+            protected int TotalCooldown { get; set; }
 
             private readonly BaseSettings _baseSettings;
             private readonly Combat.State _combatState;
@@ -293,7 +319,7 @@ namespace AsLegacy
             /// <param name="skillName">The name identifying the <see cref="Skill"/>.</param>
             public void InitiateSkill(string skillName)
             {
-                if (skillName == null)
+                if (skillName == null || IsInCooldown)
                     return;
 
                 Skill skill = _skills[skillName];
@@ -329,8 +355,8 @@ namespace AsLegacy
                         }
 
                         lastMadeEffect.Start();
-
-                        // TODO : 79 :: Start cooldown.
+                        PassedCooldown = 0;
+                        TotalCooldown += (int)(skill.Cooldown * 1000.0f);
                     },
                     () =>
                     {
@@ -425,7 +451,7 @@ namespace AsLegacy
             /// <returns>Whether the Character initiated an attempt to move.</returns>
             public bool MoveInDirection(Direction direction, Func<bool> repeatMovement = null)
             {
-                if (_mode == Mode.Defend)
+                if (_mode == Mode.Defend || IsInCooldown)
                     return false;
 
                 int intendedRow = Row;
@@ -519,8 +545,12 @@ namespace AsLegacy
             /// Performs either auto-attack on or an auto-move towards 
             /// the Character's target.
             /// </summary>
-            protected void AutoAttackOrMove()
+            /// <returns>Whether auto-attack or auto-move was initiated.</returns>
+            protected bool AutoAttackOrMove()
             {
+                if (IsInCooldown || CurrentAction != null)
+                    return false;
+
                 switch (ActiveMode)
                 {
                     case Mode.Normal:
@@ -529,12 +559,14 @@ namespace AsLegacy
                     case Mode.Attack:
                         // TODO :: Move towards if not in range of attack.
                         Combat.PerformStandardAttack(this, Target);
-                        return;
+                        break;
                     case Mode.Defend:
                         break;
                     default:
-                        break;
+                        return false;
                 }
+
+                return true;
             }
 
             /// <summary>
@@ -603,6 +635,21 @@ namespace AsLegacy
                     ActiveMode = Mode.Attack;
                 else
                     ActiveMode = Mode.Normal;
+            }
+
+
+            /// <inheritdoc/>
+            void ICharacter.Update(int timeDelta)
+            {
+                if (IsInCooldown)
+                {
+                    PassedCooldown += timeDelta;
+                    if (PassedCooldown >= TotalCooldown)
+                    {
+                        PassedCooldown = 0;
+                        TotalCooldown = 0;
+                    }
+                }
             }
         }
     }

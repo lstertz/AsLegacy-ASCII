@@ -51,6 +51,14 @@ namespace AsLegacy.Characters.Skills
         {
             get => Affinity.Activation; // TODO :: Incorporate augmenting concepts.
         }
+        /// <summary>
+        /// The time, in seconds, that a Character must cooldown 
+        /// after this Skill has been activated.
+        /// </summary>
+        public float Cooldown
+        {
+            get => Affinity.Cooldown; // TODO :: Incorporate augmenting concepts.
+        }
 
         /// <summary>
         /// The underlying affinity that defines some of the core functionality 

@@ -28,7 +28,7 @@ namespace AsLegacy.Characters
                     throw new InvalidOperationException("Player.AI is intended to only " +
                         "operate upon Player Characters.");
 
-                if (character.Target != null && character.CurrentAction == null)
+                if (character.Target != null)
                     p.AutoAttackOrMove();
             }
         }

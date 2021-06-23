@@ -20,6 +20,12 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public void UpdateModeOf(Character character)
                 {
+                    if (character.IsInCooldown)
+                    {
+                        character.ActiveMode = Mode.Defend;
+                        return;
+                    }    
+
                     Character target = character.Target;
                     if (character.ActiveMode == Mode.Defend && target != null)
                     {

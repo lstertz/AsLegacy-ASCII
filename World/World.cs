@@ -274,8 +274,11 @@ namespace AsLegacy
             for (int c = 0, count = PresentCharacters.Count; c < count; c++)
             {
                 Character character = PresentCharacters[c];
-                IAI ai = (character as ICharacter).AI;
+                ICharacter internalCharacter = character as ICharacter;
 
+                internalCharacter.Update(timeDelta);
+
+                IAI ai = internalCharacter.AI;
                 ai.UpdateTargetOf(character);
                 ai.UpdateModeOf(character);
                 ai.InitiateActionFor(character);
