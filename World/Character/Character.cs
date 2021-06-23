@@ -319,7 +319,7 @@ namespace AsLegacy
             /// <param name="skillName">The name identifying the <see cref="Skill"/>.</param>
             public void InitiateSkill(string skillName)
             {
-                if (skillName == null)
+                if (skillName == null || IsInCooldown)
                     return;
 
                 Skill skill = _skills[skillName];
@@ -451,7 +451,7 @@ namespace AsLegacy
             /// <returns>Whether the Character initiated an attempt to move.</returns>
             public bool MoveInDirection(Direction direction, Func<bool> repeatMovement = null)
             {
-                if (_mode == Mode.Defend)
+                if (_mode == Mode.Defend || IsInCooldown)
                     return false;
 
                 int intendedRow = Row;
@@ -545,8 +545,12 @@ namespace AsLegacy
             /// Performs either auto-attack on or an auto-move towards 
             /// the Character's target.
             /// </summary>
-            protected void AutoAttackOrMove()
+            /// <returns>Whether auto-attack or auto-move was initiated.</returns>
+            protected bool AutoAttackOrMove()
             {
+                if (IsInCooldown || CurrentAction != null)
+                    return false;
+
                 switch (ActiveMode)
                 {
                     case Mode.Normal:
@@ -555,12 +559,14 @@ namespace AsLegacy
                     case Mode.Attack:
                         // TODO :: Move towards if not in range of attack.
                         Combat.PerformStandardAttack(this, Target);
-                        return;
+                        break;
                     case Mode.Defend:
                         break;
                     default:
-                        break;
+                        return false;
                 }
+
+                return true;
             }
 
             /// <summary>
