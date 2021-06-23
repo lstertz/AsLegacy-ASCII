@@ -638,6 +638,7 @@ namespace AsLegacy
             }
 
 
+            /// <inheritdoc/>
             void ICharacter.Update(int timeDelta)
             {
                 if (IsInCooldown)
