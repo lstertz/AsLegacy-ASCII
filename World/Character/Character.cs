@@ -108,7 +108,16 @@ namespace AsLegacy
             /// </summary>
             protected IAI CharacterAI { get; set; }
 
+            /// <summary>
+            /// The class of this Character.
+            /// </summary>
             public Class Class { get; private set; }
+
+            /// <summary>
+            /// The cooldown of this Character, as a percentage (0 - 1), of how much of 
+            /// a current cooldown time remains.
+            /// </summary>
+            public float Cooldown { get; protected set; }
 
             /// <summary>
             /// The current action being performed by this Character, 

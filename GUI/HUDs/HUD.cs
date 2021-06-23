@@ -21,6 +21,7 @@ namespace AsLegacy.GUI.HUDs
         private readonly Func<World.Character> _characterGetter;
 
         private readonly Meter _activationMeter;
+        private readonly Meter _cooldownMeter;
         private readonly Meter _healthMeter;
 
         /// <summary>
@@ -47,6 +48,10 @@ namespace AsLegacy.GUI.HUDs
             _activationMeter = new Meter(14, 2, RetrieveActivation, Color.Goldenrod, 
                 new Color(138, 105, 20, 255), 15);
             Components.Add(_activationMeter);
+
+            _cooldownMeter = new Meter(27, 2, RetrieveCooldown, Color.CornflowerBlue, 
+                Color.RoyalBlue, 247);
+            Components.Add(_cooldownMeter);
         }
 
         /// <inheritdoc/>
@@ -98,6 +103,17 @@ namespace AsLegacy.GUI.HUDs
                 if (action != null)
                     return action.Activation;
             }
+            return 0.0f;
+        }
+
+        /// <summary>
+        /// Retrieves the cooldown of the current character of the HUD, if there is one.
+        /// </summary>
+        /// <returns>The cooldown of the current character, 0 otherwise.</returns>
+        private float RetrieveCooldown()
+        {
+            if (Character != null)
+                return Character.Cooldown;
             return 0.0f;
         }
 
