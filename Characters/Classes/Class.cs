@@ -108,7 +108,7 @@ namespace AsLegacy.Characters
                             AffectOnAspect = Influence.Purpose.Add,
                             AffectedAspect = Aspect.AreaOfEffectDamage
                         },
-                        Algorithm = (investment) => 2 * investment
+                        Algorithm = (investment) => 1 * investment
                     }
                 }),
                 Passives = new(new Passive[]
@@ -123,7 +123,7 @@ namespace AsLegacy.Characters
                             AffectOnAspect = Influence.Purpose.Add,
                             AffectedAspect = Aspect.MaxHealth
                         },
-                        Algorithm = (investment) => investment / 10.0f
+                        Algorithm = (investment) => investment / 4.0f
                     }
                 })
             });
