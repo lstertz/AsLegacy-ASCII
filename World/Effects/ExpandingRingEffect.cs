@@ -42,11 +42,17 @@ namespace AsLegacy
             /// </summary>
             public float Range { get; init; }
 
+            /// <summary>
+            /// A callback that is invoked the first time damage is dealt.
+            /// </summary>
+            public System.Action UponDamageDealt { get; init; }
+
             private int _passedTime = 0;
             private float _lastRadius = 0.0f;
 
             private bool _dealtDamage = false;
 
+            /// <inheritdoc/>
             protected override void Update(int timeDelta)
             {
                 _passedTime += timeDelta;
@@ -138,8 +144,11 @@ namespace AsLegacy
                 if (c == null || c == Performer)
                     return;
 
-                // TODO : 80 :: Notify performer that its skill dealt damage (to gain a skill point).
-                _dealtDamage = true;
+                if (!_dealtDamage)
+                {
+                    UponDamageDealt?.Invoke();
+                    _dealtDamage = true;
+                }
 
                 c.ReceiveDamage(Performer, damage, Element);
             }

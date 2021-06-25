@@ -344,7 +344,8 @@ namespace AsLegacy
                                         Origin = affects[c].Origin,
                                         Performer = this,
                                         Range = affects[c].Range,
-                                        Target = affects[c].Target
+                                        Target = affects[c].Target,
+                                        UponDamageDealt = () => AvailableSkillPoints++
                                     };
                                     break;
                                 default:
@@ -355,6 +356,7 @@ namespace AsLegacy
                         }
 
                         lastMadeEffect.Start();
+
                         PassedCooldown = 0;
                         TotalCooldown += (int)(skill.Cooldown * 1000.0f);
                     },

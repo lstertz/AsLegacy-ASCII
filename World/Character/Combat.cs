@@ -250,8 +250,7 @@ namespace AsLegacy
                             t._combatState.ReceiveDamage(attacker, 
                                 dealtDamage, Skill.Element.Physical);
 
-                            t.AvailableSkillPoints += dealtDamage;
-                            attacker.AvailableSkillPoints += dealtDamage;
+                            attacker.AvailableSkillPoints++;
                         },
                         (c) =>
                         {
