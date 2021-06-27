@@ -319,7 +319,7 @@ namespace AsLegacy
             /// <param name="skillName">The name identifying the <see cref="Skill"/>.</param>
             public void InitiateSkill(string skillName)
             {
-                if (skillName == null || IsInCooldown)
+                if (skillName == null || IsInCooldown || !IsAlive)
                     return;
 
                 Skill skill = _skills[skillName];
