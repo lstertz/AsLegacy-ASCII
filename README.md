@@ -17,9 +17,10 @@ being in attack mode. Using an attack skill, such as Shock Ring, can also damage
 It will die if it loses all of its health.<br>
 <br>
 Any damage dealing action will earn a Talent point, which can be spent in the Talents panel on 
-a Concept or a Passive by clicking the '+'. Diamonds next to a Concept are the Skills that 
-can be learned from that Concept; clicking the diamond opens a prompt to learn the Skill, which 
-is equipped to the first available Skill slot. Passive investments are applied passively.<br>
+a Concept or a Passive by clicking the corresponding '+'. Diamonds next to a Concept are the 
+Skills that can be learned from that Concept; clicking the diamond opens a prompt to learn the 
+Skill, which is equipped to the first available Skill slot. Passive investments 
+are applied passively.<br>
 <br>
 A Beast NPC will transfer all of its legacy to its killer upon death, while the 
 Goblin and Player Character will only transfer half of its current legacy; its remaining legacy 
@@ -28,7 +29,7 @@ will pass on to its successor.<br>
 An NPC will automatically attack anything adjacent to itself and has a chance to defend against 
 an attack under the right conditions.<br>
 <br>
-The curent goal is to achieve at least 25 legacy points.
+The current goal is to achieve at least 25 legacy points.
 
 ## Follow Us ##
 Development - https://trello.com/b/l1MBNnHy/as-legacy-c-ascii
