@@ -363,7 +363,7 @@ namespace AsLegacy
                     () =>
                     {
                         // May be defined by the Skill.
-                        return true;
+                        return IsAlive;
                     });
             }
 
