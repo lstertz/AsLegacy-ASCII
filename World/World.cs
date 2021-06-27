@@ -76,32 +76,32 @@ namespace AsLegacy
         /// </summary>
         public static readonly int RowCount = Map.Length;
 
-        private static readonly LinkedList<IAction> Actions = new LinkedList<IAction>();
-        private static readonly Dictionary<Character, Action> CharacterActions =
-            new Dictionary<Character, Action>();
+        private static readonly LinkedList<IAction> Actions = new();
+        private static readonly Dictionary<Character, Action> CharacterActions = new();
+
+        private static readonly Dictionary<Character, HashSet<Effect>> ActiveEffects = new();
 
         /// <summary>
         /// The displayable characters of the World.
         /// </summary>
         public static TileSet<CharacterBase>.Display CharacterTiles => Characters.GetDisplay();
         private static readonly TileSet<CharacterBase> Characters =
-            new TileSet<CharacterBase>((row, column) =>
+            new((row, column) =>
         {
             return new AbsentCharacter(row, column);
         });
 
-        private static readonly List<Character> PresentCharacters = new List<Character>();
-        private static readonly SortedSet<Character> RankedCharacters =
-            new SortedSet<Character>();
+        private static readonly List<Character> PresentCharacters = new();
+        private static readonly SortedSet<Character> RankedCharacters = new();
         private static int BeastCount = 0;
 
-        private static readonly List<Point> OpenPositions = new List<Point>();
+        private static readonly List<Point> OpenPositions = new();
 
         /// <summary>
         /// The displayable effects of the World.
         /// </summary>
         public static TileSet<Tile>.Display EffectTiles => Effects.GetDisplay();
-        private static readonly TileSet<Tile> Effects = new TileSet<Tile>((row, column) =>
+        private static readonly TileSet<Tile> Effects = new((row, column) =>
         {
             return new EffectGraphic(Color.Transparent, ' ');
         });
@@ -146,6 +146,17 @@ namespace AsLegacy
             {
                 RankedCharacters.Remove(PresentCharacters[c]);
                 RemoveCharacter(PresentCharacters[c], false);
+            }
+
+            Character[] performers = new Character[ActiveEffects.Count];
+            ActiveEffects.Keys.CopyTo(performers, 0);
+            for (int pIndex = 0, pCount = performers.Length; pIndex < pCount; pIndex++)
+            {
+                Effect[] effects = new Effect[ActiveEffects[performers[pIndex]].Count];
+                ActiveEffects[performers[pIndex]].CopyTo(effects);
+
+                for (int eIndex = 0, eCount = effects.Length; eIndex < eCount; eIndex++)
+                    effects[eIndex].Stop();
             }
 
             SeedCharacters();

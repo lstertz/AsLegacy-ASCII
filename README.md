@@ -2,24 +2,34 @@
 C# ASCII prototype of the As Legacy game concept, built using SadConsole.
 
 ## Release ##
-The latest release is 0.1.3 (03/12/2021), for Windows only, found in the releases folder.
+The latest release is 0.2.0 (06/26/2021), for Windows only, found in the releases folder.
 
 ## Controls ##
 W,A,S,D (or arrow keys) - Move, when in normal mode.<br>
 Space - Toggle between normal and attack mode.<br>
 Hold-Alt - Activate defense mode.<br>
 Left mouse click to target a Character, either through the map or the map sidebar.<br>
+1-6 - Activate corresponding equipped skill.
 
 ## Notes ##
 An NPC can be damaged by targeting one, being adjacent to it (left, right, up, down), and 
-being in attack mode. It will die if it loses all of its health.<br>
+being in attack mode. Using an attack skill, such as Shock Ring, can also damage an NPC. 
+It will die if it loses all of its health.<br>
+<br>
+Any damage dealing action will earn a Talent point, which can be spent in the Talents panel on 
+a Concept or a Passive by clicking the corresponding '+'. Diamonds next to a Concept are the 
+Skills that can be learned from that Concept; clicking the diamond opens a prompt to learn the 
+Skill, which is equipped to the first available Skill slot. Passive investments 
+are applied passively.<br>
 <br>
 A Beast NPC will transfer all of its legacy to its killer upon death, while the 
 Goblin and Player Character will only transfer half of its current legacy; its remaining legacy 
 will pass on to its successor.<br>
 <br>
 An NPC will automatically attack anything adjacent to itself and has a chance to defend against 
-an attack under the right conditions.
+an attack under the right conditions.<br>
+<br>
+The current goal is to achieve at least 25 legacy points.
 
 ## Follow Us ##
 Development - https://trello.com/b/l1MBNnHy/as-legacy-c-ascii
