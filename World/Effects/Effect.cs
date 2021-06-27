@@ -84,6 +84,10 @@ namespace AsLegacy
             public void Start()
             {
                 _action = new Action(0, OnEffectUpdate, null, true);
+
+                if (!ActiveEffects.ContainsKey(Performer))
+                    ActiveEffects.Add(Performer, new());
+                ActiveEffects[Performer].Add(this);
             }
 
             /// <summary>
@@ -95,6 +99,10 @@ namespace AsLegacy
 
                 _action.Cancel();
                 _action = null;
+
+                ActiveEffects[Performer].Remove(this);
+                if (ActiveEffects[Performer].Count == 0)
+                    ActiveEffects.Remove(Performer);
             }
 
             /// <summary>
