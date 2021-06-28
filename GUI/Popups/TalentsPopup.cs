@@ -19,7 +19,9 @@ namespace AsLegacy.GUI.Popups
         private readonly string AffinityIcon = char.ToString((char)4);
         private const string AvailablePointsText = "Available Points: ";
         private const int AvailablePointsY = 4;
-        private const int AvailablePointsMaxLength = 25;
+
+        private const string SuccessorPointsText = "Successor Points: ";
+        private const int PointsMaxLength = 25;
 
         private const int MaxConceptCount = 7;
         private const int MaxPassiveCount = 7;
@@ -30,6 +32,7 @@ namespace AsLegacy.GUI.Popups
         private readonly Button[] _conceptInvestmentButtons = new Button[MaxConceptCount];
         private readonly List<Button> _conceptAffinityButtons = new();
         private readonly Button[] _passiveInvestmentButtons = new Button[MaxPassiveCount];
+        private readonly Label _successorPointsLabel;
 
         private DynamicContentPopup _hoverPopup;
         private int _hoveredInvestmentIndex = -1;
@@ -56,14 +59,23 @@ namespace AsLegacy.GUI.Popups
             };
             Children.Add(_learnSkillPopup);
 
-            _availablePointsLabel = new Label(AvailablePointsMaxLength)
+            _availablePointsLabel = new Label(PointsMaxLength)
             {
                 Alignment = HorizontalAlignment.Right,
                 DisplayText = $"{AvailablePointsText}0",
-                Position = new(width - AvailablePointsMaxLength - 2, AvailablePointsY),
+                Position = new(width - PointsMaxLength - 2, AvailablePointsY),
                 TextColor = Colors.White
             };
             Add(_availablePointsLabel);
+
+            _successorPointsLabel = new Label(PointsMaxLength)
+            {
+                Alignment = HorizontalAlignment.Right,
+                DisplayText = $"{SuccessorPointsText}0",
+                Position = new(width - PointsMaxLength - 2, Height - 2),
+                TextColor = Colors.White
+            };
+            Add(_successorPointsLabel);
 
             for (int c = 0; c < MaxConceptCount; c++)
             {
@@ -109,9 +121,6 @@ namespace AsLegacy.GUI.Popups
 
             DrawFrame();
             UpdateContent();
-
-            string successor = "Successor Points: ##";
-            Print(Width - successor.Length - 2, Height - 2, successor);
         }
 
         /// <inheritdoc/>
@@ -332,6 +341,7 @@ namespace AsLegacy.GUI.Popups
             UpdateConcepts();
             UpdatePassives();
             UpdateActiveSkills();
+            UpdateSuccessorPoints();
         }
 
         /// <summary>
@@ -362,12 +372,22 @@ namespace AsLegacy.GUI.Popups
 
 
         /// <summary>
+        /// Updates the list of the active skills to be displayed in the popup.
+        /// </summary>
+        private void UpdateActiveSkills()
+        {
+            string[] skillNames = AsLegacy.Player.SkillNames;
+            for (int c = 0, count = skillNames.Length; c < count; c++)
+                Print(2, 4 + c, skillNames[c]);
+        }
+
+        /// <summary>
         /// Updates the available points label of the popup.
         /// </summary>
         private void UpdateAvailablePoints()
         {
             _availablePointsLabel.DisplayText =
-                $"{AvailablePointsText}{(int)AsLegacy.Player.AvailableSkillPoints}";
+                $"{AvailablePointsText}{AsLegacy.Player.AvailableSkillPoints}";
             _availablePointsLabel.IsDirty = true;
         }
 
@@ -402,13 +422,13 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
-        /// Updates the list of the active skills to be displayed in the popup.
+        /// Updates the successor points label of the popup.
         /// </summary>
-        private void UpdateActiveSkills()
+        private void UpdateSuccessorPoints()
         {
-            string[] skillNames = AsLegacy.Player.SkillNames;
-            for (int c = 0, count = skillNames.Length; c < count; c++)
-                Print(2, 4 + c, skillNames[c]);
+            _successorPointsLabel.DisplayText =
+                $"{SuccessorPointsText}{AsLegacy.Player.CharacterLineage.SuccessorPoints}";
+            _successorPointsLabel.IsDirty = true;
         }
     }
 }

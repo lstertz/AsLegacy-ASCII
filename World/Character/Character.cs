@@ -101,7 +101,7 @@ namespace AsLegacy
             /// The number of skill points that this Character has available 
             /// for investing in skills.
             /// </summary>
-            public float AvailableSkillPoints { get; private set; }
+            public int AvailableSkillPoints { get; private set; }
 
             /// <summary>
             /// The Character's AI.
@@ -319,7 +319,7 @@ namespace AsLegacy
             /// <param name="skillName">The name identifying the <see cref="Skill"/>.</param>
             public void InitiateSkill(string skillName)
             {
-                if (skillName == null || IsInCooldown)
+                if (skillName == null || IsInCooldown || !IsAlive)
                     return;
 
                 Skill skill = _skills[skillName];
@@ -363,7 +363,7 @@ namespace AsLegacy
                     () =>
                     {
                         // May be defined by the Skill.
-                        return true;
+                        return IsAlive;
                     });
             }
 
@@ -372,13 +372,13 @@ namespace AsLegacy
             /// </summary>
             /// <param name="talent">The <see cref="Talent"/> to be invested in.</param>
             /// <param name="amount">The investment amount.</param>
-            public void InvestInTalent(Talent talent, int amount)
+            public virtual void InvestInTalent(Talent talent, int amount)
             {
                 if (AvailableSkillPoints == 0)
                     return;
 
                 if (AvailableSkillPoints < amount)
-                    amount = (int)AvailableSkillPoints;
+                    amount = AvailableSkillPoints;
 
                 float previousMaxHealth = MaxHealth;
 
