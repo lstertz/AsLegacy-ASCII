@@ -60,5 +60,14 @@
             CharacterLineage = lineage;
             lineage.Update(this);
         }
+
+        /// <inheritdoc/>
+        public override void InvestInTalent(Talent talent, int amount)
+        {
+            base.InvestInTalent(talent, amount);
+
+            if (talent is Passive)
+                (CharacterLineage as Lineage).IncreaseSuccessorPoints(amount);
+        }
     }
 }

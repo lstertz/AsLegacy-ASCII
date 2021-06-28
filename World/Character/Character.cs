@@ -101,7 +101,7 @@ namespace AsLegacy
             /// The number of skill points that this Character has available 
             /// for investing in skills.
             /// </summary>
-            public float AvailableSkillPoints { get; private set; }
+            public int AvailableSkillPoints { get; private set; }
 
             /// <summary>
             /// The Character's AI.
@@ -372,13 +372,13 @@ namespace AsLegacy
             /// </summary>
             /// <param name="talent">The <see cref="Talent"/> to be invested in.</param>
             /// <param name="amount">The investment amount.</param>
-            public void InvestInTalent(Talent talent, int amount)
+            public virtual void InvestInTalent(Talent talent, int amount)
             {
                 if (AvailableSkillPoints == 0)
                     return;
 
                 if (AvailableSkillPoints < amount)
-                    amount = (int)AvailableSkillPoints;
+                    amount = AvailableSkillPoints;
 
                 float previousMaxHealth = MaxHealth;
 
