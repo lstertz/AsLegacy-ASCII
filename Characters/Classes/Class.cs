@@ -115,15 +115,87 @@ namespace AsLegacy.Characters
                 {
                     new()
                     {
-                        Name = "Endurance",
-                        AffectColor = Color.Red,
-                        FormattableDescription = $" {0} to Max Health", // Prefixed space for alignment.
+                        Name = "Focus",
+                        AffectColor = Color.Goldenrod,
+                        FormattableDescription = $" {0}% Activation time for all Skills.", // Prefixed space for alignment.
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.Add,
-                            AffectedAspect = Aspect.MaxHealth
+                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectedAspect = Aspect.Activation
                         },
-                        Algorithm = (investment) => investment / 4.0f
+                        Algorithm = (investment) => 100.0f - investment
+                    },
+                    new()
+                    {
+                        Name = "Energy Absorption",
+                        AffectColor = Color.Red,
+                        FormattableDescription = $" {0}% Damage received converted to Cooldown for the next Skill.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectedAspect = Aspect.DamageToCooldown
+                        },
+                        Algorithm = (investment) => investment
+                    },
+                    new()
+                    {
+                        Name = "Clear Mind",
+                        AffectColor = Color.Green,
+                        FormattableDescription = $" {0}% Reduction of Activation/Cooldown of next cast Spell, accumluates for each consecutive Non-Spell Attack.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectedAspect = Aspect.NextSpellReductionForConsecutiveAttacks
+                        },
+                        Algorithm = (investment) => investment
+                    },
+                    new()
+                    {
+                        Name = "Energy Reuse",
+                        AffectColor = Color.CornflowerBlue,
+                        FormattableDescription = $" {0}% Cooldown time for Non-Elemental Spells.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectedAspect = Aspect.CooldownNonElementalSpells
+                        },
+                        Algorithm = (investment) => 100.0f - investment
+                    },
+                    new()
+                    {
+                        Name = "Lightning Mastery",
+                        AffectColor = Color.Yellow,
+                        FormattableDescription = $" +{0}% Lightning damage.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectedAspect = Aspect.LightningDamage
+                        },
+                        Algorithm = (investment) => 2.0f * investment
+                    },
+                    new()
+                    {
+                        Name = "Fire Mastery",
+                        AffectColor = Color.OrangeRed,
+                        FormattableDescription = $" +{0}% Fire damage.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectedAspect = Aspect.FireDamage
+                        },
+                        Algorithm = (investment) => 2.0f * investment
+                    },
+                    new()
+                    {
+                        Name = "Ice Mastery",
+                        AffectColor = Color.Blue,
+                        FormattableDescription = $" +{0}% Ice damage.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectedAspect = Aspect.IceDamage
+                        },
+                        Algorithm = (investment) => 2.0f * investment
                     }
                 })
             });
