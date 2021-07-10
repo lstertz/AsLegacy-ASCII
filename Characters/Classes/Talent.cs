@@ -35,8 +35,9 @@ namespace AsLegacy.Characters
             float a = Algorithm(investmentA);
             float b = Algorithm(investmentB);
 
-            char sign = b - a > 0 ? '+' : '-';
-            return $"{sign}{(b - a):N1}";
+            string sign = b - a > 0 ? "+" : ""; // Negative numbers add '-' on their own.
+            string modifier = Influence.AffectOnAspect == Influence.Purpose.Scale ? "%" : "";
+            return $"{sign}{(b - a):N1}{modifier}";
         }
 
         /// <summary>

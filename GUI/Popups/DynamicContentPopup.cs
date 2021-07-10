@@ -87,7 +87,6 @@ namespace AsLegacy.GUI.Popups
                 int contentLineCount = content.Length / _maxLineWidth;
                 if (content.Length % _maxLineWidth != 0)
                     contentLineCount++;
-                totalContentLineCount += contentLineCount;
 
                 int contentWidth = contentLineCount > 1 ? _maxWidth :
                     content.Length > _minWidth ? content.Length + FrameSpaceHorizontal : _minWidth;
@@ -97,7 +96,7 @@ namespace AsLegacy.GUI.Popups
                 string remainingContent = content;
                 for (int cc = 0; cc < contentLineCount; cc++)
                 {
-                    int totalC = c + cc;
+                    int totalC = totalContentLineCount + cc;
                     if (totalC >= _textLines.Count)
                     {
                         Label newLine = new(_maxLineWidth)
@@ -121,6 +120,8 @@ namespace AsLegacy.GUI.Popups
                     _textLines[totalC].IsDirty = true;
                     _textLines[totalC].IsVisible = true;
                 }
+
+                totalContentLineCount += contentLineCount;
             }
 
             _requiredLineWidth = longestContentWidth;

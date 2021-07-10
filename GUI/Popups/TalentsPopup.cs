@@ -35,6 +35,7 @@ namespace AsLegacy.GUI.Popups
         private readonly Label _successorPointsLabel;
 
         private DynamicContentPopup _hoverPopup;
+        private Button _hoveredButton = null;
         private int _hoveredInvestmentIndex = -1;
 
         private ConfirmationPopup _learnSkillPopup;
@@ -176,8 +177,10 @@ namespace AsLegacy.GUI.Popups
         /// investment button is being hovered.</param>
         private void OnHoverBegin(object sender, MouseEventArgs args, int index)
         {
+            _hoveredButton = sender as Button;
             _hoveredInvestmentIndex = index;
-            UpdateHoverContent(sender as Button);
+            
+            UpdateHoverContent();
 
             _hoverPopup.IsVisible = true;
             _hoverPopup.IsDirty = true;
@@ -213,6 +216,10 @@ namespace AsLegacy.GUI.Popups
         /// <param name="args">The event arguments.</param>
         private void OnHoverEnd(object sender, MouseEventArgs args)
         {
+            if (sender != _hoveredButton)
+                return;
+
+            _hoveredButton = null;
             _hoveredInvestmentIndex = -1;
             _hoverPopup.IsVisible = false;
         }
@@ -235,8 +242,8 @@ namespace AsLegacy.GUI.Popups
             else
                 talent = AsLegacy.Player.Class.Concepts[index];
 
-            AsLegacy.Player.InvestInTalent(talent, 1);
-            UpdateHoverContent(sender as Button);
+            if (AsLegacy.Player.InvestInTalent(talent, 1))
+                UpdateHoverContent();
         }
 
         /// <inheritdoc/>
@@ -347,9 +354,9 @@ namespace AsLegacy.GUI.Popups
         /// <summary>
         /// Updates the content of the investment hover pop-up, if it is active.
         /// </summary>
-        private void UpdateHoverContent(Button hoveredButton)
+        private void UpdateHoverContent()
         {
-            if (hoveredButton == null || _hoveredInvestmentIndex == -1)
+            if (_hoveredButton == null || _hoveredInvestmentIndex == -1)
                 return;
 
             bool isPassive = _hoveredInvestmentIndex >= MaxConceptCount;
@@ -362,11 +369,11 @@ namespace AsLegacy.GUI.Popups
             int investment = AsLegacy.Player.GetInvestment(talent);
             string content = $"{talent.GetDescription(AsLegacy.Player)}\n" +
                 talent.GetDifferenceDescription(investment, investment + 1) +
-                " for 1 point";
+                " for 1 point.";
 
             _hoverPopup.UpdateTitle(talent.Name);
             _hoverPopup.UpdateContent(content);
-            _hoverPopup.Position = hoveredButton.Position -
+            _hoverPopup.Position = _hoveredButton.Position -
                 new Point(_hoverPopup.Width, isPassive ? _hoverPopup.Height : 0);
         }
 
