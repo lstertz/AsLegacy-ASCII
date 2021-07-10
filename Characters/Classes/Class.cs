@@ -117,19 +117,19 @@ namespace AsLegacy.Characters
                     {
                         Name = "Focus",
                         AffectColor = Color.Goldenrod,
-                        FormattableDescription = $" {0}% Activation time for all Skills.", // Prefixed space for alignment.
+                        FormattableDescription = $"Reduce Activation time for all Skills by {0}%.", // Prefixed space for alignment.
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
                             AffectedAspect = Aspect.Activation
                         },
-                        Algorithm = (investment) => 100.0f - investment
+                        Algorithm = (investment) => investment
                     },
                     new()
                     {
                         Name = "Energy Absorption",
                         AffectColor = Color.Red,
-                        FormattableDescription = $" {0}% Damage received converted to Cooldown for the next Skill.",
+                        FormattableDescription = $"Convert {0}% of received Damage to Cooldown for the next used Skill.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
@@ -141,7 +141,7 @@ namespace AsLegacy.Characters
                     {
                         Name = "Clear Mind",
                         AffectColor = Color.Green,
-                        FormattableDescription = $" {0}% Reduction of Activation/Cooldown of next cast Spell, accumluates for each consecutive Non-Spell Attack.",
+                        FormattableDescription = $"For each consecutive Non-Spell Attack, reduce the Activation and Cooldown of the next cast Spell by {0}%.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
@@ -153,19 +153,19 @@ namespace AsLegacy.Characters
                     {
                         Name = "Energy Reuse",
                         AffectColor = Color.CornflowerBlue,
-                        FormattableDescription = $" {0}% Cooldown time for Non-Elemental Spells.",
+                        FormattableDescription = $"Reduce Cooldown time for all Non-Elemental Spells by {0}%.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
                             AffectedAspect = Aspect.CooldownNonElementalSpells
                         },
-                        Algorithm = (investment) => 100.0f - investment
+                        Algorithm = (investment) =>investment
                     },
                     new()
                     {
                         Name = "Lightning Mastery",
                         AffectColor = Color.Yellow,
-                        FormattableDescription = $" +{0}% Lightning damage.",
+                        FormattableDescription = $"+{0}% Lightning damage.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
@@ -177,7 +177,7 @@ namespace AsLegacy.Characters
                     {
                         Name = "Fire Mastery",
                         AffectColor = Color.OrangeRed,
-                        FormattableDescription = $" +{0}% Fire damage.",
+                        FormattableDescription = $"+{0}% Fire damage.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
@@ -189,7 +189,7 @@ namespace AsLegacy.Characters
                     {
                         Name = "Ice Mastery",
                         AffectColor = Color.Blue,
-                        FormattableDescription = $" +{0}% Ice damage.",
+                        FormattableDescription = $"+{0}% Ice damage.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
