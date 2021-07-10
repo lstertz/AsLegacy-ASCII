@@ -370,12 +370,15 @@ namespace AsLegacy
             /// <summary>
             /// Invests the specified amount in the provided <see cref="Talent"/>.
             /// </summary>
+            /// <remarks>Investment may fail if the requested amount of points 
+            /// to be invested are not available.</remarks>
             /// <param name="talent">The <see cref="Talent"/> to be invested in.</param>
             /// <param name="amount">The investment amount.</param>
-            public virtual void InvestInTalent(Talent talent, int amount)
+            /// <returns>Whether the investment was successfully completed.</returns>
+            public virtual bool InvestInTalent(Talent talent, int amount)
             {
                 if (AvailableSkillPoints == 0)
-                    return;
+                    return false;
 
                 if (AvailableSkillPoints < amount)
                     amount = AvailableSkillPoints;
@@ -399,6 +402,8 @@ namespace AsLegacy
                 // Temporarily update current health for the change in max health.
                 if (talent.Influence.AffectedAspect == Aspect.MaxHealth)
                     _combatState.UpdateForNewMaxHealth(previousMaxHealth);
+
+                return true;
             }
 
             /// <summary>
