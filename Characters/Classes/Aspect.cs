@@ -7,11 +7,16 @@
     /// </summary>
     public enum Aspect
     {
+        Activation,
         AreaOfEffectDamage,
         AreaOfEffectRange,
-        Activation,
         Cooldown,
+        CooldownNonElementalSpells,
+        DamageToCooldown,
+        FireDamage,
+        IceDamage,
         LightningDamage,
-        MaxHealth
+        MaxHealth,
+        NextSpellReductionForConsecutiveAttacks
     }
 }

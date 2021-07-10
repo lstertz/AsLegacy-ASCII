@@ -62,12 +62,14 @@
         }
 
         /// <inheritdoc/>
-        public override void InvestInTalent(Talent talent, int amount)
+        public override bool InvestInTalent(Talent talent, int amount)
         {
-            base.InvestInTalent(talent, amount);
+            if (!base.InvestInTalent(talent, amount))
+                return false;
 
             if (talent is Passive)
                 (CharacterLineage as Lineage).IncreaseSuccessorPoints(amount);
+            return true;
         }
     }
 }
