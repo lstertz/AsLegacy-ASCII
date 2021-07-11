@@ -115,7 +115,7 @@ namespace AsLegacy.GUI.Screens
         /// </summary>
         public static void ShowItems()
         {
-            if (Screen._playerDeathPopup.IsVisible)
+            if (Screen._playerDeathPopup.IsVisible || Screen._successorPopup.IsVisible)
                 return;
 
             Screen._itemsPopup.IsVisible = true;
@@ -127,10 +127,26 @@ namespace AsLegacy.GUI.Screens
         /// </summary>
         public static void ShowPlayerDeath()
         {
+            if (Screen._successorPopup.IsVisible)
+                return;
+
             Screen._playerDeathPopup.IsVisible = true;
 
             Screen._itemsPopup.IsVisible = false;
             Screen._talentsPopup.IsVisible = false;
+        }
+
+        public static void ShowSuccessorDetails(string successorName)
+        {
+            if (!Screen._playerDeathPopup.IsVisible)
+                return;
+
+            Screen._successorPopup.SuccessorName = successorName;
+            Screen._successorPopup.IsVisible = true;
+
+            Screen._itemsPopup.IsVisible = false;
+            Screen._talentsPopup.IsVisible = false;
+            Screen._playerDeathPopup.IsVisible = false;
         }
 
         /// <summary>
@@ -138,7 +154,7 @@ namespace AsLegacy.GUI.Screens
         /// </summary>
         public static void ShowTalents()
         {
-            if (Screen._playerDeathPopup.IsVisible)
+            if (Screen._playerDeathPopup.IsVisible || Screen._successorPopup.IsVisible)
                 return;
 
             Screen._talentsPopup.IsVisible = true;
@@ -148,6 +164,7 @@ namespace AsLegacy.GUI.Screens
 
         private readonly Popup _itemsPopup;
         private readonly PlayerDeathPopup _playerDeathPopup;
+        private readonly SuccessorPopup _successorPopup;
         private readonly Popup _talentsPopup;
 
         private readonly ScrollingConsole _characters;
@@ -180,6 +197,11 @@ namespace AsLegacy.GUI.Screens
                 IsVisible = false
             };
             _playerDeathPopup = new PlayerDeathPopup(Display.Width / 2, Display.Height / 2)
+            {
+                Position = new Point(Display.Width / 4, Display.Height / 4),
+                IsVisible = false
+            };
+            _successorPopup = new SuccessorPopup(Display.Width / 2, Display.Height / 2)
             {
                 Position = new Point(Display.Width / 4, Display.Height / 4),
                 IsVisible = false
@@ -243,6 +265,7 @@ namespace AsLegacy.GUI.Screens
             _console.Children.Add(_itemsPopup);
             _console.Children.Add(_talentsPopup);
             _console.Children.Add(_playerDeathPopup);
+            _console.Children.Add(_successorPopup);
 
             _console.Components.Add(this);
         }

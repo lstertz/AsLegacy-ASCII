@@ -1,5 +1,6 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.Global;
+using AsLegacy.GUI.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -80,8 +81,7 @@ namespace AsLegacy.GUI.Popups
             };
             _createSuccessor.Click += (s, e) =>
             {
-                IsVisible = false;
-                Player.CreateSuccessor(_nameField.EditingText);
+                PlayScreen.ShowSuccessorDetails(_nameField.EditingText);
             };
             Add(_createSuccessor);
 
