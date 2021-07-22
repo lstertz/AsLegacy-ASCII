@@ -15,6 +15,10 @@ namespace AsLegacy.GUI.Popups
     /// </summary>
     public class SuccessorPopup : Popup
     {
+        private const string AvailablePointsText = "Available Points: ";
+        private const int AvailablePointsY = 4;
+        private const int PointsMaxLength = 25;
+
         private static readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
         private static readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
 
@@ -28,11 +32,13 @@ namespace AsLegacy.GUI.Popups
         {
             get
             {
-                return "About Successor"; // TODO :: Update as prompt for successor details.
+                return $"What are {SuccessorName}'s Passives?";
             }
         }
 
         private readonly Button _ok;
+        private readonly Label _availablePointsLabel;
+        private int _availablePoints;
 
         /// <summary>
         /// Constructs a new <see cref="SuccessorPopup"/>.
@@ -41,11 +47,20 @@ namespace AsLegacy.GUI.Popups
         /// <param name="height">The height of the Popup window.</param>
         public SuccessorPopup(int width, int height) : base("", width, height, false)
         {
-            // TODO :: Add available points and passives.
+            // TODO :: Add passives.
+
+            _availablePointsLabel = new Label(PointsMaxLength)
+            {
+                Alignment = HorizontalAlignment.Right,
+                DisplayText = $"{AvailablePointsText}0",
+                Position = new(width - PointsMaxLength - 2, AvailablePointsY),
+                TextColor = Colors.White
+            };
+            Add(_availablePointsLabel);
 
             _ok = new Button(2, 1)
             {
-                Position = new Point(width / 2 - 5, height - 2),
+                Position = new Point(width / 2 - 1, height - 2),
                 Text = "Ok"
             };
             _ok.Click += (s, e) =>
@@ -62,7 +77,11 @@ namespace AsLegacy.GUI.Popups
             base.OnVisibleChanged();
 
             if (IsVisible)
+            {
                 _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
+                UpdateAvailablePointsLabel();
+            }
+
             IsFocused = IsVisible;
         }
 
@@ -78,6 +97,16 @@ namespace AsLegacy.GUI.Popups
                 return;
 
             args.IsCancelled = !char.IsDigit(k.Character);
+        }
+
+        /// <summary>
+        /// Updates the label for the available successor points.
+        /// </summary>
+        private void UpdateAvailablePointsLabel()
+        {
+            _availablePointsLabel.DisplayText =
+                $"{AvailablePointsText}{_availablePoints}";
+            _availablePointsLabel.IsDirty = true;
         }
 
         /// <summary>

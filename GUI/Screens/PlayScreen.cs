@@ -67,7 +67,8 @@ namespace AsLegacy.GUI.Screens
         /// Whether the screen is currently showing a popup.
         /// </summary>
         public static bool IsShowingPopup => Screen._itemsPopup.IsVisible ||
-            Screen._talentsPopup.IsVisible || Screen._playerDeathPopup.IsVisible;
+            Screen._talentsPopup.IsVisible || Screen._playerDeathPopup.IsVisible || 
+            Screen._successorPopup.IsVisible;
 
         /// <summary>
         /// Whether the screen is currently visible.
@@ -85,6 +86,7 @@ namespace AsLegacy.GUI.Screens
                     Screen._itemsPopup.IsVisible = false;
                     Screen._talentsPopup.IsVisible = false;
                     Screen._playerDeathPopup.IsVisible = false;
+                    Screen._successorPopup.IsVisible = false;
                 }
 
                 Screen.Refresh();
