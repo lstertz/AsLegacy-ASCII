@@ -61,6 +61,8 @@ namespace AsLegacy.GUI.Popups
         {
             base.OnVisibleChanged();
 
+            if (IsVisible)
+                _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
             IsFocused = IsVisible;
         }
 

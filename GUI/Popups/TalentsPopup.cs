@@ -89,7 +89,7 @@ namespace AsLegacy.GUI.Popups
                     Text = "+"
                 };
                 button.Click += (sender, args) => OnInvestment(sender, args, index);
-                button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, index);
+                button.MouseEnter += (sender, args) => OnHoverInvestmentBegin(sender, args, index);
                 button.MouseExit += OnHoverEnd;
 
                 Add(button);
@@ -107,7 +107,7 @@ namespace AsLegacy.GUI.Popups
                     Text = "+"
                 };
                 button.Click += (sender, args) => OnInvestment(sender, args, index);
-                button.MouseEnter += (sender, args) => OnHoverBegin(sender, args, index);
+                button.MouseEnter += (sender, args) => OnHoverInvestmentBegin(sender, args, index);
                 button.MouseExit += OnHoverEnd;
 
                 Add(button);
@@ -175,7 +175,7 @@ namespace AsLegacy.GUI.Popups
         /// <param name="args">The event arguments.</param>
         /// <param name="index">The index of the talent whose 
         /// investment button is being hovered.</param>
-        private void OnHoverBegin(object sender, MouseEventArgs args, int index)
+        private void OnHoverInvestmentBegin(object sender, MouseEventArgs args, int index)
         {
             _hoveredButton = sender as Button;
             _hoveredInvestmentIndex = index;
@@ -199,6 +199,7 @@ namespace AsLegacy.GUI.Popups
             int conceptIndex, int affinityIndex)
         {
             Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
+            _hoveredButton = sender as Button;
 
             _hoverPopup.UpdateTitle(affinity.Name);
             _hoverPopup.UpdateContent(affinity.GetDescription(AsLegacy.Player));
@@ -310,6 +311,14 @@ namespace AsLegacy.GUI.Popups
                     _passiveInvestmentButtons[c].IsVisible = false;
             }
 
+            if (!IsVisible)
+            {
+                _hoveredButton = null;
+                _hoveredInvestmentIndex = -1;
+                _hoverPopup.IsVisible = false;
+
+                _learnSkillPopup.IsVisible = false;
+            }
             IsFocused = IsVisible;
         }
 
