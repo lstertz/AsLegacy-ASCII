@@ -203,9 +203,9 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Display.Width / 4, Display.Height / 4),
                 IsVisible = false
             };
-            _successorPopup = new SuccessorPopup(Display.Width / 2, Display.Height / 2)
+            _successorPopup = new SuccessorPopup(Display.Width / 2, 3 * Display.Height / 4)
             {
-                Position = new Point(Display.Width / 4, Display.Height / 4),
+                Position = new Point(Display.Width / 4, Display.Height / 8),
                 IsVisible = false
             };
             _talentsPopup = new TalentsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
