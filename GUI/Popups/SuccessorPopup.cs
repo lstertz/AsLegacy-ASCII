@@ -88,8 +88,6 @@ namespace AsLegacy.GUI.Popups
                 Add(box);
                 _passiveInvestmentBoxes[c] = box;
             }
-            // TODO :: Add printing for all passive names somewhere.
-            // TODO :: Disable passives that don't have text for a class.
 
             _ok = new Button(2, 1)
             {
@@ -161,6 +159,10 @@ namespace AsLegacy.GUI.Popups
                 _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
                 UpdateAvailablePointsLabel();
 
+                int passiveCount = AsLegacy.Player.Class.Passives.Count;
+                for (int c = 0; c < MaxPassiveCount; c++)
+                    _passiveInvestmentBoxes[c].IsVisible = c < passiveCount;
+
                 _ok.IsEnabled = _availablePoints == 0;
             }
 
@@ -219,17 +221,6 @@ namespace AsLegacy.GUI.Popups
             _hoverPopup.UpdateContent(content);
             _hoverPopup.Position = _hoveredBox.Position -
                 new Point(_hoverPopup.Width, _hoverPopup.Height / 2);
-        }
-
-        /// <summary>
-        /// Updates the ok Button's enabled state.
-        /// </summary>
-        /// <param name="sender">The event sender that triggers the update.</param>
-        /// <param name="args">The event args.</param>
-        private void UpdateCreateSuccessorEnablement(object sender, EventArgs args)
-        {
-            // TODO :: Validate all points have been spent.
-            _ok.IsEnabled = true;// name.Length > 0;
         }
 
         /// <summary>
