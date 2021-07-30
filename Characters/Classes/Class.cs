@@ -129,13 +129,13 @@ namespace AsLegacy.Characters
                     {
                         Name = "Energy Absorption",
                         AffectColor = Color.Red,
-                        FormattableDescription = $"Convert {0}% of received Damage to Cooldown for the next used Skill.",
+                        FormattableDescription = $"Convert {0}% of received Damage to Cooldown (1 damage to .1 seconds) for the next used Skill.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Scale,
                             AffectedAspect = Aspect.DamageToCooldown
                         },
-                        Algorithm = (investment) => investment
+                        Algorithm = (investment) => investment / 10.0f
                     },
                     new()
                     {

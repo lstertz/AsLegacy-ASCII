@@ -6,6 +6,7 @@ using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Input;
 using System;
+using System.Collections.ObjectModel;
 
 namespace AsLegacy.GUI.Popups
 {
@@ -21,6 +22,8 @@ namespace AsLegacy.GUI.Popups
 
         private const int MaxPassiveCount = 7;
         private const int MaxAssignedPointsLength = 3;
+
+        private const int PassiveNameX = 2;
 
         private static readonly AsciiKey Backspace = AsciiKey.Get(Keys.Back, new KeyboardState());
         private static readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
@@ -106,6 +109,13 @@ namespace AsLegacy.GUI.Popups
                 IsVisible = false
             };
             Children.Add(_hoverPopup);
+        }
+
+        /// <inheritdoc/>
+        protected override void Invalidate()
+        {
+            base.Invalidate();
+            UpdatePassiveLabels();
         }
 
         /// <summary>
@@ -203,7 +213,7 @@ namespace AsLegacy.GUI.Popups
             int investment = 0;
             string content = $"{talent.GetDescription(AsLegacy.Player)}\n" +
                 talent.GetDifferenceDescription(investment, investment + 1) +
-                " for 1 point.";
+                " for the next point.";
 
             _hoverPopup.UpdateTitle(talent.Name);
             _hoverPopup.UpdateContent(content);
@@ -220,6 +230,20 @@ namespace AsLegacy.GUI.Popups
         {
             // TODO :: Validate all points have been spent.
             _ok.IsEnabled = true;// name.Length > 0;
+        }
+
+        /// <summary>
+        /// Updates the text of the passives' descriptions in the popup.
+        /// </summary>
+        private void UpdatePassiveLabels()
+        {
+            if (!AsLegacy.HasPlayer)
+                return;
+
+            // TODO : 85 :: Use locally defined class reference.
+            ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
+            for (int c = 0, count = passives.Count, y = AvailablePointsY + 1; c < count; c++, y++)
+                Print(PassiveNameX, y, passives[c].Name);
         }
     }
 }
