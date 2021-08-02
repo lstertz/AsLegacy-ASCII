@@ -24,6 +24,16 @@ namespace AsLegacy.Characters
             string.Format(_descriptionFormat, $"{Algorithm(character.GetInvestment(this)):N1}");
 
         /// <summary>
+        /// Provides a description of the <see cref="DescribableAffect"/> as it should be for the 
+        /// specified investment.
+        /// </summary>
+        /// <param name="investment">The investment to be used to create the description.</param>
+        /// <returns>A description, for displaying details of the <see cref="DescribableAffect"/> 
+        /// for the specified investment.</returns>
+        public string GetDescription(int investment) =>
+            string.Format(_descriptionFormat, $"{Algorithm(investment):N1}");
+
+        /// <summary>
         /// Provides the affect difference between the provided investments.
         /// </summary>
         /// <param name="investmentA">The original investment.</param>
