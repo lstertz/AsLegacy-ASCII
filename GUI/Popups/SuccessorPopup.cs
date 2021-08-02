@@ -81,9 +81,11 @@ namespace AsLegacy.GUI.Popups
                     Text = "",
                     TextAlignment = HorizontalAlignment.Right
                 };
-                box.IsDirtyChanged += (sender, args) => OnInvestmentChanged();
+                box.IsDirtyChanged += (sender, args) => OnInvestmentChanged(sender as TextBox);
                 box.MouseEnter += (sender, args) => OnHoverInvestmentBegin(sender, args, index);
                 box.MouseExit += OnHoverInvestmentEnd;
+                box.TextChangedPreview += (sender, args) => 
+                    OnInvestmentChangedFinal(sender as TextBox, args);
 
                 Add(box);
                 _passiveInvestmentBoxes[c] = box;
@@ -170,11 +172,12 @@ namespace AsLegacy.GUI.Popups
         }
 
         /// <summary>
-        /// Updates the available points and Ok button for a change in point investment.
+        /// Updates the available points, permitting negative values, and the Ok button
+        /// for a change in point investment.
         /// </summary>
-        private void OnInvestmentChanged()
+        private void OnInvestmentChanged(TextBox investmentBox)
         {
-            if (Player.Character == null)
+            if (Player.Character == null || !investmentBox.IsFocused)
                 return;
 
             int spentPoints = 0;
@@ -186,6 +189,35 @@ namespace AsLegacy.GUI.Popups
             }
 
             _availablePoints = Player.Character.CharacterLineage.SuccessorPoints - spentPoints;
+            UpdateAvailablePointsLabel();
+
+            _ok.IsEnabled = _availablePoints == 0;
+        }
+
+        /// <summary>
+        /// Updates the available points and Ok button for a change in point investment.
+        /// </summary>
+        private void OnInvestmentChangedFinal(TextBox investmentBox, 
+            TextBox.TextChangedEventArgs args)
+        {
+            if (Player.Character == null || !investmentBox.IsFocused)
+                return;
+
+            int spentPoints = 0;
+            for (int c = 0, count = _passiveInvestmentBoxes.Length; c < count; c++)
+            {
+                if (_passiveInvestmentBoxes[c].EditingText == "")
+                    continue;
+                spentPoints += Convert.ToInt32(_passiveInvestmentBoxes[c].EditingText);
+            }
+
+            _availablePoints = Player.Character.CharacterLineage.SuccessorPoints - spentPoints;
+            if (_availablePoints < 0)
+            {
+                args.NewValue = (Convert.ToInt32(investmentBox.EditingText) +
+                    _availablePoints).ToString();
+                _availablePoints = 0;
+            }
             UpdateAvailablePointsLabel();
 
             _ok.IsEnabled = _availablePoints == 0;
