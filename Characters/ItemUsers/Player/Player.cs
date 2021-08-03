@@ -39,9 +39,11 @@ namespace AsLegacy.Characters
         /// Creates a new Player Character as a successor to the current Player Character.
         /// </summary>
         /// <param name="name">The name of the succeeding Player Character.</param>
+        /// <param name="initialPassiveInvestments">The succeeding Player Character's 
+        /// initial investments in their Class' Passives.</param>
         /// <exception cref="InvalidOperationException">Thrown if there is no existing 
         /// Player Character or if the existing Player Character is still alive.</exception>
-        public static void CreateSuccessor(string name)
+        public static void CreateSuccessor(string name, int[] initialPassiveInvestments = null)
         {
             if (Character == null)
                 throw new InvalidOperationException("There is no existing Player from which to " +
@@ -53,7 +55,7 @@ namespace AsLegacy.Characters
 
             Lineage lineage = Character.CharacterLineage as Lineage;
             Point point = World.GetRandomPassablePosition();
-            Character = new Player(point.Y, point.X, name, lineage);
+            Character = new Player(point.Y, point.X, name, lineage, initialPassiveInvestments);
         }
 
         /// <summary>
@@ -87,8 +89,11 @@ namespace AsLegacy.Characters
         /// <param name="column">The column position of the new Player.</param>
         /// <param name="name">The name of the current Player Character.</param>
         /// <param name="lineage">The Player's Lineage.</param>
-        private Player(int row, int column, string name, Lineage lineage) : 
-            base(row, column, name, new Settings(), lineage)
+        /// <param name="initialPassiveInvestments">The Player's initial investments in 
+        /// their Class' Passives.</param>
+        private Player(int row, int column, string name, Lineage lineage, 
+            int[] initialPassiveInvestments = null) : 
+            base(row, column, name, new Settings(initialPassiveInvestments), lineage)
         { }
     }
 }

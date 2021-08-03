@@ -20,7 +20,12 @@ namespace AsLegacy
                 /// <summary>
                 /// Defines the type of the Class of the Character.
                 /// </summary>
-                public abstract Class.Type ClassType { get;}
+                public abstract Class.Type ClassType { get; }
+                /// <summary>
+                /// Defines the initial investment amounts of the Character's passive Talents.
+                /// </summary>
+                /// <remarks>Null indicates no investments.</remarks>
+                public abstract int[] InitialPassiveInvestments { get; }
 
                 /// <summary>
                 /// Defines the color of the Character's Glyphs.

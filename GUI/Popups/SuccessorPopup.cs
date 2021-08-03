@@ -97,7 +97,15 @@ namespace AsLegacy.GUI.Popups
             _ok.Click += (s, e) =>
             {
                 IsVisible = false;
-                Player.CreateSuccessor(SuccessorName);
+                int[] initialInvestments = new int[MaxPassiveCount];
+                for (int c = 0; c < MaxPassiveCount; c++)
+                {
+                    if (_passiveInvestmentBoxes[c].EditingText != "")
+                        initialInvestments[c] = Convert.ToInt32(
+                            _passiveInvestmentBoxes[c].EditingText);
+                }
+
+                Player.CreateSuccessor(SuccessorName, initialInvestments);
             };
             Add(_ok);
 

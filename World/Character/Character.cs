@@ -254,6 +254,16 @@ namespace AsLegacy
 
                 CharacterAI = baseSettings.AI;
                 Class = Class.Get(baseSettings.ClassType);
+                if (baseSettings.InitialPassiveInvestments != null)
+                    for (int c = 0; c < baseSettings.InitialPassiveInvestments.Length; c++)
+                    {
+                        if (Class.Passives.Count <= c)
+                            break;
+
+                        if (baseSettings.InitialPassiveInvestments[c] != 0)
+                            _talentInvestments.Add(Class.Passives[c],
+                                baseSettings.InitialPassiveInvestments[c]);
+                    }
 
                 _baseSettings = baseSettings;
                 _combatState = new Combat.State(this, baseSettings, legacy);

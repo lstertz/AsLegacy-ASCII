@@ -20,6 +20,11 @@ namespace AsLegacy
             public override Class.Type ClassType => Class.Type.Spellcaster; // TODO :: Update for appropriate Beast Classes.
 
             /// <summary>
+            /// Defines the initial passive investments of a Beast.
+            /// </summary>
+            public override int[] InitialPassiveInvestments => null; // TODO :: Support initial investments to randomize Beast strength.
+
+            /// <summary>
             /// The initial legacy of the Beast.
             /// </summary>
             public abstract Combat.Legacy InitialLegacy { get; }
