@@ -31,6 +31,15 @@ namespace AsLegacy.Characters
             /// Defines the glyph to be shown when the Player is in normal mode.
             /// </summary>
             public override int NormalGlyph => 64;//'@'
+
+            /// <summary>
+            /// Constructs a new set of settings.
+            /// </summary>
+            /// <param name="initialPassiveInvestments">
+            /// <see cref="InitialPassiveInvestments"/></param>
+            public Settings(int[] initialPassiveInvestments = null) : 
+                base(initialPassiveInvestments)
+            { }
         }
     }
 }

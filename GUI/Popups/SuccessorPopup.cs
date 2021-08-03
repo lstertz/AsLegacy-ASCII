@@ -97,7 +97,15 @@ namespace AsLegacy.GUI.Popups
             _ok.Click += (s, e) =>
             {
                 IsVisible = false;
-                Player.CreateSuccessor(SuccessorName);
+                int[] initialInvestments = new int[MaxPassiveCount];
+                for (int c = 0; c < MaxPassiveCount; c++)
+                {
+                    if (_passiveInvestmentBoxes[c].EditingText != "")
+                        initialInvestments[c] = Convert.ToInt32(
+                            _passiveInvestmentBoxes[c].EditingText);
+                }
+
+                Player.CreateSuccessor(SuccessorName, initialInvestments);
             };
             Add(_ok);
 
@@ -155,13 +163,19 @@ namespace AsLegacy.GUI.Popups
 
             if (IsVisible)
             {
-                _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
-                UpdateAvailablePointsLabel();
-
                 int passiveCount = AsLegacy.Player.Class.Passives.Count;
+                _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
                 for (int c = 0; c < MaxPassiveCount; c++)
-                    _passiveInvestmentBoxes[c].IsVisible = c < passiveCount;
+                {
+                    bool isVisible = c < passiveCount;
+                    if (_passiveInvestmentBoxes[c].EditingText != "" && isVisible)
+                        _availablePoints -= Convert.ToInt32(
+                            _passiveInvestmentBoxes[c].EditingText);
 
+                    _passiveInvestmentBoxes[c].IsVisible = isVisible;
+                }
+
+                UpdateAvailablePointsLabel();
                 _ok.IsEnabled = _availablePoints == 0;
             }
 
