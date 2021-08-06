@@ -145,6 +145,9 @@ namespace AsLegacy.GUI.Popups
         private void OnClickAffinity(object sender, MouseEventArgs args, 
             int conceptIndex, int affinityIndex)
         {
+            Button affinityButton = sender as Button;
+            affinityButton.IsEnabled = false;
+
             Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
             _learnSkillPopup.Prompt = $"Learn the {affinity.Name} skill?";
             _learnSkillPopup.OnConfirmation = () => 
@@ -157,11 +160,11 @@ namespace AsLegacy.GUI.Popups
                 AsLegacy.Player.LearnSkill(skill);
                 Invalidate();
 
-                (sender as Button).IsFocused = false; 
+                affinityButton.IsEnabled = true;
             };
-            _learnSkillPopup.OnRejection = () => 
-            { 
-                (sender as Button).IsFocused = false; 
+            _learnSkillPopup.OnRejection = () =>
+            {
+                affinityButton.IsEnabled = true;
             };
             _learnSkillPopup.IsVisible = true;
 
@@ -266,6 +269,7 @@ namespace AsLegacy.GUI.Popups
                     if (hasConcept)
                     {
                         int conceptIndex = c;
+                        int startX = TalentNameX + concepts[c].Name.Length + 1;
                         for (int cc = 0; cc < concepts[c].Affinities.Count; cc++)
                         {
                             int affinityIndex = cc;
@@ -278,7 +282,7 @@ namespace AsLegacy.GUI.Popups
                             Button affinityButton = new(1)
                             {
                                 Text = AffinityIcon,
-                                Position = new(TalentNameX + concepts[c].Name.Length + 1, 5 + c),
+                                Position = new(startX + 2 * cc, 5 + c),
                                 ThemeColors = colors
                             };
                             affinityButton.MouseEnter += (sender, args) => OnHoverAffinityBegin(
@@ -286,6 +290,7 @@ namespace AsLegacy.GUI.Popups
                             affinityButton.MouseButtonClicked += (sender, args) => OnClickAffinity(
                                 sender, args, conceptIndex, affinityIndex);
                             affinityButton.MouseExit += OnHoverEnd;
+                            affinityButton.FocusOnClick = false;
 
                             _conceptAffinityButtons.Add(affinityButton);
                             Add(affinityButton);

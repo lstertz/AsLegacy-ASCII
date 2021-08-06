@@ -24,6 +24,8 @@ namespace AsLegacy.Characters.Skills
         /// </summary>
         public enum Element
         {
+            Fire,
+            Ice,
             Lightning,
             Physical
         }

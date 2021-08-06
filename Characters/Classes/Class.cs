@@ -74,11 +74,11 @@ namespace AsLegacy.Characters
                                 Element = Skill.Element.Lightning,
                                 Activation = 1.0f,
                                 Cooldown = 1.0f,
-                                CustomAttributes = new(new Attribute[] 
+                                CustomAttributes = new(new Attribute[]
                                 {
                                     new()
                                     {
-                                        Aspects = new(new Aspect[] 
+                                        Aspects = new(new Aspect[]
                                         {
                                             Aspect.AreaOfEffectDamage,
                                             Aspect.LightningDamage
@@ -97,12 +97,76 @@ namespace AsLegacy.Characters
                                     }
                                 }),
                                 FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
+                            },
+                            new()
+                            {
+                                Name = "Band of Ice",
+                                AffectColor = Color.LightSkyBlue,
+                                Element = Skill.Element.Ice,
+                                Activation = 1.5f,
+                                Cooldown = 1.0f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectDamage,
+                                            Aspect.IceDamage
+                                        }),
+                                        BaseScale = 1.1f,
+                                        BaseValue = 0,
+                                        Name = "Ice Damage"
+                                    },
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectRange
+                                        }),
+                                        BaseValue = 1,
+                                        Name = "Range"
+                                    }
+                                }),
+                                FormattableDescription = $"Creates an expanding ring of\nice that deals damage to all\nenemies that it touches.",
+                            },
+                            new()
+                            {
+                                Name = "Exploding Star",
+                                AffectColor = Color.Orange,
+                                Element = Skill.Element.Fire,
+                                Activation = 1.5f,
+                                Cooldown = 1.5f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectDamage,
+                                            Aspect.FireDamage
+                                        }),
+                                        BaseScale = 1.2f,
+                                        BaseValue = 0,
+                                        Name = "Fire Damage"
+                                    },
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectRange
+                                        }),
+                                        BaseValue = 1,
+                                        Name = "Range"
+                                    }
+                                }),
+                                FormattableDescription = $"Creates an expanding ring of\nfire that deals damage to all\nenemies that it touches.",
                             }
                         }),
                         Name = "Nova",
                         Category = Skill.Category.Tertiary,
                         Type = Skill.Type.AreaOfEffect,
-                        FormattableDescription = $" {0} damage to enemies within range.",
+                        FormattableDescription = $" {0} base damage within range.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Add,
