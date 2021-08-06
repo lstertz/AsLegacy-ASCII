@@ -74,11 +74,11 @@ namespace AsLegacy.Characters
                                 Element = Skill.Element.Lightning,
                                 Activation = 1.0f,
                                 Cooldown = 1.0f,
-                                CustomAttributes = new(new Attribute[] 
+                                CustomAttributes = new(new Attribute[]
                                 {
                                     new()
                                     {
-                                        Aspects = new(new Aspect[] 
+                                        Aspects = new(new Aspect[]
                                         {
                                             Aspect.AreaOfEffectDamage,
                                             Aspect.LightningDamage
@@ -100,10 +100,10 @@ namespace AsLegacy.Characters
                             },
                             new()
                             {
-                                Name = "Ice Ring",
+                                Name = "Band of Ice",
                                 AffectColor = Color.LightSkyBlue,
                                 Element = Skill.Element.Ice,
-                                Activation = 1.0f,
+                                Activation = 1.5f,
                                 Cooldown = 1.0f,
                                 CustomAttributes = new(new Attribute[]
                                 {
@@ -114,6 +114,7 @@ namespace AsLegacy.Characters
                                             Aspect.AreaOfEffectDamage,
                                             Aspect.IceDamage
                                         }),
+                                        BaseScale = 1.1f,
                                         BaseValue = 0,
                                         Name = "Ice Damage"
                                     },
@@ -131,11 +132,11 @@ namespace AsLegacy.Characters
                             },
                             new()
                             {
-                                Name = "Fire Ring",
+                                Name = "Exploding Star",
                                 AffectColor = Color.Orange,
                                 Element = Skill.Element.Fire,
-                                Activation = 1.0f,
-                                Cooldown = 1.0f,
+                                Activation = 1.5f,
+                                Cooldown = 1.5f,
                                 CustomAttributes = new(new Attribute[]
                                 {
                                     new()
@@ -145,6 +146,7 @@ namespace AsLegacy.Characters
                                             Aspect.AreaOfEffectDamage,
                                             Aspect.FireDamage
                                         }),
+                                        BaseScale = 1.2f,
                                         BaseValue = 0,
                                         Name = "Fire Damage"
                                     },
@@ -164,7 +166,7 @@ namespace AsLegacy.Characters
                         Name = "Nova",
                         Category = Skill.Category.Tertiary,
                         Type = Skill.Type.AreaOfEffect,
-                        FormattableDescription = $" {0} damage to enemies within range.",
+                        FormattableDescription = $" {0} base damage within range.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Add,
