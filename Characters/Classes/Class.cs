@@ -137,10 +137,6 @@ namespace AsLegacy.Characters
                                 Element = Skill.Element.Fire,
                                 BaseActivation = 1.5f,
                                 BaseCooldown = 1.5f,
-                                CooldownAdditionalAspects = new Aspect[]
-                                {
-                                    Aspect.CooldownNonElementalSpells
-                                },
                                 CustomAttributes = new(new Attribute[]
                                 {
                                     new()
@@ -185,7 +181,7 @@ namespace AsLegacy.Characters
                     {
                         Name = "Focus",
                         AffectColor = Color.Goldenrod,
-                        FormattableDescription = $"Reduce Activation time for all Skills by {0}%.", // Prefixed space for alignment.
+                        FormattableDescription = $"Reduce Activation time for all Skills by {0}%.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.ScaleDown,
@@ -227,7 +223,7 @@ namespace AsLegacy.Characters
                             AffectOnAspect = Influence.Purpose.ScaleDown,
                             AffectedAspect = Aspect.CooldownNonElementalSpells
                         },
-                        Algorithm = (investment) => investment / 4.0f
+                        Algorithm = (investment) => investment / 100.0f
                     },
                     new()
                     {
@@ -263,7 +259,7 @@ namespace AsLegacy.Characters
                             AffectOnAspect = Influence.Purpose.ScaleUp,
                             AffectedAspect = Aspect.FireDamage
                         },
-                        Algorithm = (investment) => investment / 5.0f
+                        Algorithm = (investment) => investment / 50.0f
                     }
                 })
             });
