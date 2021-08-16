@@ -297,7 +297,7 @@ namespace AsLegacy
             public virtual float GetAffect(Characters.Attribute affectAttribute)
             {
                 float baseValue = affectAttribute.BaseValue;
-                float scale = affectAttribute.BaseScale;
+                float scale = 1.0f;
 
                 for (int c = 0, count = affectAttribute.Aspects.Count; c < count; c++)
                 {
@@ -306,6 +306,7 @@ namespace AsLegacy
                     baseValue += aspectBaseValue;
                     scale += aspectScale;
                 }
+                scale = affectAttribute.BaseScale * scale;
 
                 return baseValue * scale;
             }
