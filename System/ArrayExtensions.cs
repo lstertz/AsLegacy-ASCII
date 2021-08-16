@@ -23,5 +23,22 @@
 
             return newArray;
         }
+
+        /// <summary>
+        /// Creates a new array that is the copy of the provided array, with the addition of 
+        /// the provided element at the end of the new array.
+        /// </summary>
+        /// <typeparam name="TElement">The type of the elements of this array.</typeparam>
+        /// <param name="array">The array to be copied with the new element.</param>
+        /// <param name="element">The element to be added to the new array.</param>
+        /// <returns>The new array.</returns>
+        public static TElement[] With<TElement>(this TElement[] array, TElement element)
+        {
+            TElement[] newArray = new TElement[array.Length + 1];
+            array.CopyTo(newArray, 0);
+            newArray[array.Length] = element;
+
+            return newArray;
+        }
     }
 }
