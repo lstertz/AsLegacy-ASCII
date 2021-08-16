@@ -301,7 +301,8 @@ namespace AsLegacy
 
                 for (int c = 0, count = affectAttribute.Aspects.Count; c < count; c++)
                 {
-                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue, out float aspectScale);
+                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue, 
+                        out float aspectScale);
                     baseValue += aspectBaseValue;
                     scale += aspectScale;
                 }
@@ -334,8 +335,8 @@ namespace AsLegacy
 
                 Skill skill = _skills[skillName];
                 Affect[] affects = skill.GetAffects(this);
-                int activationInMilliseconds = (int)(skill.Activation * 1000.0f);
-                new Action(this, activationInMilliseconds,
+                int activationInMilliseconds = (int)(skill.GetActivation(this) * 1000.0f);
+                _ = new Action(this, activationInMilliseconds,
                     () =>
                     {
                         Effect lastMadeEffect = null;
@@ -368,7 +369,8 @@ namespace AsLegacy
                         lastMadeEffect.Start();
 
                         PassedCooldown = 0;
-                        TotalCooldown += (int)(skill.Cooldown * 1000.0f);
+                        TotalCooldown += (int)(skill.GetCooldown(this) * 1000.0f);
+                        // TODO :: Apply cross-skill affects.
                     },
                     () =>
                     {
@@ -630,8 +632,14 @@ namespace AsLegacy
                         case Influence.Purpose.Add:
                             totalBaseValue += affect;
                             break;
-                        case Influence.Purpose.Scale:
+                        case Influence.Purpose.ScaleDown:
+                            totalScaleChange -= affect;
+                            break;
+                        case Influence.Purpose.ScaleUp:
                             totalScaleChange += affect;
+                            break;
+                        case Influence.Purpose.Subtract:
+                            totalBaseValue -= affect;
                             break;
                         default:
                             throw new NotImplementedException($"The influence purpose " +
