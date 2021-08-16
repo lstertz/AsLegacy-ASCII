@@ -19,9 +19,17 @@ namespace AsLegacy.Characters
         /// </summary>
         public Influence Influence {get; init;}
 
+        /// <summary>
+        /// Specifies whether the affect on the aspect is to scale.
+        /// </summary>
+        private bool IsScaleBased =>
+            Influence.AffectOnAspect == Influence.Purpose.ScaleUp ||
+            Influence.AffectOnAspect == Influence.Purpose.ScaleDown;
+
+
         /// <inheritdoc/>
         public override string GetDescription(World.Character character) =>
-            string.Format(_descriptionFormat, $"{Algorithm(character.GetInvestment(this)):N1}");
+            string.Format(_descriptionFormat, $"{GetDescriptionAffect(character):0.##}");
 
         /// <summary>
         /// Provides a description of the <see cref="DescribableAffect"/> as it should be for the 
@@ -31,7 +39,29 @@ namespace AsLegacy.Characters
         /// <returns>A description, for displaying details of the <see cref="DescribableAffect"/> 
         /// for the specified investment.</returns>
         public string GetDescription(int investment) =>
-            string.Format(_descriptionFormat, $"{Algorithm(investment):N1}");
+            string.Format(_descriptionFormat, $"{GetDescriptionAffect(investment):0.##}");
+
+        /// <summary>
+        /// Provides the affect as it should be used for a description.
+        /// </summary>
+        /// <param name="character">The <see cref="World.Character"/> whose 
+        /// affect is being calculated.</param>
+        /// <returns>The affect.</returns>
+        private float GetDescriptionAffect(World.Character character)
+        {
+            return GetDescriptionAffect(character.GetInvestment(this));
+        }
+
+        /// <summary>
+        /// Provides the affect as it should be used for a description.
+        /// </summary>
+        /// <param name="character">The amount of investment used for calculation.</param>
+        /// <returns>The affect.</returns>
+        private float GetDescriptionAffect(int investment)
+        {
+            return IsScaleBased ? Algorithm(investment) * 100.0f :
+                Algorithm(investment);
+        }
 
         /// <summary>
         /// Provides the affect difference between the provided investments.
@@ -42,12 +72,14 @@ namespace AsLegacy.Characters
         /// <returns>A string describing the difference in value.</returns>
         public string GetDifferenceDescription(int investmentA, int investmentB)
         {
-            float a = Algorithm(investmentA);
-            float b = Algorithm(investmentB);
+            float a = GetDescriptionAffect(investmentA);
+            float b = GetDescriptionAffect(investmentB);
 
             string sign = b - a > 0 ? "+" : ""; // Negative numbers add '-' on their own.
-            string modifier = Influence.AffectOnAspect == Influence.Purpose.Scale ? "%" : "";
-            return $"{sign}{(b - a):N1}{modifier}";
+            string modifier = IsScaleBased ? "%" : "";
+            float value = b - a;
+
+            return $"{sign}{value:0.##}{modifier}";
         }
 
         /// <summary>

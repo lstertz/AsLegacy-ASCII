@@ -125,10 +125,10 @@ namespace AsLegacy.Characters
             StringBuilder builder = new(_descriptionFormat + "\n ");
             for (int c = 0, count = CustomAttributes.Count; c < count; c++)
                 builder.Append($"\n{CustomAttributes[c].Name}: " +
-                    $"{character.GetAffect(CustomAttributes[c])}");
+                    $"{character.GetAffect(CustomAttributes[c]):0.##}");
 
-            builder.Append($"\n{_activation.Name}: {character.GetAffect(_activation)}");
-            builder.Append($"\n{_cooldown.Name}: {character.GetAffect(_cooldown)}");
+            builder.Append($"\n{_activation.Name}: {character.GetAffect(_activation):0.##}");
+            builder.Append($"\n{_cooldown.Name}: {character.GetAffect(_cooldown):0.##}");
             return builder.ToString();
         }
     }
