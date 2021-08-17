@@ -117,7 +117,7 @@ namespace AsLegacy
             /// The cooldown of this Character, as a percentage (0 - 1), of how much of 
             /// a current cooldown time remains.
             /// </summary>
-            public float Cooldown => TotalCooldown == 0 ? 
+            public float Cooldown => TotalCooldown == 0 ?
                 0.0f : 1.0f - (PassedCooldown * 1.0f) / TotalCooldown;
 
             /// <summary>
@@ -261,7 +261,7 @@ namespace AsLegacy
                             break;
 
                         if (baseSettings.InitialPassiveInvestments[c] != 0)
-                            _talentInvestments.Add(Class.Passives[c],
+                            IncreaseTalentInvestment(Class.Passives[c],
                                 baseSettings.InitialPassiveInvestments[c]);
                     }
 
@@ -301,7 +301,7 @@ namespace AsLegacy
 
                 for (int c = 0, count = affectAttribute.Aspects.Count; c < count; c++)
                 {
-                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue, 
+                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue,
                         out float aspectScale);
                     baseValue += aspectBaseValue;
                     scale += aspectScale;
@@ -399,17 +399,7 @@ namespace AsLegacy
                 float previousMaxHealth = MaxHealth;
 
                 AvailableSkillPoints -= amount;
-                if (!_talentInvestments.ContainsKey(talent))
-                {
-                    Aspect affectedAttribute = talent.Influence.AffectedAspect;
-                    if (!_aspectInfluencers.ContainsKey(affectedAttribute))
-                        _aspectInfluencers.Add(affectedAttribute, new());
-                    _aspectInfluencers[affectedAttribute].Add(talent);
-
-                    _talentInvestments.Add(talent, amount);
-                }
-                else
-                    _talentInvestments[talent] += amount;
+                IncreaseTalentInvestment(talent, amount);
 
                 // TODO :: Remove.
                 // Temporarily update current health for the change in max health.
@@ -647,6 +637,28 @@ namespace AsLegacy
                                 $"{influence.AffectOnAspect} is not supported.");
                     }
                 }
+            }
+
+            /// <summary>
+            /// Increases the investment in the specified <see cref="Talent"/> 
+            /// by the specified amount, or defines a new investment if there had been no
+            /// previous investment.
+            /// </summary>
+            /// <param name="talent">The talent whose investment is to increase.</param>
+            /// <param name="amount">The amount to increase.</param>
+            private void IncreaseTalentInvestment(Talent talent, int amount)
+            {
+                if (!_talentInvestments.ContainsKey(talent))
+                {
+                    Aspect affectedAttribute = talent.Influence.AffectedAspect;
+                    if (!_aspectInfluencers.ContainsKey(affectedAttribute))
+                        _aspectInfluencers.Add(affectedAttribute, new());
+                    _aspectInfluencers[affectedAttribute].Add(talent);
+
+                    _talentInvestments.Add(talent, amount);
+                }
+                else
+                    _talentInvestments[talent] += amount;
             }
 
             /// <summary>
