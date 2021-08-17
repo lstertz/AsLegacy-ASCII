@@ -113,6 +113,14 @@ namespace AsLegacy.GUI.Screens
         }
 
         /// <summary>
+        /// Resets display elements of the play screen.
+        /// </summary>
+        public static void Reset()
+        {
+            Screen._successorPopup.Reset();
+        }
+
+        /// <summary>
         /// Shows the PlayScreen's Items Popup.
         /// </summary>
         public static void ShowItems()

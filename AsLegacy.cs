@@ -44,7 +44,7 @@ namespace AsLegacy
         /// </summary>
         public static void Main()
         {
-            new AsLegacy();
+            _ = new AsLegacy();
         }
 
         /// <summary>
@@ -77,6 +77,7 @@ namespace AsLegacy
             World.InitNewWorld();
             Player.Create(12, 11, characterName, lineageName);
 
+            Display.Reset();
             Display.ShowScreen(Display.Screen.Play);
         }
 
