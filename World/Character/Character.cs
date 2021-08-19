@@ -101,7 +101,7 @@ namespace AsLegacy
             /// The number of skill points that this Character has available 
             /// for investing in skills.
             /// </summary>
-            public int AvailableSkillPoints { get; private set; }
+            public int AvailableSkillPoints { get; private set; } = 10; // TODO :: Remove!
 
             /// <summary>
             /// The Character's AI.
@@ -232,6 +232,7 @@ namespace AsLegacy
 
             private readonly BaseSettings _baseSettings;
             private readonly Combat.State _combatState;
+            private int _consecutiveAttackCount = 0;
 
             private readonly Dictionary<Talent, int> _talentInvestments = new();
             private readonly Dictionary<Aspect, List<Talent>> _aspectInfluencers = new();
@@ -336,7 +337,8 @@ namespace AsLegacy
 
                 Skill skill = _skills[skillName];
                 Affect[] affects = skill.GetAffects(this);
-                int activationInMilliseconds = (int)(skill.GetActivation(this) * 1000.0f);
+                int activationInMilliseconds = (int)(GetActivation(skill) * 1000.0f);
+
                 _ = new Action(this, activationInMilliseconds,
                     () =>
                     {
@@ -370,8 +372,16 @@ namespace AsLegacy
                         lastMadeEffect.Start();
 
                         PassedCooldown = 0;
-                        TotalCooldown += (int)(skill.GetCooldown(this) * 1000.0f);
-                        // TODO :: Apply cross-skill affects.
+                        TotalCooldown += (int)(GetCooldown(skill) * 1000.0f);
+
+                        if (skill.Affinity.Performance == Skill.Performance.Attack)
+                            _consecutiveAttackCount++;
+                        else if (skill.Affinity.Performance == Skill.Performance.Spell)
+                            _consecutiveAttackCount = 0;
+                        else
+                            throw new NotImplementedException($"The skill performance type, " +
+                                $"{skill.Affinity.Performance}, is not handled for " +
+                                $"updating consecutive attack counts.");
                     },
                     () =>
                     {
@@ -588,9 +598,31 @@ namespace AsLegacy
                 ActiveMode = Mode.Normal;
 
                 (CurrentAction as IAction)?.Cancel();
-                new World.Action(CharacterRemovalTime, () => RemoveCharacter(this));
+                _ = new World.Action(CharacterRemovalTime, () => RemoveCharacter(this));
             }
 
+
+            /// <summary>
+            /// Provides the actual activation time to perform the provided <see cref="Skill"/>.
+            /// </summary>
+            /// <param name="skill">The skill whose activation time is being retrieved.</param>
+            /// <returns>The activation time, in seconds.</returns>
+            private float GetActivation(Skill skill)
+            {
+                float activation = skill.GetActivation(this);
+
+                if (skill.Affinity.Performance == Skill.Performance.Spell)
+                {
+                    GetAspectInfluences(Aspect.NextSpellReductionForConsecutiveAttacks, 
+                        out float value, out float scale);
+                    activation += value * _consecutiveAttackCount;
+                    activation *= ((scale * _consecutiveAttackCount) + 1);
+                }
+
+                if (activation > 0.0f)
+                    return activation;
+                return 0.0f;
+            }
 
             /// <summary>
             /// Provides the cumulative base value and scale change associated with the 
@@ -637,6 +669,28 @@ namespace AsLegacy
                                 $"{influence.AffectOnAspect} is not supported.");
                     }
                 }
+            }
+
+            /// <summary>
+            /// Provides the actual cooldown time from performing the provided <see cref="Skill"/>.
+            /// </summary>
+            /// <param name="skill">The skill whose cooldown time is being retrieved.</param>
+            /// <returns>The cooldown time, in seconds.</returns>
+            private float GetCooldown(Skill skill)
+            {
+                float cooldown = skill.GetCooldown(this);
+
+                if (skill.Affinity.Performance == Skill.Performance.Spell)
+                {
+                    GetAspectInfluences(Aspect.NextSpellReductionForConsecutiveAttacks,
+                        out float value, out float scale);
+                    cooldown += value * _consecutiveAttackCount;
+                    cooldown *= ((scale * _consecutiveAttackCount + 1));
+                }
+
+                if (cooldown > 0.0f)
+                    return cooldown;
+                return 0.0f;
             }
 
             /// <summary>

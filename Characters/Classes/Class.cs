@@ -71,7 +71,6 @@ namespace AsLegacy.Characters
                             {
                                 Name = "Shock Ring",
                                 AffectColor = Color.Yellow,
-                                Element = Skill.Element.Lightning,
                                 BaseActivation = 1.0f,
                                 BaseCooldown = 1.0f,
                                 CustomAttributes = new(new Attribute[]
@@ -96,13 +95,14 @@ namespace AsLegacy.Characters
                                         Name = "Range"
                                     }
                                 }),
+                                Element = Skill.Element.Lightning,
                                 FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
+                                Performance = Skill.Performance.Spell
                             },
                             new()
                             {
                                 Name = "Band of Ice",
                                 AffectColor = Color.LightSkyBlue,
-                                Element = Skill.Element.Ice,
                                 BaseActivation = 1.5f,
                                 BaseCooldown = 1.0f,
                                 CustomAttributes = new(new Attribute[]
@@ -128,13 +128,14 @@ namespace AsLegacy.Characters
                                         Name = "Range"
                                     }
                                 }),
+                                Element = Skill.Element.Ice,
                                 FormattableDescription = $"Creates an expanding ring of\nice that deals damage to all\nenemies that it touches.",
+                                Performance = Skill.Performance.Spell
                             },
                             new()
                             {
                                 Name = "Exploding Star",
                                 AffectColor = Color.Orange,
-                                Element = Skill.Element.Fire,
                                 BaseActivation = 1.5f,
                                 BaseCooldown = 1.5f,
                                 CustomAttributes = new(new Attribute[]
@@ -160,7 +161,9 @@ namespace AsLegacy.Characters
                                         Name = "Range"
                                     }
                                 }),
+                                Element = Skill.Element.Fire,
                                 FormattableDescription = $"Creates an expanding ring of\nfire that deals damage to all\nenemies that it touches.",
+                                Performance = Skill.Performance.Spell
                             }
                         }),
                         Name = "Nova",
@@ -205,7 +208,7 @@ namespace AsLegacy.Characters
                     {
                         Name = "Clear Mind",
                         AffectColor = Color.Green,
-                        FormattableDescription = $"For each consecutive Non-Spell Attack, reduce the Activation and Cooldown of the next cast Spell by {0}%.",
+                        FormattableDescription = $"For each consecutive Non-Spell Attack, reduce the final Activation and Cooldown of the next cast Spell by {0}%.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.ScaleDown,

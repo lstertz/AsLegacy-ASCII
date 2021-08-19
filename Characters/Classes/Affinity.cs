@@ -94,6 +94,12 @@ namespace AsLegacy.Characters
         /// </summary>
         public Skill.Element Element { get; init; }
 
+        /// <summary>
+        /// Defines how this <see cref="Affinity"/> is performed when 
+        /// considered as a <see cref="Skill"/>.
+        /// </summary>
+        public Skill.Performance Performance { get; init; }
+
 
         /// <summary>
         /// Provides the activation, in seconds, for performing the <see cref="Skill"/> 

@@ -10,7 +10,7 @@ namespace AsLegacy.Characters.Skills
     public record Skill
     {
         /// <summary>
-        /// The category that defines how a skill is considered relative to other skills.
+        /// Defines how a skill is considered relative to other skills.
         /// </summary>
         public enum Category
         {
@@ -28,6 +28,15 @@ namespace AsLegacy.Characters.Skills
             Ice,
             Lightning,
             Physical
+        }
+
+        /// <summary>
+        /// Defines how the skill is performed.
+        /// </summary>
+        public enum Performance
+        {
+            Attack,
+            Spell
         }
 
         /// <summary>

@@ -7,8 +7,19 @@
     /// </summary>
     public enum Aspect
     {
+        /// <summary>
+        /// The aspect pertaining directly to the activation time of a <see cref="Skills.Skill"/>.
+        /// </summary>
         Activation,
+        /// <summary>
+        /// The aspect pertaining to the damage dealt by an area 
+        /// of effect <see cref="Skills.Skill"/>.
+        /// </summary>
         AreaOfEffectDamage,
+        /// <summary>
+        /// The aspect pertaining to the range of an area 
+        /// of effect <see cref="Skills.Skill"/>.
+        /// </summary>
         AreaOfEffectRange,
         Cooldown,
         CooldownNonElementalSpells,
