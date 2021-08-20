@@ -360,7 +360,19 @@ namespace AsLegacy
                                         Performer = this,
                                         Range = affects[c].Range,
                                         Target = affects[c].Target,
-                                        UponDamageDealt = () => AvailableSkillPoints++
+                                        UponDamageDealt = () =>
+                                        {
+                                            AvailableSkillPoints++;
+
+                                            Skill.Performance p = skill.Affinity.Performance;
+                                            if (p == Skill.Performance.Attack)
+                                                _consecutiveAttackCount++;
+                                            else if (p != Skill.Performance.Spell)
+                                                throw new NotImplementedException(
+                                                    $"The skill performance type, " +
+                                                    $"{p}, is not handled for updating " +
+                                                    $"consecutive attack counts.");
+                                        }
                                     };
                                     break;
                                 default:
@@ -377,14 +389,12 @@ namespace AsLegacy
                         TotalCooldown += _unappliedCooldown;
                         _unappliedCooldown = 0;
 
-                        if (skill.Affinity.Performance == Skill.Performance.Attack)
-                            _consecutiveAttackCount++;
-                        else if (skill.Affinity.Performance == Skill.Performance.Spell)
+                        if (skill.Affinity.Performance == Skill.Performance.Spell)
                             _consecutiveAttackCount = 0;
-                        else
-                            throw new NotImplementedException($"The skill performance type, " +
-                                $"{skill.Affinity.Performance}, is not handled for " +
-                                $"updating consecutive attack counts.");
+                        else if (skill.Affinity.Performance != Skill.Performance.Attack)
+                            throw new NotImplementedException(
+                                $"The skill performance type, {skill.Affinity.Performance}, " +
+                                $"is not handled for updating consecutive attack counts.");
                     },
                     () =>
                     {
