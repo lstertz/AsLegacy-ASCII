@@ -110,7 +110,8 @@ namespace AsLegacy.Characters
         /// <returns>The activation time, in seconds.</returns>
         public float GetActivation(World.Character character)
         {
-            return character.GetAffect(_activation);
+            float activation = character.GetAffect(_activation);
+            return activation < 0.0f ? 0.0f : activation;
         }
 
         /// <summary>
@@ -122,7 +123,8 @@ namespace AsLegacy.Characters
         /// <returns>The cooldown time, in seconds.</returns>
         public float GetCooldown(World.Character character)
         {
-            return character.GetAffect(_cooldown);
+            float cooldown = character.GetAffect(_cooldown);
+            return cooldown < 0.0f ? 0.0f : cooldown;
         }
 
         /// <inheritdoc/>
