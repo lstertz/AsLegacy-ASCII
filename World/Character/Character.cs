@@ -101,7 +101,7 @@ namespace AsLegacy
             /// The number of skill points that this Character has available 
             /// for investing in skills.
             /// </summary>
-            public int AvailableSkillPoints { get; private set; } = 10; // TODO :: Remove!
+            public int AvailableSkillPoints { get; private set; } = 0;
 
             /// <summary>
             /// The Character's AI.
