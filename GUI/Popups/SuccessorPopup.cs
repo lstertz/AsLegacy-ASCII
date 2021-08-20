@@ -116,6 +116,16 @@ namespace AsLegacy.GUI.Popups
             Children.Add(_hoverPopup);
         }
 
+        /// <summary>
+        /// Resets the investments of the passives.
+        /// </summary>
+        public void Reset()
+        {
+            for (int c = 0; c < MaxPassiveCount; c++)
+                _passiveInvestmentBoxes[c].Text = "";
+        }
+
+
         /// <inheritdoc/>
         protected override void Invalidate()
         {

@@ -71,9 +71,8 @@ namespace AsLegacy.Characters
                             {
                                 Name = "Shock Ring",
                                 AffectColor = Color.Yellow,
-                                Element = Skill.Element.Lightning,
-                                Activation = 1.0f,
-                                Cooldown = 1.0f,
+                                BaseActivation = 1.0f,
+                                BaseCooldown = 1.0f,
                                 CustomAttributes = new(new Attribute[]
                                 {
                                     new()
@@ -96,15 +95,16 @@ namespace AsLegacy.Characters
                                         Name = "Range"
                                     }
                                 }),
+                                Element = Skill.Element.Lightning,
                                 FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
+                                Performance = Skill.Performance.Spell
                             },
                             new()
                             {
                                 Name = "Band of Ice",
                                 AffectColor = Color.LightSkyBlue,
-                                Element = Skill.Element.Ice,
-                                Activation = 1.5f,
-                                Cooldown = 1.0f,
+                                BaseActivation = 1.5f,
+                                BaseCooldown = 1.0f,
                                 CustomAttributes = new(new Attribute[]
                                 {
                                     new()
@@ -128,15 +128,16 @@ namespace AsLegacy.Characters
                                         Name = "Range"
                                     }
                                 }),
+                                Element = Skill.Element.Ice,
                                 FormattableDescription = $"Creates an expanding ring of\nice that deals damage to all\nenemies that it touches.",
+                                Performance = Skill.Performance.Spell
                             },
                             new()
                             {
                                 Name = "Exploding Star",
                                 AffectColor = Color.Orange,
-                                Element = Skill.Element.Fire,
-                                Activation = 1.5f,
-                                Cooldown = 1.5f,
+                                BaseActivation = 1.5f,
+                                BaseCooldown = 1.5f,
                                 CustomAttributes = new(new Attribute[]
                                 {
                                     new()
@@ -160,7 +161,9 @@ namespace AsLegacy.Characters
                                         Name = "Range"
                                     }
                                 }),
+                                Element = Skill.Element.Fire,
                                 FormattableDescription = $"Creates an expanding ring of\nfire that deals damage to all\nenemies that it touches.",
+                                Performance = Skill.Performance.Spell
                             }
                         }),
                         Name = "Nova",
@@ -181,13 +184,13 @@ namespace AsLegacy.Characters
                     {
                         Name = "Focus",
                         AffectColor = Color.Goldenrod,
-                        FormattableDescription = $"Reduce Activation time for all Skills by {0}%.", // Prefixed space for alignment.
+                        FormattableDescription = $"Reduce Activation time for all Skills by {0}%.",
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
                             AffectedAspect = Aspect.Activation
                         },
-                        Algorithm = (investment) => investment
+                        Algorithm = (investment) => investment / 100.0f
                     },
                     new()
                     {
@@ -196,22 +199,22 @@ namespace AsLegacy.Characters
                         FormattableDescription = $"Convert {0}% of received Damage to Cooldown (1 damage to .1 seconds) for the next used Skill.",
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
                             AffectedAspect = Aspect.DamageToCooldown
                         },
-                        Algorithm = (investment) => investment / 10.0f
+                        Algorithm = (investment) => investment / 100.0f
                     },
                     new()
                     {
                         Name = "Clear Mind",
                         AffectColor = Color.Green,
-                        FormattableDescription = $"For each consecutive Non-Spell Attack, reduce the Activation and Cooldown of the next cast Spell by {0}%.",
+                        FormattableDescription = $"For each consecutive Non-Spell Attack, reduce the final Activation and Cooldown of the next cast Spell by {0}%.",
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
                             AffectedAspect = Aspect.NextSpellReductionForConsecutiveAttacks
                         },
-                        Algorithm = (investment) => investment
+                        Algorithm = (investment) => investment / 100.0f
                     },
                     new()
                     {
@@ -220,10 +223,10 @@ namespace AsLegacy.Characters
                         FormattableDescription = $"Reduce Cooldown time for all Non-Elemental Spells by {0}%.",
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
                             AffectedAspect = Aspect.CooldownNonElementalSpells
                         },
-                        Algorithm = (investment) =>investment
+                        Algorithm = (investment) => investment / 100.0f
                     },
                     new()
                     {
@@ -232,22 +235,10 @@ namespace AsLegacy.Characters
                         FormattableDescription = $"+{0}% Lightning damage.",
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
                             AffectedAspect = Aspect.LightningDamage
                         },
-                        Algorithm = (investment) => 2.0f * investment
-                    },
-                    new()
-                    {
-                        Name = "Fire Mastery",
-                        AffectColor = Color.OrangeRed,
-                        FormattableDescription = $"+{0}% Fire damage.",
-                        Influence = new()
-                        {
-                            AffectOnAspect = Influence.Purpose.Scale,
-                            AffectedAspect = Aspect.FireDamage
-                        },
-                        Algorithm = (investment) => 2.0f * investment
+                        Algorithm = (investment) => investment / 50.0f
                     },
                     new()
                     {
@@ -256,10 +247,22 @@ namespace AsLegacy.Characters
                         FormattableDescription = $"+{0}% Ice damage.",
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.Scale,
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
                             AffectedAspect = Aspect.IceDamage
                         },
-                        Algorithm = (investment) => 2.0f * investment
+                        Algorithm = (investment) => investment / 50.0f
+                    },
+                    new()
+                    {
+                        Name = "Fire Mastery",
+                        AffectColor = Color.OrangeRed,
+                        FormattableDescription = $"+{0}% Fire damage.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
+                            AffectedAspect = Aspect.FireDamage
+                        },
+                        Algorithm = (investment) => investment / 50.0f
                     }
                 })
             });

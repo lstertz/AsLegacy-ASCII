@@ -17,10 +17,19 @@
             /// </summary>
             Add,
             /// <summary>
+            /// The purpose of being subtracted from a scale value, to scale the base value 
+            /// of an <see cref="Aspect"/>.
+            /// </summary>
+            ScaleDown,
+            /// <summary>
             /// The purpose of being added to a scale value, to scale the base value 
             /// of an <see cref="Aspect"/>.
             /// </summary>
-            Scale
+            ScaleUp,
+            /// <summary>
+            /// The purpose of being subtracted from the base value of an <see cref="Aspect"/>.
+            /// </summary>
+            Subtract
         }
 
         /// <summary>

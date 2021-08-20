@@ -195,10 +195,12 @@ namespace AsLegacy
                         if (!_character.IsAlive)
                             return;
 
-                        float damageReduction = 0.0f;
-                        if (_character.ActiveMode == Mode.Defend)
-                            damageReduction = damage * (this as ICombat).DefenseDamageReduction;
-                        CurrentHealth -= (damage - damageReduction);
+                        float actualDamage = DamageAfterDefense(damage);
+                        actualDamage = DamageAfterCooldownConversion(actualDamage, 
+                            out float convertedCooldown);
+                        _character._unappliedCooldown += (int)(convertedCooldown * 1000);
+
+                        CurrentHealth -= actualDamage;
 
                         // TODO :: Reduce damage based on elemental type.
 
@@ -231,6 +233,45 @@ namespace AsLegacy
                     {
                         CurrentHealth += MaxHealth - previousMax;
                     }
+
+
+                    /// <summary>
+                    /// Determines the damage remaining after 
+                    /// the <see cref="Aspect.DamageToCooldown"/> influence is applied.
+                    /// </summary>
+                    /// <param name="damage">The original damage to be converted.</param>
+                    /// <param name="convertedCooldown">The amount of cooldown, in seconds, 
+                    /// resulting from the conversion.</param>
+                    /// <returns>The remaining damage after conversion.</returns>
+                    private float DamageAfterCooldownConversion(float damage, 
+                        out float convertedCooldown)
+                    {
+                        _character.GetAspectInfluences(Aspect.DamageToCooldown,
+                            out float valueConversion, out float scaleConversion);
+
+                        float convertedDamage = damage < valueConversion ?
+                            damage : valueConversion;
+                        convertedDamage += (damage - convertedDamage) * scaleConversion;
+                        if (convertedDamage > damage)
+                            convertedDamage = damage;
+
+                        convertedCooldown = convertedDamage / 10.0f;  // .1 seconds per 1 damage.
+                        return damage - convertedDamage;
+                    }
+
+                    /// <summary>
+                    /// Determines the damage remaining after accounting for the 
+                    /// standard <see cref="ICombat.DefenseDamageReduction"/> of the character.
+                    /// </summary>
+                    /// <param name="damage">The original damage to be reduced.</param>
+                    /// <returns>The remaining damage after reduction.</returns>
+                    private float DamageAfterDefense(float damage)
+                    {
+                        float damageReduction = 0.0f;
+                        if (_character.ActiveMode == Mode.Defend)
+                            damageReduction = damage * (this as ICombat).DefenseDamageReduction;
+                        return damage - damageReduction;
+                    }
                 }
 
 
@@ -249,6 +290,8 @@ namespace AsLegacy
                             float dealtDamage = aState.AttackDamage;
                             t._combatState.ReceiveDamage(attacker, 
                                 dealtDamage, Skill.Element.Physical);
+
+                            attacker._consecutiveAttackCount++;
 
                             attacker.AvailableSkillPoints++;
                         },

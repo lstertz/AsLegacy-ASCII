@@ -47,7 +47,7 @@ namespace AsLegacy.Characters
         {
             if (Character == null)
                 throw new InvalidOperationException("There is no existing Player from which to " +
-                    "base a successo.");
+                    "base a successor.");
 
             if (Character != null && Character.IsAlive)
                 throw new InvalidOperationException("The current Player Character is still " +

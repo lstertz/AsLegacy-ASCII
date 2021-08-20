@@ -49,6 +49,14 @@ namespace AsLegacy.GUI
         }
 
         /// <summary>
+        /// Resets display elements.
+        /// </summary>
+        public static void Reset()
+        {
+            PlayScreen.Reset();
+        }
+
+        /// <summary>
         /// Changes the Display to show only the specified screen.
         /// </summary>
         /// <param name="screen">The screen to be shown.</param>

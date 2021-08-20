@@ -101,7 +101,7 @@ namespace AsLegacy
             /// The number of skill points that this Character has available 
             /// for investing in skills.
             /// </summary>
-            public int AvailableSkillPoints { get; private set; }
+            public int AvailableSkillPoints { get; private set; } = 0;
 
             /// <summary>
             /// The Character's AI.
@@ -117,7 +117,7 @@ namespace AsLegacy
             /// The cooldown of this Character, as a percentage (0 - 1), of how much of 
             /// a current cooldown time remains.
             /// </summary>
-            public float Cooldown => TotalCooldown == 0 ? 
+            public float Cooldown => TotalCooldown == 0 ?
                 0.0f : 1.0f - (PassedCooldown * 1.0f) / TotalCooldown;
 
             /// <summary>
@@ -232,6 +232,8 @@ namespace AsLegacy
 
             private readonly BaseSettings _baseSettings;
             private readonly Combat.State _combatState;
+            private int _consecutiveAttackCount = 0;
+            private int _unappliedCooldown = 0;
 
             private readonly Dictionary<Talent, int> _talentInvestments = new();
             private readonly Dictionary<Aspect, List<Talent>> _aspectInfluencers = new();
@@ -261,7 +263,7 @@ namespace AsLegacy
                             break;
 
                         if (baseSettings.InitialPassiveInvestments[c] != 0)
-                            _talentInvestments.Add(Class.Passives[c],
+                            IncreaseTalentInvestment(Class.Passives[c],
                                 baseSettings.InitialPassiveInvestments[c]);
                     }
 
@@ -297,14 +299,16 @@ namespace AsLegacy
             public virtual float GetAffect(Characters.Attribute affectAttribute)
             {
                 float baseValue = affectAttribute.BaseValue;
-                float scale = affectAttribute.BaseScale;
+                float scale = 1.0f;
 
                 for (int c = 0, count = affectAttribute.Aspects.Count; c < count; c++)
                 {
-                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue, out float aspectScale);
+                    GetAspectInfluences(affectAttribute.Aspects[c], out float aspectBaseValue,
+                        out float aspectScale);
                     baseValue += aspectBaseValue;
                     scale += aspectScale;
                 }
+                scale = affectAttribute.BaseScale * scale;
 
                 return baseValue * scale;
             }
@@ -334,8 +338,9 @@ namespace AsLegacy
 
                 Skill skill = _skills[skillName];
                 Affect[] affects = skill.GetAffects(this);
-                int activationInMilliseconds = (int)(skill.Activation * 1000.0f);
-                new Action(this, activationInMilliseconds,
+                int activationInMilliseconds = (int)(GetActivation(skill) * 1000.0f);
+
+                _ = new Action(this, activationInMilliseconds,
                     () =>
                     {
                         Effect lastMadeEffect = null;
@@ -355,7 +360,19 @@ namespace AsLegacy
                                         Performer = this,
                                         Range = affects[c].Range,
                                         Target = affects[c].Target,
-                                        UponDamageDealt = () => AvailableSkillPoints++
+                                        UponDamageDealt = () =>
+                                        {
+                                            AvailableSkillPoints++;
+
+                                            Skill.Performance p = skill.Affinity.Performance;
+                                            if (p == Skill.Performance.Attack)
+                                                _consecutiveAttackCount++;
+                                            else if (p != Skill.Performance.Spell)
+                                                throw new NotImplementedException(
+                                                    $"The skill performance type, " +
+                                                    $"{p}, is not handled for updating " +
+                                                    $"consecutive attack counts.");
+                                        }
                                     };
                                     break;
                                 default:
@@ -368,7 +385,16 @@ namespace AsLegacy
                         lastMadeEffect.Start();
 
                         PassedCooldown = 0;
-                        TotalCooldown += (int)(skill.Cooldown * 1000.0f);
+                        TotalCooldown += (int)(GetCooldown(skill) * 1000.0f);
+                        TotalCooldown += _unappliedCooldown;
+                        _unappliedCooldown = 0;
+
+                        if (skill.Affinity.Performance == Skill.Performance.Spell)
+                            _consecutiveAttackCount = 0;
+                        else if (skill.Affinity.Performance != Skill.Performance.Attack)
+                            throw new NotImplementedException(
+                                $"The skill performance type, {skill.Affinity.Performance}, " +
+                                $"is not handled for updating consecutive attack counts.");
                     },
                     () =>
                     {
@@ -396,17 +422,7 @@ namespace AsLegacy
                 float previousMaxHealth = MaxHealth;
 
                 AvailableSkillPoints -= amount;
-                if (!_talentInvestments.ContainsKey(talent))
-                {
-                    Aspect affectedAttribute = talent.Influence.AffectedAspect;
-                    if (!_aspectInfluencers.ContainsKey(affectedAttribute))
-                        _aspectInfluencers.Add(affectedAttribute, new());
-                    _aspectInfluencers[affectedAttribute].Add(talent);
-
-                    _talentInvestments.Add(talent, amount);
-                }
-                else
-                    _talentInvestments[talent] += amount;
+                IncreaseTalentInvestment(talent, amount);
 
                 // TODO :: Remove.
                 // Temporarily update current health for the change in max health.
@@ -595,9 +611,31 @@ namespace AsLegacy
                 ActiveMode = Mode.Normal;
 
                 (CurrentAction as IAction)?.Cancel();
-                new World.Action(CharacterRemovalTime, () => RemoveCharacter(this));
+                _ = new World.Action(CharacterRemovalTime, () => RemoveCharacter(this));
             }
 
+
+            /// <summary>
+            /// Provides the actual activation time to perform the provided <see cref="Skill"/>.
+            /// </summary>
+            /// <param name="skill">The skill whose activation time is being retrieved.</param>
+            /// <returns>The activation time, in seconds.</returns>
+            private float GetActivation(Skill skill)
+            {
+                float activation = skill.GetActivation(this);
+
+                if (skill.Affinity.Performance == Skill.Performance.Spell)
+                {
+                    GetAspectInfluences(Aspect.NextSpellReductionForConsecutiveAttacks, 
+                        out float value, out float scale);
+                    activation += value * _consecutiveAttackCount;
+                    activation *= ((scale * _consecutiveAttackCount) + 1);
+                }
+
+                if (activation > 0.0f)
+                    return activation;
+                return 0.0f;
+            }
 
             /// <summary>
             /// Provides the cumulative base value and scale change associated with the 
@@ -630,14 +668,64 @@ namespace AsLegacy
                         case Influence.Purpose.Add:
                             totalBaseValue += affect;
                             break;
-                        case Influence.Purpose.Scale:
+                        case Influence.Purpose.ScaleDown:
+                            totalScaleChange -= affect;
+                            break;
+                        case Influence.Purpose.ScaleUp:
                             totalScaleChange += affect;
+                            break;
+                        case Influence.Purpose.Subtract:
+                            totalBaseValue -= affect;
                             break;
                         default:
                             throw new NotImplementedException($"The influence purpose " +
                                 $"{influence.AffectOnAspect} is not supported.");
                     }
                 }
+            }
+
+            /// <summary>
+            /// Provides the actual cooldown time from performing the provided <see cref="Skill"/>.
+            /// </summary>
+            /// <param name="skill">The skill whose cooldown time is being retrieved.</param>
+            /// <returns>The cooldown time, in seconds.</returns>
+            private float GetCooldown(Skill skill)
+            {
+                float cooldown = skill.GetCooldown(this);
+
+                if (skill.Affinity.Performance == Skill.Performance.Spell)
+                {
+                    GetAspectInfluences(Aspect.NextSpellReductionForConsecutiveAttacks,
+                        out float value, out float scale);
+                    cooldown += value * _consecutiveAttackCount;
+                    cooldown *= ((scale * _consecutiveAttackCount + 1));
+                }
+
+                if (cooldown > 0.0f)
+                    return cooldown;
+                return 0.0f;
+            }
+
+            /// <summary>
+            /// Increases the investment in the specified <see cref="Talent"/> 
+            /// by the specified amount, or defines a new investment if there had been no
+            /// previous investment.
+            /// </summary>
+            /// <param name="talent">The talent whose investment is to increase.</param>
+            /// <param name="amount">The amount to increase.</param>
+            private void IncreaseTalentInvestment(Talent talent, int amount)
+            {
+                if (!_talentInvestments.ContainsKey(talent))
+                {
+                    Aspect affectedAttribute = talent.Influence.AffectedAspect;
+                    if (!_aspectInfluencers.ContainsKey(affectedAttribute))
+                        _aspectInfluencers.Add(affectedAttribute, new());
+                    _aspectInfluencers[affectedAttribute].Add(talent);
+
+                    _talentInvestments.Add(talent, amount);
+                }
+                else
+                    _talentInvestments[talent] += amount;
             }
 
             /// <summary>

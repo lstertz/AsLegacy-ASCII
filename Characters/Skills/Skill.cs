@@ -10,7 +10,7 @@ namespace AsLegacy.Characters.Skills
     public record Skill
     {
         /// <summary>
-        /// The category that defines how a skill is considered relative to other skills.
+        /// Defines how a skill is considered relative to other skills.
         /// </summary>
         public enum Category
         {
@@ -31,6 +31,15 @@ namespace AsLegacy.Characters.Skills
         }
 
         /// <summary>
+        /// Defines how the skill is performed.
+        /// </summary>
+        public enum Performance
+        {
+            Attack,
+            Spell
+        }
+
+        /// <summary>
         /// The type of a skill, which defines the effects of the skill and its visuals.
         /// </summary>
         public enum Type
@@ -46,21 +55,6 @@ namespace AsLegacy.Characters.Skills
             TargetEffect
         }
 
-        /// <summary>
-        /// The time, in seconds, required for this Skill to be activated.
-        /// </summary>
-        public float Activation
-        {
-            get => Affinity.Activation; // TODO :: Incorporate augmenting concepts.
-        }
-        /// <summary>
-        /// The time, in seconds, that a Character must cooldown 
-        /// after this Skill has been activated.
-        /// </summary>
-        public float Cooldown
-        {
-            get => Affinity.Cooldown; // TODO :: Incorporate augmenting concepts.
-        }
 
         /// <summary>
         /// The underlying affinity that defines some of the core functionality 
@@ -80,6 +74,17 @@ namespace AsLegacy.Characters.Skills
         /// </summary>
         public Concept Concept { get; init; }
 
+
+        /// <summary>
+        /// Provides the activation, in seconds, for performing the skill.
+        /// </summary>
+        /// <param name="character">The <see cref="World.Character"/> performing the skill.</param>
+        /// <returns>The activation time, in seconds.</returns>
+        public float GetActivation(World.Character character)
+        {
+            // TODO :: Incorporate augmenting concepts.
+            return Affinity.GetActivation(character);
+        }
 
         /// <summary>
         /// Provides the <see cref="Affect"/>s that define the effects of this <see cref="Skill"/>.
@@ -106,6 +111,17 @@ namespace AsLegacy.Characters.Skills
                         Type = Concept.Type
                     }
                 };
+        }
+
+        /// <summary>
+        /// Provides the cooldown, in seconds, for performing the skill.
+        /// </summary>
+        /// <param name="character">The <see cref="World.Character"/> performing the skill.</param>
+        /// <returns>The cooldown time, in seconds.</returns>
+        public float GetCooldown(World.Character character)
+        {
+            // TODO :: Incorporate augmenting concepts.
+            return Affinity.GetCooldown(character);
         }
     }
 }
