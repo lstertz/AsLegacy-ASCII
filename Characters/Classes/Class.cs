@@ -202,7 +202,7 @@ namespace AsLegacy.Characters
                             AffectOnAspect = Influence.Purpose.ScaleUp,
                             AffectedAspect = Aspect.DamageToCooldown
                         },
-                        Algorithm = (investment) => investment / 1000.0f
+                        Algorithm = (investment) => investment / 100.0f
                     },
                     new()
                     {

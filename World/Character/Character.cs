@@ -233,6 +233,7 @@ namespace AsLegacy
             private readonly BaseSettings _baseSettings;
             private readonly Combat.State _combatState;
             private int _consecutiveAttackCount = 0;
+            private int _unappliedCooldown = 0;
 
             private readonly Dictionary<Talent, int> _talentInvestments = new();
             private readonly Dictionary<Aspect, List<Talent>> _aspectInfluencers = new();
@@ -373,6 +374,8 @@ namespace AsLegacy
 
                         PassedCooldown = 0;
                         TotalCooldown += (int)(GetCooldown(skill) * 1000.0f);
+                        TotalCooldown += _unappliedCooldown;
+                        _unappliedCooldown = 0;
 
                         if (skill.Affinity.Performance == Skill.Performance.Attack)
                             _consecutiveAttackCount++;
