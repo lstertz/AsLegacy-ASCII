@@ -21,7 +21,7 @@ a Concept or a Passive by clicking the corresponding '+'. Diamonds next to a Con
 Skills that can be learned from that Concept; clicking the diamond opens a prompt to learn the 
 Skill, which is equipped to the first available Skill slot. Passive investments 
 are applied passively. Every two points invested in a Passive earns a Successor Point. 
-Successor points accumulate over generations and can be applied to the passives of each 
+Successor Points accumulate over generations and can be invested in the Passives of each 
 new successor.<br>
 <br>
 A Beast NPC will transfer all of its legacy to its killer upon death, while the 
