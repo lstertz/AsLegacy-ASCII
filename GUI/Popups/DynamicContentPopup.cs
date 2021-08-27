@@ -79,9 +79,9 @@ namespace AsLegacy.GUI.Popups
         {
             int totalContentLineCount = 0;
             int longestContentWidth = 0;
-            string[] splitContent = newContent.Split('\n');
+            List<string> splitContent = GetContentLines(newContent);
 
-            for (int c = 0, count = splitContent.Length; c < count; c++)
+            for (int c = 0, count = splitContent.Count; c < count; c++)
             {
                 string content = splitContent[c];
                 int contentLineCount = content.Length / _maxLineWidth;
@@ -146,6 +146,47 @@ namespace AsLegacy.GUI.Popups
             _requiredTitleWidth = Title.Length + FrameSpaceHorizontal;
             _width = _requiredLineWidth > _requiredTitleWidth ? 
                 _requiredLineWidth : _requiredTitleWidth;
+        }
+
+        /// <summary>
+        /// Provides the lines that the provided content should be split into.
+        /// Splitting will be done in a manner to avoid splitting in the middle of words, and 
+        /// will trim whitespace at the start of a line.
+        /// </summary>
+        /// <param name="content">The content to be split.</param>
+        /// <returns>A list of the lines of split content.</returns>
+        private List<string> GetContentLines(string content)
+        {
+            string[] newLineContent = content.Split('\n');
+            List<string> splitContent = new();
+
+            for (int c = 0, count = newLineContent.Length; c < count; c++)
+            {
+                string remainingContent = newLineContent[c].TrimStart();
+                while (remainingContent.Length > 0)
+                {
+                    string lineContent = remainingContent;
+                    if (remainingContent.Length > _maxLineWidth)
+                    {
+                        lineContent = remainingContent.Substring(0, _maxLineWidth);
+                        if (remainingContent[_maxLineWidth] != ' ')
+                        {
+                            for (int lc = lineContent.Length - 1; lc >= 0; lc--)
+                            {
+                                if (lineContent[lc] == ' ')
+                                {
+                                    lineContent = lineContent.Substring(0, lc);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    remainingContent = remainingContent.Substring(lineContent.Length).TrimStart();
+                    splitContent.Add(lineContent);
+                }
+            }
+
+            return splitContent;
         }
     }
 }
