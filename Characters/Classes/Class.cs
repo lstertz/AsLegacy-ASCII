@@ -188,7 +188,7 @@ namespace AsLegacy.Characters
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.ScaleDown,
-                            AffectedAspect = Aspect.Activation
+                            AffectedAspect = Aspect.SkillActivation
                         },
                         Algorithm = (investment) => investment / 100.0f
                     },

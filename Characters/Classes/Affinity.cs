@@ -36,7 +36,8 @@ namespace AsLegacy.Characters
         {
             Aspects = new(new Aspect[]
                 {
-                    Aspect.Activation
+                    Aspect.Activation,
+                    Aspect.SkillActivation
                 }),
             Name = ActivationName
         };
