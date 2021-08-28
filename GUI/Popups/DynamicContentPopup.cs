@@ -77,59 +77,38 @@ namespace AsLegacy.GUI.Popups
         /// <param name="newContent">The new content of the pop-up.</param>
         public void UpdateContent(string newContent)
         {
-            int totalContentLineCount = 0;
             int longestContentWidth = 0;
             List<string> splitContent = GetContentLines(newContent);
 
             for (int c = 0, count = splitContent.Count; c < count; c++)
             {
                 string content = splitContent[c];
-                int contentLineCount = content.Length / _maxLineWidth;
-                if (content.Length % _maxLineWidth != 0)
-                    contentLineCount++;
-
-                int contentWidth = contentLineCount > 1 ? _maxWidth :
-                    content.Length > _minWidth ? content.Length + FrameSpaceHorizontal : _minWidth;
-                if (contentWidth > longestContentWidth)
-                    longestContentWidth = contentWidth;
-
-                string remainingContent = content;
-                for (int cc = 0; cc < contentLineCount; cc++)
+                if (c >= _textLines.Count)
                 {
-                    int totalC = totalContentLineCount + cc;
-                    if (totalC >= _textLines.Count)
+                    Label newLine = new(_maxLineWidth)
                     {
-                        Label newLine = new(_maxLineWidth)
-                        {
-                            Position = new(FrameSpaceHorizontal / 2, 
-                                TitleHeightSpace + FrameSpaceVertical / 2 + totalC)
-                        };
-                        _textLines.Add(newLine);
-                        Add(newLine);
-                    }
-
-                    string currentContent = remainingContent;
-                    if (cc < contentLineCount - 1)
-                    {
-                        currentContent = remainingContent.Substring(0, _maxLineWidth);
-                        remainingContent = remainingContent.Substring(_maxLineWidth);
-                    }
-
-                    _textLines[totalC].DisplayText = currentContent;
-                    _textLines[totalC].IsEnabled = true;
-                    _textLines[totalC].IsDirty = true;
-                    _textLines[totalC].IsVisible = true;
+                        Position = new(FrameSpaceHorizontal / 2,
+                            TitleHeightSpace + FrameSpaceVertical / 2 + c)
+                    };
+                    _textLines.Add(newLine);
+                    Add(newLine);
                 }
 
-                totalContentLineCount += contentLineCount;
+                if (content.Length > longestContentWidth)
+                    longestContentWidth = content.Length;
+
+                _textLines[c].DisplayText = content;
+                _textLines[c].IsEnabled = true;
+                _textLines[c].IsDirty = true;
+                _textLines[c].IsVisible = true;
             }
 
-            _requiredLineWidth = longestContentWidth;
-            _width = _requiredLineWidth > _requiredTitleWidth ? 
+            _requiredLineWidth = longestContentWidth + FrameSpaceHorizontal;
+            _width = _requiredLineWidth > _requiredTitleWidth ?
                 _requiredLineWidth : _requiredTitleWidth;
-            _height = totalContentLineCount + FrameSpaceVertical + TitleHeightSpace;
+            _height = splitContent.Count + FrameSpaceVertical + TitleHeightSpace;
 
-            for (int c = _textLines.Count - 1; c > totalContentLineCount - 1; c--)
+            for (int c = _textLines.Count - 1; c > splitContent.Count - 1; c--)
                 _textLines[c].IsVisible = false;
 
             Invalidate();
@@ -144,7 +123,7 @@ namespace AsLegacy.GUI.Popups
             Title = newTitle;
 
             _requiredTitleWidth = Title.Length + FrameSpaceHorizontal;
-            _width = _requiredLineWidth > _requiredTitleWidth ? 
+            _width = _requiredLineWidth > _requiredTitleWidth ?
                 _requiredLineWidth : _requiredTitleWidth;
         }
 

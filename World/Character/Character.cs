@@ -514,7 +514,12 @@ namespace AsLegacy
                         _baseSettings.InitialNormalMovementInterval :
                         _baseSettings.InitialAttackMovementInterval;
 
-                    new Action(this, movementInterval,
+                    GetAspectInfluences(Aspect.Activation, 
+                        out float valueChange, out float scaleChange);
+                    movementInterval += (int)(valueChange * 1000.0f);  // Convert value to seconds.
+                    movementInterval = (int)(movementInterval * (1.0f + scaleChange));
+
+                    _ = new Action(this, movementInterval,
                         () =>
                         {
                             Move(intendedRow, intendedColumn);

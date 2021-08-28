@@ -28,6 +28,7 @@
         IceDamage,
         LightningDamage,
         MaxHealth,
-        NextSpellReductionForConsecutiveAttacks
+        NextSpellReductionForConsecutiveAttacks,
+        SkillActivation
     }
 }

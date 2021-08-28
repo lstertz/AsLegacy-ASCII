@@ -19,16 +19,25 @@ namespace AsLegacy.Characters
         /// <summary>
         /// The initial scalar to be applied to the affect of this <see cref="Attribute"/>.
         /// </summary>
+        /// <remarks>
+        /// Default of 1.
+        /// </remarks>
         public float BaseScale { get; init; } = 1.0f;
 
         /// <summary>
         /// The initial (unscaled) value of the affect of this <see cref="Attribute"/>.
         /// </summary>
+        /// <remarks>
+        /// Default of 0.
+        /// </remarks>
         public float BaseValue { get; init; } = 0.0f;
 
         /// <summary>
         /// The descriptive name for presenting or referring to this <see cref="Attribute"/>.
         /// </summary>
-        public string Name { get; init; }
+        /// <remarks>
+        /// Default of null.
+        /// </remarks>
+        public string Name { get; init; } = null;
     }
 }
