@@ -246,6 +246,40 @@ namespace AsLegacy
         }
 
         /// <summary>
+        /// Provides the passable position nearest to the specified point, which becomes 
+        /// the center for all positions evaluated.
+        /// </summary>
+        /// <remarks>
+        /// Positions are considered by spiraling 
+        /// outwards from the center, clockwise, starting from the adjacent right 
+        /// of the center.
+        /// </remarks>
+        /// <param name="center">The position that the nearest passable position 
+        /// should be found from.</param>
+        /// <returns>The center position, if it is passable, otherwise the nearest 
+        /// position to the center position.</returns>
+        public static Point GetPassablePositionNear(Point center)
+        {
+            // TODO :: Spiraling outward from the center, find a passable position near it.
+            return center;
+        }
+
+        /// <summary>
+        /// Provides a random passable position from the map.
+        /// </summary>
+        /// <returns>A Point, the randomly chosen passable position.</returns>
+        public static Point GetRandomPassablePosition()
+        {
+            Random r = new Random();
+
+            Point passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
+            while (!IsPassable(passablePoint.Y, passablePoint.X))
+                passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
+
+            return passablePoint;
+        }
+
+        /// <summary>
         /// Specifies whether the provided position can be passed through.
         /// </summary>
         /// <param name="row">The row, defining the y axis of the position.</param>
@@ -304,21 +338,6 @@ namespace AsLegacy
 
                 current.Value.Evaluate(timeDelta);
             }
-        }
-
-        /// <summary>
-        /// Provides a random passable position from the map.
-        /// </summary>
-        /// <returns>A Point, the randomly chosen passable position.</returns>
-        public static Point GetRandomPassablePosition()
-        {
-            Random r = new Random();
-
-            Point passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
-            while (!IsPassable(passablePoint.Y, passablePoint.X))
-                passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
-
-            return passablePoint;
         }
 
 

@@ -6,6 +6,7 @@ using Game = SadConsole.Game;
 
 using AsLegacy.GUI;
 using AsLegacy.Characters;
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy
 {
@@ -75,7 +76,9 @@ namespace AsLegacy
 
             Class.Init();
             World.InitNewWorld();
-            Player.Create(12, 11, characterName, lineageName);
+
+            Point playerPosition = World.GetPassablePositionNear(new Point(11, 12));
+            Player.Create(playerPosition.Y, playerPosition.X, characterName, lineageName);
 
             Display.Reset();
             Display.ShowScreen(Display.Screen.Play);
