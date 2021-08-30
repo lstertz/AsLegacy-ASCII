@@ -65,6 +65,7 @@ namespace AsLegacy
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
         };
         private const int ExpectedBeastPopulation = 4;
+        public static readonly Rectangle NpcSpawnBounds = new(10, 11, 26, 25);
 
         /// <summary>
         /// The number of columns within the World.
@@ -110,7 +111,7 @@ namespace AsLegacy
         /// The displayable environment of the World.
         /// </summary>
         public static TileSet<Tile>.Display EnvironmentTiles => Environment.GetDisplay();
-        private static readonly TileSet<Tile> Environment = new TileSet<Tile>((row, column) =>
+        private static readonly TileSet<Tile> Environment = new((row, column) =>
         {
             if (Map[row][column] == 'T')
                 return new Tree();
@@ -170,7 +171,8 @@ namespace AsLegacy
             new ItemUser(14, 15, "Goblin", 10, "Orr");
 
             for (int c = 0; c < ExpectedBeastPopulation; c++)
-                new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
+                _ = new Beast(GetRandomPassablePosition(NpcSpawnBounds, out bool _), 
+                    Beast.GetRandomType());
         }
 
         /// <summary>
@@ -246,37 +248,35 @@ namespace AsLegacy
         }
 
         /// <summary>
-        /// Provides the passable position nearest to the specified point, which becomes 
-        /// the center for all positions evaluated.
-        /// </summary>
-        /// <remarks>
-        /// Positions are considered by spiraling 
-        /// outwards from the center, clockwise, starting from the adjacent right 
-        /// of the center.
-        /// </remarks>
-        /// <param name="center">The position that the nearest passable position 
-        /// should be found from.</param>
-        /// <returns>The center position, if it is passable, otherwise the nearest 
-        /// position to the center position.</returns>
-        public static Point GetPassablePositionNear(Point center)
-        {
-            // TODO :: Spiraling outward from the center, find a passable position near it.
-            return center;
-        }
-
-        /// <summary>
         /// Provides a random passable position from the map.
         /// </summary>
         /// <returns>A Point, the randomly chosen passable position.</returns>
         public static Point GetRandomPassablePosition()
         {
-            Random r = new Random();
+            Random r = new();
 
             Point passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
             while (!IsPassable(passablePoint.Y, passablePoint.X))
                 passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
 
             return passablePoint;
+        }
+
+        /// <summary>
+        /// Provides a random passable position from the map, within the specified bounds.
+        /// </summary>
+        /// <param name="bounds">The bounds within which the passable position 
+        /// will be chosen.</param>
+        /// <param name="foundPosition">Whether a passable position could be found 
+        /// within the specified bounds.</param>
+        /// <returns>A Point, the randomly chosen passable position.</returns>
+        public static Point GetRandomPassablePosition(Rectangle bounds, out bool foundPosition)
+        {
+            // TODO :: Determine how to store the open positions such that a position can be retrieved 
+            // from a subset of the map's positions, as appropriate for the bounds.
+
+            foundPosition = false;
+            return new(0, 0);
         }
 
         /// <summary>
@@ -376,9 +376,10 @@ namespace AsLegacy
             {
                 BeastCount--;
                 if (BeastCount < ExpectedBeastPopulation && replaceBeasts)
-                    new Action(20000, () =>
+                    _ = new Action(20000, () =>
                     {
-                        new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
+                        _ = new Beast(GetRandomPassablePosition(NpcSpawnBounds, out bool _), 
+                            Beast.GetRandomType());
                     });
             }
         }

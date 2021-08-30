@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 
 namespace AsLegacy.Characters
 {
@@ -16,8 +15,8 @@ namespace AsLegacy.Characters
             /// </summary>
             protected override void OnSpawnSuccessor()
             {
-                Point point = World.GetRandomPassablePosition();
-                new ItemUser(point.Y, point.X, CharacterName, new Settings(), this);
+                Point point = World.GetRandomPassablePosition(World.NpcSpawnBounds, out bool _);
+                _ = new ItemUser(point.Y, point.X, CharacterName, new Settings(), this);
             }
         }
     }
