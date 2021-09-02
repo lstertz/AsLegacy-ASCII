@@ -6,6 +6,7 @@ using Game = SadConsole.Game;
 
 using AsLegacy.GUI;
 using AsLegacy.Characters;
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy
 {
@@ -25,7 +26,7 @@ namespace AsLegacy
         /// While playing, this is the World Player, when dead and in 'viewer mode' this may 
         /// be any other living Character.
         /// </summary>
-        public static World.Character Focus { get => Player != null ? Player : ObservedCharacter; }
+        public static World.Character Focus { get => Player ?? ObservedCharacter; }
         private static World.Character ObservedCharacter = null;
 
         /// <summary>
@@ -75,7 +76,9 @@ namespace AsLegacy
 
             Class.Init();
             World.InitNewWorld();
-            Player.Create(12, 11, characterName, lineageName);
+
+            Point playerPosition = World.GetRandomPassablePosition(World.SpawnZone.Player);
+            Player.Create(playerPosition.Y, playerPosition.X, characterName, lineageName);
 
             Display.Reset();
             Display.ShowScreen(Display.Screen.Play);

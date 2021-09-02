@@ -138,7 +138,7 @@ namespace AsLegacy
                     // TODO :: Update naming of successors.
                     _successorPoints = MathF.Floor(_successorPoints);
 
-                    new World.Action(SpawnTime, OnSpawnSuccessor);
+                    _ = new World.Action(SpawnTime, OnSpawnSuccessor);
                     return true;
                 }
 

@@ -54,7 +54,7 @@ namespace AsLegacy.Characters
                     "active and cannot be replaced by a new instance.");
 
             Lineage lineage = Character.CharacterLineage as Lineage;
-            Point point = World.GetRandomPassablePosition();
+            Point point = World.GetRandomPassablePosition(World.SpawnZone.Player);
             Character = new Player(point.Y, point.X, name, lineage, initialPassiveInvestments);
         }
 

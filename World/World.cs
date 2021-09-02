@@ -26,10 +26,10 @@ namespace AsLegacy
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTTT.T....T.................TTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTT....T....T.TTTTT.TT..TTTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTT..TTT..TTT...TTTTTTTT..TTTTTTTTTTTTT".ToCharArray(),
-            "TTTTTTTTTTT...T..TTT...TTTTTTTT..TTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTT.......TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTT.......TTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTTT.TTTT.TTT...TTTTTTTT..TTTTTTTTTTTTT".ToCharArray(),
+            "TTTTTTTTTT....T..TTT...TTTTTTTT..TTTTTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTT..............TTTTTT....TTTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTTT...TT...TTTT.......TTT..TTTTTTTTTT".ToCharArray(),
             "TTTTTTTTTTTT..TTT..TTTTT.T..T..TTT.TTTTTTTTTTT".ToCharArray(),
@@ -66,6 +66,14 @@ namespace AsLegacy
         };
         private const int ExpectedBeastPopulation = 4;
 
+        private static readonly Zone _npcZone = new(new Rectangle[] { new(10, 11, 26, 25) });
+        private static readonly Zone _playerZone = new(new Rectangle[] { new(11, 9, 7, 2) });
+        private static readonly Dictionary<SpawnZone, Zone> _spawnZones = new()
+        {
+            { SpawnZone.NPC, _npcZone },
+            { SpawnZone.Player, _playerZone }
+        };
+
         /// <summary>
         /// The number of columns within the World.
         /// </summary>
@@ -95,8 +103,6 @@ namespace AsLegacy
         private static readonly SortedSet<Character> RankedCharacters = new();
         private static int BeastCount = 0;
 
-        private static readonly List<Point> OpenPositions = new();
-
         /// <summary>
         /// The displayable effects of the World.
         /// </summary>
@@ -110,12 +116,15 @@ namespace AsLegacy
         /// The displayable environment of the World.
         /// </summary>
         public static TileSet<Tile>.Display EnvironmentTiles => Environment.GetDisplay();
-        private static readonly TileSet<Tile> Environment = new TileSet<Tile>((row, column) =>
+        private static readonly TileSet<Tile> Environment = new((row, column) =>
         {
             if (Map[row][column] == 'T')
                 return new Tree();
 
-            OpenPositions.Add(new Point(column, row));
+            Point point = new(column, row);
+            _npcZone.RegisterOpenPosition(point);
+            _playerZone.RegisterOpenPosition(point);
+
             return new Path();
         });
 
@@ -167,10 +176,10 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            new ItemUser(14, 15, "Goblin", 10, "Orr");
+            _ = new ItemUser(14, 12, "Goblin", 10, "Orr");
 
             for (int c = 0; c < ExpectedBeastPopulation; c++)
-                new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
+                _ = new Beast(GetRandomPassablePosition(SpawnZone.NPC), Beast.GetRandomType());
         }
 
         /// <summary>
@@ -205,11 +214,11 @@ namespace AsLegacy
             int withinVertical)
         {
             if (character == null)
-                return new Character[0];
+                return Array.Empty<Character>();
 
             // TODO :: Optimize later, perhaps with 2D Linked Grid data structure support.
 
-            Dictionary<Character, int> nearCharacters = new Dictionary<Character, int>();
+            Dictionary<Character, int> nearCharacters = new();
             foreach (Character c in PresentCharacters)
             {
                 int columnDiff = character.Column - c.Column;
@@ -243,6 +252,21 @@ namespace AsLegacy
             }
 
             return sortedCharacters;
+        }
+
+        /// <summary>
+        /// Provides a random passable position from the map, within the specified spawn zone.
+        /// </summary>
+        /// <param name="spawnZone">The spawn zone from which the position should 
+        /// be chosen.</param>
+        /// <returns>A Point, the randomly chosen passable position.</returns>
+        public static Point GetRandomPassablePosition(SpawnZone spawnZone)
+        {
+            Point passablePoint = _spawnZones[spawnZone].GetRandomOpenPosition();
+            while (!IsPassable(passablePoint.Y, passablePoint.X))
+                passablePoint = _spawnZones[spawnZone].GetRandomOpenPosition();
+
+            return passablePoint;
         }
 
         /// <summary>
@@ -306,21 +330,6 @@ namespace AsLegacy
             }
         }
 
-        /// <summary>
-        /// Provides a random passable position from the map.
-        /// </summary>
-        /// <returns>A Point, the randomly chosen passable position.</returns>
-        public static Point GetRandomPassablePosition()
-        {
-            Random r = new Random();
-
-            Point passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
-            while (!IsPassable(passablePoint.Y, passablePoint.X))
-                passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
-
-            return passablePoint;
-        }
-
 
         /// <summary>
         /// Adds a Character to the World.
@@ -357,9 +366,10 @@ namespace AsLegacy
             {
                 BeastCount--;
                 if (BeastCount < ExpectedBeastPopulation && replaceBeasts)
-                    new Action(20000, () =>
+                    _ = new Action(20000, () =>
                     {
-                        new Beast(GetRandomPassablePosition(), Beast.GetRandomType());
+                        _ = new Beast(GetRandomPassablePosition(SpawnZone.NPC), 
+                            Beast.GetRandomType());
                     });
             }
         }
