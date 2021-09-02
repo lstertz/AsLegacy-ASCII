@@ -15,7 +15,7 @@ namespace AsLegacy.Characters
             /// </summary>
             protected override void OnSpawnSuccessor()
             {
-                Point point = World.GetRandomPassablePosition(World.NpcSpawnBounds, out bool _);
+                Point point = World.GetRandomPassablePosition(World.SpawnZone.NPC);
                 _ = new ItemUser(point.Y, point.X, CharacterName, new Settings(), this);
             }
         }

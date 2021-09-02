@@ -77,7 +77,7 @@ namespace AsLegacy
             Class.Init();
             World.InitNewWorld();
 
-            Point playerPosition = World.GetRandomPassablePosition(new(11, 9, 7, 2), out bool _);
+            Point playerPosition = World.GetRandomPassablePosition(World.SpawnZone.Player);
             Player.Create(playerPosition.Y, playerPosition.X, characterName, lineageName);
 
             Display.Reset();

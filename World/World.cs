@@ -65,7 +65,14 @@ namespace AsLegacy
             "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT".ToCharArray(),
         };
         private const int ExpectedBeastPopulation = 4;
-        public static readonly Rectangle NpcSpawnBounds = new(10, 11, 26, 25);
+
+        private static readonly Zone _npcZone = new(new Rectangle[] { new(10, 11, 26, 25) });
+        private static readonly Zone _playerZone = new(new Rectangle[] { new(11, 9, 7, 2) });
+        private static readonly Dictionary<SpawnZone, Zone> _spawnZones = new()
+        {
+            { SpawnZone.NPC, _npcZone },
+            { SpawnZone.Player, _playerZone }
+        };
 
         /// <summary>
         /// The number of columns within the World.
@@ -96,8 +103,6 @@ namespace AsLegacy
         private static readonly SortedSet<Character> RankedCharacters = new();
         private static int BeastCount = 0;
 
-        private static readonly List<Point> OpenPositions = new();
-
         /// <summary>
         /// The displayable effects of the World.
         /// </summary>
@@ -116,7 +121,10 @@ namespace AsLegacy
             if (Map[row][column] == 'T')
                 return new Tree();
 
-            OpenPositions.Add(new Point(column, row));
+            Point point = new(column, row);
+            _npcZone.RegisterOpenPosition(point);
+            _playerZone.RegisterOpenPosition(point);
+
             return new Path();
         });
 
@@ -247,35 +255,18 @@ namespace AsLegacy
         }
 
         /// <summary>
-        /// Provides a random passable position from the map.
+        /// Provides a random passable position from the map, within the specified spawn zone.
         /// </summary>
+        /// <param name="spawnZone">The spawn zone from which the position should 
+        /// be chosen.</param>
         /// <returns>A Point, the randomly chosen passable position.</returns>
-        public static Point GetRandomPassablePosition()
+        public static Point GetRandomPassablePosition(SpawnZone spawnZone)
         {
-            Random r = new();
-
-            Point passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
+            Point passablePoint = _spawnZones[spawnZone].GetRandomOpenPosition();
             while (!IsPassable(passablePoint.Y, passablePoint.X))
-                passablePoint = OpenPositions[r.Next(0, OpenPositions.Count)];
+                passablePoint = _spawnZones[spawnZone].GetRandomOpenPosition();
 
             return passablePoint;
-        }
-
-        /// <summary>
-        /// Provides a random passable position from the map, within the specified bounds.
-        /// </summary>
-        /// <param name="bounds">The bounds within which the passable position 
-        /// will be chosen.</param>
-        /// <param name="foundPosition">Whether a passable position could be found 
-        /// within the specified bounds.</param>
-        /// <returns>A Point, the randomly chosen passable position.</returns>
-        public static Point GetRandomPassablePosition(Rectangle bounds, out bool foundPosition)
-        {
-            // TODO :: Determine how to store the open positions such that a position can be retrieved 
-            // from a subset of the map's positions, as appropriate for the bounds.
-
-            foundPosition = false;
-            return new(0, 0);
         }
 
         /// <summary>
@@ -377,7 +368,7 @@ namespace AsLegacy
                 if (BeastCount < ExpectedBeastPopulation && replaceBeasts)
                     _ = new Action(20000, () =>
                     {
-                        _ = new Beast(GetRandomPassablePosition(NpcSpawnBounds, out bool _), 
+                        _ = new Beast(GetRandomPassablePosition(SpawnZone.NPC), 
                             Beast.GetRandomType());
                     });
             }
