@@ -26,7 +26,7 @@ namespace AsLegacy
         /// While playing, this is the World Player, when dead and in 'viewer mode' this may 
         /// be any other living Character.
         /// </summary>
-        public static World.Character Focus { get => Player != null ? Player : ObservedCharacter; }
+        public static World.Character Focus { get => Player ?? ObservedCharacter; }
         private static World.Character ObservedCharacter = null;
 
         /// <summary>

@@ -168,11 +168,10 @@ namespace AsLegacy
         /// </summary>
         private static void SeedCharacters()
         {
-            new ItemUser(14, 15, "Goblin", 10, "Orr");
+            _ = new ItemUser(14, 12, "Goblin", 10, "Orr");
 
             for (int c = 0; c < ExpectedBeastPopulation; c++)
-                _ = new Beast(GetRandomPassablePosition(NpcSpawnBounds, out bool _), 
-                    Beast.GetRandomType());
+                _ = new Beast(GetRandomPassablePosition(SpawnZone.NPC), Beast.GetRandomType());
         }
 
         /// <summary>
@@ -207,11 +206,11 @@ namespace AsLegacy
             int withinVertical)
         {
             if (character == null)
-                return new Character[0];
+                return Array.Empty<Character>();
 
             // TODO :: Optimize later, perhaps with 2D Linked Grid data structure support.
 
-            Dictionary<Character, int> nearCharacters = new Dictionary<Character, int>();
+            Dictionary<Character, int> nearCharacters = new();
             foreach (Character c in PresentCharacters)
             {
                 int columnDiff = character.Column - c.Column;
