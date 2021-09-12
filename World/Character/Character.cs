@@ -311,6 +311,18 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Provides a Character that exists only as a projection of this Character's stats.
+            /// The projection does not have presence on the map and will not alter 
+            /// this Character's state when it is altered, however it will otherwise provide stats 
+            /// that reflect its own changes on top of any stats of this Character.
+            /// </summary>
+            /// <returns>The projected Character.</returns>
+            public Projection GetProjection()
+            {
+                return new Projection(this);
+            }
+
+            /// <summary>
             /// Initiates the activation and subsequent performance of 
             /// the identified <see cref="Skill"/>.
             /// </summary>
