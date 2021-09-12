@@ -99,7 +99,20 @@ namespace AsLegacy
             private bool _defenseEnabled = false;
 
             /// <inheritdoc/>
-            public int AvailableSkillPoints { get; private set; } = 10;
+            public int AvailableSkillPoints
+            {
+                get => _availableSkillPoints;
+                set
+                {
+                    int original = _availableSkillPoints;
+                    _availableSkillPoints = value;
+
+                    if (value > original)
+                        OnAvailableSkillPointGain?.Invoke(value - original);
+                }
+            }
+            private int _availableSkillPoints = 0;
+            private Action<int> OnAvailableSkillPointGain { get; set; }
 
             /// <summary>
             /// The Character's AI.

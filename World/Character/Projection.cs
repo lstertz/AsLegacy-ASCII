@@ -19,8 +19,13 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public int AvailableSkillPoints { get; private set; }
 
-                private Dictionary<Talent, int> TalentInvestments { get; } = new();
-                private Dictionary<Aspect, List<Talent>> AspectInfluencers { get; } = new();
+                /// <summary>
+                /// Specifies whether the projection is different than its base Character.
+                /// </summary>
+                public bool HasChanged => _talentInvestments.Count > 0;
+
+                private readonly Dictionary<Talent, int> _talentInvestments = new();
+                private readonly Dictionary<Aspect, List<Talent>> _aspectInfluencers = new();
 
                 private readonly Character _base;
 
@@ -31,6 +36,7 @@ namespace AsLegacy
                 {
                     _base = character;
                     AvailableSkillPoints = _base.AvailableSkillPoints;
+                    _base.OnAvailableSkillPointGain += (amount) => AvailableSkillPoints += amount;
                 }
 
 
@@ -40,11 +46,11 @@ namespace AsLegacy
                 /// </summary>
                 public void ApplyToBase()
                 {
-                    foreach (Talent talent in TalentInvestments.Keys)
-                        _base.InvestInTalent(talent, TalentInvestments[talent]);
+                    foreach (Talent talent in _talentInvestments.Keys)
+                        _base.InvestInTalent(talent, _talentInvestments[talent]);
 
-                    TalentInvestments.Clear();
-                    AspectInfluencers.Clear();
+                    _talentInvestments.Clear();
+                    _aspectInfluencers.Clear();
                     AvailableSkillPoints = _base.AvailableSkillPoints;
                 }
 
@@ -69,7 +75,7 @@ namespace AsLegacy
                 /// <inheritdoc/>
                 public int GetInvestment(Talent talent)
                 {
-                    TalentInvestments.TryGetValue(talent, out int amount);
+                    _talentInvestments.TryGetValue(talent, out int amount);
                     return amount + _base.GetInvestment(talent);
                 }
 
@@ -81,7 +87,7 @@ namespace AsLegacy
                 /// <returns>The projected investment.</returns>
                 public int GetProjectedInvestment(Talent talent)
                 {
-                    TalentInvestments.TryGetValue(talent, out int amount);
+                    _talentInvestments.TryGetValue(talent, out int amount);
                     return amount;
                 }
 
@@ -128,14 +134,15 @@ namespace AsLegacy
                     totalScaleChange = 0.0f;
 
                     HashSet<Talent> influencers = new();
-                    if (AspectInfluencers.ContainsKey(aspect))
-                        influencers.UnionWith(AspectInfluencers[aspect]);
+                    if (_aspectInfluencers.ContainsKey(aspect))
+                        influencers.UnionWith(_aspectInfluencers[aspect]);
                     if (_base._aspectInfluencers.ContainsKey(aspect))
                         influencers.UnionWith(_base._aspectInfluencers[aspect]);
 
                     foreach (Talent talent in influencers)
                     {
-                        if (!TalentInvestments.ContainsKey(talent))
+                        if (!_talentInvestments.ContainsKey(talent) && 
+                            !_base._talentInvestments.ContainsKey(talent))
                             continue;
 
                         float affect = talent.GetAffect(GetInvestment(talent));
@@ -172,22 +179,22 @@ namespace AsLegacy
                 /// <returns>How much was actually decreased.</returns>
                 private int DecreaseTalentInvestment(Talent talent, int amount)
                 {
-                    if (!TalentInvestments.ContainsKey(talent))
+                    if (!_talentInvestments.ContainsKey(talent))
                         return 0;
 
-                    int actualAmount = TalentInvestments[talent] < amount ? 
-                        TalentInvestments[talent] : amount;
-                    TalentInvestments[talent] -= actualAmount;
+                    int actualAmount = _talentInvestments[talent] < amount ? 
+                        _talentInvestments[talent] : amount;
+                    _talentInvestments[talent] -= actualAmount;
 
-                    if (TalentInvestments[talent] <= 0)
+                    if (_talentInvestments[talent] <= 0)
                     {
                         Aspect affectedAttribute = talent.Influence.AffectedAspect;
-                        if (AspectInfluencers.ContainsKey(affectedAttribute))
-                            AspectInfluencers[affectedAttribute].Remove(talent);
-                        if (AspectInfluencers[affectedAttribute].Count == 0)
-                            AspectInfluencers.Remove(affectedAttribute);
+                        if (_aspectInfluencers.ContainsKey(affectedAttribute))
+                            _aspectInfluencers[affectedAttribute].Remove(talent);
+                        if (_aspectInfluencers[affectedAttribute].Count == 0)
+                            _aspectInfluencers.Remove(affectedAttribute);
 
-                        TalentInvestments.Remove(talent);
+                        _talentInvestments.Remove(talent);
                     }
 
                     return actualAmount;
@@ -202,17 +209,17 @@ namespace AsLegacy
                 /// <param name="amount">The amount to increase.</param>
                 private void IncreaseTalentInvestment(Talent talent, int amount)
                 {
-                    if (!TalentInvestments.ContainsKey(talent))
+                    if (!_talentInvestments.ContainsKey(talent))
                     {
                         Aspect affectedAttribute = talent.Influence.AffectedAspect;
-                        if (!AspectInfluencers.ContainsKey(affectedAttribute))
-                            AspectInfluencers.Add(affectedAttribute, new());
-                        AspectInfluencers[affectedAttribute].Add(talent);
+                        if (!_aspectInfluencers.ContainsKey(affectedAttribute))
+                            _aspectInfluencers.Add(affectedAttribute, new());
+                        _aspectInfluencers[affectedAttribute].Add(talent);
 
-                        TalentInvestments.Add(talent, amount);
+                        _talentInvestments.Add(talent, amount);
                     }
                     else
-                        TalentInvestments[talent] += amount;
+                        _talentInvestments[talent] += amount;
                 }
             }
         }
