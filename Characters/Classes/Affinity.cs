@@ -109,7 +109,7 @@ namespace AsLegacy.Characters
         /// <param name="character">The <see cref="World.Character"/> performing 
         /// the <see cref="Skill"/>.</param>
         /// <returns>The activation time, in seconds.</returns>
-        public float GetActivation(World.Character character)
+        public float GetActivation(World.ICharacter character)
         {
             float activation = character.GetAffect(_activation);
             return activation < 0.0f ? 0.0f : activation;
@@ -122,14 +122,14 @@ namespace AsLegacy.Characters
         /// <param name="character">The <see cref="World.Character"/> performing 
         /// the <see cref="Skill"/>.</param>
         /// <returns>The cooldown time, in seconds.</returns>
-        public float GetCooldown(World.Character character)
+        public float GetCooldown(World.ICharacter character)
         {
             float cooldown = character.GetAffect(_cooldown);
             return cooldown < 0.0f ? 0.0f : cooldown;
         }
 
         /// <inheritdoc/>
-        public override string GetDescription(World.Character character)
+        public override string GetDescription(World.ICharacter character)
         {
             StringBuilder builder = new(_descriptionFormat + "\n ");
             for (int c = 0, count = CustomAttributes.Count; c < count; c++)

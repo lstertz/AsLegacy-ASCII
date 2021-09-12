@@ -12,7 +12,8 @@ namespace AsLegacy
         /// Represents an abstraction of a CharacterBase that has a presence within the World.
         /// Such characters exist in a formal sense and can be interacted with.
         /// </summary>
-        public abstract partial class Character : CharacterBase, ICharacter, IRankedCharacter
+        public abstract partial class Character : CharacterBase, 
+            IInternalCharacter, IRankedCharacter, ICharacter
         {
             /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
@@ -60,7 +61,7 @@ namespace AsLegacy
 
 
             /// <inheritdoc/>
-            IAI ICharacter.AI => CharacterAI;
+            IAI IInternalCharacter.AI => CharacterAI;
 
             /// <summary>
             /// The character's present mode.
@@ -97,11 +98,21 @@ namespace AsLegacy
             private bool _attackEnabled = false;
             private bool _defenseEnabled = false;
 
-            /// <summary>
-            /// The number of skill points that this Character has available 
-            /// for investing in skills.
-            /// </summary>
-            public int AvailableSkillPoints { get; private set; } = 0;
+            /// <inheritdoc/>
+            public int AvailableSkillPoints
+            {
+                get => _availableSkillPoints;
+                set
+                {
+                    int original = _availableSkillPoints;
+                    _availableSkillPoints = value;
+
+                    if (value > original)
+                        OnAvailableSkillPointGain?.Invoke(value - original);
+                }
+            }
+            private int _availableSkillPoints = 0;
+            private Action<int> OnAvailableSkillPointGain { get; set; }
 
             /// <summary>
             /// The Character's AI.
@@ -153,7 +164,7 @@ namespace AsLegacy
                     return skills;
                 }
             }
-            private string[] _equippedSkills = new string[6];
+            private readonly string[] _equippedSkills = new string[6];
 
             /// <summary>
             /// The health of this Character, as a percentage (0 - 1) of its maximum health.
@@ -287,15 +298,7 @@ namespace AsLegacy
                 UpdateActiveMode();
             }
 
-            /// <summary>
-            /// Provides the complete affect, based on the Character's investments, 
-            /// for the specified attribute.
-            /// </summary>
-            /// <param name="affectAttribute">The attribute whose affect is being provided.</param>
-            /// <returns>The totaled (additive influencers) and scaled (scaling influencers) 
-            /// affect for the specified attribute, or the attribute's default calculated value 
-            /// if this Character has not invested in any of the attribute's 
-            /// related <see cref="Talent"/>s.</returns>
+            /// <inheritdoc/>
             public virtual float GetAffect(Characters.Attribute affectAttribute)
             {
                 float baseValue = affectAttribute.BaseValue;
@@ -313,17 +316,23 @@ namespace AsLegacy
                 return baseValue * scale;
             }
 
-            /// <summary>
-            /// Provides the amount of investment that this Character has 
-            /// in the provided <see cref="Talent"/>.
-            /// </summary>
-            /// <param name="talent">The <see cref="Talent"/> whose investment 
-            /// is to be retrieved.</param>
-            /// <returns>The amount of investment; 0 if there has been no investment.</returns>
+            /// <inheritdoc/>
             public int GetInvestment(Talent talent)
             {
                 _talentInvestments.TryGetValue(talent, out int amount);
                 return amount;
+            }
+
+            /// <summary>
+            /// Provides a Character that exists only as a projection of this Character's stats.
+            /// The projection does not have presence on the map and will not alter 
+            /// this Character's state when it is altered, however it will otherwise provide stats 
+            /// that reflect its own changes on top of any stats of this Character.
+            /// </summary>
+            /// <returns>The projected Character.</returns>
+            public Projection GetProjection()
+            {
+                return new Projection(this);
             }
 
             /// <summary>
@@ -403,33 +412,26 @@ namespace AsLegacy
                     });
             }
 
-            /// <summary>
-            /// Invests the specified amount in the provided <see cref="Talent"/>.
-            /// </summary>
-            /// <remarks>Investment may fail if the requested amount of points 
-            /// to be invested are not available.</remarks>
-            /// <param name="talent">The <see cref="Talent"/> to be invested in.</param>
-            /// <param name="amount">The investment amount.</param>
-            /// <returns>Whether the investment was successfully completed.</returns>
-            public virtual bool InvestInTalent(Talent talent, int amount)
+            /// <inheritdoc/>
+            public virtual int InvestInTalent(Talent talent, int amount)
             {
                 if (AvailableSkillPoints == 0)
-                    return false;
+                    return 0;
 
-                if (AvailableSkillPoints < amount)
-                    amount = AvailableSkillPoints;
+                int actualAmount = AvailableSkillPoints < amount ?
+                    AvailableSkillPoints : amount;
 
                 float previousMaxHealth = MaxHealth;
 
-                AvailableSkillPoints -= amount;
-                IncreaseTalentInvestment(talent, amount);
+                AvailableSkillPoints -= actualAmount;
+                IncreaseTalentInvestment(talent, actualAmount);
 
                 // TODO :: Remove.
                 // Temporarily update current health for the change in max health.
                 if (talent.Influence.AffectedAspect == Aspect.MaxHealth)
                     _combatState.UpdateForNewMaxHealth(previousMaxHealth);
 
-                return true;
+                return actualAmount;
             }
 
             /// <summary>
@@ -749,7 +751,7 @@ namespace AsLegacy
 
 
             /// <inheritdoc/>
-            void ICharacter.Update(int timeDelta)
+            void IInternalCharacter.Update(int timeDelta)
             {
                 if (IsInCooldown)
                 {

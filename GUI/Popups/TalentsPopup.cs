@@ -17,8 +17,10 @@ namespace AsLegacy.GUI.Popups
     public class TalentsPopup : Popup
     {
         private readonly string AffinityIcon = char.ToString((char)4);
+        private const int ApplyY = 5;
         private const string AvailablePointsText = "Available Points: ";
         private const int AvailablePointsY = 4;
+        private const int ConceptsStartingY = 6;
 
         private const string SuccessorPointsText = "Successor Points: ";
         private const int PointsMaxLength = 25;
@@ -28,17 +30,24 @@ namespace AsLegacy.GUI.Popups
 
         private const int TalentNameX = 23;
 
+        private readonly Button _applyInvestmentsButton;
         private readonly Label _availablePointsLabel;
+        private readonly Button[] _conceptDivestmentButtons = new Button[MaxConceptCount];
         private readonly Button[] _conceptInvestmentButtons = new Button[MaxConceptCount];
         private readonly List<Button> _conceptAffinityButtons = new();
+        private readonly Button[] _passiveDivestmentButtons = new Button[MaxPassiveCount];
         private readonly Button[] _passiveInvestmentButtons = new Button[MaxPassiveCount];
         private readonly Label _successorPointsLabel;
 
-        private DynamicContentPopup _hoverPopup;
+        private World.Character.Projection _projection;
+        private float _pendingSuccessorPoints = 0.0f;
+
+        private readonly DynamicContentPopup _hoverPopup;
         private Button _hoveredButton = null;
         private int _hoveredInvestmentIndex = -1;
 
-        private ConfirmationPopup _learnSkillPopup;
+        private readonly ConfirmationPopup _learnSkillPopup;
+
 
         /// <summary>
         /// Constructs a new TalentsPopup.
@@ -69,6 +78,15 @@ namespace AsLegacy.GUI.Popups
             };
             Add(_availablePointsLabel);
 
+            _applyInvestmentsButton = new Button(7)
+            {
+                IsEnabled = false,
+                Position = new(width - 8, ApplyY),
+                Text = "Apply"
+            };
+            _applyInvestmentsButton.Click += (sender, args) => ApplyInvestments();
+            Add(_applyInvestmentsButton);
+
             _successorPointsLabel = new Label(PointsMaxLength)
             {
                 Alignment = HorizontalAlignment.Right,
@@ -81,38 +99,84 @@ namespace AsLegacy.GUI.Popups
             for (int c = 0; c < MaxConceptCount; c++)
             {
                 int index = c;
-                Button button = new(1, 1)
+                Button divest = new(1, 1)
+                {
+                    CanFocus = false,
+                    IsEnabled = false,
+                    Position = new(width - 4, ConceptsStartingY + c),
+                    Text = "-"
+                };
+                divest.Click += (sender, args) => OnInvestmentChange(sender, args, index, false);
+                divest.MouseEnter += (sender, args) => OnHoverInvestmentChangeBegin(
+                    sender, args, index, false);
+                divest.MouseExit += OnHoverEnd;
+
+                Button invest = new(1, 1)
                 {
                     CanFocus = false,
                     IsEnabled = true,
-                    Position = new(width - 3, 5 + c),
+                    Position = new(width - 3, ConceptsStartingY + c),
                     Text = "+"
                 };
-                button.Click += (sender, args) => OnInvestment(sender, args, index);
-                button.MouseEnter += (sender, args) => OnHoverInvestmentBegin(sender, args, index);
-                button.MouseExit += OnHoverEnd;
+                invest.Click += (sender, args) => OnInvestmentChange(sender, args, index, true);
+                invest.MouseEnter += (sender, args) => OnHoverInvestmentChangeBegin(
+                    sender, args, index, true);
+                invest.MouseExit += OnHoverEnd;
 
-                Add(button);
-                _conceptInvestmentButtons[c] = button;
+                Add(divest);
+                Add(invest);
+                _conceptDivestmentButtons[c] = divest;
+                _conceptInvestmentButtons[c] = invest;
             }
 
             for (int c = 0; c < MaxPassiveCount; c++)
             {
                 int index = c + MaxConceptCount;
-                Button button = new(1, 1)
+                Button divest = new(1, 1)
+                {
+                    CanFocus = false,
+                    IsEnabled = false,
+                    Position = new(width - 4, Height - 9 + c),
+                    Text = "-"
+                };
+                divest.Click += (sender, args) => OnInvestmentChange(sender, args, index, false);
+                divest.MouseEnter += (sender, args) => OnHoverInvestmentChangeBegin(
+                    sender, args, index, false);
+                divest.MouseExit += OnHoverEnd;
+
+                Button invest = new(1, 1)
                 {
                     CanFocus = false,
                     IsEnabled = true,
                     Position = new(width - 3, Height - 9 + c),
                     Text = "+"
                 };
-                button.Click += (sender, args) => OnInvestment(sender, args, index);
-                button.MouseEnter += (sender, args) => OnHoverInvestmentBegin(sender, args, index);
-                button.MouseExit += OnHoverEnd;
+                invest.Click += (sender, args) => OnInvestmentChange(sender, args, index, true);
+                invest.MouseEnter += (sender, args) => OnHoverInvestmentChangeBegin(
+                    sender, args, index, true);
+                invest.MouseExit += OnHoverEnd;
 
-                Add(button);
-                _passiveInvestmentButtons[c] = button;
+                Add(divest);
+                Add(invest);
+                _passiveDivestmentButtons[c] = divest;
+                _passiveInvestmentButtons[c] = invest;
             }
+        }
+
+        /// <summary>
+        /// Applies any investments that have been made to the actual Character.
+        /// </summary>
+        private void ApplyInvestments()
+        {
+            _projection.ApplyToBase();
+            _pendingSuccessorPoints = 0.0f;
+
+            _applyInvestmentsButton.IsEnabled = _projection.HasChanged;
+
+            for (int c = 0; c < MaxConceptCount; c++)
+                _conceptDivestmentButtons[c].IsEnabled = false;
+            for (int c = 0; c < MaxPassiveCount; c++)
+                _passiveDivestmentButtons[c].IsEnabled = false;
         }
 
         /// <inheritdoc/>
@@ -137,20 +201,20 @@ namespace AsLegacy.GUI.Popups
         /// Handles the clicking of an affinity button.
         /// </summary>
         /// <param name="sender">The event sender (the affinity button).</param>
-        /// <param name="args">The event arguments.</param>
         /// <param name="conceptIndex">The index of the concept whose 
         /// affinity icon is being clicked.</param>
         /// <param name="affinityIndex">The index of the affinity icon, within its 
         /// concept's collection of affinities, that is being clicked.</param>
-        private void OnClickAffinity(object sender, MouseEventArgs args, 
+        private void OnClickAffinity(object sender, MouseEventArgs _,
             int conceptIndex, int affinityIndex)
         {
             Button affinityButton = sender as Button;
             affinityButton.IsEnabled = false;
 
-            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
+            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex]
+                .Affinities[affinityIndex];
             _learnSkillPopup.Prompt = $"Learn the {affinity.Name} skill?";
-            _learnSkillPopup.OnConfirmation = () => 
+            _learnSkillPopup.OnConfirmation = () =>
             {
                 Skill skill = new()
                 {
@@ -175,15 +239,16 @@ namespace AsLegacy.GUI.Popups
         /// Handles the start of the hovering of an investment button.
         /// </summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="args">The event arguments.</param>
         /// <param name="index">The index of the talent whose 
         /// investment button is being hovered.</param>
-        private void OnHoverInvestmentBegin(object sender, MouseEventArgs args, int index)
+        /// <param name="isForInvestment">Whether the change is to increase investment.</param>
+        private void OnHoverInvestmentChangeBegin(object sender, MouseEventArgs _,
+            int index, bool isForInvestment)
         {
             _hoveredButton = sender as Button;
             _hoveredInvestmentIndex = index;
-            
-            UpdateHoverContent();
+
+            UpdateHoverContent(isForInvestment);
 
             _hoverPopup.IsVisible = true;
             _hoverPopup.IsDirty = true;
@@ -193,19 +258,19 @@ namespace AsLegacy.GUI.Popups
         /// Handles the start of the hovering of an affinity icon.
         /// </summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="args">The event arguments.</param>
         /// <param name="conceptIndex">The index of the concept whose 
         /// affinity icon is being hovered.</param>
         /// <param name="affinityIndex">The index of the affinity icon, within its 
         /// concept's collection of affinities, that is being hovered.</param>
-        private void OnHoverAffinityBegin(object sender, MouseEventArgs args,
+        private void OnHoverAffinityBegin(object sender, MouseEventArgs _,
             int conceptIndex, int affinityIndex)
         {
-            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex].Affinities[affinityIndex];
+            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex]
+                .Affinities[affinityIndex];
             _hoveredButton = sender as Button;
 
             _hoverPopup.UpdateTitle(affinity.Name);
-            _hoverPopup.UpdateContent(affinity.GetDescription(AsLegacy.Player));
+            _hoverPopup.UpdateContent(affinity.GetDescription(_projection));
             _hoverPopup.Position = (sender as Button).Position -
                 new Point(_hoverPopup.Width, 0);
 
@@ -217,8 +282,7 @@ namespace AsLegacy.GUI.Popups
         /// Handles the end of the hovering of a button.
         /// </summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="args">The event arguments.</param>
-        private void OnHoverEnd(object sender, MouseEventArgs args)
+        private void OnHoverEnd(object sender, MouseEventArgs _)
         {
             if (sender != _hoveredButton)
                 return;
@@ -232,22 +296,53 @@ namespace AsLegacy.GUI.Popups
         /// Handles the investment of a talent.
         /// </summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="args">The event args.</param>
         /// <param name="index">The index of the talent to be invested in.</param>
-        private void OnInvestment(object sender, System.EventArgs args, int index)
+        /// <param name="isForInvestment">Whether the change is to increase investment.</param>
+        private void OnInvestmentChange(object sender, System.EventArgs _,
+            int index, bool isForInvestment)
         {
             if (!AsLegacy.HasPlayer)
                 return;
 
-            // TODO :: Support various investment amounts (eg. 1, 5, 10, etc.).
             Talent talent;
             if (index >= MaxConceptCount)
                 talent = AsLegacy.Player.Class.Passives[index - MaxConceptCount];
             else
                 talent = AsLegacy.Player.Class.Concepts[index];
 
-            if (AsLegacy.Player.InvestInTalent(talent, 1))
-                UpdateHoverContent();
+            // TODO :: Support various investment amounts (eg. 1, 5, 10, etc.).
+            int changeAmount = 1;
+            bool divestEnabled = true;
+            if (isForInvestment)
+            {
+                _projection.InvestInTalent(talent, changeAmount);
+                if (index >= MaxConceptCount)
+                    _pendingSuccessorPoints += changeAmount / 2.0f;
+
+                if (_projection.AvailableSkillPoints == 0)
+                    OnHoverEnd(sender, null);
+            }
+            else
+            {
+                int actualChange = _projection.DivestInTalent(talent, changeAmount);
+
+                if (index >= MaxConceptCount)
+                    _pendingSuccessorPoints -= actualChange / 2.0f;
+
+                if (_projection.GetProjectedInvestment(talent) <= 0)
+                {
+                    divestEnabled = false;
+                    OnHoverEnd(sender, null);
+                }
+            }
+
+            if (index >= MaxConceptCount)
+                _passiveDivestmentButtons[index - MaxConceptCount].IsEnabled = divestEnabled;
+            else
+                _conceptDivestmentButtons[index].IsEnabled = divestEnabled;
+
+            UpdateHoverContent(isForInvestment);
+            _applyInvestmentsButton.IsEnabled = _projection.HasChanged;
         }
 
         /// <inheritdoc/>
@@ -257,6 +352,7 @@ namespace AsLegacy.GUI.Popups
 
             if (AsLegacy.HasPlayer && IsVisible)
             {
+                _projection = AsLegacy.Player.GetProjection();
                 UpdateContent();
 
                 ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
@@ -264,6 +360,8 @@ namespace AsLegacy.GUI.Popups
                 for (int c = 0; c < MaxConceptCount; c++)
                 {
                     bool hasConcept = c < conceptCount;
+                    _conceptDivestmentButtons[c].IsVisible = hasConcept;
+                    _conceptDivestmentButtons[c].IsEnabled = false;
                     _conceptInvestmentButtons[c].IsVisible = hasConcept;
 
                     if (hasConcept)
@@ -282,7 +380,7 @@ namespace AsLegacy.GUI.Popups
                             Button affinityButton = new(1)
                             {
                                 Text = AffinityIcon,
-                                Position = new(startX + 2 * cc, 5 + c),
+                                Position = new(startX + 2 * cc, ConceptsStartingY + c),
                                 ThemeColors = colors
                             };
                             affinityButton.MouseEnter += (sender, args) => OnHoverAffinityBegin(
@@ -300,12 +398,18 @@ namespace AsLegacy.GUI.Popups
 
                 int passiveCount = AsLegacy.Player.Class.Passives.Count;
                 for (int c = 0; c < MaxPassiveCount; c++)
+                {
+                    _passiveDivestmentButtons[c].IsVisible = c < passiveCount;
+                    _passiveDivestmentButtons[c].IsEnabled = false;
+
                     _passiveInvestmentButtons[c].IsVisible = c < passiveCount;
+                }
             }
             else
             {
                 for (int c = 0; c < MaxConceptCount; c++)
                 {
+                    _conceptDivestmentButtons[c].IsVisible = false;
                     _conceptInvestmentButtons[c].IsVisible = false;
 
                     for (int cc = 0; cc < _conceptAffinityButtons.Count; cc++)
@@ -313,7 +417,10 @@ namespace AsLegacy.GUI.Popups
                     _conceptAffinityButtons.Clear();
                 }
                 for (int c = 0; c < MaxPassiveCount; c++)
+                {
+                    _passiveDivestmentButtons[c].IsVisible = false;
                     _passiveInvestmentButtons[c].IsVisible = false;
+                }
             }
 
             if (!IsVisible)
@@ -355,7 +462,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdateContent()
         {
-            if (!AsLegacy.HasPlayer)
+            if (_projection == null)
                 return;
 
             UpdateAvailablePoints();
@@ -368,7 +475,9 @@ namespace AsLegacy.GUI.Popups
         /// <summary>
         /// Updates the content of the investment hover pop-up, if it is active.
         /// </summary>
-        private void UpdateHoverContent()
+        /// <param name="diffForInvestment">Whether the difference displayed should be 
+        /// for an increase in investment.</param>
+        private void UpdateHoverContent(bool diffForInvestment)
         {
             if (_hoveredButton == null || _hoveredInvestmentIndex == -1)
                 return;
@@ -380,9 +489,10 @@ namespace AsLegacy.GUI.Popups
             else
                 talent = AsLegacy.Player.Class.Concepts[_hoveredInvestmentIndex];
 
-            int investment = AsLegacy.Player.GetInvestment(talent);
-            string content = $"{talent.GetDescription(AsLegacy.Player)}\n" +
-                talent.GetDifferenceDescription(investment, investment + 1) +
+            int investment = _projection.GetInvestment(talent);
+            int diff = diffForInvestment ? investment + 1 : investment - 1;
+            string content = $"{talent.GetDescription(investment)}\n" +
+                talent.GetDifferenceDescription(investment, diff) +
                 " for 1 point.";
 
             _hoverPopup.UpdateTitle(talent.Name);
@@ -407,9 +517,15 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdateAvailablePoints()
         {
-            _availablePointsLabel.DisplayText =
-                $"{AvailablePointsText}{AsLegacy.Player.AvailableSkillPoints}";
+            int points = _projection.AvailableSkillPoints;
+            _availablePointsLabel.DisplayText = $"{AvailablePointsText}{points}";
             _availablePointsLabel.IsDirty = true;
+
+            bool investmentButtonsEnabled = points > 0;
+            for (int c = 0, count = _passiveInvestmentButtons.Length; c < count; c++)
+                _passiveInvestmentButtons[c].IsEnabled = investmentButtonsEnabled;
+            for (int c = 0, count = _conceptInvestmentButtons.Length; c < count; c++)
+                _conceptInvestmentButtons[c].IsEnabled = investmentButtonsEnabled;
         }
 
         /// <summary>
@@ -418,12 +534,13 @@ namespace AsLegacy.GUI.Popups
         private void UpdateConcepts()
         {
             ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
-            for (int c = 0, count = concepts.Count, y = 5; c < count; c++, y++)
+            for (int c = 0, count = concepts.Count, y = ConceptsStartingY; c < count; c++, y++)
             {
-                string investment = AsLegacy.Player.GetInvestment(concepts[c]).ToString();
+                int investment = _projection.GetInvestment(concepts[c]);
+                string investmentText = investment.ToString();
 
                 Print(TalentNameX, y, concepts[c].Name);
-                Print(Width - investment.Length - 4, y, investment);
+                Print(Width - investmentText.Length - 5, y, investmentText);
             }
         }
 
@@ -435,10 +552,11 @@ namespace AsLegacy.GUI.Popups
             ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
             for (int c = 0, count = passives.Count, y = Height - 9; c < count; c++, y++)
             {
-                string investment = AsLegacy.Player.GetInvestment(passives[c]).ToString();
+                int investment = _projection.GetInvestment(passives[c]);
+                string investmentText = investment.ToString();
 
                 Print(TalentNameX, y, passives[c].Name);
-                Print(Width - investment.Length - 4, y, investment);
+                Print(Width - investmentText.Length - 5, y, investmentText);
             }
         }
 
@@ -447,8 +565,9 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdateSuccessorPoints()
         {
-            _successorPointsLabel.DisplayText =
-                $"{SuccessorPointsText}{AsLegacy.Player.CharacterLineage.SuccessorPoints}";
+            int points = AsLegacy.Player.CharacterLineage.SuccessorPoints +
+                ((int)_pendingSuccessorPoints);
+            _successorPointsLabel.DisplayText = $"{SuccessorPointsText}{points}";
             _successorPointsLabel.IsDirty = true;
         }
     }
