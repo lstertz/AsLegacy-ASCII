@@ -309,7 +309,7 @@ namespace AsLegacy
             for (int c = 0, count = PresentCharacters.Count; c < count; c++)
             {
                 Character character = PresentCharacters[c];
-                ICharacter internalCharacter = character as ICharacter;
+                IInternalCharacter internalCharacter = character as IInternalCharacter;
 
                 internalCharacter.Update(timeDelta);
 

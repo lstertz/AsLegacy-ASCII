@@ -28,7 +28,7 @@ namespace AsLegacy.Characters
 
 
         /// <inheritdoc/>
-        public override string GetDescription(World.Character character) =>
+        public override string GetDescription(World.ICharacter character) =>
             string.Format(_descriptionFormat, $"{GetDescriptionAffect(character):0.##}");
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace AsLegacy.Characters
         /// <param name="character">The <see cref="World.Character"/> whose 
         /// affect is being calculated.</param>
         /// <returns>The affect.</returns>
-        private float GetDescriptionAffect(World.Character character)
+        private float GetDescriptionAffect(World.ICharacter character)
         {
             return GetDescriptionAffect(character.GetInvestment(this));
         }

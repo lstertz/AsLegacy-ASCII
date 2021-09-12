@@ -35,12 +35,12 @@ namespace AsLegacy.Characters
 
         /// <summary>
         /// Provides a description of the <see cref="DescribableAffect"/> as it should be for the 
-        /// state of the provided <see cref="World.Character"/>.
+        /// state of the provided <see cref="World.ICharacter"/>.
         /// </summary>
         /// <param name="character">The Character whose state is referenced 
         /// to create the description.</param>
         /// <returns>A description, for displaying details of the <see cref="DescribableAffect"/> 
-        /// for the state of the provided <see cref="World.Character"/>.</returns>
-        public abstract string GetDescription(World.Character character);
+        /// for the state of the provided <see cref="World.ICharacter"/>.</returns>
+        public abstract string GetDescription(World.ICharacter character);
     }
 }
