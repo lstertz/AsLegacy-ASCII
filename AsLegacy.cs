@@ -1,14 +1,13 @@
-﻿using SadConsole.Components;
+﻿using AsLegacy.Characters;
+using AsLegacy.GUI;
+using AsLegacy.GUI.Elements;
+using Microsoft.Xna.Framework;
+using SadConsole.Components;
+using SadConsole.Themes;
 using System;
 
 using Console = SadConsole.Console;
 using Game = SadConsole.Game;
-
-using AsLegacy.GUI;
-using AsLegacy.Characters;
-using Microsoft.Xna.Framework;
-using SadConsole.Themes;
-using AsLegacy.GUI.Elements;
 
 namespace AsLegacy
 {
