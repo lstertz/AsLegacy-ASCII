@@ -1,12 +1,13 @@
-﻿using SadConsole.Components;
+﻿using AsLegacy.Characters;
+using AsLegacy.GUI;
+using AsLegacy.GUI.Elements;
+using Microsoft.Xna.Framework;
+using SadConsole.Components;
+using SadConsole.Themes;
 using System;
 
 using Console = SadConsole.Console;
 using Game = SadConsole.Game;
-
-using AsLegacy.GUI;
-using AsLegacy.Characters;
-using Microsoft.Xna.Framework;
 
 namespace AsLegacy
 {
@@ -93,6 +94,7 @@ namespace AsLegacy
             Game.Create(Display.Width, Display.Height);
             Game.OnInitialize = () =>
             {
+                Library.Default.SetControlTheme(typeof(ClearingTextBox), new TextBoxTheme());
                 SadConsole.Global.LoadFont("Fonts/AsLegacy.font");
                 SadConsole.Global.FontDefault = SadConsole.Global.Fonts["AsLegacy"]
                     .GetFont(SadConsole.Font.FontSizes.One);

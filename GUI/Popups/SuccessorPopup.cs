@@ -1,5 +1,6 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.Global;
+using AsLegacy.GUI.Elements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -41,12 +42,14 @@ namespace AsLegacy.GUI.Popups
 
         private readonly Button _ok;
         private readonly Label _availablePointsLabel;
-        private readonly TextBox[] _passiveInvestmentBoxes = new TextBox[MaxPassiveCount];
+        private readonly ClearingTextBox[] _passiveInvestmentBoxes = 
+            new ClearingTextBox[MaxPassiveCount];
         private int _availablePoints;
 
         private DynamicContentPopup _hoverPopup;
-        private TextBox _hoveredBox = null;
+        private ClearingTextBox _hoveredBox = null;
         private int _hoveredInvestmentIndex = -1;
+
 
         /// <summary>
         /// Constructs a new <see cref="SuccessorPopup"/>.
@@ -67,7 +70,7 @@ namespace AsLegacy.GUI.Popups
             for (int c = 0; c < MaxPassiveCount; c++)
             {
                 int index = c;
-                TextBox box = new(MaxAssignedPointsLength + 1)
+                ClearingTextBox box = new(MaxAssignedPointsLength + 1)
                 {
                     AllowDecimal = false,
                     CanFocus = true,
@@ -142,7 +145,7 @@ namespace AsLegacy.GUI.Popups
         /// investment text box is being hovered.</param>
         private void OnHoverInvestmentBegin(object sender, MouseEventArgs args, int index)
         {
-            _hoveredBox = sender as TextBox;
+            _hoveredBox = sender as ClearingTextBox;
             _hoveredInvestmentIndex = index;
 
             UpdateHoverContent();
@@ -164,32 +167,6 @@ namespace AsLegacy.GUI.Popups
             _hoveredBox = null;
             _hoveredInvestmentIndex = -1;
             _hoverPopup.IsVisible = false;
-        }
-
-        /// <inheritdoc/>
-        protected override void OnVisibleChanged()
-        {
-            base.OnVisibleChanged();
-
-            if (IsVisible)
-            {
-                int passiveCount = AsLegacy.Player.Class.Passives.Count;
-                _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
-                for (int c = 0; c < MaxPassiveCount; c++)
-                {
-                    bool isVisible = c < passiveCount;
-                    if (_passiveInvestmentBoxes[c].EditingText != "" && isVisible)
-                        _availablePoints -= Convert.ToInt32(
-                            _passiveInvestmentBoxes[c].EditingText);
-
-                    _passiveInvestmentBoxes[c].IsVisible = isVisible;
-                }
-
-                UpdateAvailablePointsLabel();
-                _ok.IsEnabled = _availablePoints == 0;
-            }
-
-            IsFocused = IsVisible;
         }
 
         /// <summary>
@@ -245,6 +222,32 @@ namespace AsLegacy.GUI.Popups
             _ok.IsEnabled = _availablePoints == 0;
         }
 
+        /// <inheritdoc/>
+        protected override void OnVisibleChanged()
+        {
+            base.OnVisibleChanged();
+
+            if (IsVisible)
+            {
+                int passiveCount = AsLegacy.Player.Class.Passives.Count;
+                _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
+                for (int c = 0; c < MaxPassiveCount; c++)
+                {
+                    bool isVisible = c < passiveCount;
+                    if (_passiveInvestmentBoxes[c].EditingText != "" && isVisible)
+                        _availablePoints -= Convert.ToInt32(
+                            _passiveInvestmentBoxes[c].EditingText);
+
+                    _passiveInvestmentBoxes[c].IsVisible = isVisible;
+                }
+
+                UpdateAvailablePointsLabel();
+                _ok.IsEnabled = _availablePoints == 0;
+            }
+
+            IsFocused = IsVisible;
+        }
+
         /// <summary>
         /// Updates the label for the available successor points.
         /// </summary>
@@ -288,7 +291,6 @@ namespace AsLegacy.GUI.Popups
             if (!AsLegacy.HasPlayer)
                 return;
 
-            // TODO : 85 :: Use locally defined class reference.
             ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
             for (int c = 0, count = passives.Count, y = AvailablePointsY + 1; c < count; c++, y++)
                 Print(PassiveNameX, y, passives[c].Name);
