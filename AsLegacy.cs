@@ -7,6 +7,8 @@ using Game = SadConsole.Game;
 using AsLegacy.GUI;
 using AsLegacy.Characters;
 using Microsoft.Xna.Framework;
+using SadConsole.Themes;
+using AsLegacy.GUI.Elements;
 
 namespace AsLegacy
 {
@@ -93,6 +95,7 @@ namespace AsLegacy
             Game.Create(Display.Width, Display.Height);
             Game.OnInitialize = () =>
             {
+                Library.Default.SetControlTheme(typeof(ClearingTextBox), new TextBoxTheme());
                 SadConsole.Global.LoadFont("Fonts/AsLegacy.font");
                 SadConsole.Global.FontDefault = SadConsole.Global.Fonts["AsLegacy"]
                     .GetFont(SadConsole.Font.FontSizes.One);
