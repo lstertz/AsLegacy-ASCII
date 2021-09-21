@@ -32,7 +32,7 @@ namespace AsLegacy.GUI.Popups
         public string SuccessorName { get; set; }
 
         /// <inheritdoc/>
-        protected override string Title
+        public override string Title
         {
             get
             {
@@ -277,8 +277,8 @@ namespace AsLegacy.GUI.Popups
                 talent.GetDifferenceDescription(investment, investment + 1) +
                 " for the next point.";
 
-            _hoverPopup.UpdateTitle(talent.Name);
-            _hoverPopup.UpdateContent(content);
+            _hoverPopup.Title = talent.Name;
+            _hoverPopup.Content = content;
             _hoverPopup.Position = _hoveredBox.Position -
                 new Point(_hoverPopup.Width, _hoverPopup.Height / 2);
         }

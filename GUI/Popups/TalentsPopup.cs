@@ -213,10 +213,11 @@ namespace AsLegacy.GUI.Popups
 
             Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex]
                 .Affinities[affinityIndex];
-            _learnSkillPopup.Prompt = $"Learn the {affinity.Name} skill?";
-            _learnSkillPopup.OnConfirmation = () =>
+            Skill skill = new()
             {
-                Skill skill = new()
+                Affinity = affinity,
+                Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
+            };
                 {
                     Affinity = affinity,
                     Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
@@ -228,9 +229,24 @@ namespace AsLegacy.GUI.Popups
             };
             _learnSkillPopup.OnRejection = () =>
             {
-                affinityButton.IsEnabled = true;
-            };
-            _learnSkillPopup.IsVisible = true;
+                _learnSkillPopup.Prompt = $"Learn {affinity.Name}?";
+                _learnSkillPopup.OnConfirmation = () =>
+                {
+                    Skill skill = new()
+                    {
+                        Affinity = affinity,
+                        Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
+                    };
+                    AsLegacy.Player.LearnSkill(skill);
+                    Invalidate();
+
+                    affinityButton.IsEnabled = true;
+                };
+                _learnSkillPopup.OnRejection = () =>
+                {
+                    affinityButton.IsEnabled = true;
+                };
+                _learnSkillPopup.IsVisible = true;
 
             _hoverPopup.IsVisible = false;
         }
@@ -269,8 +285,8 @@ namespace AsLegacy.GUI.Popups
                 .Affinities[affinityIndex];
             _hoveredButton = sender as Button;
 
-            _hoverPopup.UpdateTitle(affinity.Name);
-            _hoverPopup.UpdateContent(affinity.GetDescription(_projection));
+            _hoverPopup.Title = affinity.Name;
+            _hoverPopup.Content = affinity.GetDescription(_projection);
             _hoverPopup.Position = (sender as Button).Position -
                 new Point(_hoverPopup.Width, 0);
 
@@ -495,8 +511,8 @@ namespace AsLegacy.GUI.Popups
                 talent.GetDifferenceDescription(investment, diff) +
                 " for 1 point.";
 
-            _hoverPopup.UpdateTitle(talent.Name);
-            _hoverPopup.UpdateContent(content);
+            _hoverPopup.Title = talent.Name;
+            _hoverPopup.Content = content;
             _hoverPopup.Position = _hoveredButton.Position -
                 new Point(_hoverPopup.Width, isPassive ? _hoverPopup.Height : 0);
         }
