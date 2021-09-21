@@ -15,9 +15,44 @@ namespace AsLegacy.GUI.Popups
         private const int FrameSpaceHorizontal = 4;
         private const int FrameSpaceVertical = 2;
 
-        public override int Width => _width;
+        /// <summary>
+        /// The content of the pop-up.
+        /// </summary>
+        public string Content
+        {
+            get => _content;
+            set => UpdateContent(value);
+        }
+        private string _content;
+
+        /// <inheritdoc/>
+        public override string Title
+        {
+            get => base.Title;
+            set
+            {
+                base.Title = value;
+
+                _requiredTitleWidth = Title.Length + FrameSpaceHorizontal;
+                Width = _requiredLineWidth > _requiredTitleWidth ?
+                    _requiredLineWidth : _requiredTitleWidth;
+            }
+        }
+
+        /// <inheritdoc/>
+        public override int Width
+        {
+            get => _width;
+            protected set
+            {
+                _width = value;
+                UpdateCloseButtonPosition(_width);
+            }
+        }
         private int _width;
-        public override int Height => _height;
+
+        /// <inheritdoc/>
+        public override int Height { get => _height; protected set => _height = value; }
         private int _height;
 
         private readonly int _maxLineWidth;
@@ -37,8 +72,11 @@ namespace AsLegacy.GUI.Popups
         /// <param name="minWidth">The minimum width of the pop-up.</param>
         /// <param name="maxWidth">The maximum width that the pop-up will resize to.</param>
         /// <param name="maxHeight">The maximum height that the pop-up will resize to.</param>
+        /// <param name="hasCloseButton">Whether the pop-up has the default close button 
+        /// in the top-right.</param>
         public DynamicContentPopup(string title, int minWidth,
-            int maxWidth, int maxHeight) : base(title, maxWidth, maxHeight, false)
+            int maxWidth, int maxHeight, bool hasCloseButton = false) :
+            base(title, maxWidth, maxHeight, hasCloseButton)
         {
             _width = Width;
             _height = Height;
@@ -75,7 +113,7 @@ namespace AsLegacy.GUI.Popups
         /// Updates the content of this pop-up, which may also resize the pop-up view.
         /// </summary>
         /// <param name="newContent">The new content of the pop-up.</param>
-        public void UpdateContent(string newContent)
+        private void UpdateContent(string newContent)
         {
             int longestContentWidth = 0;
             List<string> splitContent = GetContentLines(newContent);
@@ -104,27 +142,15 @@ namespace AsLegacy.GUI.Popups
             }
 
             _requiredLineWidth = longestContentWidth + FrameSpaceHorizontal;
-            _width = _requiredLineWidth > _requiredTitleWidth ?
+            Width = _requiredLineWidth > _requiredTitleWidth ?
                 _requiredLineWidth : _requiredTitleWidth;
-            _height = splitContent.Count + FrameSpaceVertical + TitleHeightSpace;
+            Height = splitContent.Count + FrameSpaceVertical + TitleHeightSpace;
 
             for (int c = _textLines.Count - 1; c > splitContent.Count - 1; c--)
                 _textLines[c].IsVisible = false;
 
+            _content = newContent;
             Invalidate();
-        }
-
-        /// <summary>
-        /// Updates the title of the pop-up, which may also resize the pop-up view.
-        /// </summary>
-        /// <param name="newTitle">The new title.</param>
-        public void UpdateTitle(string newTitle)
-        {
-            Title = newTitle;
-
-            _requiredTitleWidth = Title.Length + FrameSpaceHorizontal;
-            _width = _requiredLineWidth > _requiredTitleWidth ?
-                _requiredLineWidth : _requiredTitleWidth;
         }
 
         /// <summary>
