@@ -47,6 +47,7 @@ namespace AsLegacy.GUI.Popups
         private int _hoveredInvestmentIndex = -1;
 
         private readonly ConfirmationPopup _learnSkillPopup;
+        private readonly NotificationPopup _notificationPopup;
 
 
         /// <summary>
@@ -68,6 +69,13 @@ namespace AsLegacy.GUI.Popups
                 IsVisible = false
             };
             Children.Add(_learnSkillPopup);
+
+            _notificationPopup = new("", 10, 40, 20)
+            {
+                Position = new(width / 2 - 20, height / 2 - 3),
+                IsVisible = false
+            };
+            Children.Add(_notificationPopup);
 
             _availablePointsLabel = new Label(PointsMaxLength)
             {
@@ -218,16 +226,18 @@ namespace AsLegacy.GUI.Popups
                 Affinity = affinity,
                 Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
             };
-                {
-                    Affinity = affinity,
-                    Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
-                };
-                AsLegacy.Player.LearnSkill(skill);
-                Invalidate();
 
-                affinityButton.IsEnabled = true;
-            };
-            _learnSkillPopup.OnRejection = () =>
+            if (AsLegacy.Player.HasLearnedSkill(skill))
+            {
+                _notificationPopup.Content = $"{affinity.Name}\nhas " + 
+                    $"already been learned.";
+                _notificationPopup.OnDismissal = () =>
+                {
+                    affinityButton.IsEnabled = true;
+                };
+                _notificationPopup.IsVisible = true;
+            }
+            else
             {
                 _learnSkillPopup.Prompt = $"Learn {affinity.Name}?";
                 _learnSkillPopup.OnConfirmation = () =>
@@ -247,6 +257,7 @@ namespace AsLegacy.GUI.Popups
                     affinityButton.IsEnabled = true;
                 };
                 _learnSkillPopup.IsVisible = true;
+            }
 
             _hoverPopup.IsVisible = false;
         }
