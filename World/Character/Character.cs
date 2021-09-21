@@ -336,6 +336,17 @@ namespace AsLegacy
             }
 
             /// <summary>
+            /// Specifies whether the character has already learned 
+            /// the specified <see cref="Skill"/>.
+            /// </summary>
+            /// <param name="skill">The skill being checked for.</param>
+            /// <returns>Whether the skill has already been learned.</returns>
+            public bool HasLearnedSkill(Skill skill)
+            {
+                return _skills.ContainsKey(skill.Affinity.Name);
+            }
+
+            /// <summary>
             /// Initiates the activation and subsequent performance of 
             /// the identified <see cref="Skill"/>.
             /// </summary>
@@ -451,7 +462,7 @@ namespace AsLegacy
             }
 
             /// <summary>
-            /// Attempts to have this Character learn the specified Skill.
+            /// Attempts to have this Character learn the specified <see cref="Skill"/>.
             /// </summary>
             /// <param name="skill">The skill to be learned.</param>
             /// <returns>Whether the skill was learned; false if the Character already 
