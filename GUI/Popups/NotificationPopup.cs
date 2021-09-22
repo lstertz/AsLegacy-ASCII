@@ -9,6 +9,11 @@ namespace AsLegacy.GUI.Popups
     /// </summary>
     public class NotificationPopup : DynamicContentPopup
     {
+        /// <summary>
+        /// Callback upon the dismissal (or general closing) of the popup.
+        /// </summary>
+        public Action OnDismissal { get; set; }
+
         /// <inheritdoc/>
         public override int Height 
         {
@@ -35,13 +40,8 @@ namespace AsLegacy.GUI.Popups
             }
         }
 
-
         private readonly Button _ok;
 
-        /// <summary>
-        /// Callback upon the dismissal (or general closing) of the popup.
-        /// </summary>
-        public Action OnDismissal { get; set; }
 
         /// <summary>
         /// Constructs a new <see cref="NotificationPopup"/>.
