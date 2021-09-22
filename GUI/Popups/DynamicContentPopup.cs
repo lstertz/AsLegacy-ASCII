@@ -146,7 +146,8 @@ namespace AsLegacy.GUI.Popups
 
                 if (_alignment == HorizontalAlignment.Center)
                 {
-                    int adjustedX = 1 - ((_maxWidth - longestContentWidth - FrameSpaceHorizontal) / 2);
+                    int adjustedX = 1 - 
+                        ((_maxWidth - longestContentWidth - FrameSpaceHorizontal) / 2);
                     _textLines[c].Position = new(adjustedX,
                         TitleHeightSpace + FrameSpaceVertical / 2 + c);
                 }
