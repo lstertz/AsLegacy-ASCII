@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Input;
 using System.Collections.Generic;
@@ -15,10 +16,47 @@ namespace AsLegacy.GUI.Popups
         private const int FrameSpaceHorizontal = 4;
         private const int FrameSpaceVertical = 2;
 
-        public override int Width => _width;
+        /// <summary>
+        /// The content of the pop-up.
+        /// </summary>
+        public string Content
+        {
+            get => _content;
+            set => UpdateContent(value);
+        }
+        private string _content;
+
+        /// <inheritdoc/>
+        public override string Title
+        {
+            get => base.Title;
+            set
+            {
+                base.Title = value;
+
+                _requiredTitleWidth = Title.Length + FrameSpaceHorizontal;
+                Width = _requiredLineWidth > _requiredTitleWidth ?
+                    _requiredLineWidth : _requiredTitleWidth;
+            }
+        }
+
+        /// <inheritdoc/>
+        public override int Width
+        {
+            get => _width;
+            protected set
+            {
+                _width = value;
+                UpdateCloseButtonPosition(_width);
+            }
+        }
         private int _width;
-        public override int Height => _height;
+
+        /// <inheritdoc/>
+        public override int Height { get => _height; protected set => _height = value; }
         private int _height;
+
+        private HorizontalAlignment _alignment;
 
         private readonly int _maxLineWidth;
         private int _requiredTitleWidth;
@@ -37,8 +75,13 @@ namespace AsLegacy.GUI.Popups
         /// <param name="minWidth">The minimum width of the pop-up.</param>
         /// <param name="maxWidth">The maximum width that the pop-up will resize to.</param>
         /// <param name="maxHeight">The maximum height that the pop-up will resize to.</param>
+        /// <param name="hasCloseButton">Whether the pop-up has the default close button 
+        /// in the top-right.</param>
+        /// <param name="alignment">The alignment of the pop-up content.</param>
         public DynamicContentPopup(string title, int minWidth,
-            int maxWidth, int maxHeight) : base(title, maxWidth, maxHeight, false)
+            int maxWidth, int maxHeight, bool hasCloseButton = false,
+            HorizontalAlignment alignment = HorizontalAlignment.Left) :
+            base(title, maxWidth, maxHeight, hasCloseButton)
         {
             _width = Width;
             _height = Height;
@@ -46,6 +89,8 @@ namespace AsLegacy.GUI.Popups
             _minWidth = minWidth;
             _maxWidth = maxWidth;
             _maxHeight = maxHeight;
+
+            _alignment = alignment;
 
             _maxLineWidth = _maxWidth - FrameSpaceHorizontal;
             _requiredLineWidth = _minWidth + FrameSpaceHorizontal;
@@ -75,10 +120,14 @@ namespace AsLegacy.GUI.Popups
         /// Updates the content of this pop-up, which may also resize the pop-up view.
         /// </summary>
         /// <param name="newContent">The new content of the pop-up.</param>
-        public void UpdateContent(string newContent)
+        private void UpdateContent(string newContent)
         {
             int longestContentWidth = 0;
             List<string> splitContent = GetContentLines(newContent);
+
+            for (int c = 0, count = splitContent.Count; c < count; c++)
+                if (splitContent[c].Length > longestContentWidth)
+                    longestContentWidth = splitContent[c].Length;
 
             for (int c = 0, count = splitContent.Count; c < count; c++)
             {
@@ -87,6 +136,7 @@ namespace AsLegacy.GUI.Popups
                 {
                     Label newLine = new(_maxLineWidth)
                     {
+                        Alignment = _alignment,
                         Position = new(FrameSpaceHorizontal / 2,
                             TitleHeightSpace + FrameSpaceVertical / 2 + c)
                     };
@@ -94,8 +144,19 @@ namespace AsLegacy.GUI.Popups
                     Add(newLine);
                 }
 
-                if (content.Length > longestContentWidth)
-                    longestContentWidth = content.Length;
+                if (_alignment == HorizontalAlignment.Center)
+                {
+                    int adjustedX = 1 - 
+                        ((_maxWidth - longestContentWidth - FrameSpaceHorizontal) / 2);
+                    _textLines[c].Position = new(adjustedX,
+                        TitleHeightSpace + FrameSpaceVertical / 2 + c);
+                }
+                else if (_alignment == HorizontalAlignment.Right)
+                {
+                    int adjustedX = 2 - (_maxWidth - longestContentWidth - FrameSpaceHorizontal);
+                    _textLines[c].Position = new(adjustedX,
+                        TitleHeightSpace + FrameSpaceVertical / 2 + c);
+                }
 
                 _textLines[c].DisplayText = content;
                 _textLines[c].IsEnabled = true;
@@ -104,27 +165,15 @@ namespace AsLegacy.GUI.Popups
             }
 
             _requiredLineWidth = longestContentWidth + FrameSpaceHorizontal;
-            _width = _requiredLineWidth > _requiredTitleWidth ?
+            Width = _requiredLineWidth > _requiredTitleWidth ?
                 _requiredLineWidth : _requiredTitleWidth;
-            _height = splitContent.Count + FrameSpaceVertical + TitleHeightSpace;
+            Height = splitContent.Count + FrameSpaceVertical + TitleHeightSpace;
 
             for (int c = _textLines.Count - 1; c > splitContent.Count - 1; c--)
                 _textLines[c].IsVisible = false;
 
+            _content = newContent;
             Invalidate();
-        }
-
-        /// <summary>
-        /// Updates the title of the pop-up, which may also resize the pop-up view.
-        /// </summary>
-        /// <param name="newTitle">The new title.</param>
-        public void UpdateTitle(string newTitle)
-        {
-            Title = newTitle;
-
-            _requiredTitleWidth = Title.Length + FrameSpaceHorizontal;
-            _width = _requiredLineWidth > _requiredTitleWidth ?
-                _requiredLineWidth : _requiredTitleWidth;
         }
 
         /// <summary>

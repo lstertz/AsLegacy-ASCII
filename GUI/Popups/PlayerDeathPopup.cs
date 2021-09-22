@@ -24,7 +24,7 @@ namespace AsLegacy.GUI.Popups
         private static readonly AsciiKey Delete = AsciiKey.Get(Keys.Delete, new KeyboardState());
 
         /// <inheritdoc/>
-        protected override string Title
+        public override string Title
         {
             get
             {

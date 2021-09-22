@@ -47,6 +47,7 @@ namespace AsLegacy.GUI.Popups
         private int _hoveredInvestmentIndex = -1;
 
         private readonly ConfirmationPopup _learnSkillPopup;
+        private readonly NotificationPopup _notificationPopup;
 
 
         /// <summary>
@@ -68,6 +69,13 @@ namespace AsLegacy.GUI.Popups
                 IsVisible = false
             };
             Children.Add(_learnSkillPopup);
+
+            _notificationPopup = new("", 10, 40, 20)
+            {
+                Position = new(width / 2 - 20, height / 2 - 3),
+                IsVisible = false
+            };
+            Children.Add(_notificationPopup);
 
             _availablePointsLabel = new Label(PointsMaxLength)
             {
@@ -213,24 +221,43 @@ namespace AsLegacy.GUI.Popups
 
             Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex]
                 .Affinities[affinityIndex];
-            _learnSkillPopup.Prompt = $"Learn the {affinity.Name} skill?";
-            _learnSkillPopup.OnConfirmation = () =>
+            Skill skill = new()
             {
-                Skill skill = new()
-                {
-                    Affinity = affinity,
-                    Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
-                };
-                AsLegacy.Player.LearnSkill(skill);
-                Invalidate();
+                Affinity = affinity,
+                Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
+            };
 
-                affinityButton.IsEnabled = true;
-            };
-            _learnSkillPopup.OnRejection = () =>
+            if (AsLegacy.Player.HasLearnedSkill(skill))
             {
-                affinityButton.IsEnabled = true;
-            };
-            _learnSkillPopup.IsVisible = true;
+                _notificationPopup.Content = $"{affinity.Name}\nhas " + 
+                    $"already been learned.";
+                _notificationPopup.OnDismissal = () =>
+                {
+                    affinityButton.IsEnabled = true;
+                };
+                _notificationPopup.IsVisible = true;
+            }
+            else
+            {
+                _learnSkillPopup.Prompt = $"Learn {affinity.Name}?";
+                _learnSkillPopup.OnConfirmation = () =>
+                {
+                    Skill skill = new()
+                    {
+                        Affinity = affinity,
+                        Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
+                    };
+                    AsLegacy.Player.LearnSkill(skill);
+                    Invalidate();
+
+                    affinityButton.IsEnabled = true;
+                };
+                _learnSkillPopup.OnRejection = () =>
+                {
+                    affinityButton.IsEnabled = true;
+                };
+                _learnSkillPopup.IsVisible = true;
+            }
 
             _hoverPopup.IsVisible = false;
         }
@@ -269,8 +296,8 @@ namespace AsLegacy.GUI.Popups
                 .Affinities[affinityIndex];
             _hoveredButton = sender as Button;
 
-            _hoverPopup.UpdateTitle(affinity.Name);
-            _hoverPopup.UpdateContent(affinity.GetDescription(_projection));
+            _hoverPopup.Title = affinity.Name;
+            _hoverPopup.Content = affinity.GetDescription(_projection);
             _hoverPopup.Position = (sender as Button).Position -
                 new Point(_hoverPopup.Width, 0);
 
@@ -495,8 +522,8 @@ namespace AsLegacy.GUI.Popups
                 talent.GetDifferenceDescription(investment, diff) +
                 " for 1 point.";
 
-            _hoverPopup.UpdateTitle(talent.Name);
-            _hoverPopup.UpdateContent(content);
+            _hoverPopup.Title = talent.Name;
+            _hoverPopup.Content = content;
             _hoverPopup.Position = _hoveredButton.Position -
                 new Point(_hoverPopup.Width, isPassive ? _hoverPopup.Height : 0);
         }
