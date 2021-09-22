@@ -50,7 +50,7 @@ namespace AsLegacy.GUI.Popups
         /// <param name="width">The width of the popup window.</param>
         /// <param name="height">The height of the popup window.</param>
         public NotificationPopup(string title, int minWidth, int maxWidth, int maxHeight) : 
-            base(title, minWidth, maxWidth, maxHeight, true)
+            base(title, minWidth, maxWidth, maxHeight, true, SadConsole.HorizontalAlignment.Center)
         {
             _ok = new(4, 1)
             {

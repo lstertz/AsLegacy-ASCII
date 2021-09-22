@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Input;
 using System.Collections.Generic;
@@ -55,6 +56,8 @@ namespace AsLegacy.GUI.Popups
         public override int Height { get => _height; protected set => _height = value; }
         private int _height;
 
+        private HorizontalAlignment _alignment;
+
         private readonly int _maxLineWidth;
         private int _requiredTitleWidth;
         private int _requiredLineWidth;
@@ -74,8 +77,10 @@ namespace AsLegacy.GUI.Popups
         /// <param name="maxHeight">The maximum height that the pop-up will resize to.</param>
         /// <param name="hasCloseButton">Whether the pop-up has the default close button 
         /// in the top-right.</param>
+        /// <param name="alignment">The alignment of the pop-up content.</param>
         public DynamicContentPopup(string title, int minWidth,
-            int maxWidth, int maxHeight, bool hasCloseButton = false) :
+            int maxWidth, int maxHeight, bool hasCloseButton = false,
+            HorizontalAlignment alignment = HorizontalAlignment.Left) :
             base(title, maxWidth, maxHeight, hasCloseButton)
         {
             _width = Width;
@@ -84,6 +89,8 @@ namespace AsLegacy.GUI.Popups
             _minWidth = minWidth;
             _maxWidth = maxWidth;
             _maxHeight = maxHeight;
+
+            _alignment = alignment;
 
             _maxLineWidth = _maxWidth - FrameSpaceHorizontal;
             _requiredLineWidth = _minWidth + FrameSpaceHorizontal;
@@ -119,12 +126,17 @@ namespace AsLegacy.GUI.Popups
             List<string> splitContent = GetContentLines(newContent);
 
             for (int c = 0, count = splitContent.Count; c < count; c++)
+                if (splitContent[c].Length > longestContentWidth)
+                    longestContentWidth = splitContent[c].Length;
+
+            for (int c = 0, count = splitContent.Count; c < count; c++)
             {
                 string content = splitContent[c];
                 if (c >= _textLines.Count)
                 {
                     Label newLine = new(_maxLineWidth)
                     {
+                        Alignment = _alignment,
                         Position = new(FrameSpaceHorizontal / 2,
                             TitleHeightSpace + FrameSpaceVertical / 2 + c)
                     };
@@ -132,8 +144,18 @@ namespace AsLegacy.GUI.Popups
                     Add(newLine);
                 }
 
-                if (content.Length > longestContentWidth)
-                    longestContentWidth = content.Length;
+                if (_alignment == HorizontalAlignment.Center)
+                {
+                    int adjustedX = 1 - ((_maxWidth - longestContentWidth - FrameSpaceHorizontal) / 2);
+                    _textLines[c].Position = new(adjustedX,
+                        TitleHeightSpace + FrameSpaceVertical / 2 + c);
+                }
+                else if (_alignment == HorizontalAlignment.Right)
+                {
+                    int adjustedX = 2 - (_maxWidth - longestContentWidth - FrameSpaceHorizontal);
+                    _textLines[c].Position = new(adjustedX,
+                        TitleHeightSpace + FrameSpaceVertical / 2 + c);
+                }
 
                 _textLines[c].DisplayText = content;
                 _textLines[c].IsEnabled = true;
