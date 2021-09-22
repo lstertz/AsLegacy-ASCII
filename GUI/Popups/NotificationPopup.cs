@@ -67,7 +67,7 @@ namespace AsLegacy.GUI.Popups
         protected override void OnClose()
         {
             base.OnClose();
-            OnDismissal();
+            OnDismissal?.Invoke();
         }
 
         /// <inheritdoc/>
