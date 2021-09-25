@@ -1,4 +1,5 @@
 ﻿using AsLegacy.Global;
+using AsLegacy.GUI.Screens;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using SadConsole.Controls;
@@ -23,6 +24,7 @@ namespace AsLegacy.GUI.Popups
         public virtual new int Width { get => base.Width; protected set => base.Width = value; }
 
         private readonly Button _close;
+        private readonly Button _help;
 
 
         /// <summary>
@@ -32,19 +34,31 @@ namespace AsLegacy.GUI.Popups
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
         public Popup(string title, int width, int height,
-            bool hasCloseButton = true) : base(width, height)
+            bool hasCloseButton = true, string helpText = null) : base(width, height)
         {
             ThemeColors = Colors.StandardTheme;
 
             if (hasCloseButton)
             {
-                _close = new Button(1, 1)
+                _close = new(1, 1)
                 {
                     Position = new(width - 3, 1),
                     Text = "X"
                 };
                 _close.Click += (s, e) => OnClose();
                 Add(_close);
+            }
+
+            if (!string.IsNullOrEmpty(helpText))
+            {
+                int x = hasCloseButton ? width - 4 : width - 3;
+                _help = new(1, 1)
+                {
+                    Position = new(x, 1),
+                    Text = "?"  // TODO :: Change to more clear help button.
+                };
+                _help.Click += (s, e) => PlayScreen.ShowHelp(helpText, this);
+                Add(_help);
             }
 
             Title = title;
@@ -66,7 +80,7 @@ namespace AsLegacy.GUI.Popups
 
             Fill(new Rectangle(1, 1, Width - 2, Height - 2), Colors.White, Colors.Black, 0);
             if (Title != null)
-                Print(Width / 2 - Title.Length / 2, 1, Title, Color.White);
+                Print(Width / 2 - (Title.Length - 1) / 2, 1, Title, Color.White);
         }
 
         /// <summary>
