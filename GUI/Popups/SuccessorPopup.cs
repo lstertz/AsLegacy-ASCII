@@ -26,6 +26,8 @@ namespace AsLegacy.GUI.Popups
 
         private const int PassiveNameX = 2;
 
+        private const string HelpText = "Test"; // TODO :: Change to actual text.
+
         /// <summary>
         /// The name of the successor.
         /// </summary>
@@ -56,7 +58,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public SuccessorPopup(int width, int height) : base("", width, height, false)
+        public SuccessorPopup(int width, int height) : base("", width, height, false, HelpText)
         {
             _availablePointsLabel = new Label(PointsMaxLength)
             {
