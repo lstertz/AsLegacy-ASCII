@@ -202,7 +202,7 @@ namespace AsLegacy.GUI.Popups
         private void OnInvestmentChangedFinal(TextBox investmentBox,
             TextBox.TextChangedEventArgs args)
         {
-            if (Player.Character == null || !investmentBox.IsFocused)
+            if (Player.Character == null)
                 return;
 
             int spentPoints = 0;
