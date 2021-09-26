@@ -199,7 +199,7 @@ namespace AsLegacy.GUI.Popups
         /// <inheritdoc/>
         public override bool ProcessMouse(MouseConsoleState state)
         {
-            if (_learnSkillPopup.IsVisible)
+            if (_learnSkillPopup.IsVisible || _notificationPopup.IsVisible)
                 return true;
 
             return base.ProcessMouse(state);
@@ -457,6 +457,7 @@ namespace AsLegacy.GUI.Popups
                 _hoverPopup.IsVisible = false;
 
                 _learnSkillPopup.IsVisible = false;
+                _notificationPopup.IsVisible = false;
             }
             IsFocused = IsVisible;
         }

@@ -23,7 +23,7 @@ namespace AsLegacy.GUI.Popups
                 base.Height = value;
 
                 if (_ok != null)
-                    _ok.Position = new(Width / 2 - 1, Height - 2);
+                    _ok.Position = new(Width / 2 - 2, Height - 2);
             }
         }
 
@@ -36,7 +36,7 @@ namespace AsLegacy.GUI.Popups
                 base.Width = value;
 
                 if (_ok != null)
-                    _ok.Position = new(Width / 2 - 1, Height - 2);
+                    _ok.Position = new(Width / 2 - 2, Height - 2);
             }
         }
 

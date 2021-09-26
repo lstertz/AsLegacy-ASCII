@@ -83,7 +83,7 @@ namespace AsLegacy.GUI.Popups
             HorizontalAlignment alignment = HorizontalAlignment.Left) :
             base(title, maxWidth, maxHeight, hasCloseButton)
         {
-            _width = Width;
+            _width = base.Width;
             _height = Height;
 
             _minWidth = minWidth;
@@ -93,7 +93,7 @@ namespace AsLegacy.GUI.Popups
             _alignment = alignment;
 
             _maxLineWidth = _maxWidth - FrameSpaceHorizontal;
-            _requiredLineWidth = _minWidth + FrameSpaceHorizontal;
+            _requiredLineWidth = _minWidth;
             _requiredTitleWidth = title.Length + FrameSpaceHorizontal;
 
             // TODO :: Support a scrollbar if over max height.
@@ -129,6 +129,15 @@ namespace AsLegacy.GUI.Popups
                 if (splitContent[c].Length > longestContentWidth)
                     longestContentWidth = splitContent[c].Length;
 
+            _requiredLineWidth = longestContentWidth + FrameSpaceHorizontal;
+            bool isMinWidth = _requiredLineWidth < _minWidth;
+            if (isMinWidth)
+                _requiredLineWidth = _minWidth;
+
+            Width = _requiredLineWidth > _requiredTitleWidth ?
+                _requiredLineWidth : _requiredTitleWidth;
+            Height = splitContent.Count + FrameSpaceVertical + TitleHeightSpace;
+
             for (int c = 0, count = splitContent.Count; c < count; c++)
             {
                 string content = splitContent[c];
@@ -146,14 +155,13 @@ namespace AsLegacy.GUI.Popups
 
                 if (_alignment == HorizontalAlignment.Center)
                 {
-                    int adjustedX = 1 - 
-                        ((_maxWidth - longestContentWidth - FrameSpaceHorizontal) / 2);
+                    int adjustedX = (FrameSpaceHorizontal / 2) - ((_maxWidth - Width + 1) / 2);
                     _textLines[c].Position = new(adjustedX,
                         TitleHeightSpace + FrameSpaceVertical / 2 + c);
                 }
                 else if (_alignment == HorizontalAlignment.Right)
                 {
-                    int adjustedX = 2 - (_maxWidth - longestContentWidth - FrameSpaceHorizontal);
+                    int adjustedX = (FrameSpaceHorizontal / 2) - (_maxWidth - Width);
                     _textLines[c].Position = new(adjustedX,
                         TitleHeightSpace + FrameSpaceVertical / 2 + c);
                 }
@@ -164,10 +172,6 @@ namespace AsLegacy.GUI.Popups
                 _textLines[c].IsVisible = true;
             }
 
-            _requiredLineWidth = longestContentWidth + FrameSpaceHorizontal;
-            Width = _requiredLineWidth > _requiredTitleWidth ?
-                _requiredLineWidth : _requiredTitleWidth;
-            Height = splitContent.Count + FrameSpaceVertical + TitleHeightSpace;
 
             for (int c = _textLines.Count - 1; c > splitContent.Count - 1; c--)
                 _textLines[c].IsVisible = false;

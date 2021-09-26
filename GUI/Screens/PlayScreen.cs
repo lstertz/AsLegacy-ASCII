@@ -64,10 +64,18 @@ namespace AsLegacy.GUI.Screens
         private static PlayScreen Screen;
 
         /// <summary>
+        /// Whether the help popup is currently showing.
+        /// </summary>
+        public static bool IsShowingHelp => Screen._helpPopup.IsVisible;
+
+        /// <summary>
         /// Whether the screen is currently showing a popup.
         /// </summary>
-        public static bool IsShowingPopup => Screen._itemsPopup.IsVisible ||
-            Screen._talentsPopup.IsVisible || Screen._playerDeathPopup.IsVisible || 
+        public static bool IsShowingPopup => 
+            Screen._helpPopup.IsVisible || 
+            Screen._itemsPopup.IsVisible ||
+            Screen._talentsPopup.IsVisible || 
+            Screen._playerDeathPopup.IsVisible || 
             Screen._successorPopup.IsVisible;
 
         /// <summary>
@@ -83,6 +91,7 @@ namespace AsLegacy.GUI.Screens
 
                 if (!value)
                 {
+                    Screen._helpPopup.IsVisible = false;
                     Screen._itemsPopup.IsVisible = false;
                     Screen._talentsPopup.IsVisible = false;
                     Screen._playerDeathPopup.IsVisible = false;
@@ -121,6 +130,25 @@ namespace AsLegacy.GUI.Screens
         }
 
         /// <summary>
+        /// Shows the PlayScreen's Help Popup.
+        /// </summary>
+        /// <param name="helpText">The text to be displayed in the popup.</param>
+        /// <param name="requestingPopup">The popup requesting the help popup 
+        /// to be displayed. This is referenced to orient the help popup respective to 
+        /// its requester.</param>
+        public static void ShowHelp(string helpText, Popup requestingPopup)
+        {
+            NotificationPopup help = Screen._helpPopup;
+
+            help.Content = helpText;
+            help.Position = new(
+                requestingPopup.Position.X + requestingPopup.Width / 2 - help.Width / 2, 
+                requestingPopup.Position.Y + requestingPopup.Height / 2 - help.Height / 2);
+            help.OnDismissal += () => requestingPopup.IsFocused = true;
+            help.IsVisible = true;
+        }
+
+        /// <summary>
         /// Shows the PlayScreen's Items Popup.
         /// </summary>
         public static void ShowItems()
@@ -146,6 +174,9 @@ namespace AsLegacy.GUI.Screens
             Screen._talentsPopup.IsVisible = false;
         }
 
+        /// <summary>
+        /// Shows the PlayScreen's Successor Popup.
+        /// </summary>
         public static void ShowSuccessorDetails(string successorName)
         {
             if (!Screen._playerDeathPopup.IsVisible)
@@ -172,6 +203,7 @@ namespace AsLegacy.GUI.Screens
         }
 
 
+        private readonly NotificationPopup _helpPopup;
         private readonly Popup _itemsPopup;
         private readonly PlayerDeathPopup _playerDeathPopup;
         private readonly SuccessorPopup _successorPopup;
@@ -201,6 +233,11 @@ namespace AsLegacy.GUI.Screens
 
             SetConsoleFrame(_console);
 
+            _helpPopup = new("Help", Display.Width / 2, Display.Width / 2, Display.Height)
+            {
+                Position = new(MapViewPortHalfWidth + Display.Width / 2 + 1, Display.Height / 2),
+                IsVisible = false
+            };
             _itemsPopup = new ItemsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
@@ -276,6 +313,7 @@ namespace AsLegacy.GUI.Screens
             _console.Children.Add(_talentsPopup);
             _console.Children.Add(_playerDeathPopup);
             _console.Children.Add(_successorPopup);
+            _console.Children.Add(_helpPopup);
 
             _console.Components.Add(this);
         }

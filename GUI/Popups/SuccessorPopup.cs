@@ -1,6 +1,7 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.Global;
 using AsLegacy.GUI.Elements;
+using AsLegacy.GUI.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -25,6 +26,10 @@ namespace AsLegacy.GUI.Popups
         private const int MaxAssignedPointsLength = 3;
 
         private const int PassiveNameX = 2;
+
+        private const string HelpText = "All successor points must be allocated to passives " +
+            "for the successive character. Points accumulate over generations, so the same " +
+            "points can be re-allocated for any character after this next character.";
 
         /// <summary>
         /// The name of the successor.
@@ -56,7 +61,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public SuccessorPopup(int width, int height) : base("", width, height, false)
+        public SuccessorPopup(int width, int height) : base("", width, height, false, HelpText)
         {
             _availablePointsLabel = new Label(PointsMaxLength)
             {
@@ -199,7 +204,7 @@ namespace AsLegacy.GUI.Popups
         private void OnInvestmentChangedFinal(TextBox investmentBox,
             TextBox.TextChangedEventArgs args)
         {
-            if (Player.Character == null || !investmentBox.IsFocused)
+            if (Player.Character == null)
                 return;
 
             int spentPoints = 0;
@@ -220,6 +225,15 @@ namespace AsLegacy.GUI.Popups
             UpdateAvailablePointsLabel();
 
             _ok.IsEnabled = _availablePoints == 0;
+        }
+
+        /// <inheritdoc/>
+        public override bool ProcessMouse(MouseConsoleState state)
+        {
+            if (PlayScreen.IsShowingHelp)
+                return true;
+
+            return base.ProcessMouse(state);
         }
 
         /// <inheritdoc/>
