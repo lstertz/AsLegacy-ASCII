@@ -82,7 +82,7 @@ namespace AsLegacy.GUI.Popups
 
             Fill(new Rectangle(1, 1, Width - 2, Height - 2), Colors.White, Colors.Black, 0);
             if (Title != null)
-                Print(Width / 2 - (Title.Length - 1) / 2, 1, Title, Color.White);
+                Print((Width - Title.Length) / 2, 1, Title, Color.White);
         }
 
         /// <summary>
