@@ -27,7 +27,9 @@ namespace AsLegacy.GUI.Popups
 
         private const int PassiveNameX = 2;
 
-        private const string HelpText = "Test"; // TODO :: Change to actual text.
+        private const string HelpText = "All successor points must be allocated to passives " +
+            "for the successive character. Points accumulate over generations, so the same " +
+            "points can be re-allocated for any character after this next character.";
 
         /// <summary>
         /// The name of the successor.

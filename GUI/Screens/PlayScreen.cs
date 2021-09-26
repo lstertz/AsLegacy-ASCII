@@ -140,9 +140,6 @@ namespace AsLegacy.GUI.Screens
         {
             NotificationPopup help = Screen._helpPopup;
 
-            // TODO :: Fix ability to interact after closed.
-            // TODO :: Add other icon.
-
             help.Content = helpText;
             help.Position = new(
                 requestingPopup.Position.X + requestingPopup.Width / 2 - help.Width / 2, 
@@ -236,7 +233,7 @@ namespace AsLegacy.GUI.Screens
 
             SetConsoleFrame(_console);
 
-            _helpPopup = new("Help", Display.Width / 2, Display.Width / 2, Display.Height / 2)
+            _helpPopup = new("Help", Display.Width / 2, Display.Width / 2, Display.Height)
             {
                 Position = new(MapViewPortHalfWidth + Display.Width / 2 + 1, Display.Height / 2),
                 IsVisible = false
