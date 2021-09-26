@@ -23,6 +23,7 @@ namespace AsLegacy.GUI.Popups
         /// <inheritdoc cref="CellSurface.Width"/>
         public virtual new int Width { get => base.Width; protected set => base.Width = value; }
 
+
         private readonly Button _close;
         private readonly Button _help;
 
@@ -55,7 +56,8 @@ namespace AsLegacy.GUI.Popups
                 _help = new(1, 1)
                 {
                     Position = new(x, 1),
-                    Text = "?"  // TODO :: Change to more clear help button.
+                    Text = new string((char)264, 1)
+                    
                 };
                 _help.Click += (s, e) => PlayScreen.ShowHelp(helpText, this);
                 Add(_help);
