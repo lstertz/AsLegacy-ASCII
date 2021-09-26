@@ -64,6 +64,11 @@ namespace AsLegacy.GUI.Screens
         private static PlayScreen Screen;
 
         /// <summary>
+        /// Whether the help popup is currently showing.
+        /// </summary>
+        public static bool IsShowingHelp => Screen._helpPopup.IsVisible;
+
+        /// <summary>
         /// Whether the screen is currently showing a popup.
         /// </summary>
         public static bool IsShowingPopup => 
@@ -138,10 +143,11 @@ namespace AsLegacy.GUI.Screens
             // TODO :: Fix ability to interact after closed.
             // TODO :: Add other icon.
 
+            help.Content = helpText;
             help.Position = new(
                 requestingPopup.Position.X + requestingPopup.Width / 2 - help.Width / 2, 
                 requestingPopup.Position.Y + requestingPopup.Height / 2 - help.Height / 2);
-            help.Content = helpText;
+            help.OnDismissal += () => requestingPopup.IsFocused = true;
             help.IsVisible = true;
         }
 

@@ -1,6 +1,7 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.Global;
 using AsLegacy.GUI.Elements;
+using AsLegacy.GUI.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -222,6 +223,15 @@ namespace AsLegacy.GUI.Popups
             UpdateAvailablePointsLabel();
 
             _ok.IsEnabled = _availablePoints == 0;
+        }
+
+        /// <inheritdoc/>
+        public override bool ProcessMouse(MouseConsoleState state)
+        {
+            if (PlayScreen.IsShowingHelp)
+                return true;
+
+            return base.ProcessMouse(state);
         }
 
         /// <inheritdoc/>
