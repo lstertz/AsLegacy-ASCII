@@ -108,6 +108,15 @@ namespace AsLegacy.GUI.Popups
             IsFocused = IsVisible;
         }
 
+        /// <inheritdoc/>
+        public override bool ProcessMouse(MouseConsoleState state)
+        {
+            if (PlayScreen.IsShowingHelp)
+                return true;
+
+            return base.ProcessMouse(state);
+        }
+
         /// <summary>
         /// Validates the input key press.
         /// </summary>

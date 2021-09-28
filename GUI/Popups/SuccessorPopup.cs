@@ -3,7 +3,6 @@ using AsLegacy.Global;
 using AsLegacy.GUI.Elements;
 using AsLegacy.GUI.Screens;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Controls;
 using SadConsole.Input;
