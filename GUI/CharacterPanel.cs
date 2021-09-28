@@ -90,18 +90,17 @@ namespace AsLegacy.GUI
         {
             Print(1, EquippedSkillsStartingY, "Equipped Skills", Color.White);
             string[] equippedSkills = AsLegacy.Focus.EquippedSkills;
-            for (int c = 0, count = equippedSkills.Length; c < count; c++)
+            for (int c = 0, count = equippedSkills.Length, half = count / 2; c < count; c++)
             {
                 string text = equippedSkills[c];
                 if (string.IsNullOrEmpty(text))
                     text = EmptySkillSlotGlyph;
 
-                int y = EquippedSkillsStartingY + c / 2 + 1;
-                bool printLeft = c % 2 == 0;
-                if (printLeft)
-                    Print(1, y, $"{c + 1}: {text}", Color.White);
+                if (c < half)
+                    Print(1, EquippedSkillsStartingY + c + 1, $"{c + 1}: {text}", Color.White);
                 else
-                    Print(Width / 2 + 1, y, $"{c + 1}: {text}", Color.White);
+                    Print(Width / 2 + 1, EquippedSkillsStartingY + (c - half) + 1, 
+                        $"{c + 1}: {text}", Color.White);
             }
         }
 
