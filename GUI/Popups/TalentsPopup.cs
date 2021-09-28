@@ -30,6 +30,15 @@ namespace AsLegacy.GUI.Popups
 
         private const int TalentNameX = 23;
 
+        private const string HelpText = "Talents are concepts and passives that a character " +
+            "can invest in, by using the + and - buttons, with talent points. Any investments " +
+            "must be applied to take effect, and cannot be undone once applied. Any damage " +
+            "dealing action will earn a character a talent point. A passive grants the benefit " +
+            "of its investment to the character at all times. A concept imparts the benefit of " +
+            "its investment to any skills that are defined by the concept. Any skill can be " +
+            "learned by clicking its diamond next to its primary concept. Once learned, the " +
+            "skill can be equipped and used.";
+
         private readonly Button _applyInvestmentsButton;
         private readonly Label _availablePointsLabel;
         private readonly Button[] _conceptDivestmentButtons = new Button[MaxConceptCount];
@@ -55,7 +64,8 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         /// <param name="width">The width of the Popup window.</param>
         /// <param name="height">The height of the Popup window.</param>
-        public TalentsPopup(int width, int height) : base("Talents", width, height)
+        public TalentsPopup(int width, int height) : 
+            base("Talents", width, height, true, HelpText)
         {
             _hoverPopup = new("", 10, 40, 20)
             {
