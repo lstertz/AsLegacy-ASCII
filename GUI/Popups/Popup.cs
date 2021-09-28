@@ -44,7 +44,7 @@ namespace AsLegacy.GUI.Popups
                 _close = new(1, 1)
                 {
                     Position = new(width - 3, 1),
-                    Text = "X"
+                    Text = new string((char)265, 1)
                 };
                 _close.Click += (s, e) => OnClose();
                 Add(_close);
@@ -52,7 +52,7 @@ namespace AsLegacy.GUI.Popups
 
             if (!string.IsNullOrEmpty(helpText))
             {
-                int x = hasCloseButton ? width - 4 : width - 3;
+                int x = hasCloseButton ? width - 5 : width - 3;
                 _help = new(1, 1)
                 {
                     Position = new(x, 1),
