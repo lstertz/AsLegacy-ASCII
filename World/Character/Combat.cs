@@ -284,7 +284,8 @@ namespace AsLegacy
                 public static void PerformStandardAttack(Character attacker, Character target)
                 {
                     ICombat aState = attacker._combatState;
-                    new TargetedAction(attacker, target, aState.AttackInterval,
+                    new TargetedAction(attacker, target, aState.AttackInterval, 
+                        ActivityMessageAttacking, 
                         (t) =>
                         {
                             float dealtDamage = aState.AttackDamage;

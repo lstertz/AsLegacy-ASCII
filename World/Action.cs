@@ -138,24 +138,31 @@ namespace AsLegacy
             /// </summary>
             public class Action : World.Action
             {
+                /// <summary>
+                /// The displayable name of the action.
+                /// </summary>
+                public string Name { get; private set; }
+
                 private readonly Character _performer;
 
                 /// <summary>
                 /// Constructs a new Character Action.
                 /// </summary>
-                /// <param name="character">The performing Character.</param>
+                /// <param name="performer">The performing Character.</param>
                 /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
                 /// before the action is to be performed.</param>
+                /// <param name="name">The displayable name of the action.</param>
                 /// <param name="repeats">Whether the Action re-initializes 
                 /// itself after is resolves.</param>
                 /// <param name="action">The Action to be performed by the Character.</param>
                 /// <param name="conditionalCheck">A Func to ensure that required conditions to 
                 /// resolve this Action continue to be met.</param>
-                public Action(Character performer, int requiredActivationTime,
+                public Action(Character performer, int requiredActivationTime, string name,
                     System.Action action, Func<bool> conditionalCheck = null,
                     bool repeats = false) : base(
                         requiredActivationTime, action, conditionalCheck, repeats)
                 {
+                    Name = name;
                     _performer = performer;
 
                     if (CharacterActions.ContainsKey(performer))
@@ -188,6 +195,7 @@ namespace AsLegacy
                 /// <param name="target">The targeted Character.</param>
                 /// <param name="requiredActivationTime">The time, in milliseconds, that must pass 
                 /// before the action is to be performed.</param>
+                /// <param name="name">The displayable name of the action.</param>
                 /// <param name="repeats">Whether the Action re-initializes 
                 /// itself after is resolves.</param>
                 /// <param name="action">The Action to be performed upon the targeted Character,
@@ -196,9 +204,9 @@ namespace AsLegacy
                 /// resolve this Action for the targeted Character, provided as a parameter,
                 /// continue to be met.</param>
                 public TargetedAction(Character performer, Character target,
-                    int requiredActivationTime, Action<Character> action,
+                    int requiredActivationTime, string name, Action<Character> action,
                     Func<Character, bool> conditionalCheck, bool repeats = false) : base(
-                        performer, requiredActivationTime,
+                        performer, requiredActivationTime, name,
                         () => action(target),
                         () => { return conditionalCheck(target); },
                         repeats)
