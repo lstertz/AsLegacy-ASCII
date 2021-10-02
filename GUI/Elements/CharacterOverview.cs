@@ -70,8 +70,13 @@ namespace AsLegacy.GUI.Elements
 
             Color foreground = Character.Selected ? Colors.Selected : 
                 Character.Highlighted ? Colors.Highlighted : Colors.FadedWhite;
+
+            string activity = Character.CurrentActivity;
+            activity = activity.Length > console.Width ? 
+                activity.Substring(0, console.Width) : activity;
+
             console.Print(0, _y, name, foreground);
-            console.Print(0, _y + 1, "[Action]", foreground);
+            console.Print(0, _y + 1, activity, foreground);
             console.Print(0, _y + 2, "[Target]", foreground);
 
             console.DrawLine(new Point(0, _y + BottomFrameIndex), 

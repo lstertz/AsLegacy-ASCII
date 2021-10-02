@@ -67,6 +67,11 @@ namespace AsLegacy.GUI.HUDs
         {
             base.Update(timeElapsed);
 
+            Erase(1, 1, Width - 2);
+
+            if (Character != null)
+                Print(2, 1, Character.CurrentActivity);
+
             // TODO :: Update other target details, if target is not null.
         }
 

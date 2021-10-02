@@ -15,6 +15,14 @@ namespace AsLegacy
         public abstract partial class Character : CharacterBase, 
             IInternalCharacter, IRankedCharacter, ICharacter
         {
+            protected const string ActivityMessageAttack = "Hostile";
+            protected const string ActivityMessageAttacking = "Attacking";
+            protected const string ActivityMessageCooldown = "Cooldown";
+            protected const string ActivityMessageDead = "Dead";
+            protected const string ActivityMessageDefend = "Defending";
+            protected const string ActivityMessageMovingPrefix = "Moving ";
+            protected const string ActivityMessageNone = "";
+
             /// <summary>
             /// Defines the standard directions, for immediate actions, available to the Character.
             /// </summary>
@@ -25,6 +33,13 @@ namespace AsLegacy
                 Up,
                 Down
             }
+            private readonly Dictionary<Direction, string> _directionMapping = new()
+            {
+                { Direction.Down, "South" },
+                { Direction.Left, "West" },
+                { Direction.Right, "East" },
+                { Direction.Up, "North" }
+            };
 
             /// <summary>
             /// Defines the different modes of a Character, which heavily influence the state and 
@@ -143,6 +158,34 @@ namespace AsLegacy
                         return CharacterActions[this];
 
                     return null;
+                }
+            }
+
+            public string CurrentActivity
+            {
+                get
+                {
+                    if (!IsAlive)
+                        return ActivityMessageDead;
+
+                    Action action = CurrentAction as Action;
+                    if (action == null)
+                    {
+                        switch (ActiveMode)
+                        {
+                            case Mode.Attack:
+                                if (Cooldown > 0)
+                                    return ActivityMessageCooldown;
+                                return ActivityMessageAttack;
+                            case Mode.Defend:
+                                return ActivityMessageDefend;
+                            default:
+                                if (Cooldown > 0)
+                                    return ActivityMessageCooldown;
+                                return ActivityMessageNone;
+                        }
+                    }
+                    return action.Name;
                 }
             }
 
@@ -360,7 +403,7 @@ namespace AsLegacy
                 Affect[] affects = skill.GetAffects(this);
                 int activationInMilliseconds = (int)(GetActivation(skill) * 1000.0f);
 
-                _ = new Action(this, activationInMilliseconds,
+                _ = new Action(this, activationInMilliseconds, skill.Affinity.Name,
                     () =>
                     {
                         Effect lastMadeEffect = null;
@@ -532,7 +575,8 @@ namespace AsLegacy
                     movementInterval += (int)(valueChange * 1000.0f);  // Convert value to seconds.
                     movementInterval = (int)(movementInterval * (1.0f + scaleChange));
 
-                    _ = new Action(this, movementInterval,
+                    string actionName = ActivityMessageMovingPrefix + _directionMapping[direction];
+                    _ = new Action(this, movementInterval, actionName,
                         () =>
                         {
                             Move(intendedRow, intendedColumn);
