@@ -67,10 +67,18 @@ namespace AsLegacy.GUI.HUDs
         {
             base.Update(timeElapsed);
 
-            Erase(1, 1, Width - 2);
+            Erase(0, 1, Width);
 
             if (Character != null)
+            {
                 Print(2, 1, Character.CurrentActivity);
+
+                World.Character target = Character.Target;
+                string targetName = "";
+                if (target != null)
+                    targetName = target is ILineal tLineal ? tLineal.LineageName : target.Name;
+                Print(Width - targetName.Length - 1, 1, targetName);
+            }
 
             // TODO :: Update other target details, if target is not null.
         }

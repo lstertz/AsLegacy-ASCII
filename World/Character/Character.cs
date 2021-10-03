@@ -276,6 +276,7 @@ namespace AsLegacy
             /// The target will be the recipient of certain actions performed 
             /// by this Character.
             /// </summary>
+            /// <remarks>Null if this Character has no target.</remarks>
             public virtual Character Target { get; set; }
 
             /// <summary>

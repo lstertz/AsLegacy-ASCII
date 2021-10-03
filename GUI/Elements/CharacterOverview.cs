@@ -64,20 +64,24 @@ namespace AsLegacy.GUI.Elements
             // TODO :: Refer to AsLegacy.Focus, comparing to World.Player when appropriate,
             //          for displaying details relevant to the viewer.
 
+            Color foreground = Character.Selected ? Colors.Selected : 
+                Character.Highlighted ? Colors.Highlighted : Colors.FadedWhite;
+
             string name = Character.Name;
             if (Character is ILineal lineal)
                 name = lineal.FullName;
-
-            Color foreground = Character.Selected ? Colors.Selected : 
-                Character.Highlighted ? Colors.Highlighted : Colors.FadedWhite;
+            console.Print(0, _y, name, foreground);
 
             string activity = Character.CurrentActivity;
             activity = activity.Length > console.Width ? 
                 activity.Substring(0, console.Width) : activity;
-
-            console.Print(0, _y, name, foreground);
             console.Print(0, _y + 1, activity, foreground);
-            console.Print(0, _y + 2, "[Target]", foreground);
+
+            World.Character target = Character.Target;
+            string targetName = "";
+            if (target != null)
+                targetName = target is ILineal tLineal ? tLineal.LineageName : target.Name;
+            console.Print(0, _y + 2, targetName, foreground);
 
             console.DrawLine(new Point(0, _y + BottomFrameIndex), 
                 new Point(console.Width - 1, _y + BottomFrameIndex), 
