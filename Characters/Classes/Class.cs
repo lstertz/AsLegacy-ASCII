@@ -18,6 +18,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public enum Type
         {
+            GiantRat,
             Spellcaster
         }
 
@@ -26,6 +27,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public static readonly ReadOnlyCollection<string> Names = new(new string[]
         {
+            "GiantRat",
             "Spellcaster"
         });
 
@@ -59,6 +61,108 @@ namespace AsLegacy.Characters
             // TODO :: Retrieve data-driven details (talents) and construct classes around them 
             //          for each Type of class. Populate Classes.
             // Populate manually for now.
+            Classes.Add(Type.GiantRat, new()
+            {
+                Concepts = new(new Concept[]
+                {
+                    new()
+                    {
+                        Affinities = new(new Affinity[]
+                        {
+                            new() // TODO : 100 :: Complete Affinities.
+                            {
+                                Name = "Rapid Bites",
+                                AffectColor = Color.DarkGray,
+                                BaseActivation = 1.0f,
+                                BaseCooldown = 1.0f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectDamage,
+                                            Aspect.LightningDamage
+                                        }),
+                                        BaseValue = 0,
+                                        Name = "Lightning Damage"
+                                    },
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectRange
+                                        }),
+                                        BaseValue = 1,
+                                        Name = "Range"
+                                    }
+                                }),
+                                Element = Skill.Element.Lightning,
+                                FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
+                                Performance = Skill.Performance.Spell
+                            },
+                            new()
+                            {
+                                Name = "Clench",
+                                AffectColor = Color.LightSkyBlue,
+                                BaseActivation = 1.5f,
+                                BaseCooldown = 1.0f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectDamage,
+                                            Aspect.IceDamage
+                                        }),
+                                        BaseScale = 1.1f,
+                                        BaseValue = 0,
+                                        Name = "Ice Damage"
+                                    },
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AreaOfEffectRange
+                                        }),
+                                        BaseValue = 1,
+                                        Name = "Range"
+                                    }
+                                }),
+                                Element = Skill.Element.Ice,
+                                FormattableDescription = $"Creates an expanding ring of\nice that deals damage to all\nenemies that it touches.",
+                                Performance = Skill.Performance.Spell
+                            }
+                        }),
+                        Name = "Bite",
+                        Category = Skill.Category.Primary,
+                        Type = Skill.Type.AdjacentAttack,
+                        FormattableDescription = $" {0} base damage within range.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.DirectDamage
+                        },
+                        Algorithm = (investment) => 1 * investment
+                    }
+                }),
+                Passives = new(new Passive[]
+                {
+                    new() // TODO : 100 :: Complete Passives.
+                    {
+                        Name = "Fire Mastery",
+                        AffectColor = Color.OrangeRed,
+                        FormattableDescription = $"+{0}% Fire damage.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
+                            AffectedAspect = Aspect.FireDamage
+                        },
+                        Algorithm = (investment) => investment / 50.0f
+                    }
+                })
+            });
             Classes.Add(Type.Spellcaster, new()
             {
                 Concepts = new(new Concept[]

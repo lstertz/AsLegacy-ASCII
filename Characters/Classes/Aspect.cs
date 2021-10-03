@@ -24,6 +24,7 @@
         Cooldown,
         CooldownNonElementalSpells,
         DamageToCooldown,
+        DirectDamage,
         FireDamage,
         IceDamage,
         LightningDamage,
