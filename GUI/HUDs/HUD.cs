@@ -77,7 +77,7 @@ namespace AsLegacy.GUI.HUDs
                 string targetName = "";
                 if (target != null)
                     targetName = target is ILineal tLineal ? tLineal.LineageName : target.Name;
-                Print(Width - targetName.Length, 1, targetName);
+                Print(Width - targetName.Length - 1, 1, targetName);
             }
 
             // TODO :: Update other target details, if target is not null.
