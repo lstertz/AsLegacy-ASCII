@@ -69,95 +69,101 @@ namespace AsLegacy.Characters
                     {
                         Affinities = new(new Affinity[]
                         {
-                            new() // TODO : 100 :: Complete Affinities.
+                            new()
                             {
-                                Name = "Rapid Bites",
-                                AffectColor = Color.DarkGray,
-                                BaseActivation = 1.0f,
-                                BaseCooldown = 1.0f,
+                                Name = "Quick Bite",
+                                AffectColor = Color.LightGray,
+                                BaseActivation = 0.5f,
+                                BaseCooldown = 0.75f,
                                 CustomAttributes = new(new Attribute[]
                                 {
                                     new()
                                     {
                                         Aspects = new(new Aspect[]
                                         {
-                                            Aspect.AreaOfEffectDamage,
-                                            Aspect.LightningDamage
+                                            Aspect.AdjacentTargetOneTimeDamage,
+                                            Aspect.PhysicalDamage,
+                                            Aspect.PiercingDamage
                                         }),
-                                        BaseValue = 0,
-                                        Name = "Lightning Damage"
-                                    },
-                                    new()
-                                    {
-                                        Aspects = new(new Aspect[]
-                                        {
-                                            Aspect.AreaOfEffectRange
-                                        }),
-                                        BaseValue = 1,
-                                        Name = "Range"
+                                        Name = "Damage"
                                     }
                                 }),
-                                Element = Skill.Element.Lightning,
-                                FormattableDescription = $"Creates an expanding ring of \nlightning that deals damage to \nall enemies that it touches.",
-                                Performance = Skill.Performance.Spell
+                                Element = Skill.Element.Physical,
+                                FormattableDescription = $"A quick bite.",
+                                Performance = Skill.Performance.Attack
                             },
                             new()
                             {
                                 Name = "Clench",
-                                AffectColor = Color.LightSkyBlue,
+                                AffectColor = Color.DarkGray,
                                 BaseActivation = 1.5f,
-                                BaseCooldown = 1.0f,
+                                BaseCooldown = 0.5f,
                                 CustomAttributes = new(new Attribute[]
                                 {
                                     new()
                                     {
                                         Aspects = new(new Aspect[]
                                         {
-                                            Aspect.AreaOfEffectDamage,
-                                            Aspect.IceDamage
+                                            Aspect.AdjacentTargetOneTimeDamage,
+                                            Aspect.PhysicalDamage,
+                                            Aspect.PiercingDamage
                                         }),
-                                        BaseScale = 1.1f,
-                                        BaseValue = 0,
-                                        Name = "Ice Damage"
-                                    },
-                                    new()
-                                    {
-                                        Aspects = new(new Aspect[]
-                                        {
-                                            Aspect.AreaOfEffectRange
-                                        }),
-                                        BaseValue = 1,
-                                        Name = "Range"
+                                        BaseScale = 2.0f,
+                                        Name = "Damage"
                                     }
                                 }),
-                                Element = Skill.Element.Ice,
-                                FormattableDescription = $"Creates an expanding ring of\nice that deals damage to all\nenemies that it touches.",
-                                Performance = Skill.Performance.Spell
+                                Element = Skill.Element.Physical,
+                                FormattableDescription = $"A focused forceful bite.",
+                                Performance = Skill.Performance.Attack
                             }
                         }),
                         Name = "Bite",
                         Category = Skill.Category.Primary,
                         Type = Skill.Type.AdjacentAttack,
-                        FormattableDescription = $" {0} base damage within range.",
+                        FormattableDescription = $" {0} base damage to adjacent target.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.Add,
-                            AffectedAspect = Aspect.DirectDamage
+                            AffectedAspect = Aspect.AdjacentTargetOneTimeDamage
                         },
                         Algorithm = (investment) => 1 * investment
                     }
                 }),
                 Passives = new(new Passive[]
                 {
-                    new() // TODO : 100 :: Complete Passives.
+                    new()
                     {
-                        Name = "Fire Mastery",
-                        AffectColor = Color.OrangeRed,
-                        FormattableDescription = $"+{0}% Fire damage.",
+                        Name = "Agility",
+                        AffectColor = Color.Silver,
+                        FormattableDescription = $"-{0}% Activation for all actions.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
+                            AffectedAspect = Aspect.Activation
+                        },
+                        Algorithm = (investment) => investment / 50.0f
+                    },
+                    new()
+                    {
+                        Name = "Hearty",
+                        AffectColor = Color.DarkRed,
+                        FormattableDescription = $"+{0} Max Health.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.MaxHealth
+                        },
+                        Algorithm = (investment) => 0.25f * investment
+                    },
+                    new()
+                    {
+                        Name = "Strength",
+                        AffectColor = Color.Gold,
+                        FormattableDescription = $"+{0}% Physical Damage.",
                         Influence = new()
                         {
                             AffectOnAspect = Influence.Purpose.ScaleUp,
-                            AffectedAspect = Aspect.FireDamage
+                            AffectedAspect = Aspect.PhysicalDamage
                         },
                         Algorithm = (investment) => investment / 50.0f
                     }
