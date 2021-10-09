@@ -27,7 +27,8 @@ namespace AsLegacy.Characters.Skills
             Fire,
             Ice,
             Lightning,
-            Physical
+            Physical,
+            Vocal
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace AsLegacy.Characters.Skills
         public enum Performance
         {
             Attack,
+            Expression,
             Spell
         }
 
@@ -46,6 +48,7 @@ namespace AsLegacy.Characters.Skills
         {
             AdjacentAttack,
             AreaOfEffect,
+            Callout,
             Debuff,
             EnvironmentEffect,
             Movement,

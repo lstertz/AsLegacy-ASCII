@@ -19,7 +19,8 @@ namespace AsLegacy.Characters
         public enum Type
         {
             GiantRat,
-            Spellcaster
+            Spellcaster,
+            Wolf
         }
 
         /// <summary>
@@ -27,8 +28,9 @@ namespace AsLegacy.Characters
         /// </summary>
         public static readonly ReadOnlyCollection<string> Names = new(new string[]
         {
-            "GiantRat",
-            "Spellcaster"
+            "Giant Rat",
+            "Spellcaster",
+            "Wolf"
         });
 
         private static readonly Dictionary<Type, Class> Classes = new();
@@ -371,6 +373,133 @@ namespace AsLegacy.Characters
                         {
                             AffectOnAspect = Influence.Purpose.ScaleUp,
                             AffectedAspect = Aspect.FireDamage
+                        },
+                        Algorithm = (investment) => investment / 50.0f
+                    }
+                })
+            });
+            Classes.Add(Type.Wolf, new()
+            {
+                Concepts = new(new Concept[]
+                {
+                    new()
+                    {
+                        Affinities = new(new Affinity[]
+                        {
+                            new()
+                            {
+                                Name = "Call to Attack",
+                                AffectColor = Color.Red,
+                                BaseActivation = 1.5f,
+                                BaseCooldown = 1.0f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.CalloutRange
+                                        }),
+                                        Name = "Range",
+                                        BaseValue = 2
+                                    }
+                                }),
+                                Element = Skill.Element.Vocal,
+                                FormattableDescription = $"A howl that calls out a target to be attacked.",
+                                Performance = Skill.Performance.Expression
+                            },
+                            new()
+                            {
+                                Name = "Call to Defend",
+                                AffectColor = Color.MediumBlue,
+                                BaseActivation = 1.0f,
+                                BaseCooldown = 1.5f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.CalloutRange
+                                        }),
+                                        Name = "Range",
+                                        BaseValue = 2
+                                    }
+                                }),
+                                Element = Skill.Element.Vocal,
+                                FormattableDescription = $"A howl that calls out a target to be defended.",
+                                Performance = Skill.Performance.Expression
+                            },
+                            new()
+                            {
+                                Name = "Call to Avoid",
+                                AffectColor = Color.YellowGreen,
+                                BaseActivation = 2.0f,
+                                BaseCooldown = 1.0f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.CalloutRange
+                                        }),
+                                        Name = "Range",
+                                        BaseValue = 2
+                                    }
+                                }),
+                                Element = Skill.Element.Vocal,
+                                FormattableDescription = $"A howl that calls out a target to be avoided.",
+                                Performance = Skill.Performance.Expression
+                            }
+                        }),
+                        Name = "Howl",
+                        Category = Skill.Category.Primary,
+                        Type = Skill.Type.Callout,
+                        FormattableDescription = $" {0} range of the howl's effect.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.CalloutRange
+                        },
+                        Algorithm = (investment) => investment / 10.0f
+                    }
+                }),
+                Passives = new(new Passive[]
+                {
+                    new()
+                    {
+                        Name = "Cold Resistance",
+                        AffectColor = Color.LightBlue,
+                        FormattableDescription = $"-{0}% Damage from ice.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
+                            AffectedAspect = Aspect.IceDamage
+                        },
+                        Algorithm = (investment) => investment / 50.0f
+                    },
+                    new()
+                    {
+                        Name = "Endurance",
+                        AffectColor = Color.CornflowerBlue,
+                        FormattableDescription = $"-{0}% Cooldown.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
+                            AffectedAspect = Aspect.Cooldown
+                        },
+                        Algorithm = (investment) => investment / 50.0f
+                    },
+                    new()
+                    {
+                        Name = "Quick Feet",
+                        AffectColor = Color.Goldenrod,
+                        FormattableDescription = $"-{0}% Activation for movement.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
+                            AffectedAspect = Aspect.MovementActivation
                         },
                         Algorithm = (investment) => investment / 50.0f
                     }
