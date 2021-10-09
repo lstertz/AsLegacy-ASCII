@@ -12,6 +12,10 @@
         /// </summary>
         Activation,
         /// <summary>
+        /// The aspect pertaining to the damage dealt in a single motion to a specific target.
+        /// </summary>
+        AdjacentTargetOneTimeDamage,
+        /// <summary>
         /// The aspect pertaining to the damage dealt by an area 
         /// of effect <see cref="Skills.Skill"/>.
         /// </summary>
@@ -30,6 +34,8 @@
         LightningDamage,
         MaxHealth,
         NextSpellReductionForConsecutiveAttacks,
+        PiercingDamage,
+        PhysicalDamage,
         SkillActivation
     }
 }
