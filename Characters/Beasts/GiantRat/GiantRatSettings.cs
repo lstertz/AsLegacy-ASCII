@@ -18,7 +18,6 @@ namespace AsLegacy
             public override Color GlyphColor => Color.LightPink;
 
             /// <inheritdoc/>
-
             public override Class.Type ClassType => Class.Type.GiantRat;
             /// <inheritdoc/>
             public override Combat.Legacy InitialLegacy => new Combat.Legacy(4);
