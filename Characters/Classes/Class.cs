@@ -18,6 +18,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public enum Type
         {
+            GiantRat,
             Spellcaster
         }
 
@@ -26,6 +27,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public static readonly ReadOnlyCollection<string> Names = new(new string[]
         {
+            "GiantRat",
             "Spellcaster"
         });
 
@@ -59,6 +61,114 @@ namespace AsLegacy.Characters
             // TODO :: Retrieve data-driven details (talents) and construct classes around them 
             //          for each Type of class. Populate Classes.
             // Populate manually for now.
+            Classes.Add(Type.GiantRat, new()
+            {
+                Concepts = new(new Concept[]
+                {
+                    new()
+                    {
+                        Affinities = new(new Affinity[]
+                        {
+                            new()
+                            {
+                                Name = "Quick Bite",
+                                AffectColor = Color.LightGray,
+                                BaseActivation = 0.5f,
+                                BaseCooldown = 0.75f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AdjacentTargetOneTimeDamage,
+                                            Aspect.PhysicalDamage,
+                                            Aspect.PiercingDamage
+                                        }),
+                                        Name = "Damage"
+                                    }
+                                }),
+                                Element = Skill.Element.Physical,
+                                FormattableDescription = $"A quick bite.",
+                                Performance = Skill.Performance.Attack
+                            },
+                            new()
+                            {
+                                Name = "Clench",
+                                AffectColor = Color.DarkGray,
+                                BaseActivation = 1.5f,
+                                BaseCooldown = 0.5f,
+                                CustomAttributes = new(new Attribute[]
+                                {
+                                    new()
+                                    {
+                                        Aspects = new(new Aspect[]
+                                        {
+                                            Aspect.AdjacentTargetOneTimeDamage,
+                                            Aspect.PhysicalDamage,
+                                            Aspect.PiercingDamage
+                                        }),
+                                        BaseScale = 2.0f,
+                                        Name = "Damage"
+                                    }
+                                }),
+                                Element = Skill.Element.Physical,
+                                FormattableDescription = $"A focused forceful bite.",
+                                Performance = Skill.Performance.Attack
+                            }
+                        }),
+                        Name = "Bite",
+                        Category = Skill.Category.Primary,
+                        Type = Skill.Type.AdjacentAttack,
+                        FormattableDescription = $" {0} base damage to adjacent target.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.AdjacentTargetOneTimeDamage
+                        },
+                        Algorithm = (investment) => 1 * investment
+                    }
+                }),
+                Passives = new(new Passive[]
+                {
+                    new()
+                    {
+                        Name = "Agility",
+                        AffectColor = Color.Silver,
+                        FormattableDescription = $"-{0}% Activation for all actions.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleDown,
+                            AffectedAspect = Aspect.Activation
+                        },
+                        Algorithm = (investment) => investment / 50.0f
+                    },
+                    new()
+                    {
+                        Name = "Hearty",
+                        AffectColor = Color.DarkRed,
+                        FormattableDescription = $"+{0} Max Health.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.MaxHealth
+                        },
+                        Algorithm = (investment) => 0.25f * investment
+                    },
+                    new()
+                    {
+                        Name = "Strength",
+                        AffectColor = Color.Gold,
+                        FormattableDescription = $"+{0}% Physical Damage.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
+                            AffectedAspect = Aspect.PhysicalDamage
+                        },
+                        Algorithm = (investment) => investment / 50.0f
+                    }
+                })
+            });
             Classes.Add(Type.Spellcaster, new()
             {
                 Concepts = new(new Concept[]

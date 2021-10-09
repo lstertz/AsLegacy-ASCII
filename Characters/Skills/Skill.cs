@@ -106,7 +106,8 @@ namespace AsLegacy.Characters.Skills
                         BaseDamage = character.GetAffect(Affinity.CustomAttributes[0]),
                         Element = Affinity.Element,
                         Origin = character.Point,
-                        Range = character.GetAffect(Affinity.CustomAttributes[1]),
+                        Range = Concept.Type == Type.AdjacentAttack ? 1 : 
+                            character.GetAffect(Affinity.CustomAttributes[1]),
                         Target = character.Point,
                         Type = Concept.Type
                     }
