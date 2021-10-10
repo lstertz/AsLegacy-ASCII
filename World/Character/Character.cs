@@ -572,9 +572,13 @@ namespace AsLegacy
                         _baseSettings.InitialAttackMovementInterval;
 
                     GetAspectInfluences(Aspect.Activation, 
-                        out float valueChange, out float scaleChange);
-                    movementInterval += (int)(valueChange * 1000.0f);  // Convert value to seconds.
-                    movementInterval = (int)(movementInterval * (1.0f + scaleChange));
+                        out float valueChange1, out float scaleChange1);
+                    GetAspectInfluences(Aspect.MovementActivation,
+                        out float valueChange2, out float scaleChange2);
+                    movementInterval += (int)((valueChange1 + valueChange2) * 
+                        1000.0f);  // Convert value to seconds.
+                    movementInterval = (int)(movementInterval * (
+                        1.0f + (scaleChange1 + scaleChange2)));
 
                     string actionName = ActivityMessageMovingPrefix + _directionMapping[direction];
                     _ = new Action(this, movementInterval, actionName,

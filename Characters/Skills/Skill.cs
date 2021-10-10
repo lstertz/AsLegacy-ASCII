@@ -27,7 +27,8 @@ namespace AsLegacy.Characters.Skills
             Fire,
             Ice,
             Lightning,
-            Physical
+            Physical,
+            Vocal
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace AsLegacy.Characters.Skills
         public enum Performance
         {
             Attack,
+            Expression,
             Spell
         }
 
@@ -46,6 +48,7 @@ namespace AsLegacy.Characters.Skills
         {
             AdjacentAttack,
             AreaOfEffect,
+            Callout,
             Debuff,
             EnvironmentEffect,
             Movement,
@@ -97,17 +100,18 @@ namespace AsLegacy.Characters.Skills
         {
             // TODO :: Evaluate this Skill's Affinity, Concept, and Augmenting Concepts to 
             //          determine the affect(s) it should produce, right now assume the Nova.
-
+            var customAttributes = Affinity.CustomAttributes;
             return new Affect[]
                 {
                     new()
                     {
                         AffectColor = Affinity.AffectColor,
-                        BaseDamage = character.GetAffect(Affinity.CustomAttributes[0]),
+                        BaseDamage = !customAttributes.ContainsKey(Affect.Setting.BaseDamage) ? 0 :
+                        character.GetAffect(customAttributes[Affect.Setting.BaseDamage]),
                         Element = Affinity.Element,
                         Origin = character.Point,
-                        Range = Concept.Type == Type.AdjacentAttack ? 1 : 
-                            character.GetAffect(Affinity.CustomAttributes[1]),
+                        Range = !customAttributes.ContainsKey(Affect.Setting.Range) ? 1 : 
+                            character.GetAffect(customAttributes[Affect.Setting.Range]),
                         Target = character.Point,
                         Type = Concept.Type
                     }

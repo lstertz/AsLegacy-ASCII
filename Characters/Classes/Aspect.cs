@@ -26,6 +26,10 @@
         /// </summary>
         AreaOfEffectRange,
         /// <summary>
+        /// The aspect pertaining to the range of a callout.
+        /// </summary>
+        CalloutRange,
+        /// <summary>
         /// The aspect pertaining to the cooldown of all <see cref="Skills.Skill"/>.
         /// </summary>
         Cooldown,
@@ -54,6 +58,10 @@
         /// The aspect pertaining to the maximum health of a <see cref="World.Character"/>.
         /// </summary>
         MaxHealth,
+        /// <summary>
+        /// The aspect pertaining to the activation time of <see cref="World.Character"/> movement.
+        /// </summary>
+        MovementActivation,
         /// <summary>
         /// The aspect pertaining to an increasing reduction in both activation and cooldown 
         /// of the next cast spell, for each consecutive attack.

@@ -1,5 +1,6 @@
 ﻿using AsLegacy.Characters.Skills;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
@@ -84,10 +85,11 @@ namespace AsLegacy.Characters
         }
 
         /// <summary>
-        /// Any additional <see cref="Attribute"/>s that define this <see cref="Affinity"/>.
+        /// Any additional <see cref="Attribute"/>s that define this <see cref="Affinity"/>, 
+        /// keyed by the affect setting to which they apply.
         /// </summary>
-        public ReadOnlyCollection<Attribute> CustomAttributes { get; init; } =
-            new(Array.Empty<Attribute>());
+        public ReadOnlyDictionary<Affect.Setting, Attribute> CustomAttributes { get; init; } =
+            new(new Dictionary<Affect.Setting, Attribute>());
 
         /// <summary>
         /// The elemental classification of this <see cref="Affinity"/> when 
@@ -132,9 +134,8 @@ namespace AsLegacy.Characters
         public override string GetDescription(World.ICharacter character)
         {
             StringBuilder builder = new(_descriptionFormat + "\n ");
-            for (int c = 0, count = CustomAttributes.Count; c < count; c++)
-                builder.Append($"\n{CustomAttributes[c].Name}: " +
-                    $"{character.GetAffect(CustomAttributes[c]):0.##}");
+            foreach (Attribute attribute in CustomAttributes.Values)
+                builder.Append($"\n{attribute.Name}: {character.GetAffect(attribute):0.##}");
 
             builder.Append($"\n{_activation.Name}: {character.GetAffect(_activation):0.##}");
             builder.Append($"\n{_cooldown.Name}: {character.GetAffect(_cooldown):0.##}");
