@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AsLegacy.Characters;
+using Microsoft.Xna.Framework;
 
 namespace AsLegacy
 {
@@ -15,6 +16,9 @@ namespace AsLegacy
         {
             /// <inheritdoc/>
             public override Color GlyphColor => Color.DarkOrange;
+
+            /// <inheritdoc/>
+            public override Class.Type ClassType => Class.Type.Bear;
             /// <inheritdoc/>
             public override Combat.Legacy InitialLegacy => new Combat.Legacy(12);
             /// <inheritdoc/>

@@ -18,6 +18,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public enum Type
         {
+            Bear,
             GiantRat,
             Spellcaster,
             Wolf
@@ -28,6 +29,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public static readonly ReadOnlyCollection<string> Names = new(new string[]
         {
+            "Bear",
             "Giant Rat",
             "Spellcaster",
             "Wolf"
@@ -63,6 +65,144 @@ namespace AsLegacy.Characters
             // TODO :: Retrieve data-driven details (talents) and construct classes around them 
             //          for each Type of class. Populate Classes.
             // Populate manually for now.
+            Classes.Add(Type.Bear, new()
+            {
+                Concepts = new(new Concept[]
+                {
+                    new()
+                    {
+                        Affinities = new(new Affinity[]
+                        {
+                            new()
+                            {
+                                Name = "Rapid Swipe",
+                                AffectColor = Color.LightGray,
+                                BaseActivation = 0.75f,
+                                BaseCooldown = 0.75f,
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
+                                {
+                                    {
+                                        Affect.Setting.BaseDamage, new()
+                                        {
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AdjacentTargetOneTimeDamage,
+                                                Aspect.PhysicalDamage,
+                                                Aspect.SlashingDamage
+                                            }),
+                                            Name = "Damage"
+                                        }
+                                    }
+                                }),
+                                Element = Skill.Element.Physical,
+                                FormattableDescription = $"A fast moving swipe.",
+                                Performance = Skill.Performance.Attack
+                            },
+                            new()
+                            {
+                                Name = "Poisoned Claw",
+                                AffectColor = Color.LightGreen,
+                                BaseActivation = 1.25f,
+                                BaseCooldown = 0.75f,
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
+                                {
+                                    {
+                                        Affect.Setting.BaseDamage, new()
+                                        {
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AdjacentTargetOneTimeDamage,
+                                                Aspect.PoisonDamage,
+                                                Aspect.SlashingDamage
+                                            }),
+                                            BaseScale = 1.5f,
+                                            Name = "Poison Damage"
+                                        }
+                                    }
+                                }),
+                                Element = Skill.Element.Physical,
+                                FormattableDescription = $"A poisonous swipe.",
+                                Performance = Skill.Performance.Attack
+                            },
+                            new()
+                            {
+                                Name = "Lunging Swipe",
+                                AffectColor = Color.DarkGray,
+                                BaseActivation = 2.0f,
+                                BaseCooldown = 0.75f,
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
+                                {
+                                    {
+                                        Affect.Setting.BaseDamage, new()
+                                        {
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AdjacentTargetOneTimeDamage,
+                                                Aspect.PhysicalDamage,
+                                                Aspect.SlashingDamage
+                                            }),
+                                            BaseScale = 3.0f,
+                                            Name = "Damage"
+                                        }
+                                    }
+                                }),
+                                Element = Skill.Element.Physical,
+                                FormattableDescription = $"A powerful swipe with the weight of the bear behind it.",
+                                Performance = Skill.Performance.Attack
+                            }
+                        }),
+                        Name = "Maul",
+                        Category = Skill.Category.Primary,
+                        Type = Skill.Type.AdjacentAttack,
+                        FormattableDescription = $" {0} base damage to adjacent target.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.AdjacentTargetOneTimeDamage
+                        },
+                        Algorithm = (investment) => 1 * investment
+                    }
+                }),
+                Passives = new(new Passive[]
+                {
+                    new()
+                    {
+                        Name = "Heavy Coat",
+                        AffectColor = Color.Brown,
+                        FormattableDescription = $"+{0}% Elemental resistance.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
+                            AffectedAspect = Aspect.ElementalResistance
+                        },
+                        Algorithm = (investment) => investment / 100.0f
+                    },
+                    new()
+                    {
+                        Name = "Hearty",
+                        AffectColor = Color.DarkRed,
+                        FormattableDescription = $"+{0} Max Health.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.Add,
+                            AffectedAspect = Aspect.MaxHealth
+                        },
+                        Algorithm = (investment) => 0.5f * investment
+                    },
+                    new()
+                    {
+                        Name = "Thick Skin",
+                        AffectColor = Color.Gray,
+                        FormattableDescription = $"+{0}% Defense damage Reduction.",
+                        Influence = new()
+                        {
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
+                            AffectedAspect = Aspect.DefenseDamageReduction
+                        },
+                        Algorithm = (investment) => investment / 100.0f
+                    }
+                })
+            });
             Classes.Add(Type.GiantRat, new()
             {
                 Concepts = new(new Concept[]
@@ -488,13 +628,13 @@ namespace AsLegacy.Characters
                 {
                     new()
                     {
-                        Name = "Cold Resistance",
+                        Name = "Thick Fur",
                         AffectColor = Color.LightBlue,
-                        FormattableDescription = $"-{0}% Damage from ice.",
+                        FormattableDescription = $"+{0}% Resistance to ice.",
                         Influence = new()
                         {
-                            AffectOnAspect = Influence.Purpose.ScaleDown,
-                            AffectedAspect = Aspect.IceDamage
+                            AffectOnAspect = Influence.Purpose.ScaleUp,
+                            AffectedAspect = Aspect.IceResistance
                         },
                         Algorithm = (investment) => investment / 50.0f
                     },
