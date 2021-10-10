@@ -37,6 +37,7 @@ namespace AsLegacy
         /// <returns>A newly constructed BeastSettings.</returns>
         private static Settings GetBeastSettings(Type type)
         {
+            // TODO : 103 :: Support randomized passive investments.
             switch (type)
             {
                 case Type.GiantRat:

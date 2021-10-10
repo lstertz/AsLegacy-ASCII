@@ -22,7 +22,8 @@ namespace AsLegacy
             /// <summary>
             /// Defines the initial passive investments of a Beast.
             /// </summary>
-            public override int[] InitialPassiveInvestments => null; // TODO :: Support initial investments to randomize Beast strength.
+            public override int[] InitialPassiveInvestments => _initialPassiveInvestments;
+            private readonly int[] _initialPassiveInvestments;
 
             /// <summary>
             /// The initial legacy of the Beast.
@@ -33,6 +34,17 @@ namespace AsLegacy
             /// The name of the Beast.
             /// </summary>
             public abstract string Name { get; }
+
+
+            /// <summary>
+            /// Constructs a new set of settings.
+            /// </summary>
+            /// <param name="initialPassiveInvestments">
+            /// <see cref="InitialPassiveInvestments"/></param>
+            public Settings(int[] initialPassiveInvestments = null)
+            {
+                _initialPassiveInvestments = initialPassiveInvestments;
+            }
         }
     }
 }
