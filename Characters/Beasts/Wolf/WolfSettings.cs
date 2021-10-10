@@ -43,6 +43,16 @@ namespace AsLegacy
             public override float InitialDefenseDamageReduction => 0.15f;
             /// <inheritdoc/>
             public override int InitialNormalMovementInterval => 400;
+
+
+            /// <summary>
+            /// Constructs a new set of wolf settings.
+            /// </summary>
+            /// <param name="initialPassiveInvestments">
+            /// <see cref="InitialPassiveInvestments"/></param>
+            public WolfSettings(int[] initialPassiveInvestments = null) :
+                base(initialPassiveInvestments)
+            { }
         }
     }
 }

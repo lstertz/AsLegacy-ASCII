@@ -43,6 +43,16 @@ namespace AsLegacy
             public override float InitialDefenseDamageReduction => 0.2f;
             /// <inheritdoc/>
             public override int InitialNormalMovementInterval => 600;
+
+
+            /// <summary>
+            /// Constructs a new set of bear settings.
+            /// </summary>
+            /// <param name="initialPassiveInvestments">
+            /// <see cref="InitialPassiveInvestments"/></param>
+            public BearSettings(int[] initialPassiveInvestments = null) :
+                base(initialPassiveInvestments)
+            { }
         }
     }
 }

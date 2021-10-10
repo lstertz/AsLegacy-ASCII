@@ -311,6 +311,10 @@ namespace AsLegacy
 
                 CharacterAI = baseSettings.AI;
                 Class = Class.Get(baseSettings.ClassType);
+
+                _baseSettings = baseSettings;
+                _combatState = new Combat.State(this, baseSettings, legacy);
+
                 if (baseSettings.InitialPassiveInvestments != null)
                     for (int c = 0; c < baseSettings.InitialPassiveInvestments.Length; c++)
                     {
@@ -322,8 +326,6 @@ namespace AsLegacy
                                 baseSettings.InitialPassiveInvestments[c]);
                     }
 
-                _baseSettings = baseSettings;
-                _combatState = new Combat.State(this, baseSettings, legacy);
 
                 RankedCharacters.Add(this);
             }
@@ -476,15 +478,8 @@ namespace AsLegacy
                 int actualAmount = AvailableSkillPoints < amount ?
                     AvailableSkillPoints : amount;
 
-                float previousMaxHealth = MaxHealth;
-
                 AvailableSkillPoints -= actualAmount;
                 IncreaseTalentInvestment(talent, actualAmount);
-
-                // TODO :: Remove.
-                // Temporarily update current health for the change in max health.
-                if (talent.Influence.AffectedAspect == Aspect.MaxHealth)
-                    _combatState.UpdateForNewMaxHealth(previousMaxHealth);
 
                 return actualAmount;
             }
@@ -782,6 +777,8 @@ namespace AsLegacy
             /// <param name="amount">The amount to increase.</param>
             private void IncreaseTalentInvestment(Talent talent, int amount)
             {
+                float previousMaxHealth = MaxHealth;
+
                 if (!_talentInvestments.ContainsKey(talent))
                 {
                     Aspect affectedAttribute = talent.Influence.AffectedAspect;
@@ -793,6 +790,11 @@ namespace AsLegacy
                 }
                 else
                     _talentInvestments[talent] += amount;
+
+                // TODO :: Remove.
+                // Temporarily update current health for the change in max health.
+                if (talent.Influence.AffectedAspect == Aspect.MaxHealth)
+                    _combatState.UpdateForNewMaxHealth(previousMaxHealth);
             }
 
             /// <summary>

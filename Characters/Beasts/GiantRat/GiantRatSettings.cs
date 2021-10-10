@@ -43,6 +43,16 @@ namespace AsLegacy
             public override float InitialDefenseDamageReduction => 0.1f;
             /// <inheritdoc/>
             public override int InitialNormalMovementInterval => 500;
+
+
+            /// <summary>
+            /// Constructs a new set of giant rat settings.
+            /// </summary>
+            /// <param name="initialPassiveInvestments">
+            /// <see cref="InitialPassiveInvestments"/></param>
+            public GiantRatSettings(int[] initialPassiveInvestments = null) :
+                base(initialPassiveInvestments)
+            { }
         }
     }
 }
