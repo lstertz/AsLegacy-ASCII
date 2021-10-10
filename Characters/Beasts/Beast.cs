@@ -9,6 +9,9 @@ namespace AsLegacy
     /// </summary>
     public partial class Beast : World.Character
     {
+        private const int NumOfBeastTypes = 3;
+        private const int PassivePointsUpperBound = 16;
+
         /// <summary>
         /// The Type of the Beast, which may define its name, initial legacy, 
         /// appearance, and base stats.
@@ -27,7 +30,7 @@ namespace AsLegacy
         public static Type GetRandomType()
         {
             Random r = new Random();
-            return (Type) r.Next(0, 3);
+            return (Type) r.Next(0, NumOfBeastTypes);
         }
 
         /// <summary>
@@ -37,15 +40,22 @@ namespace AsLegacy
         /// <returns>A newly constructed BeastSettings.</returns>
         private static Settings GetBeastSettings(Type type)
         {
-            // TODO : 103 :: Support randomized passive investments.
+            Random r = new Random();
+            int[] passiveInvestments = new int[]
+            {
+                r.Next(0, PassivePointsUpperBound),
+                r.Next(0, PassivePointsUpperBound),
+                r.Next(0, PassivePointsUpperBound)
+            };
+
             switch (type)
             {
                 case Type.GiantRat:
-                    return new GiantRatSettings();
+                    return new GiantRatSettings(passiveInvestments);
                 case Type.Wolf:
-                    return new WolfSettings();
+                    return new WolfSettings(passiveInvestments);
                 case Type.Bear:
-                    return new BearSettings();
+                    return new BearSettings(passiveInvestments);
                 default:
                     throw new NotImplementedException("That Beast Type does " +
                         "not have settings implemented yet.");
