@@ -8,6 +8,22 @@ namespace AsLegacy.Characters.Skills
     public struct Affect
     {
         /// <summary>
+        /// The available properties of an affect that can be set to define 
+        /// its result.
+        /// </summary>
+        public enum Setting
+        {
+            /// <summary>
+            /// <see cref="BaseDamage"/>
+            /// </summary>
+            BaseDamage,
+            /// <summary>
+            /// <see cref="Range"/>
+            /// </summary>
+            Range
+        }
+
+        /// <summary>
         /// The color to be used for anything defined by the affect.
         /// </summary>
         public Color AffectColor { get; init; }

@@ -77,17 +77,19 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.LightGray,
                                 BaseActivation = 0.5f,
                                 BaseCooldown = 0.75f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.BaseDamage, new()
                                         {
-                                            Aspect.AdjacentTargetOneTimeDamage,
-                                            Aspect.PhysicalDamage,
-                                            Aspect.PiercingDamage
-                                        }),
-                                        Name = "Damage"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AdjacentTargetOneTimeDamage,
+                                                Aspect.PhysicalDamage,
+                                                Aspect.PiercingDamage
+                                            }),
+                                            Name = "Damage"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Physical,
@@ -100,18 +102,20 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.DarkGray,
                                 BaseActivation = 1.5f,
                                 BaseCooldown = 0.5f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.BaseDamage, new()
                                         {
-                                            Aspect.AdjacentTargetOneTimeDamage,
-                                            Aspect.PhysicalDamage,
-                                            Aspect.PiercingDamage
-                                        }),
-                                        BaseScale = 2.0f,
-                                        Name = "Damage"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AdjacentTargetOneTimeDamage,
+                                                Aspect.PhysicalDamage,
+                                                Aspect.PiercingDamage
+                                            }),
+                                            BaseScale = 2.0f,
+                                            Name = "Damage"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Physical,
@@ -185,26 +189,29 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.Yellow,
                                 BaseActivation = 1.0f,
                                 BaseCooldown = 1.0f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.BaseDamage, new()
                                         {
-                                            Aspect.AreaOfEffectDamage,
-                                            Aspect.LightningDamage
-                                        }),
-                                        BaseValue = 0,
-                                        Name = "Lightning Damage"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AreaOfEffectDamage,
+                                                Aspect.LightningDamage
+                                            }),
+                                            Name = "Lightning Damage"
+                                        }
                                     },
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.Range, new()
                                         {
-                                            Aspect.AreaOfEffectRange
-                                        }),
-                                        BaseValue = 1,
-                                        Name = "Range"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AreaOfEffectRange
+                                            }),
+                                            BaseValue = 1,
+                                            Name = "Range"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Lightning,
@@ -217,27 +224,30 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.LightSkyBlue,
                                 BaseActivation = 1.5f,
                                 BaseCooldown = 1.0f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.BaseDamage, new()
                                         {
-                                            Aspect.AreaOfEffectDamage,
-                                            Aspect.IceDamage
-                                        }),
-                                        BaseScale = 1.1f,
-                                        BaseValue = 0,
-                                        Name = "Ice Damage"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AreaOfEffectDamage,
+                                                Aspect.IceDamage
+                                            }),
+                                            BaseScale = 1.1f,
+                                            Name = "Ice Damage"
+                                        }
                                     },
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.Range, new()
                                         {
-                                            Aspect.AreaOfEffectRange
-                                        }),
-                                        BaseValue = 1,
-                                        Name = "Range"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AreaOfEffectRange
+                                            }),
+                                            BaseValue = 1,
+                                            Name = "Range"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Ice,
@@ -250,27 +260,30 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.Orange,
                                 BaseActivation = 1.5f,
                                 BaseCooldown = 1.5f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.BaseDamage, new()
                                         {
-                                            Aspect.AreaOfEffectDamage,
-                                            Aspect.FireDamage
-                                        }),
-                                        BaseScale = 1.2f,
-                                        BaseValue = 0,
-                                        Name = "Fire Damage"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AreaOfEffectDamage,
+                                                Aspect.FireDamage
+                                            }),
+                                            BaseScale = 1.2f,
+                                            Name = "Fire Damage"
+                                        }
                                     },
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.Range, new()
                                         {
-                                            Aspect.AreaOfEffectRange
-                                        }),
-                                        BaseValue = 1,
-                                        Name = "Range"
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.AreaOfEffectRange
+                                            }),
+                                            BaseValue = 1,
+                                            Name = "Range"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Fire,
@@ -392,16 +405,18 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.Red,
                                 BaseActivation = 1.5f,
                                 BaseCooldown = 1.0f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.Range, new()
                                         {
-                                            Aspect.CalloutRange
-                                        }),
-                                        Name = "Range",
-                                        BaseValue = 2
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.CalloutRange
+                                            }),
+                                            BaseValue = 2,
+                                            Name = "Effect Range"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Vocal,
@@ -414,16 +429,18 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.MediumBlue,
                                 BaseActivation = 1.0f,
                                 BaseCooldown = 1.5f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.Range, new()
                                         {
-                                            Aspect.CalloutRange
-                                        }),
-                                        Name = "Range",
-                                        BaseValue = 2
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.CalloutRange
+                                            }),
+                                            BaseValue = 2,
+                                            Name = "Effect Range"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Vocal,
@@ -436,16 +453,18 @@ namespace AsLegacy.Characters
                                 AffectColor = Color.YellowGreen,
                                 BaseActivation = 2.0f,
                                 BaseCooldown = 1.0f,
-                                CustomAttributes = new(new Attribute[]
+                                CustomAttributes = new(new Dictionary<Affect.Setting, Attribute>()
                                 {
-                                    new()
                                     {
-                                        Aspects = new(new Aspect[]
+                                        Affect.Setting.Range, new()
                                         {
-                                            Aspect.CalloutRange
-                                        }),
-                                        Name = "Range",
-                                        BaseValue = 2
+                                            Aspects = new(new Aspect[]
+                                            {
+                                                Aspect.CalloutRange
+                                            }),
+                                            BaseValue = 2,
+                                            Name = "Effect Range"
+                                        }
                                     }
                                 }),
                                 Element = Skill.Element.Vocal,
