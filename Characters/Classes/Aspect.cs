@@ -43,13 +43,25 @@
         /// </summary>
         DamageToCooldown,
         /// <summary>
+        /// The aspect pertaining to the reduction of damage while in defense mode.
+        /// </summary>
+        DefenseDamageReduction,
+        /// <summary>
         /// The aspect pertaining to fire-typed damage.
         /// </summary>
         FireDamage,
         /// <summary>
+        /// The aspect pertaining to resistance to all elemental-typed damage.
+        /// </summary>
+        ElementalResistance,
+        /// <summary>
         /// The aspect pertaining to ice-typed damage.
         /// </summary>
         IceDamage,
+        /// <summary>
+        /// The aspect pertaining to resistance to ice-typed damage.
+        /// </summary>
+        IceResistance,
         /// <summary>
         /// The aspect pertaining to lightning-typed damage.
         /// </summary>
@@ -72,12 +84,20 @@
         /// </summary>
         PiercingDamage,
         /// <summary>
-        /// The aspect pertaining physical-based damage.
+        /// The aspect pertaining to physical-based damage.
         /// </summary>
         PhysicalDamage,
         /// <summary>
+        /// The aspect pertaining to poison-based damage.
+        /// </summary>
+        PoisonDamage,
+        /// <summary>
         /// The aspect pertaining to the activation time of all <see cref="Skills.Skill"/>s.
         /// </summary>
-        SkillActivation
+        SkillActivation,
+        /// <summary>
+        /// The aspect pertaining to slashing-typed damage.
+        /// </summary>
+        SlashingDamage
     }
 }
