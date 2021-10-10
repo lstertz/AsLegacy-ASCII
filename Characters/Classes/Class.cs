@@ -18,6 +18,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public enum Type
         {
+            Bear,
             GiantRat,
             Spellcaster,
             Wolf
@@ -28,6 +29,7 @@ namespace AsLegacy.Characters
         /// </summary>
         public static readonly ReadOnlyCollection<string> Names = new(new string[]
         {
+            "Bear",
             "Giant Rat",
             "Spellcaster",
             "Wolf"
