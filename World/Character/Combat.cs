@@ -269,7 +269,12 @@ namespace AsLegacy
                     {
                         float damageReduction = 0.0f;
                         if (_character.ActiveMode == Mode.Defend)
-                            damageReduction = damage * (this as ICombat).DefenseDamageReduction;
+                        {
+                            _character.GetAspectInfluences(Aspect.DefenseDamageReduction,
+                                out float _, out float scale);
+                            damageReduction = damage * 
+                                ((this as ICombat).DefenseDamageReduction + scale);
+                        }
                         return damage - damageReduction;
                     }
                 }
