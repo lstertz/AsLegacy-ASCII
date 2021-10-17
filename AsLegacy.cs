@@ -95,7 +95,7 @@ namespace AsLegacy
             Game.OnInitialize = () =>
             {
                 Library.Default.SetControlTheme(typeof(ClearingTextBox), new TextBoxTheme());
-                SadConsole.Global.LoadFont("Fonts/AsLegacy.font");
+                SadConsole.Global.LoadFont("Resources/Fonts/AsLegacy.font");
                 SadConsole.Global.FontDefault = SadConsole.Global.Fonts["AsLegacy"]
                     .GetFont(SadConsole.Font.FontSizes.One);
                 Display.Init(this);
