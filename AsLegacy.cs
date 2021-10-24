@@ -1,11 +1,11 @@
 ﻿using AsLegacy.Characters;
+using AsLegacy.Configs;
 using AsLegacy.GUI;
 using AsLegacy.GUI.Elements;
 using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Themes;
 using System;
-
 using Console = SadConsole.Console;
 using Game = SadConsole.Game;
 
@@ -21,6 +21,11 @@ namespace AsLegacy
         /// The legacy (point) goal of the game.
         /// </summary>
         public const int Goal = 25;
+
+        private static readonly string LocalFontsFile = System.IO.Path.Combine(
+            "Resources", 
+            "Fonts", 
+            "AsLegacy.font");
 
         /// <summary>
         /// The current Character being focused on by the game player.
@@ -91,11 +96,13 @@ namespace AsLegacy
         /// </summary>
         public AsLegacy()
         {
+            ConfigurationManager.Initialize();
+
             Game.Create(Display.Width, Display.Height);
             Game.OnInitialize = () =>
             {
                 Library.Default.SetControlTheme(typeof(ClearingTextBox), new TextBoxTheme());
-                SadConsole.Global.LoadFont("Resources/Fonts/AsLegacy.font");
+                SadConsole.Global.LoadFont(LocalFontsFile);
                 SadConsole.Global.FontDefault = SadConsole.Global.Fonts["AsLegacy"]
                     .GetFont(SadConsole.Font.FontSizes.One);
                 Display.Init(this);
