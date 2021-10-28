@@ -39,7 +39,6 @@ namespace AsLegacy.Configs
                     .Deserialize<ConfigurationDetails>(File.ReadAllText(files[c]));
                 options[c] = details.Name;
                 _configOptions.Add(details.Name, files[c]);
-                System.Diagnostics.Debug.WriteLine(details.Name);
             }
 
             ConfigurationOptions = new(options);
