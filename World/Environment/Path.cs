@@ -3,8 +3,8 @@
 namespace AsLegacy
 {
     /// <summary>
-    /// Defines a Tree, which is an Environment Element that represents a 
-    /// tree, as a Tile, on the World map.
+    /// Defines a Path, which is an Environment Element that represents a 
+    /// path, as a Tile, on the World map.
     /// </summary>
     public class Path : World.EnvironmentElement
     {

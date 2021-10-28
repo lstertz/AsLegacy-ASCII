@@ -5,6 +5,8 @@ using Console = SadConsole.Console;
 
 using AsLegacy.Global;
 using SadConsole.Controls;
+using AsLegacy.Configs;
+using System.Collections.ObjectModel;
 
 namespace AsLegacy.GUI.Screens
 {
@@ -14,11 +16,8 @@ namespace AsLegacy.GUI.Screens
     /// </summary>
     public class StartScreen : ControlsConsole
     {
-        private const string ContinueLabel = "Continue";
-        private readonly int ContinueLabelWidth = ContinueLabel.Length + 2;
-
-        private const string NewGameLabel = "New Game";
-        private readonly int NewGameLabelWidth = NewGameLabel.Length + 2;
+        private const int GameModeInitialYOffset = -8;
+        private const int GameModeOffsetShift = 2;
 
         private const string TitleMessage = "As Legacy";
         private const int TitleY = 10;
@@ -70,27 +69,20 @@ namespace AsLegacy.GUI.Screens
                 TextColor = Colors.White
             });
 
-            Button newGame = new Button(NewGameLabelWidth, 1)
+            ReadOnlyCollection<string> gameModes = ConfigurationManager.ConfigurationOptions;
+            for (int c = 0, count = gameModes.Count; c < count; c++)
             {
-                Position = new Point(Width / 2 - NewGameLabelWidth / 2, Height - 8),
-                Text = NewGameLabel
-            };
-            newGame.Click += (s, e) => Display.ShowScreen(Display.Screen.Settings);
-            Add(newGame);
+                int width = gameModes[c].Length + 2;
+                int yOffset = GameModeInitialYOffset + (GameModeOffsetShift * c);
 
-            Button continueGame = new Button(ContinueLabelWidth, 1)
-            {
-                Position = new Point(Width / 2 - ContinueLabelWidth / 2, Height - 6),
-                Text = ContinueLabel,
-                IsEnabled = false
-            };
-            continueGame.Click += (s, e) =>
-            {
-                throw new NotImplementedException("The functionality to continue a game " +
-                    "has not yet been implemented.");
-                // TODO :: Show continue options or load the last played game.
-            };
-            Add(continueGame);
+                Button button = new(width, 1)
+                {
+                    Position = new Point(Width / 2 - width / 2, Height + yOffset),
+                    Text = gameModes[c]
+                };
+                button.Click += (s, e) => Display.ShowScreen(Display.Screen.Settings);
+                Add(button);
+            }
         }
     }
 }
