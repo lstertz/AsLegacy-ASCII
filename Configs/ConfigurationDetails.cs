@@ -2,10 +2,14 @@
 
 namespace AsLegacy.Configs
 {
-    /// <inheritdoc cref="IConfigurationDetails"/>
-    public class ConfigurationDetails : IConfigurationDetails
+    /// <summary>
+    /// Defines the details of a configuration of the application.
+    /// </summary>
+    public class ConfigurationDetails
     {
-        /// <inheritdoc/>
+        /// <summary>
+        /// The user-friendly name that identifies the configuration.
+        /// </summary>
         public string Name { get; private set; }
 
         /// <summary>
