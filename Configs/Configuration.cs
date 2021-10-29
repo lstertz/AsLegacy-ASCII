@@ -1,4 +1,7 @@
-﻿namespace AsLegacy.Configs
+﻿using AsLegacy.Configs.Converters;
+using System.Text.Json.Serialization;
+
+namespace AsLegacy.Configs
 {
     /// <summary>
     /// Defines the configuration of the application, specifically what implementations 
@@ -6,9 +9,7 @@
     /// </summary>
     public class Configuration : ConfigurationDetails
     {
-        /// <inheritdoc/>
-        public Configuration(string name) : base(name)
-        {
-        }
+        [JsonConverter(typeof(TestConverter))]
+        public ITest Test { get; init; }
     }
 }

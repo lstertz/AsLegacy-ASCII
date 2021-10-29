@@ -10,13 +10,6 @@ namespace AsLegacy.Configs
         /// <summary>
         /// The user-friendly name that identifies the configuration.
         /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// Default JSON constructor.
-        /// </summary>
-        /// <param name="name"><see cref="Name"/></param>
-        [JsonConstructor]
-        public ConfigurationDetails(string name) => (Name) = (name);
+        public string Name { get; init; }
 }
 }
