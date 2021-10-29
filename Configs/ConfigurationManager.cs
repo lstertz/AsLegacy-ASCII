@@ -22,7 +22,10 @@ namespace AsLegacy.Configs
         /// configuration's user-friendly name.
         /// </summary>
         public static ReadOnlyCollection<string> ConfigurationOptions { get; private set; }
-        private static readonly Dictionary<string, string> _configOptions = new();
+        private static readonly Dictionary<string, string> _configurationOptions = new();
+
+        private static Configuration _currentConfiguration = null;
+
 
         /// <summary>
         /// Initializes the configuration manager by loading the available application
@@ -38,10 +41,22 @@ namespace AsLegacy.Configs
                 ConfigurationDetails details = JsonSerializer
                     .Deserialize<ConfigurationDetails>(File.ReadAllText(files[c]));
                 options[c] = details.Name;
-                _configOptions.Add(details.Name, files[c]);
+                _configurationOptions.Add(details.Name, files[c]);
             }
 
             ConfigurationOptions = new(options);
+        }
+
+        /// <summary>
+        /// Loads the configuration, identified by the provided configuration option, 
+        /// as the configuration of the game.
+        /// </summary>
+        /// <param name="configurationOption">The option identifying the 
+        /// configuration to be loaded.</param>
+        public static void LoadConfiguration(string configurationOption)
+        {
+            _currentConfiguration = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(
+                _configurationOptions[configurationOption]));
         }
     }
 }

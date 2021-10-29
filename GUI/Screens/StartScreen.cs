@@ -69,18 +69,23 @@ namespace AsLegacy.GUI.Screens
                 TextColor = Colors.White
             });
 
-            ReadOnlyCollection<string> gameModes = ConfigurationManager.ConfigurationOptions;
-            for (int c = 0, count = gameModes.Count; c < count; c++)
+            ReadOnlyCollection<string> gameConfigs = ConfigurationManager.ConfigurationOptions;
+            for (int c = 0, count = gameConfigs.Count; c < count; c++)
             {
-                int width = gameModes[c].Length + 2;
+                int width = gameConfigs[c].Length + 2;
                 int yOffset = GameModeInitialYOffset + (GameModeOffsetShift * c);
+                string mode = gameConfigs[c];
 
                 Button button = new(width, 1)
                 {
                     Position = new Point(Width / 2 - width / 2, Height + yOffset),
-                    Text = gameModes[c]
+                    Text = mode
                 };
-                button.Click += (s, e) => Display.ShowScreen(Display.Screen.Settings);
+                button.Click += (s, e) =>
+                {
+                    Display.ShowScreen(Display.Screen.Settings);
+                    ConfigurationManager.LoadConfiguration(mode);
+                };
                 Add(button);
             }
         }

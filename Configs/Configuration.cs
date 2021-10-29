@@ -1,12 +1,15 @@
-﻿namespace AsLegacy.Configs
+﻿using AsLegacy.Configs.Converters;
+using System.Text.Json.Serialization;
+
+namespace AsLegacy.Configs
 {
     /// <summary>
     /// Defines the configuration of the application, specifically what implementations 
     /// and settings the application should use.
     /// </summary>
-    public class Configuration : IConfigurationDetails
+    public class Configuration : ConfigurationDetails
     {
-        /// <inheritdoc/>
-        public string Name { get; }
+        [JsonConverter(typeof(TestConverter))]
+        public ITest Test { get; init; }
     }
 }

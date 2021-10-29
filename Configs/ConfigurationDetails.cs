@@ -2,17 +2,14 @@
 
 namespace AsLegacy.Configs
 {
-    /// <inheritdoc cref="IConfigurationDetails"/>
-    public class ConfigurationDetails : IConfigurationDetails
+    /// <summary>
+    /// Defines the details of a configuration of the application.
+    /// </summary>
+    public class ConfigurationDetails
     {
-        /// <inheritdoc/>
-        public string Name { get; private set; }
-
         /// <summary>
-        /// Default JSON constructor.
+        /// The user-friendly name that identifies the configuration.
         /// </summary>
-        /// <param name="name"><see cref="Name"/></param>
-        [JsonConstructor]
-        public ConfigurationDetails(string name) => (Name) = (name);
+        public string Name { get; init; }
 }
 }
