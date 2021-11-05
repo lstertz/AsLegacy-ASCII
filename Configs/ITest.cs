@@ -1,4 +1,6 @@
-﻿namespace AsLegacy.Configs
+﻿using ContextualProgramming;
+
+namespace AsLegacy.Configs
 {
     // TEMP implementation to validate configuration feature deserialization.
 
@@ -6,14 +8,15 @@
     {
         public int SomeProperty { get; init; }
     }
-    public class TestA : ITest
+
+    public record TestA : Context, ITest
     {
         public string SomeString { get; init; } = "Test";
 
         public int SomeProperty { get; init; }
     }
 
-    public class TestB : ITest
+    public record TestB : Context, ITest
     {
         public bool SomeBool { get; init; }
 
