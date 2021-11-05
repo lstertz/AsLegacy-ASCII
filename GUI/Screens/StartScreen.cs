@@ -74,17 +74,17 @@ namespace AsLegacy.GUI.Screens
             {
                 int width = gameConfigs[c].Length + 2;
                 int yOffset = GameModeInitialYOffset + (GameModeOffsetShift * c);
-                string mode = gameConfigs[c];
+                string config = gameConfigs[c];
 
                 Button button = new(width, 1)
                 {
                     Position = new Point(Width / 2 - width / 2, Height + yOffset),
-                    Text = mode
+                    Text = config
                 };
                 button.Click += (s, e) =>
                 {
                     Display.ShowScreen(Display.Screen.Settings);
-                    ConfigurationManager.LoadConfiguration(mode);
+                    ConfigurationManager.LoadConfiguration(config);
                 };
                 Add(button);
             }
