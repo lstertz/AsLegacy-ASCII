@@ -33,7 +33,8 @@ namespace AsLegacy.Configs
         /// </summary>
         public static void Initialize()
         {
-            string[] files = Directory.GetFiles(ConfigsDirectory);
+            string[] files = Directory.GetFiles(ConfigsDirectory, "", 
+                SearchOption.AllDirectories);
             string[] options = new string[files.Length];
 
             for (int c = 0, count = files.Length; c < count; c++)

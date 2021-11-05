@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Content Include="Resources\**" Exclude="Resources\Configs\SingleplayerTest.config">
+    <Content Include="Resources\**" Exclude="Resources\Configs\Test\**;">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
