@@ -2,6 +2,7 @@
 using AsLegacy.Configs;
 using AsLegacy.GUI;
 using AsLegacy.GUI.Elements;
+using ContextualProgramming;
 using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Themes;
@@ -96,6 +97,7 @@ namespace AsLegacy
         /// </summary>
         public AsLegacy()
         {
+            App.Initialize();
             ConfigurationManager.Initialize();
 
             Game.Create(Display.Width, Display.Height);

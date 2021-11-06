@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace ContextualProgramming
 {
@@ -9,6 +11,27 @@ namespace ContextualProgramming
     public static class App
     {
         private static List<Context> _contexts = new();
+        private static List<object> _independentBehaviors = new();
+
+        /// <summary>
+        /// Initializes the contetual execution of the application by registering all 
+        /// declared behaviors (classes decorated with <see cref="BehaviorAttribute"/>).
+        /// </summary>
+        /// <remarks>Behaviors without any dependencies will be instantiated.</remarks>
+        public static void Initialize()
+        {
+            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+            for (int c = 0, count = types.Length; c < count; c++)
+            {
+                BehaviorAttribute attr = types[c].GetCustomAttribute<BehaviorAttribute>(true);
+                if (attr == null)
+                    continue;
+
+                // TODO :: Check for dependencies.
+
+                _independentBehaviors.Add(Activator.CreateInstance(types[c]));
+            }
+        }
 
         /// <summary>
         /// Registers a new context for the execution context of the application.
