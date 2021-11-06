@@ -22,4 +22,11 @@ namespace AsLegacy.Configs
 
         public int SomeProperty { get; init; }
     }
+
+
+    [Behavior]
+    public class TestBehavior
+    {
+
+    }
 }
