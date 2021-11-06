@@ -25,8 +25,23 @@ namespace AsLegacy.Configs
 
 
     [Behavior]
-    public class TestBehavior
+    public class IndependentBehavior
     {
 
+    }
+
+    [Behavior]
+    public class DependentBehaviorA
+    {
+        [Dependency(DependencySource.Shared)]
+        public TestA A { get; private init; }
+    }
+
+    [Behavior]
+    public class DependentBehaviorI
+    {
+
+        [Dependency(DependencySource.Shared)]
+        public ITest I { get; private init; }
     }
 }
