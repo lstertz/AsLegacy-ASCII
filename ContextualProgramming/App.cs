@@ -14,11 +14,14 @@ namespace ContextualProgramming
         private static List<Context> _contexts = new();
         private static List<object> _independentBehaviors = new();
 
+
         /// <summary>
         /// Initializes the contextual execution of the application by registering all 
         /// declared behaviors (<see cref="BehaviorAttribute"/>).
         /// </summary>
-        /// <remarks>Behaviors without any dependencies will be instantiated.</remarks>
+        /// <remarks>
+        /// Behaviors without any dependencies will be instantiated.
+        /// </remarks>
         public static void Initialize()
         {
             Type[] types = Assembly.GetExecutingAssembly().GetTypes();
