@@ -6,7 +6,8 @@ namespace ContextualProgramming
 {
     /// <summary>
     /// Handles the state and behavior of the running application by managing 
-    /// registered <see cref="Context"/>s and the resulting behaviors.
+    /// registered <see cref="Context"/>s and the resulting behaviors 
+    /// (<see cref="BehaviorAttribute"/>).
     /// </summary>
     public static class App
     {
@@ -14,8 +15,8 @@ namespace ContextualProgramming
         private static List<object> _independentBehaviors = new();
 
         /// <summary>
-        /// Initializes the contetual execution of the application by registering all 
-        /// declared behaviors (classes decorated with <see cref="BehaviorAttribute"/>).
+        /// Initializes the contextual execution of the application by registering all 
+        /// declared behaviors (<see cref="BehaviorAttribute"/>).
         /// </summary>
         /// <remarks>Behaviors without any dependencies will be instantiated.</remarks>
         public static void Initialize()
