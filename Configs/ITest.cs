@@ -25,8 +25,48 @@ namespace AsLegacy.Configs
 
 
     [Behavior]
-    public class TestBehavior
+    public class IndependentBehavior
     {
 
+    }
+
+    [Behavior]
+    public class DependentBehaviorSelf
+    {
+        [Dependency(DependencySource.Self)]
+        public TestA A { get; private init; } = new()
+        {
+            SomeProperty = 1
+        };
+
+        private DependentBehaviorSelf() { }
+    }
+
+    [Behavior]
+    public class DependentBehaviorSelfInterface
+    {
+        [Dependency(DependencySource.Self)]
+        public ITest I { get; private init; }
+
+        private DependentBehaviorSelfInterface() => I = new TestB() { SomeProperty = 2 };
+    }
+
+
+    [Behavior]
+    public class DependentBehaviorShared
+    {
+        [Dependency(DependencySource.Shared)]
+        public TestA A { get; private init; }
+
+        private DependentBehaviorShared() { }
+    }
+
+    [Behavior]
+    public class DependentBehaviorUnique
+    {
+        [Dependency(DependencySource.Unique)]
+        public TestA A { get; private init; }
+
+        private DependentBehaviorUnique() { }
     }
 }
