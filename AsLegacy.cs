@@ -1,4 +1,6 @@
-﻿using AsLegacy.Characters;
+﻿global using static AsLegacy.App;
+
+using AsLegacy.Characters;
 using AsLegacy.Configs;
 using AsLegacy.GUI;
 using AsLegacy.GUI.Elements;
