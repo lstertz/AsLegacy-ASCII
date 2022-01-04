@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "mw7NG3mTpimke1oyCfb0judmtNRXg1Dq/2KDU5ZNAx4zwiUahVQWNPYWjyNdil3+8CbGMaWlfnMKk2nxtb+pQw==",
+  "dgSpecHash": "fGgOC9A00CWwXyzIzuQop204TLabF90OnYIpBAEavlx5mqG6MIbUkjUWjHlNGoIN4evtNnBTVvFFd/WUMoytyQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\lucas\\Projects\\AsLegacy-ASCII\\AsLegacy.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\lucas\\.nuget\\packages\\contextualprogramming\\1.0.0\\contextualprogramming.1.0.0.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.0.1641\\monogame.framework.desktopgl.3.8.0.1641.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\sadconsole\\8.99.3\\sadconsole.8.99.3.nupkg.sha512"
