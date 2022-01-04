@@ -20,8 +20,8 @@ namespace AsLegacy.Configs
         public ContextStateList<string> ConfigurationFiles { get; init; }
 
         /// <summary>
-        /// The configuration currently chosen to define the game's functionality.
+        /// The index of the configuration currently chosen to define the game's functionality.
         /// </summary>
-        public ContextState<string> CurrentConfiguration { get; init; }
+        public ContextState<int> CurrentConfiguration { get; init; }
     }
 }
