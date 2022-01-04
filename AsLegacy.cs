@@ -98,7 +98,7 @@ public class AsLegacy : UpdateConsoleComponent
     /// </summary>
     public AsLegacy()
     {
-        ConfigurationManager.Initialize();
+        Initialize();
 
         Game.Create(Display.Width, Display.Height);
         Game.OnInitialize = () =>
@@ -121,6 +121,8 @@ public class AsLegacy : UpdateConsoleComponent
     /// <param name="delta">The time passed since the last update.</param>
     public override void Update(Console console, TimeSpan delta)
     {
+        App.Update();
+
         if (Display.CurrentScreen != Display.Screen.Play)
             return;
 
