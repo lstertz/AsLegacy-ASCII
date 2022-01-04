@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "ContextualProgramming/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/ContextualProgramming.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/ContextualProgramming.dll": {}
+        }
+      },
       "MonoGame.Framework.DesktopGL/3.8.0.1641": {
         "type": "package",
         "compile": {
@@ -72,6 +81,19 @@
     }
   },
   "libraries": {
+    "ContextualProgramming/1.0.0": {
+      "sha512": "gC8kjmajM9e+xatl0e1CcrgSk/cx96sz08elyJzOtDJzW85g/ml60zleul0Ows5d8Ud8RPQ1P43sZEnqgoB1TA==",
+      "type": "package",
+      "path": "contextualprogramming/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "contextualprogramming.1.0.0.nupkg.sha512",
+        "contextualprogramming.nuspec",
+        "lib/net6.0/ContextualProgramming.dll"
+      ]
+    },
     "MonoGame.Framework.DesktopGL/3.8.0.1641": {
       "sha512": "rJQlrlHQbnOECYV6EcQ8GlGRQ2lzPTroXQcyyOZ0ki+BQRSJEN2zVBm9skqLiXya348aGAfTSSGTaSKjAy9NaA==",
       "type": "package",
@@ -145,6 +167,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "ContextualProgramming >= 1.0.0",
       "MonoGame.Framework.DesktopGL >= 3.8.0.1641",
       "SadConsole >= 8.99.3"
     ]
@@ -193,6 +216,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "ContextualProgramming": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          },
           "MonoGame.Framework.DesktopGL": {
             "target": "Package",
             "version": "[3.8.0.1641, )"
