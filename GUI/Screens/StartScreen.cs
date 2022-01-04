@@ -69,8 +69,8 @@ namespace AsLegacy.GUI.Screens
                 TextColor = Colors.White
             });
 
-            ConfigurationOptions options = GetContext<ConfigurationOptions>();
-            string[] gameConfigs = options.AvailableConfigurations;
+            Configurations configurations = GetContext<Configurations>();
+            string[] gameConfigs = configurations.AvailableConfigurations;
             for (int c = 0, count = gameConfigs.Length; c < count; c++)
             {
                 int option = c;
@@ -87,7 +87,7 @@ namespace AsLegacy.GUI.Screens
                 button.Click += (s, e) =>
                 {
                     Display.ShowScreen(Display.Screen.Settings);
-                    options.CurrentConfiguration.Value = option;
+                    configurations.CurrentConfiguration.Value = option;
                 };
                 Add(button);
             }

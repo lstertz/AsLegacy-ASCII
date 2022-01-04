@@ -7,7 +7,7 @@ namespace AsLegacy.Configs
     /// functionality of the game.
     /// </summary>
     [Context]
-    public class ConfigurationOptions
+    public class Configurations
     {
         /// <summary>
         /// The user-friendly names of the available configurations.

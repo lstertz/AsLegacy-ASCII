@@ -11,18 +11,18 @@ namespace AsLegacy.Configs
     /// The manager of all possible configurations of the application.
     /// </summary>
     [Behavior]
-    [Dependency<ConfigurationOptions>(Binding.Unique, 
-        Fulfillment.SelfCreated, ConfigurationOptions)]
+    [Dependency<Configurations>(Binding.Unique, Fulfillment.SelfCreated, Configurations)]
     public class ConfigurationManager
     {
-        private const string ConfigurationOptions = "configurationOptions";
+        private const string Configurations = "configurations";
 
         private static readonly string ConfigsDirectory = PathIO.Combine(
             PathIO.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             "Resources",
             "Configs");
 
-        public ConfigurationManager(out ConfigurationOptions configurationOptions)
+
+        public ConfigurationManager(out Configurations configurations)
         {
             string[] files = Directory.GetFiles(ConfigsDirectory, "",
                 SearchOption.AllDirectories);
@@ -35,7 +35,7 @@ namespace AsLegacy.Configs
                 options[c] = details.Name;
             }
 
-            configurationOptions = new()
+            configurations = new()
             {
                 AvailableConfigurations = options,
                 ConfigurationFiles = files,
@@ -47,15 +47,15 @@ namespace AsLegacy.Configs
         /// Loads the configuration specified as the current configuration.
         /// </summary>
         [Operation]
-        [OnChange(ConfigurationOptions)]
-        public void LoadConfiguration(ConfigurationOptions configurationOptions)
+        [OnChange(Configurations)]
+        public void LoadConfiguration(Configurations configurations)
         {
-            int option = configurationOptions.CurrentConfiguration;
+            int option = configurations.CurrentConfiguration;
             if (option == -1)
                 return;
 
             Configuration config = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(
-                configurationOptions.ConfigurationFiles[option]));
+                configurations.ConfigurationFiles[option]));
             Contextualize(config.Test);
         }
     }
