@@ -69,12 +69,15 @@ namespace AsLegacy.GUI.Screens
                 TextColor = Colors.White
             });
 
-            ReadOnlyCollection<string> gameConfigs = ConfigurationManager.ConfigurationOptions;
-            for (int c = 0, count = gameConfigs.Count; c < count; c++)
+            Configurations configurations = GetContext<Configurations>();
+            string[] gameConfigs = configurations.AvailableConfigurations;
+            for (int c = 0, count = gameConfigs.Length; c < count; c++)
             {
-                int width = gameConfigs[c].Length + 2;
-                int yOffset = GameModeInitialYOffset + (GameModeOffsetShift * c);
-                string config = gameConfigs[c];
+                int option = c;
+
+                int width = gameConfigs[option].Length + 2;
+                int yOffset = GameModeInitialYOffset + (GameModeOffsetShift * option);
+                string config = gameConfigs[option];
 
                 Button button = new(width, 1)
                 {
@@ -84,7 +87,7 @@ namespace AsLegacy.GUI.Screens
                 button.Click += (s, e) =>
                 {
                     Display.ShowScreen(Display.Screen.Settings);
-                    ConfigurationManager.LoadConfiguration(config);
+                    configurations.CurrentConfiguration.Value = option;
                 };
                 Add(button);
             }
