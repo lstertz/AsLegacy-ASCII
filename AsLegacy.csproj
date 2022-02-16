@@ -1,31 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<LangVersion>Preview</LangVersion>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="release\**" />
-    <EmbeddedResource Remove="release\**" />
-    <None Remove="release\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="release\**" />
+		<EmbeddedResource Remove="release\**" />
+		<None Remove="release\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
-    <PackageReference Include="SadConsole" Version="8.99.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ContextualProgramming" Version="1.1.0" />
+		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.0.1641" />
+		<PackageReference Include="SadConsole" Version="8.99.3" />
+	</ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <Content Include="Resources\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+		<Content Include="Resources\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Release'">
-    <Content Include="Resources\**" Exclude="Resources\Configs\Test\**;">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<Content Include="Resources\**" Exclude="Resources\Configs\Test\**;">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
 </Project>
