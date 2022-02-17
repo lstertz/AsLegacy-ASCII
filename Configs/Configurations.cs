@@ -12,12 +12,12 @@ namespace AsLegacy.Configs
         /// <summary>
         /// The user-friendly names of the available configurations.
         /// </summary>
-        public ContextStateList<string> AvailableConfigurations { get; init; }
+        public ReadonlyContextStateList<string> AvailableConfigurations { get; init; }
 
         /// <summary>
         /// The file paths of the available configurations.
         /// </summary>
-        public ContextStateList<string> ConfigurationFiles { get; init; }
+        public ReadonlyContextStateList<string> ConfigurationFiles { get; init; }
 
         /// <summary>
         /// The index of the configuration currently chosen to define the game's functionality.
