@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace AsLegacy.Configs
+﻿namespace AsLegacy.Configs
 {
     /// <summary>
     /// Defines the details of a configuration of the application.

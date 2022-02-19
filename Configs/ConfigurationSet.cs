@@ -1,4 +1,5 @@
 ﻿using ContextualProgramming;
+using System;
 
 namespace AsLegacy.Configs
 {
@@ -7,21 +8,18 @@ namespace AsLegacy.Configs
     /// functionality of the game.
     /// </summary>
     [Context]
-    public class Configurations
+    public class ConfigurationSet
     {
         /// <summary>
         /// The user-friendly names of the available configurations.
         /// </summary>
-        public ReadonlyContextStateList<string> AvailableConfigurations { get; init; }
+        public ReadonlyContextStateList<string> ConfigurationNames { get; init; } = 
+            Array.Empty<string>();
 
         /// <summary>
         /// The file paths of the available configurations.
         /// </summary>
-        public ReadonlyContextStateList<string> ConfigurationFiles { get; init; }
-
-        /// <summary>
-        /// The index of the configuration currently chosen to define the game's functionality.
-        /// </summary>
-        public ContextState<int> CurrentConfiguration { get; init; }
+        public ReadonlyContextStateList<string> ConfigurationFiles { get; init; } =
+            Array.Empty<string>();
     }
 }

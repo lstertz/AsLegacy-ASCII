@@ -11,10 +11,12 @@ namespace AsLegacy.Configs
     /// The manager of all possible configurations of the application.
     /// </summary>
     [Behavior]
-    [Dependency<Configurations>(Binding.Unique, Fulfillment.SelfCreated, Configurations)]
-    public class ConfigurationManager
+    [Dependency<ConfigurationSet>(Binding.Unique, Fulfillment.SelfCreated, Options)]
+    [Dependency<ConfigurationSelection>(Binding.Unique, Fulfillment.SelfCreated, Selection)]
+    public class ConfigurationManagement
     {
-        private const string Configurations = "configurations";
+        private const string Options = "options";
+        private const string Selection = "selection";
 
         private static readonly string ConfigsDirectory = PathIO.Combine(
             PathIO.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
@@ -22,40 +24,40 @@ namespace AsLegacy.Configs
             "Configs");
 
 
-        public ConfigurationManager(out Configurations configurations)
+        public ConfigurationManagement(out ConfigurationSet options, 
+            out ConfigurationSelection selection)
         {
             string[] files = Directory.GetFiles(ConfigsDirectory, "",
                 SearchOption.AllDirectories);
-            string[] options = new string[files.Length];
+            string[] names = new string[files.Length];
 
             for (int c = 0, count = files.Length; c < count; c++)
             {
                 ConfigurationDetails details = JsonSerializer
                     .Deserialize<ConfigurationDetails>(File.ReadAllText(files[c]));
-                options[c] = details.Name;
+                names[c] = details.Name;
             }
 
-            configurations = new()
+            options = new()
             {
-                AvailableConfigurations = options,
-                ConfigurationFiles = files,
-                CurrentConfiguration = -1
+                ConfigurationNames = names,
+                ConfigurationFiles = files
             };
+            selection = new();
         }
 
         /// <summary>
         /// Loads the configuration specified as the current configuration.
         /// </summary>
         [Operation]
-        [OnChange(Configurations)]
-        public void LoadConfiguration(Configurations configurations)
+        [OnChange(Selection)]
+        public void LoadConfiguration(ConfigurationSelection selection)
         {
-            int option = configurations.CurrentConfiguration;
-            if (option == -1)
+            if (!selection.HasSelection())
                 return;
 
             Configuration config = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(
-                configurations.ConfigurationFiles[option]));
+                selection.ConfigurationFile));
             Contextualize(config.Test);
         }
     }

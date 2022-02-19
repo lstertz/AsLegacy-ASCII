@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
-using System;
 using Console = SadConsole.Console;
 
 using AsLegacy.Global;
 using SadConsole.Controls;
 using AsLegacy.Configs;
-using System.Collections.ObjectModel;
 
 namespace AsLegacy.GUI.Screens
 {
@@ -69,8 +67,9 @@ namespace AsLegacy.GUI.Screens
                 TextColor = Colors.White
             });
 
-            Configurations configurations = GetContext<Configurations>();
-            string[] gameConfigs = configurations.AvailableConfigurations;
+            ConfigurationSelection selection = GetContext<ConfigurationSelection>();
+            ConfigurationSet configurations = GetContext<ConfigurationSet>();
+            string[] gameConfigs = configurations.ConfigurationNames;
             for (int c = 0, count = gameConfigs.Length; c < count; c++)
             {
                 int option = c;
@@ -87,7 +86,8 @@ namespace AsLegacy.GUI.Screens
                 button.Click += (s, e) =>
                 {
                     Display.ShowScreen(Display.Screen.Settings);
-                    configurations.CurrentConfiguration.Value = option;
+                    selection.ConfigurationFile.Value = configurations.ConfigurationFiles[option];
+                    selection.ConfigurationName.Value = configurations.ConfigurationNames[option];
                 };
                 Add(button);
             }
