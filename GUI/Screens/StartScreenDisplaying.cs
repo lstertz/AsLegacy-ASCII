@@ -8,13 +8,16 @@ using AsLegacy.Configs;
 
 namespace AsLegacy.GUI.Screens;
 
+/// <summary>
+/// Handles the initialization and visibility of the start screen.
+/// </summary>
 [Behavior]
 [Dependency<ConfigurationSelection>(Binding.Unique, Fulfillment.Existing, Selection)]
 [Dependency<ConfigurationSet>(Binding.Unique, Fulfillment.Existing, Configurations)]
 [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
 [Dependency<DisplayContext>(Binding.Unique, Fulfillment.Existing, Display)]
 [Dependency<GameState>(Binding.Unique, Fulfillment.Existing, State)]
-public class StartScreenController : ControlsConsole
+public class StartScreenDisplaying : ControlsConsole
 {
     private const string Configurations = "configurations";
     private const string Consoles = "consoles";
@@ -28,7 +31,7 @@ public class StartScreenController : ControlsConsole
     private const string TitleMessage = "As Legacy";
     private const int TitleY = 10;
 
-    public StartScreenController() :
+    public StartScreenDisplaying() :
         // Workaround for dependencies not injected to constructors.
         base(GetContext<DisplayContext>().Width, GetContext<DisplayContext>().Height)
     {
