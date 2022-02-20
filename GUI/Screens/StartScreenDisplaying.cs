@@ -4,7 +4,7 @@ using SadConsole;
 using AsLegacy.Global;
 using SadConsole.Controls;
 using AsLegacy.Configs;
-
+using AsLegacy.Progression;
 
 namespace AsLegacy.GUI.Screens;
 
@@ -12,7 +12,6 @@ namespace AsLegacy.GUI.Screens;
 /// Handles the initialization and visibility of the start screen.
 /// </summary>
 [Behavior]
-[Dependency<ConfigurationSelection>(Binding.Unique, Fulfillment.Existing, Selection)]
 [Dependency<ConfigurationSet>(Binding.Unique, Fulfillment.Existing, Configurations)]
 [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
 [Dependency<DisplayContext>(Binding.Unique, Fulfillment.Existing, Display)]
@@ -22,7 +21,6 @@ public class StartScreenDisplaying : ControlsConsole
     private const string Configurations = "configurations";
     private const string Consoles = "consoles";
     private const string Display = "display";
-    private const string Selection = "selection";
     private const string State = "state";
 
     private const int GameModeInitialYOffset = -8;
@@ -31,6 +29,9 @@ public class StartScreenDisplaying : ControlsConsole
     private const string TitleMessage = "As Legacy";
     private const int TitleY = 10;
 
+    /// <summary>
+    /// Sets up the opening screen.
+    /// </summary>
     public StartScreenDisplaying() :
         // Workaround for dependencies not injected to constructors.
         base(GetContext<DisplayContext>().Width, GetContext<DisplayContext>().Height)
@@ -39,18 +40,18 @@ public class StartScreenDisplaying : ControlsConsole
         ConfigurationSet configurations = GetContext<ConfigurationSet>();
         ConsoleCollection consoles = GetContext<ConsoleCollection>();
         DisplayContext display = GetContext<DisplayContext>();
-        ConfigurationSelection selection = GetContext<ConfigurationSelection>();
-        GameState state = GetContext<GameState>();
 
         ThemeColors = Colors.StandardTheme;
         consoles.ScreenConsoles.Add(this);
 
         SetUpTitle(display);
-        SetUpConfigurationButtons(configurations, selection, state, display);
+        SetUpConfigurationButtons(configurations, display);
     }
 
-    private void SetUpConfigurationButtons(ConfigurationSet configurations,
-        ConfigurationSelection selection, GameState state, DisplayContext display)
+    /// <summary>
+    /// Sets up the configuration buttons of the opening screen.
+    /// </summary>
+    private void SetUpConfigurationButtons(ConfigurationSet configurations, DisplayContext display)
     {
         string[] gameConfigs = configurations.ConfigurationNames;
         for (int c = 0, count = gameConfigs.Length; c < count; c++)
@@ -66,16 +67,17 @@ public class StartScreenDisplaying : ControlsConsole
                 Position = new Point(display.Width / 2 - width / 2, display.Height + yOffset),
                 Text = config
             };
-            button.Click += (s, e) =>
+            button.Click += (s, e) => Contextualize(new GameStartMessage()
             {
-                state.CurrentStage.Value = GameState.Stage.Setup;
-                selection.ConfigurationFile.Value = configurations.ConfigurationFiles[option];
-                selection.ConfigurationName.Value = configurations.ConfigurationNames[option];
-            };
+                SelectedConfigurationOption = option
+            });
             Add(button);
         }
     }
 
+    /// <summary>
+    /// Sets up the title of the opening screen.
+    /// </summary>
     private void SetUpTitle(DisplayContext display)
     {
         Add(new Label(display.Width)
@@ -98,7 +100,7 @@ public class StartScreenDisplaying : ControlsConsole
     [OnChange(State, nameof(GameState.CurrentStage))]
     public void UpdateVisibility(GameState state)
     {
-        bool isVisible = state.CurrentStage == GameState.Stage.Opening;
+        bool isVisible = state.CurrentStage == GameStageMap.Stage.Opening;
 
         IsVisible = isVisible;
         IsFocused = isVisible;

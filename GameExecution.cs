@@ -1,6 +1,7 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.GUI;
 using AsLegacy.GUI.Elements;
+using AsLegacy.Progression;
 using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Themes;
@@ -117,7 +118,7 @@ public class GameExecution : UpdateConsoleComponent
     [OnChange(State, nameof(GameState.CurrentStage))]
     public void StartGameplay(GameState state, PlayerDetails playerDetails)
     {
-        if (state.CurrentStage != GameState.Stage.Play)
+        if (state.CurrentStage != GameStageMap.Stage.Play)
             return;
 
         ObservedCharacter = null;
