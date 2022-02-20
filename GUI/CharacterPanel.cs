@@ -68,7 +68,7 @@ namespace AsLegacy.GUI
         {
             base.Invalidate();
 
-            if (AsLegacy.Focus == null)
+            if (GameExecution.Focus == null)
                 return;
 
             DrawTitle();
@@ -89,7 +89,7 @@ namespace AsLegacy.GUI
         private void DrawEquippedSkills()
         {
             Print(1, EquippedSkillsStartingY, "Equipped Skills", Color.White);
-            string[] equippedSkills = AsLegacy.Focus.EquippedSkills;
+            string[] equippedSkills = GameExecution.Focus.EquippedSkills;
             for (int c = 0, count = equippedSkills.Length, half = count / 2; c < count; c++)
             {
                 string text = equippedSkills[c];
@@ -110,12 +110,12 @@ namespace AsLegacy.GUI
         private void DrawHealth()
         {
             string health;
-            if (AsLegacy.Focus.CurrentHealth <= 0.0f)
+            if (GameExecution.Focus.CurrentHealth <= 0.0f)
                 health = "0";
             else
-                health = MathF.Ceiling(AsLegacy.Focus.CurrentHealth).ToString();
+                health = MathF.Ceiling(GameExecution.Focus.CurrentHealth).ToString();
 
-            string maxHealth = MathF.Ceiling(AsLegacy.Focus.MaxHealth).ToString();
+            string maxHealth = MathF.Ceiling(GameExecution.Focus.MaxHealth).ToString();
             Print(1, HealthY, $"Health: {health}/{maxHealth}", Color.White);
         }
 
@@ -125,10 +125,10 @@ namespace AsLegacy.GUI
         private void DrawTitle()
         {
             string title;
-            if (AsLegacy.Focus is ItemUser)
-                title = (AsLegacy.Focus as ItemUser).FullName;
+            if (GameExecution.Focus is ItemUser)
+                title = (GameExecution.Focus as ItemUser).FullName;
             else
-                title = AsLegacy.Focus.Name;
+                title = GameExecution.Focus.Name;
 
             Print(Width / 2 - title.Length / 2, 0, title, Color.White);
         }

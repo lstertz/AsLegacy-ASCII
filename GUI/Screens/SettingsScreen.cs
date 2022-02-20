@@ -117,7 +117,7 @@ namespace AsLegacy.GUI.Screens
                 Position = new Point(Width / 2 - PlayLabelWidth / 2, Height - PlayOffsetY),
                 Text = PlayLabel
             };
-            _play.Click += (s, e) => AsLegacy.StartGame(
+            _play.Click += (s, e) => GameExecution.StartGame(
                 _nameField.EditingText, _lineageField.EditingText);
             Add(_play);
 

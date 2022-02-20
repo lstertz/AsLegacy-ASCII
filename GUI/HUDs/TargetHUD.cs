@@ -16,8 +16,8 @@ namespace AsLegacy.GUI.HUDs
         public TargetHUD(int width) : base(width, 196, 
             () => 
             {
-                if (AsLegacy.Focus != null && AsLegacy.Focus.Target != AsLegacy.Focus)
-                    return AsLegacy.Focus.Target;
+                if (GameExecution.Focus != null && GameExecution.Focus.Target != GameExecution.Focus)
+                    return GameExecution.Focus.Target;
                 return null;
             })
         {

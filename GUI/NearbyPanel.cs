@@ -36,12 +36,12 @@ namespace AsLegacy.GUI
             
             // TODO :: If no focus, support showing characters closest to current center of view.
 
-            World.Character[] nearbyCharacters = World.CharactersNear(AsLegacy.Focus,
+            World.Character[] nearbyCharacters = World.CharactersNear(GameExecution.Focus,
                 PlayScreen.MapViewPortHalfWidth, PlayScreen.MapViewPortHalfHeight);
 
             while (nearbyCharacters.Length > Components.Count)
                 Components.Add(new CharacterOverview(
-                    Components.Count * CharacterOverview.Height, AsLegacy.Focus));
+                    Components.Count * CharacterOverview.Height, GameExecution.Focus));
 
             for (int c = 0, count = Components.Count; c < count; c++)
                 if (c >= nearbyCharacters.Length)

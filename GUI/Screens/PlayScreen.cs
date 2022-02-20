@@ -369,8 +369,8 @@ namespace AsLegacy.GUI.Screens
                 _commands.IsFocused = true;
 
             Point center = new Point(0, 0); // TODO :: Support disembodied center when ther is no focus.
-            if (AsLegacy.Focus != null)
-                center = AsLegacy.Focus.Point;
+            if (GameExecution.Focus != null)
+                center = GameExecution.Focus.Point;
 
             _characters.CenterViewPortOnPoint(center);
             _effects.CenterViewPortOnPoint(center);

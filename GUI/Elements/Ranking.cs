@@ -49,7 +49,7 @@ namespace AsLegacy.GUI
         /// </summary>
         private void DrawFooter()
         {
-            string goal = System.Convert.ToString(AsLegacy.Goal);
+            string goal = System.Convert.ToString(GameExecution.Goal);
 
             SetGlyph(0, Height - 1, 222);
             Fill(1, Height - 1, TotalWidth - 2, Colors.Transparent, Colors.White, 0);
