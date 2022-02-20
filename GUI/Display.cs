@@ -4,6 +4,25 @@ using AsLegacy.GUI.Screens;
 
 namespace AsLegacy.GUI
 {
+
+    /// <summary>
+    /// Defines the settings of the display, including what screen is currently being displayed.
+    /// </summary>
+    [Context]
+    public class DisplayContext // TODO :: Rename to 'Display' when old Display can be removed.
+    {
+        /// <summary>
+        /// The height of the display, in cells.
+        /// </summary>
+        public ReadonlyContextState<int> Height { get; init; } = 25;
+
+        /// <summary>
+        /// The width of the display, in cells.
+        /// </summary>
+        public ReadonlyContextState<int> Width { get; init; } = 80;
+
+    }
+
     /// <summary>
     /// Defines Display, which serves as the primary visual output controller.
     /// </summary>
@@ -38,11 +57,9 @@ namespace AsLegacy.GUI
             SadConsole.Global.CurrentScreen = console;
             console.Components.Add(gameManager);
 
-            StartScreen.Init(console);
             SettingsScreen.Init(console);
             PlayScreen.Init(console);
             CompletionScreen.Init(console);
-            // TODO :: Implement other screens.
 
             ShowScreen(Screen.Start);
         }
@@ -63,11 +80,9 @@ namespace AsLegacy.GUI
         {
             // TODO :: Add an optional fade transition or wait of some kind.
 
-            StartScreen.IsVisible = screen == Screen.Start;
             SettingsScreen.IsVisible = screen == Screen.Settings;
             PlayScreen.IsVisible = screen == Screen.Play;
             CompletionScreen.IsVisible = screen == Screen.Completion;
-            // TODO :: Implement for the other screens.
 
             CurrentScreen = screen;
         }
