@@ -1,4 +1,5 @@
-﻿using ContextualProgramming;
+﻿using AsLegacy.Progression;
+using ContextualProgramming;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
@@ -24,7 +25,7 @@ namespace AsLegacy.Configs
             "Configs");
 
 
-        public ConfigurationManagement(out ConfigurationSet options, 
+        public ConfigurationManagement(out ConfigurationSet options,
             out ConfigurationSelection selection)
         {
             string[] files = Directory.GetFiles(ConfigsDirectory, "",
@@ -53,14 +54,53 @@ namespace AsLegacy.Configs
         [OnChange(Selection)]
         public void LoadConfiguration(ConfigurationSelection selection)
         {
-            if (!selection.HasSelection() || selection.IsLoaded)
+            if (!selection.HasSelection())
                 return;
 
             Configuration config = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(
                 selection.ConfigurationFile));
             Contextualize(config.Test);
 
-            selection.IsLoaded.Value = true;
+
+            // TODO :: Make this context loaded from the configuration.
+            Contextualize(new GameStageMap()
+            {
+                StageProgressions = new()
+                {
+                    {
+                        GameStageMap.Stage.Opening,
+                        new()
+                        {
+                            Next = GameStageMap.Stage.Setup,
+                            Previous = GameStageMap.Stage.Opening
+                        }
+                    },
+                    {
+                        GameStageMap.Stage.Setup,
+                        new()
+                        {
+                            Next = GameStageMap.Stage.Play,
+                            Previous = GameStageMap.Stage.Opening
+                        }
+                    },
+                    {
+                        GameStageMap.Stage.Play,
+                        new()
+                        {
+                            Next = GameStageMap.Stage.Results,
+                            Previous = GameStageMap.Stage.Setup
+                        }
+                    },
+                    {
+                        GameStageMap.Stage.Results,
+                        new()
+                        {
+                            Next = GameStageMap.Stage.Opening,
+                            Previous = GameStageMap.Stage.Play
+                        }
+                    }
+                }
+            });
         }
     }
 }
