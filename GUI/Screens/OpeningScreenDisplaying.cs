@@ -16,7 +16,7 @@ namespace AsLegacy.GUI.Screens;
 [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
 [Dependency<DisplayContext>(Binding.Unique, Fulfillment.Existing, Display)]
 [Dependency<GameState>(Binding.Unique, Fulfillment.Existing, State)]
-public class StartScreenDisplaying : ControlsConsole
+public class OpeningScreenDisplaying : ControlsConsole
 {
     private const string Configurations = "configurations";
     private const string Consoles = "consoles";
@@ -32,7 +32,7 @@ public class StartScreenDisplaying : ControlsConsole
     /// <summary>
     /// Sets up the opening screen.
     /// </summary>
-    public StartScreenDisplaying() :
+    public OpeningScreenDisplaying() :
         // Workaround for dependencies not injected to constructors.
         base(GetContext<DisplayContext>().Width, GetContext<DisplayContext>().Height)
     {
