@@ -18,6 +18,11 @@ namespace AsLegacy.Configs
         /// </summary>
         public ContextState<string> ConfigurationFile { get; init; } = new(null);
 
+        /// <summary>
+        /// Specifies whether the selected configuration has been loaded.
+        /// </summary>
+        public ContextState<bool> IsLoaded { get; init; } = false;
+
 
         /// <summary>
         /// Specifies whether a configuration has been selected.

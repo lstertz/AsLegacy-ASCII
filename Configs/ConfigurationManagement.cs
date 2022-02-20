@@ -53,12 +53,14 @@ namespace AsLegacy.Configs
         [OnChange(Selection)]
         public void LoadConfiguration(ConfigurationSelection selection)
         {
-            if (!selection.HasSelection())
+            if (!selection.HasSelection() || selection.IsLoaded)
                 return;
 
             Configuration config = JsonSerializer.Deserialize<Configuration>(File.ReadAllText(
                 selection.ConfigurationFile));
             Contextualize(config.Test);
+
+            selection.IsLoaded.Value = true;
         }
     }
 }
