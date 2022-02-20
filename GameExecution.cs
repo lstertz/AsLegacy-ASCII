@@ -5,8 +5,8 @@ using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Themes;
 using System;
-using Console = SadConsole.Console;
 using Game = SadConsole.Game;
+
 
 namespace AsLegacy;
 

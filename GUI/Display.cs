@@ -1,5 +1,4 @@
 ﻿using SadConsole.Components;
-using Console = SadConsole.Console;
 
 using AsLegacy.GUI.Screens;
 

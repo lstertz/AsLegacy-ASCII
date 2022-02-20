@@ -1,4 +1,4 @@
-﻿using Console = SadConsole.Console;
+﻿using System;
 
 namespace AsLegacy.GUI
 {
@@ -13,5 +13,8 @@ namespace AsLegacy.GUI
         /// This console has no parent and controls the over-arching display of the game.
         /// </summary>
         public ContextState<Console> PrimaryConsole { get; init; } = new(null);
+
+        public ContextStateList<Console> ScreenConsoles { get; init; } =
+            new(Array.Empty<Console>());
     }
 }
