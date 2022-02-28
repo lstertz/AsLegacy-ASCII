@@ -57,7 +57,6 @@ namespace AsLegacy.GUI
             SadConsole.Global.CurrentScreen = console;
             console.Components.Add(gameManager);
 
-            SettingsScreen.Init(console);
             PlayScreen.Init(console);
             CompletionScreen.Init(console);
 
@@ -80,7 +79,6 @@ namespace AsLegacy.GUI
         {
             // TODO :: Add an optional fade transition or wait of some kind.
 
-            SettingsScreen.IsVisible = screen == Screen.Settings;
             PlayScreen.IsVisible = screen == Screen.Play;
             CompletionScreen.IsVisible = screen == Screen.Completion;
 
