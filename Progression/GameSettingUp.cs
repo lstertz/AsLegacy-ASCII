@@ -1,4 +1,7 @@
-﻿namespace AsLegacy.Progression;
+﻿using AsLegacy.Characters;
+using Microsoft.Xna.Framework;
+
+namespace AsLegacy.Progression;
 
 
 /// <summary>
@@ -22,7 +25,16 @@ public class GameSettingUp
         // Workaround for dependencies not being injected to constructors.
         GameSetUpMessage setUpMessage = GetContext<GameSetUpMessage>();
 
-        // TODO :: Create Player context with the name and lineage.
+        GameExecution.ObservedCharacter = null;
+        Player.Reset();
+
+        Class.Init();
+        World.InitNewWorld();
+
+        // TODO :: Refactor Player as context, with name and lineage.
+        Point playerPosition = World.GetRandomPassablePosition(World.SpawnZone.Player);
+        Player.Create(playerPosition.Y, playerPosition.X, setUpMessage.Name, setUpMessage.Lineage);
+
         // TODO :: Create contexts for any other player-specified game settings.
 
         stageMessage = new GameStageCompletionMessage();

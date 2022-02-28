@@ -18,13 +18,11 @@ namespace AsLegacy;
 [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.SelfCreated, Consoles)]
 [Dependency<DisplayContext>(Binding.Unique, Fulfillment.SelfCreated, Display)]
 [Dependency<GameState>(Binding.Unique, Fulfillment.SelfCreated, State)]
-[Dependency<PlayerDetails>(Binding.Unique, Fulfillment.SelfCreated, PlayerDetails)]
 public class GameExecution : UpdateConsoleComponent
 {
     private const string Consoles = "consoles";
     private const string Display = "display";
     private const string State = "state";
-    private const string PlayerDetails = "playerDetails";
 
     private static readonly string LocalFontsFile = System.IO.Path.Combine(
         "Resources",
@@ -40,7 +38,14 @@ public class GameExecution : UpdateConsoleComponent
     /// be any other living Character.
     /// </summary>
     public static World.Character Focus { get => Player ?? ObservedCharacter; }
-    private static World.Character ObservedCharacter = null;
+
+    /// <summary>
+    /// The character for the player to observer while they have no character of their own.
+    /// </summary>
+    /// <remarks>
+    /// Temporarily exposed during CP refactor.
+    /// </remarks>
+    public static World.Character ObservedCharacter = null;
 
     /// <summary>
     /// Specifies whether the game has a current Player Character.
@@ -71,9 +76,8 @@ public class GameExecution : UpdateConsoleComponent
 
 
     public GameExecution(out ConsoleCollection consoles, out DisplayContext display, 
-        out GameState state, out PlayerDetails playerDetails)
+        out GameState state)
     {
-        playerDetails = new();
         consoles = new();
         display = new();
         state = new();
@@ -112,35 +116,23 @@ public class GameExecution : UpdateConsoleComponent
     // TODO :: Phase out most of the below operation through CP refactor.
 
     /// <summary>
-    /// Updates player and world state to start the play stage of the game.
+    /// Updates whether the game is in its play stage.
     /// </summary>
     [Operation]
     [OnChange(State, nameof(GameState.CurrentStage))]
-    public void StartGameplay(GameState state, PlayerDetails playerDetails)
+    public void EvaluateCurrentStage(GameState state)
     {
-        if (state.CurrentStage != GameStageMap.Stage.Play)
-            return;
-
-        ObservedCharacter = null;
-        Player.Reset();
-
-        Class.Init();
-        World.InitNewWorld();
-
-        Point playerPosition = World.GetRandomPassablePosition(World.SpawnZone.Player);
-        Player.Create(playerPosition.Y, playerPosition.X, playerDetails.CharacterName, 
-            playerDetails.LineageName);
-
-        _isOnPlayStage = true;
+        _isOnPlayStage = state.CurrentStage == GameStageMap.Stage.Play;
     }
-
     private bool _isOnPlayStage = false;
+
     /// <inheritdoc/>
     public override void Update(Console console, TimeSpan delta)
     {
         App.Update();
 
         // TODO :: Phase out the below through CP refactor.
+        //          World updating should be handled as part of the app update.
         if (_isOnPlayStage)
             World.Update(delta.Milliseconds);
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
 using System;
-using Console = SadConsole.Console;
 
 using AsLegacy.Global;
 using SadConsole.Controls;
