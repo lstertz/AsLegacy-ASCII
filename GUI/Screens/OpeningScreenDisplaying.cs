@@ -39,19 +39,18 @@ public class OpeningScreenDisplaying : ControlsConsole
         // More workarounds for dependencies not being injected to constructors.
         ConfigurationSet configurations = GetContext<ConfigurationSet>();
         ConsoleCollection consoles = GetContext<ConsoleCollection>();
-        DisplayContext display = GetContext<DisplayContext>();
 
         ThemeColors = Colors.StandardTheme;
         consoles.ScreenConsoles.Add(this);
 
-        SetUpTitle(display);
-        SetUpConfigurationButtons(configurations, display);
+        SetUpTitle();
+        SetUpConfigurationButtons(configurations);
     }
 
     /// <summary>
     /// Sets up the configuration buttons of the opening screen.
     /// </summary>
-    private void SetUpConfigurationButtons(ConfigurationSet configurations, DisplayContext display)
+    private void SetUpConfigurationButtons(ConfigurationSet configurations)
     {
         string[] gameConfigs = configurations.ConfigurationNames;
         for (int c = 0, count = gameConfigs.Length; c < count; c++)
@@ -64,7 +63,7 @@ public class OpeningScreenDisplaying : ControlsConsole
 
             Button button = new(width, 1)
             {
-                Position = new Point(display.Width / 2 - width / 2, display.Height + yOffset),
+                Position = new Point(Width / 2 - width / 2, Height + yOffset),
                 Text = config
             };
             button.Click += (s, e) => Contextualize(new GameStartMessage()
@@ -78,9 +77,9 @@ public class OpeningScreenDisplaying : ControlsConsole
     /// <summary>
     /// Sets up the title of the opening screen.
     /// </summary>
-    private void SetUpTitle(DisplayContext display)
+    private void SetUpTitle()
     {
-        Add(new Label(display.Width)
+        Add(new Label(Width)
         {
             Alignment = HorizontalAlignment.Center,
             DisplayText = TitleMessage,
