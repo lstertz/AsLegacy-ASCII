@@ -14,7 +14,7 @@ namespace AsLegacy.GUI.Screens;
 [Behavior]
 [Dependency<ConfigurationSet>(Binding.Unique, Fulfillment.Existing, Configurations)]
 [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
-[Dependency<DisplayContext>(Binding.Unique, Fulfillment.Existing, Display)]
+[Dependency<Display>(Binding.Unique, Fulfillment.Existing, Display)]
 [Dependency<GameState>(Binding.Unique, Fulfillment.Existing, State)]
 public class OpeningScreenDisplaying : ControlsConsole
 {
@@ -34,7 +34,7 @@ public class OpeningScreenDisplaying : ControlsConsole
     /// </summary>
     public OpeningScreenDisplaying() :
         // Workaround for dependencies not injected to constructors.
-        base(GetContext<DisplayContext>().Width, GetContext<DisplayContext>().Height)
+        base(GetContext<Display>().Width, GetContext<Display>().Height)
     {
         // More workarounds for dependencies not being injected to constructors.
         ConfigurationSet configurations = GetContext<ConfigurationSet>();

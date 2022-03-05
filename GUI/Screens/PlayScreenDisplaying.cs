@@ -17,7 +17,7 @@ namespace AsLegacy.GUI.Screens
     /// </summary>
     [Behavior]
     [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
-    [Dependency<DisplayContext>(Binding.Unique, Fulfillment.Existing, Display)]
+    [Dependency<Display>(Binding.Unique, Fulfillment.Existing, Display)]
     [Dependency<GameState>(Binding.Unique, Fulfillment.Existing, State)]
     public class PlayScreenDisplaying : DrawConsoleComponent
     {
@@ -211,7 +211,7 @@ namespace AsLegacy.GUI.Screens
         private PlayScreenDisplaying()
         {
             // Workarounds for dependencies not being injected to constructors.
-            DisplayContext display = GetContext<DisplayContext>();
+            Display display = GetContext<Display>();
             ConsoleCollection consoles = GetContext<ConsoleCollection>();
             GameState state = GetContext<GameState>();
 

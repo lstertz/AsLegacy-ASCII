@@ -15,7 +15,7 @@ namespace AsLegacy.GUI.Screens
     /// </summary>
     [Behavior]
     [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
-    [Dependency<DisplayContext>(Binding.Unique, Fulfillment.Existing, Display)]
+    [Dependency<Display>(Binding.Unique, Fulfillment.Existing, Display)]
     [Dependency<GameState>(Binding.Unique, Fulfillment.Existing, State)]
     public class ResultsScreenDisplaying : ControlsConsole
     {
@@ -36,7 +36,7 @@ namespace AsLegacy.GUI.Screens
 
         private ResultsScreenDisplaying() :
             // Workaround for dependencies not injected to constructors.
-            base(GetContext<DisplayContext>().Width, GetContext<DisplayContext>().Height)
+            base(GetContext<Display>().Width, GetContext<Display>().Height)
         {
             // Workarounds for dependencies not being injected to constructors.
             ConsoleCollection consoles = GetContext<ConsoleCollection>();

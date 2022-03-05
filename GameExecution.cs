@@ -16,7 +16,7 @@ namespace AsLegacy;
 /// </summary>
 [Behavior]
 [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.SelfCreated, Consoles)]
-[Dependency<DisplayContext>(Binding.Unique, Fulfillment.SelfCreated, Display)]
+[Dependency<Display>(Binding.Unique, Fulfillment.SelfCreated, Display)]
 [Dependency<GameState>(Binding.Unique, Fulfillment.SelfCreated, State)]
 public class GameExecution : UpdateConsoleComponent
 {
@@ -81,7 +81,7 @@ public class GameExecution : UpdateConsoleComponent
     #endregion
 
 
-    public GameExecution(out ConsoleCollection consoles, out DisplayContext display, 
+    public GameExecution(out ConsoleCollection consoles, out Display display, 
         out GameState state)
     {
         consoles = new();
