@@ -46,8 +46,9 @@ namespace AsLegacy.GUI.Screens
             // Workaround for dependencies not injected to constructors.
             base(GetContext<DisplayContext>().Width, GetContext<DisplayContext>().Height)
         {
-            // Workaround for dependencies not being injected to constructors.
+            // Workarounds for dependencies not being injected to constructors.
             ConsoleCollection consoles = GetContext<ConsoleCollection>();
+            GameState state = GetContext<GameState>();
 
             ThemeColors = Colors.StandardTheme;
             consoles.ScreenConsoles.Add(this);
@@ -58,6 +59,7 @@ namespace AsLegacy.GUI.Screens
             SetUpPlayButton();
 
             FocusedControl = _nameField;
+            IsVisible = state.CurrentStage == GameStageMap.Stage.Setup;
         }
         
         /// <summary>

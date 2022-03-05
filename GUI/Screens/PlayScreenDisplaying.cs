@@ -213,6 +213,7 @@ namespace AsLegacy.GUI.Screens
             // Workarounds for dependencies not being injected to constructors.
             DisplayContext display = GetContext<DisplayContext>();
             ConsoleCollection consoles = GetContext<ConsoleCollection>();
+            GameState state = GetContext<GameState>();
 
             int width = display.Width;
             int height = display.Height;
@@ -305,6 +306,7 @@ namespace AsLegacy.GUI.Screens
             _console.Children.Add(_helpPopup);
 
             _console.Components.Add(this);
+            _console.IsVisible = state.CurrentStage == GameStageMap.Stage.Play;
         }
 
         /// <summary>
