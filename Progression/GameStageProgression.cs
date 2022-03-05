@@ -1,7 +1,7 @@
 ﻿namespace AsLegacy.Progression;
 
 /// <summary>
-/// Handles the <see cref="GameStageCompletionMessage"/>s to progress the stage 
+/// Handles a <see cref="GameStageCompletionMessage"/> to progress the stage 
 /// of the game.
 /// </summary>
 [Behavior]

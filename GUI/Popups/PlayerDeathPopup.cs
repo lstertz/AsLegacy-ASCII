@@ -1,6 +1,7 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.Global;
 using AsLegacy.GUI.Screens;
+using AsLegacy.Progression;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -70,7 +71,7 @@ namespace AsLegacy.GUI.Popups
             quit.Click += (s, e) =>
             {
                 IsVisible = false;
-                Display.ShowScreen(Display.Screen.Start);
+                Contextualize(new GameStageJumpMessage());
             };
             Add(quit);
 
