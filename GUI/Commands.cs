@@ -68,9 +68,9 @@ namespace AsLegacy.GUI
                 y = GameExecution.Player.Row;
             }
 
-            int centerX = PlayScreen.MapViewPortHalfWidth;
-            int centerY = PlayScreen.MapViewPortHalfHeight;
-            Rectangle viewPort = PlayScreen.MapViewPort;
+            int centerX = PlayScreenDisplaying.MapViewPortHalfWidth;
+            int centerY = PlayScreenDisplaying.MapViewPortHalfHeight;
+            Rectangle viewPort = PlayScreenDisplaying.MapViewPort;
 
             if (viewPort.Left == 0)
                 centerX = x;
@@ -125,7 +125,7 @@ namespace AsLegacy.GUI
         /// <returns>Whether the input should be considered for a command.</returns>
         private bool IsInteractable(int worldX, int worldY)
         {
-            if (!GameExecution.HasPlayer || PlayScreen.IsShowingPopup)
+            if (!GameExecution.HasPlayer || PlayScreenDisplaying.IsShowingPopup)
                 return false;
 
             return World.IsPassable(worldX, worldY) &&

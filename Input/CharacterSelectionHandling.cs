@@ -15,7 +15,7 @@ namespace AsLegacy.Input
         public override void ProcessMouse(Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;
-            if (PlayScreen.IsShowingPopup)
+            if (PlayScreenDisplaying.IsShowingPopup)
             {
                 World.Character.Highlight(null);
                 return;

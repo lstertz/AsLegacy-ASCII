@@ -20,7 +20,7 @@ namespace AsLegacy.Characters
             protected override void OnSpawnSuccessor()
             {
                 Character.Target = null;
-                PlayScreen.ShowPlayerDeath();
+                PlayScreenDisplaying.ShowPlayerDeath();
             }
         }
     }

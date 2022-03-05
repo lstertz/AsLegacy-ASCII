@@ -93,7 +93,7 @@ namespace AsLegacy.GUI.Elements
             out bool handled)
         {
             handled = false;
-            if (PlayScreen.IsShowingPopup || !_box.Contains(state.ConsoleCellPosition))
+            if (PlayScreenDisplaying.IsShowingPopup || !_box.Contains(state.ConsoleCellPosition))
             {
                 World.Character.Highlight(null);
                 return;

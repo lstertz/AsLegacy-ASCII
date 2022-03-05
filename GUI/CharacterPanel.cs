@@ -37,7 +37,7 @@ namespace AsLegacy.GUI
                 Position = new Point(9, 1),
                 Text = "Items"
             };
-            items.Click += (s, e) => PlayScreen.ShowItems();
+            items.Click += (s, e) => PlayScreenDisplaying.ShowItems();
             Add(items);
 
             Button talents = new Button(9, 1)
@@ -45,7 +45,7 @@ namespace AsLegacy.GUI
                 Position = new Point(width - 16, 1),
                 Text = "Talents"
             };
-            talents.Click += (s, e) => PlayScreen.ShowTalents();
+            talents.Click += (s, e) => PlayScreenDisplaying.ShowTalents();
             Add(talents);
 
             _ranking = new Ranking(8, true)

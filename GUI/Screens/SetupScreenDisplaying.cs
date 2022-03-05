@@ -41,11 +41,7 @@ namespace AsLegacy.GUI.Screens
         private TextBox _nameField;
         private Button _play;
 
-        /// <summary>
-        /// Constructs a new StartScreen for the given Console.
-        /// </summary>
-        /// <param name="parentConsole">The Console to become the 
-        /// new CompletionScreen's Console's parent Console.</param>
+
         private SetupScreenDisplaying() :
             // Workaround for dependencies not injected to constructors.
             base(GetContext<DisplayContext>().Width, GetContext<DisplayContext>().Height)

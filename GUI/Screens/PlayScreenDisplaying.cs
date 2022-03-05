@@ -7,60 +7,31 @@ using System.Collections.Generic;
 using AsLegacy.GUI.HUDs;
 using AsLegacy.Input;
 using AsLegacy.GUI.Popups;
+using AsLegacy.Progression;
 
 namespace AsLegacy.GUI.Screens
 {
     /// <summary>
-    /// Defines PlayScreen, which serves as visual output controller for the active play 
-    /// rendering and GUI.
+    /// Handles the initialization and visibility of the play screen, which servers as a 
+    /// visual output controller for the active play rendering and GUI.
     /// </summary>
-    public class PlayScreen : DrawConsoleComponent
+    [Behavior]
+    [Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
+    [Dependency<DisplayContext>(Binding.Unique, Fulfillment.Existing, Display)]
+    [Dependency<GameState>(Binding.Unique, Fulfillment.Existing, State)]
+    public class PlayScreenDisplaying : DrawConsoleComponent
     {
+        private const string Consoles = "consoles";
+        private const string Display = "display";
+        private const string State = "state";
+
         public const int MapViewPortWidth = 20;
         public const int MapViewPortHeight = 20;
         public const int MapViewPortHalfWidth = MapViewPortWidth / 2;
         public const int MapViewPortHalfHeight = MapViewPortHeight / 2;
 
-        /// <summary>
-        /// Defines a map of the frame for the main console.
-        /// The map is structured as {x, {y, glyph} }, where a -1 for x or y indicates that 
-        /// the glyph applies for all values of that axis.
-        /// </summary>
-        private static readonly Dictionary<int, Dictionary<int, int>> FrameMap =
-            new Dictionary<int, Dictionary<int, int>>()
-            {
-                {0, new Dictionary<int, int>() {
-                    {0, 201},
-                    {Display.Height - 4, 204},
-                    {Display.Height - 1, 200},
-                    {-1, 186}
-                } },
-                {21, new Dictionary<int, int>() {
-                    {0, 205},
-                    {Display.Height - 1, 205},
-                    {-1, 179}
-                } },
-                {Display.Width / 2, new Dictionary<int, int>()
-                {
-                    {0, 203},
-                    {Display.Height - 4, 185},
-                    {Display.Height - 1, 202},
-                    {-1, 186}
-                } },
-                {Display.Width - 1, new Dictionary<int, int>()
-                {
-                    {0, 187},
-                    {Display.Height - 1, 188},
-                    {-1, 186}
-                } },
-                {-1, new Dictionary<int, int>()
-                {
-                    {0, 205},
-                    {Display.Height - 1, 205}
-                } }
-            };
+        private readonly static PlayScreenDisplaying Screen;
 
-        private static PlayScreen Screen;
 
         /// <summary>
         /// Whether the help popup is currently showing.
@@ -70,63 +41,18 @@ namespace AsLegacy.GUI.Screens
         /// <summary>
         /// Whether the screen is currently showing a popup.
         /// </summary>
-        public static bool IsShowingPopup => 
-            Screen._helpPopup.IsVisible || 
+        public static bool IsShowingPopup =>
+            Screen._helpPopup.IsVisible ||
             Screen._itemsPopup.IsVisible ||
-            Screen._talentsPopup.IsVisible || 
-            Screen._playerDeathPopup.IsVisible || 
+            Screen._talentsPopup.IsVisible ||
+            Screen._playerDeathPopup.IsVisible ||
             Screen._successorPopup.IsVisible;
-
-        /// <summary>
-        /// Whether the screen is currently visible.
-        /// </summary>
-        public static bool IsVisible
-        {
-            get => Screen._console.IsVisible;
-            set
-            {
-                Screen._console.IsVisible = value;
-                Screen._commands.IsFocused = value;
-
-                if (!value)
-                {
-                    Screen._helpPopup.IsVisible = false;
-                    Screen._itemsPopup.IsVisible = false;
-                    Screen._talentsPopup.IsVisible = false;
-                    Screen._playerDeathPopup.IsVisible = false;
-                    Screen._successorPopup.IsVisible = false;
-                }
-
-                Screen.Refresh();
-            }
-        }
 
         /// <summary>
         /// The current position and size of the map viewport.
         /// </summary>
         public static Rectangle MapViewPort => Screen._characters.ViewPort;
 
-
-        /// <summary>
-        /// Initializes the PlayScreen.
-        /// Required for any screen output to be rendered, or for any 
-        /// child consoles to be created for interaction.
-        /// </summary>
-        /// <param name="parentConsole">The Console to become the 
-        /// initialized PlayScreen's Console's parent Console.</param>
-        public static void Init(Console parentConsole)
-        {
-            if (Screen == null)
-                Screen = new PlayScreen(parentConsole);
-        }
-
-        /// <summary>
-        /// Resets display elements of the play screen.
-        /// </summary>
-        public static void Reset()
-        {
-            Screen._successorPopup.Reset();
-        }
 
         /// <summary>
         /// Shows the PlayScreen's Help Popup.
@@ -141,7 +67,7 @@ namespace AsLegacy.GUI.Screens
 
             help.Content = helpText;
             help.Position = new(
-                requestingPopup.Position.X + requestingPopup.Width / 2 - help.Width / 2, 
+                requestingPopup.Position.X + requestingPopup.Width / 2 - help.Width / 2,
                 requestingPopup.Position.Y + requestingPopup.Height / 2 - help.Height / 2);
             help.OnDismissal += () => requestingPopup.IsFocused = true;
             help.IsVisible = true;
@@ -202,6 +128,68 @@ namespace AsLegacy.GUI.Screens
         }
 
 
+        /// <summary>
+        /// Sets the frame, defined by the frame map, for the provided Console.
+        /// </summary>
+        /// <param name="console">The Console to which the frame will be added.
+        /// It is expected that this Console's width/height will match the width/height 
+        /// expected by the frame map.</param>
+        private static void SetConsoleFrame(Console console)
+        {
+            int width = console.Width;
+            int height = console.Height;
+            Dictionary<int, Dictionary<int, int>> frameMap = new()
+            {
+                {0, new() {
+                    {0, 201},
+                    {height - 4, 204},
+                    {height - 1, 200},
+                    {-1, 186}
+                } },
+                {21, new() {
+                    {0, 205},
+                    {height - 1, 205},
+                    {-1, 179}
+                } },
+                {width / 2, new()
+                {
+                    {0, 203},
+                    {height - 4, 185},
+                    {height - 1, 202},
+                    {-1, 186}
+                } },
+                {width - 1, new()
+                {
+                    {0, 187},
+                    {height - 1, 188},
+                    {-1, 186}
+                } },
+                {-1, new Dictionary<int, int>()
+                {
+                    {0, 205},
+                    {height - 1, 205}
+                } }
+            };
+
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                {
+                    if (frameMap.ContainsKey(x))
+                    {
+                        if (frameMap[x].ContainsKey(y))
+                            console.SetGlyph(x, y, frameMap[x][y]);
+                        else if (frameMap[x].ContainsKey(-1))
+                            console.SetGlyph(x, y, frameMap[x][-1]);
+                    }
+                    else if (frameMap.ContainsKey(-1))
+                    {
+                        if (frameMap[-1].ContainsKey(y))
+                            console.SetGlyph(x, y, frameMap[-1][y]);
+                    }
+                }
+        }
+
+
         private readonly NotificationPopup _helpPopup;
         private readonly Popup _itemsPopup;
         private readonly PlayerDeathPopup _playerDeathPopup;
@@ -220,39 +208,41 @@ namespace AsLegacy.GUI.Screens
 
         private readonly Console _console;
 
-        /// <summary>
-        /// Constructs a new PlayScreen for the given Console.
-        /// </summary>
-        /// <param name="parentConsole">The Console to become the 
-        /// new PlayScreen's Console's parent Console.</param>
-        private PlayScreen(Console parentConsole)
+        private PlayScreenDisplaying()
         {
-            _console = new Console(Display.Width, Display.Height);
-            parentConsole.Children.Add(_console);
+            // Workarounds for dependencies not being injected to constructors.
+            DisplayContext display = GetContext<DisplayContext>();
+            ConsoleCollection consoles = GetContext<ConsoleCollection>();
+
+            int width = display.Width;
+            int height = display.Height;
+
+            _console = new Console(width, height);
+            consoles.ScreenConsoles.Add(_console);
 
             SetConsoleFrame(_console);
 
-            _helpPopup = new("Help", Display.Width / 2, Display.Width / 2, Display.Height)
+            _helpPopup = new("Help", width / 2, width / 2, height)
             {
-                Position = new(MapViewPortHalfWidth + Display.Width / 2 + 1, Display.Height / 2),
+                Position = new(MapViewPortHalfWidth + width / 2 + 1, height / 2),
                 IsVisible = false
             };
-            _itemsPopup = new ItemsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
+            _itemsPopup = new ItemsPopup(width - MapViewPortWidth - 1, height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
             };
-            _playerDeathPopup = new PlayerDeathPopup(Display.Width / 2, Display.Height / 2)
+            _playerDeathPopup = new PlayerDeathPopup(width / 2, height / 2)
             {
-                Position = new Point(Display.Width / 4, Display.Height / 4),
+                Position = new Point(width / 4, height / 4),
                 IsVisible = false
             };
-            _successorPopup = new SuccessorPopup(Display.Width / 2, 3 * Display.Height / 4)
+            _successorPopup = new SuccessorPopup(width / 2, 3 * height / 4)
             {
-                Position = new Point(Display.Width / 4, Display.Height / 8),
+                Position = new Point(width / 4, height / 8),
                 IsVisible = false
             };
-            _talentsPopup = new TalentsPopup(Display.Width - MapViewPortWidth - 1, Display.Height)
+            _talentsPopup = new TalentsPopup(width - MapViewPortWidth - 1, height)
             {
                 Position = new Point(MapViewPortWidth + 1, 0),
                 IsVisible = false
@@ -268,14 +258,14 @@ namespace AsLegacy.GUI.Screens
             _commands.Components.Add(new PlayerCommandHandling());
             _commands.IsFocused = true;
 
-            _playerHUD = new FocusHUD(Display.Width / 2 - 1)
+            _playerHUD = new FocusHUD(width / 2 - 1)
             {
-                Position = new Point(1, Display.Height - 4)
+                Position = new Point(1, height - 4)
             };
 
-            _targetHUD = new TargetHUD(Display.Width / 2 - 1)
+            _targetHUD = new TargetHUD(width / 2 - 1)
             {
-                Position = new Point(1, Display.Height - 7)
+                Position = new Point(1, height - 7)
             };
 
             _effects = World.EffectTiles;
@@ -288,15 +278,15 @@ namespace AsLegacy.GUI.Screens
             _environment.ViewPort = new Rectangle(0, 0, MapViewPortWidth, MapViewPortHeight);
             _environment.CenterViewPortOnPoint(new Point(0, 0));
 
-            _nearbyPanel = new NearbyPanel(Display.Width / 2 - MapViewPortWidth - 2,
+            _nearbyPanel = new NearbyPanel(width / 2 - MapViewPortWidth - 2,
                 MapViewPortHeight)
             {
                 Position = new Point(MapViewPortWidth + 2, 1)
             };
 
-            _characterPanel = new CharacterPanel(Display.Width / 2 - 2, Display.Height - 2)
+            _characterPanel = new CharacterPanel(width / 2 - 2, height - 2)
             {
-                Position = new Point(Display.Width / 2 + 1, 1)
+                Position = new Point(width / 2 + 1, 1)
             };
 
             _console.Children.Add(_environment);
@@ -318,35 +308,6 @@ namespace AsLegacy.GUI.Screens
         }
 
         /// <summary>
-        /// Sets the frame, defined by the frame map, for the provided Console.
-        /// </summary>
-        /// <param name="console">The Console to which the frame will be added.
-        /// It is expected that this Console's width/height will match the width/height 
-        /// expected by the frame map.</param>
-        private void SetConsoleFrame(Console console)
-        {
-            int width = console.Width;
-            int height = console.Height;
-
-            for (int x = 0; x < width; x++)
-                for (int y = 0; y < height; y++)
-                {
-                    if (FrameMap.ContainsKey(x))
-                    {
-                        if (FrameMap[x].ContainsKey(y))
-                            console.SetGlyph(x, y, FrameMap[x][y]);
-                        else if (FrameMap[x].ContainsKey(-1))
-                            console.SetGlyph(x, y, FrameMap[x][-1]);
-                    }
-                    else if (FrameMap.ContainsKey(-1))
-                    {
-                        if (FrameMap[-1].ContainsKey(y))
-                            console.SetGlyph(x, y, FrameMap[-1][y]);
-                    }
-                }
-        }
-
-        /// <summary>
         /// Forces a redraw of this PlayScreen and its children.
         /// </summary>
         public void Refresh()
@@ -361,13 +322,13 @@ namespace AsLegacy.GUI.Screens
         /// <param name="delta">The time passed since the last Draw call.</param>
         public override void Draw(Console console, TimeSpan delta)
         {
-            if (!IsVisible)
+            if (!console.IsVisible)
                 return;
 
             if (!IsShowingPopup)
                 _commands.IsFocused = true;
 
-            Point center = new Point(0, 0); // TODO :: Support disembodied center when ther is no focus.
+            Point center = new(0, 0); // TODO :: Support disembodied center when there is no focus.
             if (GameExecution.Focus != null)
                 center = GameExecution.Focus.Point;
 
@@ -376,6 +337,33 @@ namespace AsLegacy.GUI.Screens
             _environment.CenterViewPortOnPoint(center);
 
             _characterPanel.Draw(delta);
+        }
+
+
+        /// <summary>
+        /// Updates whether this console is visible based on the current stage of the game.
+        /// </summary>
+        [Operation]
+        [OnChange(State, nameof(GameState.CurrentStage))]
+        public void UpdateVisibility(GameState state)
+        {
+            bool isVisible = state.CurrentStage == GameStageMap.Stage.Play;
+
+            _console.IsVisible = isVisible;
+            _commands.IsFocused = isVisible;
+
+            if (!isVisible)
+            {
+                _helpPopup.IsVisible = false;
+                _itemsPopup.IsVisible = false;
+                _talentsPopup.IsVisible = false;
+                _playerDeathPopup.IsVisible = false;
+                _successorPopup.IsVisible = false;
+            }
+            else
+                _successorPopup.Reset();
+
+            Refresh();
         }
     }
 }

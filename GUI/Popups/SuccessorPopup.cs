@@ -229,7 +229,7 @@ namespace AsLegacy.GUI.Popups
         /// <inheritdoc/>
         public override bool ProcessMouse(MouseConsoleState state)
         {
-            if (PlayScreen.IsShowingHelp)
+            if (PlayScreenDisplaying.IsShowingHelp)
                 return true;
 
             return base.ProcessMouse(state);

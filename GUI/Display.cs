@@ -53,22 +53,13 @@ namespace AsLegacy.GUI
         /// directs the processes of the game's progression.</param>
         public static void Init(UpdateConsoleComponent gameManager)
         {
-            Console console = new Console(Width, Height);
+            Console console = new(Width, Height);
             SadConsole.Global.CurrentScreen = console;
             console.Components.Add(gameManager);
 
-            PlayScreen.Init(console);
             CompletionScreen.Init(console);
 
             ShowScreen(Screen.Start);
-        }
-
-        /// <summary>
-        /// Resets display elements.
-        /// </summary>
-        public static void Reset()
-        {
-            PlayScreen.Reset();
         }
 
         /// <summary>
@@ -79,7 +70,6 @@ namespace AsLegacy.GUI
         {
             // TODO :: Add an optional fade transition or wait of some kind.
 
-            PlayScreen.IsVisible = screen == Screen.Play;
             CompletionScreen.IsVisible = screen == Screen.Completion;
 
             CurrentScreen = screen;

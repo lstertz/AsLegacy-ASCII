@@ -81,7 +81,7 @@ namespace AsLegacy.GUI.Popups
             };
             _createSuccessor.Click += (s, e) =>
             {
-                PlayScreen.ShowSuccessorDetails(_nameField.EditingText);
+                PlayScreenDisplaying.ShowSuccessorDetails(_nameField.EditingText);
             };
             Add(_createSuccessor);
 
@@ -111,7 +111,7 @@ namespace AsLegacy.GUI.Popups
         /// <inheritdoc/>
         public override bool ProcessMouse(MouseConsoleState state)
         {
-            if (PlayScreen.IsShowingHelp)
+            if (PlayScreenDisplaying.IsShowingHelp)
                 return true;
 
             return base.ProcessMouse(state);

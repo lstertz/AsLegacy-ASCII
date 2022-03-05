@@ -96,7 +96,7 @@ namespace AsLegacy.Configs
                         new()
                         {
                             Next = GameStageMap.Stage.Opening,
-                            Previous = GameStageMap.Stage.Play
+                            Previous = GameStageMap.Stage.Setup
                         }
                     }
                 }

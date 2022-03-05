@@ -26,7 +26,7 @@ namespace AsLegacy.Input
             info.RepeatDelay = float.PositiveInfinity;
 
             handled = true;
-            if (PlayScreen.IsShowingPopup)
+            if (PlayScreenDisplaying.IsShowingPopup)
                 return;
 
             if (info.IsKeyPressed(Keys.Up) || info.IsKeyPressed(Keys.W))
@@ -75,7 +75,7 @@ namespace AsLegacy.Input
         {
             handled = false;
 
-            if (!GameExecution.HasPlayer || PlayScreen.IsShowingPopup)
+            if (!GameExecution.HasPlayer || PlayScreenDisplaying.IsShowingPopup)
                 return;
 
             Commands c = console as Commands;
