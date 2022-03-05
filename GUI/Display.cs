@@ -56,10 +56,6 @@ namespace AsLegacy.GUI
             Console console = new(Width, Height);
             SadConsole.Global.CurrentScreen = console;
             console.Components.Add(gameManager);
-
-            CompletionScreen.Init(console);
-
-            ShowScreen(Screen.Start);
         }
 
         /// <summary>
@@ -69,8 +65,6 @@ namespace AsLegacy.GUI
         public static void ShowScreen(Screen screen)
         {
             // TODO :: Add an optional fade transition or wait of some kind.
-
-            CompletionScreen.IsVisible = screen == Screen.Completion;
 
             CurrentScreen = screen;
         }
