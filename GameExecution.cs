@@ -33,6 +33,12 @@ public class GameExecution : UpdateConsoleComponent
     #region Remove through CP refactor
 
     /// <summary>
+    /// The number of legacy points required for a game to be won.
+    /// </summary>
+    public const int Goal = 25;
+
+
+    /// <summary>
     /// The current Character being focused on by the game player.
     /// While playing, this is the World Player, when dead and in 'viewer mode' this may 
     /// be any other living Character.
@@ -134,13 +140,11 @@ public class GameExecution : UpdateConsoleComponent
         // TODO :: Phase out the below through CP refactor.
         //          World updating should be handled as part of the app update.
         if (_isOnPlayStage)
-            World.Update(delta.Milliseconds);
-
-        /*
-        if (World.HighestRankedCharacter.Legacy < Goal)
-            World.Update(delta.Milliseconds);
-        else if (Display.CurrentScreen != Display.Screen.Completion)
-            Display.ShowScreen(Display.Screen.Completion);
-        */
+        {
+            if (World.HighestRankedCharacter.Legacy < Goal)
+                World.Update(delta.Milliseconds);
+            else
+                Contextualize(new GameEndMessage());
+        }
     }
 }
