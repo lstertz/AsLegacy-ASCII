@@ -2,7 +2,6 @@
 using SadConsole;
 using SadConsole.Input;
 using System;
-using Console = SadConsole.Console;
 
 using AsLegacy.Global;
 using AsLegacy.GUI.Screens;

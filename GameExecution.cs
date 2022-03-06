@@ -88,9 +88,11 @@ public class GameExecution : UpdateConsoleComponent
         display = new();
         state = new();
 
-        Game.Create(display.Width, display.Height);
-        Console console = new(display.Width, display.Height);
-        consoles.PrimaryConsole.Value = console;
+        int width = display.Width;
+        int height = display.Height;
+        ContextState<Console> primaryConsole = consoles.PrimaryConsole;
+
+        Game.Create(width, height);
 
         Game.OnInitialize = () =>
         {
@@ -98,6 +100,9 @@ public class GameExecution : UpdateConsoleComponent
             SadConsole.Global.LoadFont(LocalFontsFile);
             SadConsole.Global.FontDefault = SadConsole.Global.Fonts["AsLegacy"]
                 .GetFont(SadConsole.Font.FontSizes.One);
+
+            Console console = new(width, height);
+            primaryConsole.Value = console;
 
             SadConsole.Global.CurrentScreen = console;
             console.Components.Add(this);

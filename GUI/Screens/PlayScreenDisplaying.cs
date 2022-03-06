@@ -30,7 +30,7 @@ namespace AsLegacy.GUI.Screens
         public const int MapViewPortHalfWidth = MapViewPortWidth / 2;
         public const int MapViewPortHalfHeight = MapViewPortHeight / 2;
 
-        private readonly static PlayScreenDisplaying Screen;
+        private static PlayScreenDisplaying Screen;
 
 
         /// <summary>
@@ -214,6 +214,8 @@ namespace AsLegacy.GUI.Screens
             Display display = GetContext<Display>();
             ConsoleCollection consoles = GetContext<ConsoleCollection>();
             GameState state = GetContext<GameState>();
+
+            Screen = this;
 
             int width = display.Width;
             int height = display.Height;
