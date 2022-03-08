@@ -2,7 +2,6 @@
 using AsLegacy.GUI;
 using AsLegacy.GUI.Elements;
 using AsLegacy.Progression;
-using Microsoft.Xna.Framework;
 using SadConsole.Components;
 using SadConsole.Themes;
 using System;
@@ -15,8 +14,8 @@ namespace AsLegacy;
 /// Handles the set up and updating of game systems.
 /// </summary>
 [Behavior]
-[Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.SelfCreated, Consoles)]
-[Dependency<Display>(Binding.Unique, Fulfillment.SelfCreated, Display)]
+[Dependency<ConsoleCollection>(Binding.Unique, Fulfillment.Existing, Consoles)]
+[Dependency<Display>(Binding.Unique, Fulfillment.Existing, Display)]
 [Dependency<GameState>(Binding.Unique, Fulfillment.SelfCreated, State)]
 public class GameExecution : UpdateConsoleComponent
 {
@@ -81,12 +80,14 @@ public class GameExecution : UpdateConsoleComponent
     #endregion
 
 
-    public GameExecution(out ConsoleCollection consoles, out Display display, 
-        out GameState state)
+    /// <summary>
+    /// Initializes the game with SadConsole, which executes within an embedded loop 
+    /// after <see cref="Game.OnInitialize"/>.
+    /// </summary>
+    public static void Initialize()
     {
-        consoles = new();
-        display = new();
-        state = new();
+        ConsoleCollection consoles = new();
+        Display display = new();
 
         int width = display.Width;
         int height = display.Height;
@@ -105,11 +106,20 @@ public class GameExecution : UpdateConsoleComponent
             primaryConsole.Value = console;
 
             SadConsole.Global.CurrentScreen = console;
-            console.Components.Add(this);
-        };
 
-        Game.Instance.Run();
-        Game.Instance.Dispose();
+            App.Initialize();
+            Contextualize(consoles);
+            Contextualize(display);
+        };
+    }
+
+
+    public GameExecution(out GameState state)
+    {
+        ConsoleCollection consoles = GetContext<ConsoleCollection>();
+        state = new();
+
+        consoles.PrimaryConsole.Value.Components.Add(this);
     }
 
     /// <summary>

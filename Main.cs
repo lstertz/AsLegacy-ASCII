@@ -2,5 +2,11 @@
 global using ContextualProgramming;
 
 global using Console = SadConsole.Console;
+using SadConsole;
+using AsLegacy;
 
-Initialize();
+
+GameExecution.Initialize();
+
+Game.Instance.Run();
+Game.Instance.Dispose();
