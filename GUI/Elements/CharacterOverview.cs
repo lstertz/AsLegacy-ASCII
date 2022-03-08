@@ -93,7 +93,7 @@ namespace AsLegacy.GUI.Elements
             out bool handled)
         {
             handled = false;
-            if (PlayScreen.IsShowingPopup || !_box.Contains(state.ConsoleCellPosition))
+            if (PlayScreenDisplaying.IsShowingPopup || !_box.Contains(state.ConsoleCellPosition))
             {
                 World.Character.Highlight(null);
                 return;
@@ -101,7 +101,7 @@ namespace AsLegacy.GUI.Elements
 
             handled = true;
             if (state.Mouse.LeftClicked)
-                AsLegacy.SelectCharacter(Character);
+                GameExecution.SelectCharacter(Character);
             else
                 World.Character.Highlight(Character);
         }

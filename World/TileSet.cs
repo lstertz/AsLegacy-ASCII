@@ -2,8 +2,6 @@
 using SadConsole;
 using System;
 
-using Console = SadConsole.Console;
-
 namespace AsLegacy
 {
     public static partial class World

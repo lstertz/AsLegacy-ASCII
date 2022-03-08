@@ -15,7 +15,7 @@ namespace AsLegacy.Input
         public override void ProcessMouse(Console console, MouseConsoleState state, out bool handled)
         {
             handled = false;
-            if (PlayScreen.IsShowingPopup)
+            if (PlayScreenDisplaying.IsShowingPopup)
             {
                 World.Character.Highlight(null);
                 return;
@@ -25,7 +25,7 @@ namespace AsLegacy.Input
             int row = state.CellPosition.Y;
 
             if (state.Mouse.LeftClicked)
-                AsLegacy.SelectCharacter(World.CharacterAt(row, column));
+                GameExecution.SelectCharacter(World.CharacterAt(row, column));
             else
                 World.Character.Highlight(World.CharacterAt(row, column));
         }

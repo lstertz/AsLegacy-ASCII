@@ -20,7 +20,7 @@ namespace AsLegacy.GUI
         /// other nearby Characters for displaying in the Panel.</param>
         public NearbyPanel(int width, int height) : base(width, height)
         {
-            while (PlayScreen.MapViewPortHeight / CharacterOverview.Height > Components.Count)
+            while (PlayScreenDisplaying.MapViewPortHeight / CharacterOverview.Height > Components.Count)
                 Components.Add(new CharacterOverview(
                     Components.Count * CharacterOverview.Height));
         }
@@ -36,12 +36,12 @@ namespace AsLegacy.GUI
             
             // TODO :: If no focus, support showing characters closest to current center of view.
 
-            World.Character[] nearbyCharacters = World.CharactersNear(AsLegacy.Focus,
-                PlayScreen.MapViewPortHalfWidth, PlayScreen.MapViewPortHalfHeight);
+            World.Character[] nearbyCharacters = World.CharactersNear(GameExecution.Focus,
+                PlayScreenDisplaying.MapViewPortHalfWidth, PlayScreenDisplaying.MapViewPortHalfHeight);
 
             while (nearbyCharacters.Length > Components.Count)
                 Components.Add(new CharacterOverview(
-                    Components.Count * CharacterOverview.Height, AsLegacy.Focus));
+                    Components.Count * CharacterOverview.Height, GameExecution.Focus));
 
             for (int c = 0, count = Components.Count; c < count; c++)
                 if (c >= nearbyCharacters.Length)

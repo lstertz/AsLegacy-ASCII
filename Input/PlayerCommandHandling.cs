@@ -19,44 +19,44 @@ namespace AsLegacy.Input
         public override void ProcessKeyboard(Console console, Keyboard info, out bool handled)
         {
             handled = false;
-            if (!AsLegacy.HasPlayer)
+            if (!GameExecution.HasPlayer)
                 return;
 
             info.InitialRepeatDelay = float.PositiveInfinity;
             info.RepeatDelay = float.PositiveInfinity;
 
             handled = true;
-            if (PlayScreen.IsShowingPopup)
+            if (PlayScreenDisplaying.IsShowingPopup)
                 return;
 
             if (info.IsKeyPressed(Keys.Up) || info.IsKeyPressed(Keys.W))
-                AsLegacy.Player.MoveInDirection(World.Character.Direction.Up, () =>
+                GameExecution.Player.MoveInDirection(World.Character.Direction.Up, () =>
                     info.IsKeyDown(Keys.Up) || info.IsKeyDown(Keys.W));
             else if (info.IsKeyPressed(Keys.Down) || info.IsKeyPressed(Keys.S))
-                AsLegacy.Player.MoveInDirection(World.Character.Direction.Down, () =>
+                GameExecution.Player.MoveInDirection(World.Character.Direction.Down, () =>
                     info.IsKeyDown(Keys.Down) || info.IsKeyDown(Keys.S));
             else if (info.IsKeyPressed(Keys.Left) || info.IsKeyPressed(Keys.A))
-                AsLegacy.Player.MoveInDirection(World.Character.Direction.Left, () =>
+                GameExecution.Player.MoveInDirection(World.Character.Direction.Left, () =>
                     info.IsKeyDown(Keys.Left) || info.IsKeyDown(Keys.A));
             else if (info.IsKeyPressed(Keys.Right) || info.IsKeyPressed(Keys.D))
-                AsLegacy.Player.MoveInDirection(World.Character.Direction.Right, () =>
+                GameExecution.Player.MoveInDirection(World.Character.Direction.Right, () =>
                     info.IsKeyDown(Keys.Right) || info.IsKeyDown(Keys.D));
             else if (info.IsKeyPressed(Keys.D1) || info.IsKeyPressed(Keys.NumPad1))
-                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[0]);
+                GameExecution.Player.InitiateSkill(GameExecution.Player.EquippedSkills[0]);
             else if (info.IsKeyPressed(Keys.D2) || info.IsKeyPressed(Keys.NumPad2))
-                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[1]);
+                GameExecution.Player.InitiateSkill(GameExecution.Player.EquippedSkills[1]);
             else if (info.IsKeyPressed(Keys.D3) || info.IsKeyPressed(Keys.NumPad3))
-                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[2]);
+                GameExecution.Player.InitiateSkill(GameExecution.Player.EquippedSkills[2]);
             else if (info.IsKeyPressed(Keys.D4) || info.IsKeyPressed(Keys.NumPad4))
-                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[3]);
+                GameExecution.Player.InitiateSkill(GameExecution.Player.EquippedSkills[3]);
             else if (info.IsKeyPressed(Keys.D5) || info.IsKeyPressed(Keys.NumPad5))
-                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[4]);
+                GameExecution.Player.InitiateSkill(GameExecution.Player.EquippedSkills[4]);
             else if (info.IsKeyPressed(Keys.D6) || info.IsKeyPressed(Keys.NumPad6))
-                AsLegacy.Player.InitiateSkill(AsLegacy.Player.EquippedSkills[5]);
+                GameExecution.Player.InitiateSkill(GameExecution.Player.EquippedSkills[5]);
 
             if (info.IsKeyReleased(Keys.Space))
-                AsLegacy.Player.ToggleAttackMode();
-            AsLegacy.Player.EnableDefense(AltIsDown(info));
+                GameExecution.Player.ToggleAttackMode();
+            GameExecution.Player.EnableDefense(AltIsDown(info));
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace AsLegacy.Input
         {
             handled = false;
 
-            if (!AsLegacy.HasPlayer || PlayScreen.IsShowingPopup)
+            if (!GameExecution.HasPlayer || PlayScreenDisplaying.IsShowingPopup)
                 return;
 
             Commands c = console as Commands;
@@ -87,16 +87,16 @@ namespace AsLegacy.Input
                 if (x == 0)
                 {
                     if (y == -1) // Up
-                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Up);
+                        handled = GameExecution.Player.MoveInDirection(World.Character.Direction.Up);
                     else if (y == 1) // Down
-                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Down);
+                        handled = GameExecution.Player.MoveInDirection(World.Character.Direction.Down);
                 }
                 else if (y == 0)
                 {
                     if (x == -1) // Left
-                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Left);
+                        handled = GameExecution.Player.MoveInDirection(World.Character.Direction.Left);
                     else if (x == 1) // Right
-                        handled = AsLegacy.Player.MoveInDirection(World.Character.Direction.Right);
+                        handled = GameExecution.Player.MoveInDirection(World.Character.Direction.Right);
                 }
 
                 c?.SetCellToHighlight(-1, -1);

@@ -229,7 +229,7 @@ namespace AsLegacy.GUI.Popups
         /// <inheritdoc/>
         public override bool ProcessMouse(MouseConsoleState state)
         {
-            if (PlayScreen.IsShowingHelp)
+            if (PlayScreenDisplaying.IsShowingHelp)
                 return true;
 
             return base.ProcessMouse(state);
@@ -242,7 +242,7 @@ namespace AsLegacy.GUI.Popups
 
             if (IsVisible)
             {
-                int passiveCount = AsLegacy.Player.Class.Passives.Count;
+                int passiveCount = GameExecution.Player.Class.Passives.Count;
                 _availablePoints = Player.Character.CharacterLineage.SuccessorPoints;
                 for (int c = 0; c < MaxPassiveCount; c++)
                 {
@@ -279,7 +279,7 @@ namespace AsLegacy.GUI.Popups
             if (_hoveredBox == null || _hoveredInvestmentIndex == -1)
                 return;
 
-            Talent talent = AsLegacy.Player.Class.Passives[_hoveredInvestmentIndex];
+            Talent talent = GameExecution.Player.Class.Passives[_hoveredInvestmentIndex];
 
             int investment = 0;
             string investmentText = _passiveInvestmentBoxes[_hoveredInvestmentIndex].EditingText;
@@ -301,10 +301,10 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdatePassiveLabels()
         {
-            if (!AsLegacy.HasPlayer)
+            if (!GameExecution.HasPlayer)
                 return;
 
-            ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
+            ReadOnlyCollection<Passive> passives = GameExecution.Player.Class.Passives;
             for (int c = 0, count = passives.Count, y = AvailablePointsY + 1; c < count; c++, y++)
                 Print(PassiveNameX, y, passives[c].Name);
         }

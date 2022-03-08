@@ -10,7 +10,7 @@
         /// Constructs a new FocusHUD.
         /// </summary>
         /// <param name="width">The width of the FocusHUD.</param>
-        public FocusHUD(int width) : base(width, 205, () => { return AsLegacy.Focus; })
+        public FocusHUD(int width) : base(width, 205, () => { return GameExecution.Focus; })
         {
         }
     }

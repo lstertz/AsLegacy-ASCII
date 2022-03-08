@@ -229,15 +229,15 @@ namespace AsLegacy.GUI.Popups
             Button affinityButton = sender as Button;
             affinityButton.IsEnabled = false;
 
-            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex]
+            Affinity affinity = GameExecution.Player.Class.Concepts[conceptIndex]
                 .Affinities[affinityIndex];
             Skill skill = new()
             {
                 Affinity = affinity,
-                Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
+                Concept = GameExecution.Player.Class.Concepts[conceptIndex]
             };
 
-            if (AsLegacy.Player.HasLearnedSkill(skill))
+            if (GameExecution.Player.HasLearnedSkill(skill))
             {
                 _notificationPopup.Content = $"{affinity.Name}\nhas " + 
                     $"already been learned.";
@@ -255,9 +255,9 @@ namespace AsLegacy.GUI.Popups
                     Skill skill = new()
                     {
                         Affinity = affinity,
-                        Concept = AsLegacy.Player.Class.Concepts[conceptIndex]
+                        Concept = GameExecution.Player.Class.Concepts[conceptIndex]
                     };
-                    AsLegacy.Player.LearnSkill(skill);
+                    GameExecution.Player.LearnSkill(skill);
                     Invalidate();
 
                     affinityButton.IsEnabled = true;
@@ -302,7 +302,7 @@ namespace AsLegacy.GUI.Popups
         private void OnHoverAffinityBegin(object sender, MouseEventArgs _,
             int conceptIndex, int affinityIndex)
         {
-            Affinity affinity = AsLegacy.Player.Class.Concepts[conceptIndex]
+            Affinity affinity = GameExecution.Player.Class.Concepts[conceptIndex]
                 .Affinities[affinityIndex];
             _hoveredButton = sender as Button;
 
@@ -338,14 +338,14 @@ namespace AsLegacy.GUI.Popups
         private void OnInvestmentChange(object sender, System.EventArgs _,
             int index, bool isForInvestment)
         {
-            if (!AsLegacy.HasPlayer)
+            if (!GameExecution.HasPlayer)
                 return;
 
             Talent talent;
             if (index >= MaxConceptCount)
-                talent = AsLegacy.Player.Class.Passives[index - MaxConceptCount];
+                talent = GameExecution.Player.Class.Passives[index - MaxConceptCount];
             else
-                talent = AsLegacy.Player.Class.Concepts[index];
+                talent = GameExecution.Player.Class.Concepts[index];
 
             // TODO :: Support various investment amounts (eg. 1, 5, 10, etc.).
             int changeAmount = 1;
@@ -387,12 +387,12 @@ namespace AsLegacy.GUI.Popups
         {
             base.OnVisibleChanged();
 
-            if (AsLegacy.HasPlayer && IsVisible)
+            if (GameExecution.HasPlayer && IsVisible)
             {
-                _projection = AsLegacy.Player.GetProjection();
+                _projection = GameExecution.Player.GetProjection();
                 UpdateContent();
 
-                ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
+                ReadOnlyCollection<Concept> concepts = GameExecution.Player.Class.Concepts;
                 int conceptCount = concepts.Count;
                 for (int c = 0; c < MaxConceptCount; c++)
                 {
@@ -433,7 +433,7 @@ namespace AsLegacy.GUI.Popups
                     }
                 }
 
-                int passiveCount = AsLegacy.Player.Class.Passives.Count;
+                int passiveCount = GameExecution.Player.Class.Passives.Count;
                 for (int c = 0; c < MaxPassiveCount; c++)
                 {
                     _passiveDivestmentButtons[c].IsVisible = c < passiveCount;
@@ -523,9 +523,9 @@ namespace AsLegacy.GUI.Popups
             bool isPassive = _hoveredInvestmentIndex >= MaxConceptCount;
             Talent talent;
             if (isPassive)
-                talent = AsLegacy.Player.Class.Passives[_hoveredInvestmentIndex - MaxConceptCount];
+                talent = GameExecution.Player.Class.Passives[_hoveredInvestmentIndex - MaxConceptCount];
             else
-                talent = AsLegacy.Player.Class.Concepts[_hoveredInvestmentIndex];
+                talent = GameExecution.Player.Class.Concepts[_hoveredInvestmentIndex];
 
             int investment = _projection.GetInvestment(talent);
             int diff = diffForInvestment ? investment + 1 : investment - 1;
@@ -545,7 +545,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdateActiveSkills()
         {
-            string[] skillNames = AsLegacy.Player.SkillNames;
+            string[] skillNames = GameExecution.Player.SkillNames;
             for (int c = 0, count = skillNames.Length; c < count; c++)
                 Print(2, 4 + c, skillNames[c]);
         }
@@ -571,7 +571,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdateConcepts()
         {
-            ReadOnlyCollection<Concept> concepts = AsLegacy.Player.Class.Concepts;
+            ReadOnlyCollection<Concept> concepts = GameExecution.Player.Class.Concepts;
             for (int c = 0, count = concepts.Count, y = ConceptsStartingY; c < count; c++, y++)
             {
                 int investment = _projection.GetInvestment(concepts[c]);
@@ -587,7 +587,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdatePassives()
         {
-            ReadOnlyCollection<Passive> passives = AsLegacy.Player.Class.Passives;
+            ReadOnlyCollection<Passive> passives = GameExecution.Player.Class.Passives;
             for (int c = 0, count = passives.Count, y = Height - 9; c < count; c++, y++)
             {
                 int investment = _projection.GetInvestment(passives[c]);
@@ -603,7 +603,7 @@ namespace AsLegacy.GUI.Popups
         /// </summary>
         private void UpdateSuccessorPoints()
         {
-            int points = AsLegacy.Player.CharacterLineage.SuccessorPoints +
+            int points = GameExecution.Player.CharacterLineage.SuccessorPoints +
                 ((int)_pendingSuccessorPoints);
             _successorPointsLabel.DisplayText = $"{SuccessorPointsText}{points}";
             _successorPointsLabel.IsDirty = true;

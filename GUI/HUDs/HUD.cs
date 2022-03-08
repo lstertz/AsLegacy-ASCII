@@ -3,8 +3,6 @@ using AsLegacy.GUI.Elements;
 using Microsoft.Xna.Framework;
 using System;
 
-using Console = SadConsole.Console;
-
 namespace AsLegacy.GUI.HUDs
 {
     /// <summary>

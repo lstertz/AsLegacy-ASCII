@@ -58,7 +58,7 @@ namespace AsLegacy.GUI.Popups
                     Position = new(x, 1),
                     Text = new string((char)264, 1)
                 };
-                _help.Click += (s, e) => PlayScreen.ShowHelp(helpText, this);
+                _help.Click += (s, e) => PlayScreenDisplaying.ShowHelp(helpText, this);
                 Add(_help);
             }
 

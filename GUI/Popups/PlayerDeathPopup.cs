@@ -1,6 +1,7 @@
 ﻿using AsLegacy.Characters;
 using AsLegacy.Global;
 using AsLegacy.GUI.Screens;
+using AsLegacy.Progression;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using SadConsole;
@@ -70,7 +71,7 @@ namespace AsLegacy.GUI.Popups
             quit.Click += (s, e) =>
             {
                 IsVisible = false;
-                Display.ShowScreen(Display.Screen.Start);
+                Contextualize(new GameStageJumpMessage());
             };
             Add(quit);
 
@@ -81,7 +82,7 @@ namespace AsLegacy.GUI.Popups
             };
             _createSuccessor.Click += (s, e) =>
             {
-                PlayScreen.ShowSuccessorDetails(_nameField.EditingText);
+                PlayScreenDisplaying.ShowSuccessorDetails(_nameField.EditingText);
             };
             Add(_createSuccessor);
 
@@ -111,7 +112,7 @@ namespace AsLegacy.GUI.Popups
         /// <inheritdoc/>
         public override bool ProcessMouse(MouseConsoleState state)
         {
-            if (PlayScreen.IsShowingHelp)
+            if (PlayScreenDisplaying.IsShowingHelp)
                 return true;
 
             return base.ProcessMouse(state);

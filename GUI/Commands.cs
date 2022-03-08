@@ -2,7 +2,6 @@
 using SadConsole;
 using SadConsole.Input;
 using System;
-using Console = SadConsole.Console;
 
 using AsLegacy.Global;
 using AsLegacy.GUI.Screens;
@@ -62,15 +61,15 @@ namespace AsLegacy.GUI
 
             int x = 0;
             int y = 0;
-            if (AsLegacy.HasPlayer)
+            if (GameExecution.HasPlayer)
             {
-                x = AsLegacy.Player.Column;
-                y = AsLegacy.Player.Row;
+                x = GameExecution.Player.Column;
+                y = GameExecution.Player.Row;
             }
 
-            int centerX = PlayScreen.MapViewPortHalfWidth;
-            int centerY = PlayScreen.MapViewPortHalfHeight;
-            Rectangle viewPort = PlayScreen.MapViewPort;
+            int centerX = PlayScreenDisplaying.MapViewPortHalfWidth;
+            int centerY = PlayScreenDisplaying.MapViewPortHalfHeight;
+            Rectangle viewPort = PlayScreenDisplaying.MapViewPort;
 
             if (viewPort.Left == 0)
                 centerX = x;
@@ -125,12 +124,12 @@ namespace AsLegacy.GUI
         /// <returns>Whether the input should be considered for a command.</returns>
         private bool IsInteractable(int worldX, int worldY)
         {
-            if (!AsLegacy.HasPlayer || PlayScreen.IsShowingPopup)
+            if (!GameExecution.HasPlayer || PlayScreenDisplaying.IsShowingPopup)
                 return false;
 
             return World.IsPassable(worldX, worldY) &&
-                AsLegacy.Player.ActiveMode != World.Character.Mode.Defend &&
-                !AsLegacy.Player.IsInCooldown;
+                GameExecution.Player.ActiveMode != World.Character.Mode.Defend &&
+                !GameExecution.Player.IsInCooldown;
         }
     }
 }
